@@ -16,9 +16,9 @@ class App extends Component {
     }
 
     constructor(props) {
-      super(props);
+        super(props);
 
-      this.dropdownSelectItem = this.dropdownSelectItem.bind(this);
+        this.dropdownSelectItem = this.dropdownSelectItem.bind(this);
     }
 
     initApiCall = () => {
@@ -53,7 +53,7 @@ class App extends Component {
     }
 
     dropdownSelectItem(item) {
-      this.setState({ selectedVariable: item });
+        this.setState({ selectedVariable: item });
     }
 
     render() {
@@ -61,7 +61,7 @@ class App extends Component {
         return (
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
-                  selectedItem={this.state.selectedVariable} />
+                    selectedItem={this.state.selectedVariable} />
             </div>
         );
     }
