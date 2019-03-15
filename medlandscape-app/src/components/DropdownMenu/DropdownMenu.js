@@ -4,14 +4,7 @@ import './DropdownMenu.css';
 
 class DropdownMenu extends Component {
 
-  state = {
-    selectedName: "Kennzahl",
-    dropdownContentClasses: "dropdown-content hide"
-  }
-
-  componentDidMount() {
-    // this.setState({ selectedName: this.props.listItems[0].name_de });
-  }
+  state = { dropdownContentClasses: "dropdown-content hide" }
 
   toggleDropdown() {
     var css = (this.state.dropdownContentClasses === "dropdown-content hide") ? "dropdown-content show" : "dropdown-content hide";
@@ -19,7 +12,7 @@ class DropdownMenu extends Component {
   }
 
   selectItem(item) {
-    this.setState({ selectedName: item.name_de });
+    this.props.selectItem(item);
     this.toggleDropdown();
   }
 
@@ -42,31 +35,25 @@ class DropdownMenu extends Component {
   render() {
     return (
       <div className="dropdown">
-      <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{this.state.selectedName} ▼</button>
+      <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{this.props.selectedItem.name_de} ▼</button>
       <div id="myDropdown" className={this.state.dropdownContentClasses}>
       <input type="text" placeholder="Suchen..." id="myInput" onKeyUp={this.filterFunction.bind(this)} />
       {
         this.props.listItems.map((item) => (
-            //task.done === false && <TodoItem key={task.id} task={task} toggle={this.props.toggle}/>
-            // prop.toCheck === compareValue && <ComponentToLoadIfTrue />
-            <div onClick={this.selectItem.bind(this, item)}>{item.name_de}</div>
+            <div key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.name_de}</div>
         ))
       }
       </div>
       </div>
-
-      //this.props.listItems.map((item) => (
-
-      //))
     );
   }
 }
 
-
-
 // PropTypes
 DropdownMenu.propTypes = {
   listItems: PropTypes.array.isRequired, // Yes, the comma is necessary
+  selectItem: PropTypes.func.isRequired,
+  selectedItem: PropTypes.object.isRequired,
 }
 
 export default DropdownMenu;
