@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DropdrownMenu from './components/DropdownMenu.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -9,7 +10,15 @@ class App extends Component {
     state = {
         var: [],
         cantons : [],
-        hospitals : []
+        hospitals : [],
+
+        selectedVariable: {}
+    }
+
+    constructor(props) {
+      super(props);
+
+      this.dropdownSelectItem = this.dropdownSelectItem.bind(this);
     }
 
     initApiCall = () => {
@@ -19,6 +28,7 @@ class App extends Component {
                     return variable;
                 })
             })
+            this.dropdownSelectItem(this.state.var[0]);
         });
 
         fetch(apiURL + "de/api/medical_landscape/cantons").then(res => res.json()).then((results) => {
@@ -42,11 +52,16 @@ class App extends Component {
         this.initApiCall();
     }
 
+    dropdownSelectItem(item) {
+      this.setState({ selectedVariable: item });
+    }
+
     render() {
         console.log(this.state);
         return (
             <div className="App">
-                <h1>Hello world</h1>
+                <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
+                  selectedItem={this.state.selectedVariable} />
             </div>
         );
     }
