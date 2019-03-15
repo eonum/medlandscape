@@ -11,21 +11,13 @@ import './DropdownMenu.css';
 class DropdownMenu extends Component {
 
     /**
-    * state
-    *
-    * dropdownContentClasses: string containing all css classnames that are
-    * applied to "myDropdown"
-    */
-    state = { dropdownContentClasses: "dropdown-content hide" }
-
-    /**
     * toggleDropdown - toggles whether the DropdownMenu is opened or closed
     */
     toggleDropdown() {
-        var css = (this.state.dropdownContentClasses === "dropdown-content hide") ? "dropdown-content show" : "dropdown-content hide";
-        this.setState({ dropdownContentClasses:css });
+        let dropdownListDiv = document.getElementById("dropdownList");
+        dropdownListDiv.classList.toggle('show');
     }
-    
+
     /**
     * selectItem - informs this.props.selectItem about the item that has been
     * selected from the list. Also closes the menu.
@@ -45,7 +37,7 @@ class DropdownMenu extends Component {
         let input, filter, a, i, div, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
-        div = document.getElementById("myDropdown");
+        div = document.getElementById("dropdownList");
         a = div.getElementsByTagName("div");
         for (i = 0; i < a.length; i++) {
             txtValue = a[i].textContent || a[i].innerText;
@@ -67,15 +59,15 @@ class DropdownMenu extends Component {
     render() {
         return (
             <div className="dropdown">
-            <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{this.props.selectedItem.name_de} ▼</button>
-            <div id="myDropdown" className={this.state.dropdownContentClasses}>
-            <input type="text" placeholder="Suchen..." id="myInput" onKeyUp={this.filterFunction.bind(this)} />
-            {
-                this.props.listItems.map((item) => (
-                    <div key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.name_de}</div>
-                ))
-            }
-            </div>
+                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{this.props.selectedItem.name_de} ▼</button>
+                <div id="dropdownList" className="dropdown-content">
+                    <input type="text" placeholder="Suchen..." id="myInput" className="dropdownElem" onKeyUp={this.filterFunction.bind(this)} />
+                    {
+                        this.props.listItems.map((item) => (
+                            <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.name_de}</div>
+                        ))
+                    }
+                </div>
             </div>
         );
     }
