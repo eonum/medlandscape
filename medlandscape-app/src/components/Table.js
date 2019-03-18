@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 
+/**
+ * Table-Component
+ *
+ * Renders a table
+ */
 class Table extends Component {
+
+    /**
+     * render - Converts the property (see below) into a HTML-table and renders
+     *      it.
+     *
+     * @return {JSX}  JSX-Code of component
+     */
     render() {
         return (
             <div className="table">
