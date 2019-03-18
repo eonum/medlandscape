@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
+import Table from './components/Table.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -12,7 +13,8 @@ class App extends Component {
         cantons : [],
         hospitals : [],
 
-        selectedVariable: {}
+        selectedVariable: {},
+        tableData : []
     }
 
     constructor(props) {
@@ -43,10 +45,19 @@ class App extends Component {
             this.setState({
                 hospitals : results.map(hospital => {
                     return hospital;
-                })
+                }),
             })
+            this.create2dArr();
         });
     };
+
+    create2dArr = () => {
+        const {name, street, city, latitude, longitude} = this.state.hospitals[0];
+        let arr = [["name", name], ["street", street], ["city", city], ["coordinates", latitude + ", " + longitude]];
+        this.setState({
+            tableData : arr
+        })
+    }
 
     componentDidMount(){
         this.initApiCall();
@@ -62,6 +73,7 @@ class App extends Component {
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
                     selectedItem={this.state.selectedVariable} />
+                <Table tableData={this.state.tableData} />
             </div>
         );
     }
