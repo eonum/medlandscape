@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
+import CantonList from './components/CantonList.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -12,13 +13,12 @@ class App extends Component {
         cantons : [],
         hospitals : [],
 
-        selectedVariable: {}
+        selectedVariable : {},
+        selectedCantons : []
     }
 
-    constructor(props) {
-        super(props);
-
-        this.dropdownSelectItem = this.dropdownSelectItem.bind(this);
+    componentDidMount(){
+        this.initApiCall();
     }
 
     initApiCall = () => {
@@ -48,20 +48,30 @@ class App extends Component {
         });
     };
 
-    componentDidMount(){
-        this.initApiCall();
-    }
-
-    dropdownSelectItem(item) {
+    dropdownSelectItem = (item) => {
         this.setState({ selectedVariable: item });
     }
 
+    selectCanton = (canton) => {
+        if (this.state.selectedCantons.includes(canton)) {
+            this.setState({
+                selectedCantons : this.state.selectedCantons.filter(checkedCanton => {
+                    return checkedCanton !== canton;
+                })
+            })
+        } else {
+            this.setState({
+                selectedCantons : [...this.state.selectedCantons, canton]
+            })
+        }
+    }
+
     render() {
-        console.log(this.state);
         return (
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
                     selectedItem={this.state.selectedVariable} />
+                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
             </div>
         );
     }
