@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Table-Component
@@ -8,7 +9,7 @@ import React, { Component } from 'react';
 class Table extends Component {
 
     /**
-     * render - Converts the property (see below) into a HTML-table and renders
+     * render - Converts the property 'tableData' (see below) into a HTML-table and renders
      *      it.
      *
      * @return {JSX}  JSX-Code of component
@@ -17,7 +18,7 @@ class Table extends Component {
         return (
             <div className="table">
                 <table>
-                    {
+                    { // for each row, each element is added to the DOM
                         this.props.tableData.map((row) => {
                             return (<tr>{row.map((cell) => {
                                 return <td>{cell}</td>
@@ -28,6 +29,15 @@ class Table extends Component {
             </div>
         );
     }
+}
+
+/**
+* PropTypes
+*
+* tableData: a 2d-Array that represents the table
+*/
+Table.propTypes = {
+    tableData: PropTypes.array.isRequired,
 }
 
 export default Table;
