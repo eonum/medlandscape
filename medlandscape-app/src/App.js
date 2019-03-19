@@ -39,6 +39,7 @@ class App extends Component {
                     return canton;
                 })
             })
+            this.create2dArr(this.state.cantons[0]);
         });
 
         fetch(apiURL + "de/api/medical_landscape/hospitals").then(res => res.json()).then((results) => {
@@ -47,13 +48,17 @@ class App extends Component {
                     return hospital;
                 }),
             })
-            this.create2dArr();
         });
     };
 
-    create2dArr = () => {
-        const {name, street, city, latitude, longitude} = this.state.hospitals[0];
-        let arr = [["name", name], ["street", street], ["city", city], ["coordinates", latitude + ", " + longitude]];
+    create2dArr = (selectedObject) => {
+        let arr = [];
+        for (var key in selectedObject) {
+            if (typeof selectedObject[key] !== 'object' && selectedObject[key] !== null) {
+                arr.push([key, selectedObject[key]]);
+            }
+        }
+        console.log(arr);
         this.setState({
             tableData : arr
         })
@@ -68,7 +73,6 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}

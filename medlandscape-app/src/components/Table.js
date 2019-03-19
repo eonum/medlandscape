@@ -18,13 +18,15 @@ class Table extends Component {
         return (
             <div className="table">
                 <table>
+                    <tbody>
                     { // for each row, each element is added to the DOM
                         this.props.tableData.map((row) => {
-                            return (<tr>{row.map((cell) => {
-                                return <td>{cell}</td>
+                            return (<tr key={row[0]}>{row.map((cell) => {
+                                return <td key={cell}>{cell}</td>
                             })}</tr>)
                         })
                     }
+                    </tbody>
                 </table>
             </div>
         );
