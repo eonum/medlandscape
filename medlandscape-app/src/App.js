@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
+import Table from './components/Table.js';
 import CantonList from './components/CantonList.js';
 import CantonMap from './components/CantonMap/CantonMap.js';
 import './App.css';
@@ -15,11 +16,8 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
-        selectedCantons : []
-    }
-
-    componentDidMount(){
-        this.initApiCall();
+        selectedCantons : [],
+        tableData : []
     }
 
     initApiCall = () => {
@@ -38,6 +36,7 @@ class App extends Component {
                     return canton;
                 })
             })
+            this.create2dArr(this.state.cantons[0]);
         });
 
         fetch(apiURL + "de/api/medical_landscape/hospitals").then(res => res.json()).then((results) => {
@@ -67,6 +66,22 @@ class App extends Component {
         }
     }
 
+    create2dArr = (selectedObject) => {
+        let arr = [];
+        for (var key in selectedObject) {
+            if (typeof selectedObject[key] !== 'object' && selectedObject[key] !== null) {
+                arr.push([key, selectedObject[key]]);
+            }
+        }
+        this.setState({
+            tableData : arr
+        })
+    }
+
+    componentDidMount() {
+        this.initApiCall();
+    }
+
     render() {
         return (
             <div className="App">
@@ -75,6 +90,7 @@ class App extends Component {
                 <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
                 <h1>Hello world</h1>
                 <CantonMap/>
+                <Table tableData={this.state.tableData} />
             </div>
         );
     }
