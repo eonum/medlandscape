@@ -1,21 +1,30 @@
-.canton-list-item {
+.canton-list{
     width: 270px;
+    height: 500px;
+    overflow: scroll;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #ddd;
+}
+
+.canton-list-item {
+    width: 100%;
     font-size: 16px;
     box-sizing: border-box;
     padding: 3px 0 3px 10px;
-    background-color: #ddd;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
 }
 
 .canton-name {
     box-sizing: border-box;
-    padding: 10px;
-    display: inline-block;
+    display: inline;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
 }
 
 .canton-name:hover {
     cursor: pointer;
-}
-
-.canton-name p {
-    padding-left: 10px;
 }

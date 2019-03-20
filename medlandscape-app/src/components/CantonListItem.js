@@ -7,8 +7,10 @@ class CantonListItem extends Component {
         return (
             <div className="canton-list-item">
                 <label>
-                    <input type="checkbox" className="canton-cb" onChange={this.props.selectCanton.bind(this, this.props.canton)}/>
-                    <p className="canton-name" >{name + " " + name_de}</p>
+                    <input type="checkbox" className="list-item-cb" onChange={this.props.selectCanton.bind(this, this.props.canton)}/>
+                    <div className="canton-name">
+                        {name + " " + name_de}
+                    </div>
                 </label>
             </div>
         );
