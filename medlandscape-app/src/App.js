@@ -6,7 +6,7 @@ import CantonMap from './components/CantonMap/CantonMap.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
-let apiRequest = "de/api/medical_landscape/hospitals";
+let apiRequest = "de/api/medical_landscape/";
 
 class App extends Component {
 
@@ -20,12 +20,32 @@ class App extends Component {
         tableData : []
     }
 
+    apiCall = () => {
+        let query = apiRequest + "hospitals?variables=" + this.state.selectedVariable.name;
+        fetch(apiURL + query).then(res => res.json()).then((results) => {
+            this.setState({
+                hospitals : results.map(hospital => {
+                    return hospital;
+                })
+            })
+        });
+
+        query = apiRequest + "cantons?variables=" + this.state.selectedVariable.name;
+        fetch(apiURL + query).then(res => res.json()).then((results) => {
+            this.setState({
+                cantons : results.map(canton => {
+                    return canton;
+                })
+            })
+        });
+    }
+
     initApiCall = () => {
         fetch(apiURL + "de/api/medical_landscape/variables").then(res => res.json()).then((results) => {
             this.setState({
                 var : results.map(variable => {
                     return variable;
-                })
+                }),
             })
             this.dropdownSelectItem(this.state.var[0]);
         });
@@ -50,6 +70,7 @@ class App extends Component {
 
     dropdownSelectItem = (item) => {
         this.setState({ selectedVariable: item });
+        this.apiCall();
     }
 
     selectCanton = (canton) => {
@@ -85,12 +106,11 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
-                    selectedItem={this.state.selectedVariable} />
-                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
-                <h1>Hello world</h1>
-                <CantonMap/>
-                <Table tableData={this.state.tableData} />
+                <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
+                {/*<CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>*/}
+                <CantonMap cantons={this.state.cantons} />
+                {/*<HospitalMap hospitals={this.state.hospitals}*/}
+                {/*<Table tableData={this.state.tableData} />*/}
             </div>
         );
     }
