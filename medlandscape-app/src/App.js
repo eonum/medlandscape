@@ -20,8 +20,8 @@ class App extends Component {
         tableData : []
     }
 
-    apiCall = () => {
-        let query = apiRequest + "hospitals?variables=" + this.state.selectedVariable.name;
+    apiCall = (selectedVar) => {
+        let query = apiRequest + "hospitals?variables=" + selectedVar;
         fetch(apiURL + query).then(res => res.json()).then((results) => {
             this.setState({
                 hospitals : results.map(hospital => {
@@ -30,7 +30,7 @@ class App extends Component {
             })
         });
 
-        query = apiRequest + "cantons?variables=" + this.state.selectedVariable.name;
+        query = apiRequest + "cantons?variables=" + selectedVar;
         fetch(apiURL + query).then(res => res.json()).then((results) => {
             this.setState({
                 cantons : results.map(canton => {
@@ -69,8 +69,8 @@ class App extends Component {
     };
 
     dropdownSelectItem = (item) => {
-        this.setState({ selectedVariable: item });
-        this.apiCall();
+        this.setState({ selectedVariable : item });
+        this.apiCall(item.name);
     }
 
     selectCanton = (canton) => {
