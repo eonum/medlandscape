@@ -3,6 +3,7 @@ import DropdrownMenu from './components/DropdownMenu.js';
 import Table from './components/Table.js';
 import CantonList from './components/CantonList.js';
 import CantonMap from './components/CantonMap/CantonMap.js';
+import HospitalMap from './components/HospitalMap/HospitalMap.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -107,9 +108,9 @@ class App extends Component {
         return (
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
-                {/*<CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>*/}
-                <CantonMap cantons={this.state.cantons} />
-                {/*<HospitalMap hospitals={this.state.hospitals}*/}
+                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
+				{/*<CantonMap cantons={this.state.cantons} />*/}
+                <HospitalMap hospitals={this.state.hospitals} />
                 {/*<Table tableData={this.state.tableData} />*/}
             </div>
         );

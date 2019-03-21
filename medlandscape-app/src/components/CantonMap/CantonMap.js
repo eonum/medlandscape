@@ -4,11 +4,15 @@ import './CantonMap.css';
 import neuchatel from './cantons/Neuchatel.json';
 
 class CantonMap extends Component {
-  state = {
-    lat: 46.87,
-    lng: 8.24,
-    zoom: 8,
-  }
+	constructor(props){
+		super(props);
+		console.log(props.cantons);
+		this.state = {
+			lat: 46.87,
+			lng: 8.24,
+			zoom: 8,
+		};
+	}
 
   render() {
     const position = [this.state.lat, this.state.lng]
