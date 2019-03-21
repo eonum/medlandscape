@@ -1,4 +1,4 @@
-.canton-list{
+.checkbox-list{
     width: 270px;
     height: 500px;
     overflow: scroll;
@@ -7,7 +7,7 @@
     background-color: #ddd;
 }
 
-.canton-list-item {
+.checkbox-list-item {
     width: 100%;
     font-size: 16px;
     box-sizing: border-box;
@@ -17,7 +17,7 @@
     align-items: center;
 }
 
-.canton-name {
+.list-item-name {
     box-sizing: border-box;
     display: inline;
     height: 30px;

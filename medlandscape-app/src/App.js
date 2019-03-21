@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
-import CantonList from './components/CantonList.js';
+import CheckboxList from './components/CheckboxList.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -52,7 +52,7 @@ class App extends Component {
         this.setState({ selectedVariable: item });
     }
 
-    selectCanton = (canton) => {
+    checkboxSelectItem = (canton) => {
         if (this.state.selectedCantons.includes(canton)) {
             this.setState({
                 selectedCantons : this.state.selectedCantons.filter(checkedCanton => {
@@ -71,7 +71,7 @@ class App extends Component {
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
                     selectedItem={this.state.selectedVariable} />
-                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
+                <CheckboxList cantons={this.state.cantons} checkboxSelectItem={this.checkboxSelectItem} />
             </div>
         );
     }
