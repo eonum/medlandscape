@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
 import './CantonMap.css';
-import neuchatel from './cantons/Neuchatel.json';
+import NE from './cantons/Neuchatel.json';
 
 class CantonMap extends Component {
 	constructor(props){
 		super(props);
-		console.log(props.cantons);
 		this.state = {
 			lat: 46.87,
 			lng: 8.24,
 			zoom: 8,
 		};
 	}
+	
+	componentDidUpdate() {
+		console.log(this.props.cantons);
+	}
 
   render() {
     const position = [this.state.lat, this.state.lng]
-    const ne = neuchatel
+    const ne = NE;
     return (
       <Map center={position} zoom={this.state.zoom}>
         <TileLayer
