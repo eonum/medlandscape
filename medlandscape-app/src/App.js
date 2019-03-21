@@ -109,7 +109,7 @@ class App extends Component {
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
                 <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
-				{/*<CantonMap cantons={this.state.cantons} />*/}
+				{<CantonMap cantons={this.state.cantons} />}
                 <HospitalMap hospitals={this.state.hospitals} />
                 {/*<Table tableData={this.state.tableData} />*/}
             </div>

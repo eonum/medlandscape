@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
 import './CantonMap.css';
-import NE from './cantons/Neuchatel.json';
+import NW from './cantons/NW.json';
+import OW from './cantons/OW.json';
 
 class CantonMap extends Component {
 	constructor(props){
@@ -19,14 +20,16 @@ class CantonMap extends Component {
 
   render() {
     const position = [this.state.lat, this.state.lng]
-    const ne = NE;
+    const nw = NW;
+    const ow = OW;
     return (
       <Map center={position} zoom={this.state.zoom}>
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         />
-        <GeoJSON data = {ne}/>
+        <GeoJSON data = {nw}/>
+        <GeoJSON data = {ow}/>
       </Map>
     )
   }
