@@ -1,18 +1,35 @@
 import React, { Component } from 'react'
-import { Map, TileLayer, Circle, Popup } from 'react-leaflet'
+import { Map, TileLayer, CircleMarker, Popup, getZoom } from 'react-leaflet'
 import './HospitalMap.css';
 
 class HospitalMap extends Component {  
 	constructor(props){
 		super(props);
 		this.state = {
+			data: props.data,
 			lat: 46.87,
 			lng: 8.24,
 			zoom: 8,
-		};
+			};
 	}
+
+	returnData(item, keys){
+		let temp = item.attributes;
+		for (let i = 0; i < keys.length; i++){
+			if(temp == null) {
+				console.log(typeof temp);
+				return 0;
+			} else {
+				temp = temp[keys[i]];
+			}
+		}
+		if (temp === undefined)
+			temp = 0;
+		return 2*temp;
+	}
+
 	componentDidUpdate() {
-		console.log(this.props.hospitals);
+		console.log(this.props.data);
 	}
 
 	render() {
@@ -25,12 +42,12 @@ class HospitalMap extends Component {
 				url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
 			/>
 			{
-				this.props.hospitals.map((item) => (
-					<Circle center={{lon: item.longitude, lat: item.latitude}} radius={40}>
+				this.props.data.data.map((item) => (
+					<CircleMarker center={{lon: item.longitude, lat: item.latitude}} radius={this.returnData(item, this.props.data.keys)}>
 						<Popup>
-							{JSON.stringify(item.attributes)}
+							{this.returnData(item, this.props.data.keys)}
 						</Popup>
-					</Circle>
+					</CircleMarker>
 				))
 			}
 			</Map>
