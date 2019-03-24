@@ -14,7 +14,7 @@ class DropdownMenu extends Component {
     * toggleDropdown - toggles whether the DropdownMenu is opened or closed
     */
     toggleDropdown() {
-        let dropdownListDiv = document.getElementById("dropdownList");
+        let dropdownListDiv = document.getElementById(this.props.id);
         dropdownListDiv.classList.toggle('show');
     }
 
@@ -59,9 +59,9 @@ class DropdownMenu extends Component {
     render() {
         return (
             <div className="dropdown">
-                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{this.props.selectedItem.name_de} ▼</button>
-                <div id="dropdownList" className="dropdown-content">
-                    <input type="text" placeholder="Suchen..." id="myInput" className="dropdownElem" onKeyUp={this.filterFunction.bind(this)} />
+                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.props.selectedItem.name_de*/} ▼</button>
+                <div id={this.props.id} className="dropdown-content">
+                    <input type="text" placeholder="Suchen..." className="dropdownElem searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {
                         this.props.listItems.map((item) => (
                             <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.name_de}</div>
