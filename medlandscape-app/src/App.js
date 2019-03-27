@@ -75,7 +75,7 @@ class App extends Component {
     }
 
     dropdownSelectItem = (item) => {
-        this.setState({ selectedVariables : item });
+        this.setState({ selectedVariable : item });
         this.applyVar(item);
     }
 

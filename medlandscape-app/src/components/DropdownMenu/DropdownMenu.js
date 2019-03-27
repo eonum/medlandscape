@@ -59,12 +59,12 @@ class DropdownMenu extends Component {
     render() {
         return (
             <div className="dropdown">
-                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.props.selectedItem.name_de*/} ▼</button>
+                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.props.selectedItem.text*/} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
                     <input type="text" placeholder="Suchen..." className="dropdownElem searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {
                         this.props.listItems.map((item) => (
-                            <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.name_de}</div>
+                            <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.text}</div>
                         ))
                     }
                 </div>
