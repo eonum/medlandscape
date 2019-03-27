@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Map, TileLayer, CircleMarker, Popup, getZoom } from 'react-leaflet'
+import { Map, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import './HospitalMap.css';
 
 class HospitalMap extends Component {  
@@ -31,8 +31,9 @@ class HospitalMap extends Component {
 	}
 
 	/*iterates through all values of the given key variable and returns the maximum value*/
-	getMax(){
+	getMaxAndMin(){
 		let max = 0;
+		let min = 1000000000000;
 		const array = this.props.data.data.map((item) => item);
 		const keys = this.props.data.keys;
 		for (let i = 0; i < array.length; i++){
@@ -44,15 +45,20 @@ class HospitalMap extends Component {
 					if (item !== undefined){
 						item = item[keys[j]];
 						if (item !== undefined){
-							if (max < item[keys[1]]) //put year instead of 1 here
+							if (max < item[keys[1]]) //1 equals the year
     							max = item[keys[1]]
-							console.log(max); 
+    						if (item[keys[1]] < min) //1 equals the year
+    							min = item[keys[1]]
+							console.log("min: " + min); 
 						}
 					}
 				}
 			}
 		}
-		return max;
+		return {
+			max: max,
+			min: min
+		}
 	}
 
 	/*calculates and returns a rgb color*/
@@ -60,9 +66,19 @@ class HospitalMap extends Component {
 		return "rgb(255, 5, 0)";
 	}
 
+	getNormedRadius(item, keys){
+		const maxAndMin = this.getMaxAndMin();
+		const min = maxAndMin.min;
+		const max = maxAndMin.max;
+		// norming variable value to a number from 0 (lowest value) to 1 (highest value) 
+		const normedVal = (this.returnData(item, keys)-min)/(max-min);
+		const smallest = 4  // minimum pixel size of smallest value
+		const factor = 40; // factor + smallest = maximal size of biggest value
+		return normedVal*factor+smallest;
+	}
+
 	render() {
 		const position = [this.state.lat, this.state.lng]
-		const max = this.getMax()
 		return (
 			<Map center={position} zoom={this.state.zoom}>
 				<TileLayer
@@ -74,7 +90,10 @@ class HospitalMap extends Component {
 						<CircleMarker 
 							center={{lon: item.longitude, lat: item.latitude}} 
 							color = {this.calculateColor()}
-							radius={this.returnData(item, this.props.data.keys)/max*50}> // norming function is here
+							opacity = "0.8"
+							weight = "3" // defining how big the outer line of circle is
+							radius={this.getNormedRadius(item, this.props.data.keys)} // norming function is here
+							>
 								<Popup>
 									{this.returnData(item, this.props.data.keys)}
 								</Popup>

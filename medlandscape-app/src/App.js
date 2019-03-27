@@ -135,7 +135,7 @@ class App extends Component {
 				<CantonMap cantons={this.state.cantons} />
                 <HospitalMap data={obj} />
                 <Table tableData={tableData} />*/}
-				{/*<HospitalMap data={obj} />*/}
+				{<HospitalMap data={obj} />}
 				<CantonMap data={cantonObj} />
             </div>
         );
