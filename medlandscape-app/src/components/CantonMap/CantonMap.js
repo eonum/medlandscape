@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
-import { Map, TileLayer, Popup, GeoJSON } from 'react-leaflet'
+import React, { Component } from 'react';
+import { Map, TileLayer, Popup, GeoJSON, MapControl } from 'react-leaflet';
 import './CantonMap.css';
 import cantons from './cantons/cantons.json';
-import NW from './cantons/NW.json';
-import OW from './cantons/OW.json';
 
 class CantonMap extends Component {
 	constructor(props){
@@ -65,28 +63,26 @@ class CantonMap extends Component {
 		}
 	}
 		
-	getStyle(item, keys){
+	getNormedStyle(item, keys){
 		const maxAndMin = this.getMaxAndMin();
 		const min = maxAndMin.min;
 		const max = maxAndMin.max;
 		// norming variable value to a number from 0 (lowest value) to 1 (highest value) 
 		const normedVal = (this.returnData(item, keys)-min)/(max-min);
 		let color;
-		if (normedVal <= 0.2)
-			color = "249, 213, 213"
-		if (normedVal <= 0.4 && normedVal > 0.2)
-			color = "243, 155, 155"
-		if (normedVal <= 0.6 && normedVal > 0.4)
-			color = "240, 112, 112"
-		if (normedVal <= 0.8 && normedVal > 0.6)
-			color = "223, 61, 61"
-		if (normedVal <= 1 && normedVal > 0.8)
-			color = "255, 0, 0"
-	
+		// defining color upon classing
+		// array classCollors contains the colors for the classes
+		const classColors = Array("250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "127, 36, 0")
+		for (let i = 0; i < 5; i++){
+			if (normedVal <= (i+1)*0.2 && normedVal >= (i)*0.2)
+				color = classColors[i];
+		}
 		var cantonStyle = {
-    		"color": "rgb("+color+")",
-    		"weight": 0,  // defining how big the outer line of canton is
-    		"opacity": 1
+			"color": "rgb("+color+")", // outline color
+    		"fillColor": "rgb("+color+")",
+    		"weight": 1,  // defining how big the outline of canton is
+    		"opacity": 0.4, // outline opacity
+    		"fillOpacity": 0.5
 			};
 		return cantonStyle;
 	}
@@ -103,7 +99,7 @@ class CantonMap extends Component {
 					this.props.data.data.map((item) => (
 						<GeoJSON 
 							data = {cantons[item.name]}
-						 	style = {this.getStyle(item, this.props.data.keys)}
+						 	style = {this.getNormedStyle(item, this.props.data.keys)}
 						>
 							<Popup>
 								{this.returnData(item, this.props.data.keys)}
@@ -112,6 +108,7 @@ class CantonMap extends Component {
 					))
 				}
 			</Map>
+
 		)
 	}
 }

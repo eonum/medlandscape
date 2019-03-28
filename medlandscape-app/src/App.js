@@ -130,12 +130,11 @@ class App extends Component {
         let tableData = this.create2dArr(this.state.cantons[0]);
         return (
             <div className="App">
-                <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
-                {/*<CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
+                { /* <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
+                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
 				<CantonMap cantons={this.state.cantons} />
                 <HospitalMap data={obj} />
                 <Table tableData={tableData} />*/}
-				{<HospitalMap data={obj} />}
 				<CantonMap data={cantonObj} />
             </div>
         );
