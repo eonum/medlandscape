@@ -4,6 +4,7 @@ import Table from './components/Table.js';
 import CantonList from './components/CantonList.js';
 import CantonMap from './components/CantonMap/CantonMap.js';
 import HospitalMap from './components/HospitalMap/HospitalMap.js';
+import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -18,7 +19,8 @@ class App extends Component {
 
         selectedVariable : {},
         selectedVarInfo : {},
-        selectedCantons : []
+        selectedCantons : [],
+        selectedHospitals : []
     }
 
     applyVar = (selectedVar) => {
@@ -98,17 +100,19 @@ class App extends Component {
         this.applyVar(item);
     }
 
-    selectCanton = (canton) => {
-        let updatedCantonList = [];
-        if (this.state.selectedCantons.includes(canton)) {
-            updatedCantonList = this.state.selectedCantons.filter(checkedCanton => {
-                return checkedCanton !== canton;
-            })
+    checkboxSelectItem = (object) => {
+        let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
+        console.log(selectedObj);
+        let newList = [];
+        if (this.state[selectedObj].includes(object)) {
+            newList = this.state[selectedObj].filter(checkedObj => {
+                return checkedObj !== object;
+            });
         } else {
-            updatedCantonList =  [...this.state.selectedCantons, canton];
+            newList = [...this.state[selectedObj], object];
         }
         this.setState({
-            selectedCantons : updatedCantonList
+            [selectedObj] : newList
         })
     }
 
@@ -139,6 +143,7 @@ class App extends Component {
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
                 {/*<CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
+                <CheckboxList objects={this.state.cantons} checkboxSelectItem={this.checkboxSelectItem} />
 				<CantonMap cantons={cantonsData} />
                 <HospitalMap data={hospitalsData} />
                 {/*<Table tableData={tableData} />*/}
