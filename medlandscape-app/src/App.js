@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
-import CheckboxList from './components/CheckboxList.js';
+import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -71,7 +71,8 @@ class App extends Component {
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem}
                     selectedItem={this.state.selectedVariable} />
-                <CheckboxList cantons={this.state.cantons} checkboxSelectItem={this.checkboxSelectItem} />
+                <CheckboxList objects={this.state.cantons} checkboxSelectItem={this.checkboxSelectItem} /><br />
+                <CheckboxList objects={this.state.hospitals} checkboxSelectItem={this.checkboxSelectItem} />
             </div>
         );
     }

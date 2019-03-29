@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 class CheckboxListItem extends Component {
 
     render() {
-        const {name, name_de, checkboxSelectItem} = this.props.canton;
+        const {name, text, checkboxSelectItem} = this.props.object;
         return (
             <div className="checkbox-list-item">
                 <label>
-                    <input type="checkbox" className="list-item-cb" onChange={this.props.checkboxSelectItem.bind(this, this.props.canton)}/>
+                    <input type="checkbox" className="list-item-cb" onChange={this.props.checkboxSelectItem.bind(this, this.props.object)}/>
                     <div className="list-item-name">
-                        {name + " " + name_de}
+                        {(text) ? name + " " + text : name}
                     </div>
                 </label>
             </div>
