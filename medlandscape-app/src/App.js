@@ -17,6 +17,7 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
+        selectedVarInfo : {},
         selectedCantons : []
     }
 
@@ -27,54 +28,68 @@ class App extends Component {
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
 
         query += key + "?variables=" + name;
-        this.apiCall(key, query, this.createVarInfo, selectedVar);
-    }
-
-    apiCall = (key, query, callback, cbArg) => {
-        fetch(apiURL + query).then(res => res.json()).then((results) => {
+        this.apiCall(key, query).then((results) => {
             this.setState({
                 [key] : results.map(obj => {
                     return obj;
                 })
             });
-            if (callback && cbArg)
-                callback(cbArg);
-            else if (callback)
-                callback(this.state[key][0]);
-        })
+        }).then(() => {
+            console.log("createVarInfo");
+            this.createVarInfo();
+        });
+    }
+
+    apiCall = (key, query) => {
+        return fetch(apiURL + query).then(res => res.json());
     }
 
     initApiCall = () => {
-        let key = "var";
-        let query = apiRequest + "variables";
-        this.apiCall(key, query, this.dropdownSelectItem);
+
+        let varResultArr, cantonResultArr = [];
+
+        this.apiCall("var", (apiRequest + "variables")).then((result) => {
+            varResultArr = result.map(obj => {
+                return obj;
+            })
+        });
 
         // hospitals already fetched in applyVar()
 
-        key = "cantons";
-        query = apiRequest + "cantons";
-        this.apiCall(key, query);
+        this.apiCall("cantons", (apiRequest + "cantons")).then((result) => {
+            cantonResultArr = result.map(obj => {
+                return obj;
+            })
+        }).then(() => {
+            this.setState({
+                var : varResultArr,
+                cantons : cantonResultArr,
+                selectedVariable : varResultArr[0]
+            });
+            this.applyVar(varResultArr[0]);
+        });
     }
 
-    createVarInfo = (variable) => {
-        const {name, variable_model, variable_type, is_time_series} = variable;
 
+    createVarInfo = () => {
+        const {name, variable_model, variable_type, is_time_series} = this.state.selectedVariable;
         let model = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        let varData = this.state[model];
-        let keys = [name];
-        if (is_time_series) {
-            let firstEntry = this.create2dArr(varData[0].attributes[name])[0][0];
-            keys = [...keys, firstEntry];
-        }
-        
-        let obj = {
-            name : name,
-            variable_model : model,
-            variable_type : variable_type,
-            is_time_series : is_time_series,
-            keys : keys,
-            data : varData
-        }
+
+        let appliedData = this.state[model].map((obj) => {
+            return obj.attributes[name];
+        });
+
+        console.log(this.state[model]);
+
+        //work in progress
+
+        let obj = {};
+        //     name : name,
+        //     variable_model : model,
+        //     variable_type : variable_type,
+        //     is_time_series : is_time_series,
+        //     data :
+        // }
         return obj;
     }
 
@@ -124,9 +139,9 @@ class App extends Component {
             <div className="App">
                 <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
                 {/*<CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
-				<CantonMap cantons={this.state.cantons} />
-                <HospitalMap data={obj} />
-                <Table tableData={tableData} />*/}
+				<CantonMap cantons={cantonsData} />
+                <HospitalMap data={hospitalsData} />
+                {/*<Table tableData={tableData} />*/}
             </div>
         );
     }
