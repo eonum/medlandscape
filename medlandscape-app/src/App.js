@@ -14,7 +14,8 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
-        selectedCantons : []
+        selectedCantons : [],
+        selectedHospitals : []
     }
 
     componentDidMount(){
@@ -52,18 +53,20 @@ class App extends Component {
         this.setState({ selectedVariable: item });
     }
 
-    checkboxSelectItem = (canton) => {
-        if (this.state.selectedCantons.includes(canton)) {
-            this.setState({
-                selectedCantons : this.state.selectedCantons.filter(checkedCanton => {
-                    return checkedCanton !== canton;
-                })
-            })
+    checkboxSelectItem = (object) => {
+        let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
+        console.log(selectedObj);
+        let newList = [];
+        if (this.state[selectedObj].includes(object)) {
+            newList = this.state[selectedObj].filter(checkedObj => {
+                return checkedObj !== object;
+            });
         } else {
-            this.setState({
-                selectedCantons : [...this.state.selectedCantons, canton]
-            })
+            newList = [...this.state[selectedObj], object];
         }
+        this.setState({
+            [selectedObj] : newList
+        })
     }
 
     render() {

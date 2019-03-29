@@ -1,9 +1,8 @@
 .checkbox-list{
-    width: 270px;
+    min-width: 270px;
+    max-width: 400px;
     height: 500px;
-    overflow: scroll;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    overflow-y: scroll;
     background-color: #ddd;
 }
 
@@ -12,9 +11,12 @@
     font-size: 16px;
     box-sizing: border-box;
     padding: 3px 0 3px 10px;
-    overflow: hidden;
     display: inline-flex;
     align-items: center;
+}
+
+.checkbox-list-item:nth-child(odd) {
+    background-color: #ccc;
 }
 
 .list-item-name {
