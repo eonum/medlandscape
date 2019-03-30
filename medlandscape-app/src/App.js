@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
 import Table from './components/Table.js';
 import CantonList from './components/CantonList.js';
-import CantonMap from './components/CantonMap/CantonMap.js';
-import HospitalMap from './components/HospitalMap/HospitalMap.js';
+import Maps from './components/Maps/Maps.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -132,10 +131,8 @@ class App extends Component {
             <div className="App">
                 { /* <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
                 <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
-				<CantonMap cantons={this.state.cantons} />
-                <HospitalMap data={obj} />
                 <Table tableData={tableData} />*/}
-				<CantonMap data={cantonObj} />
+				<Maps data={cantonObj} />
             </div>
         );
     }

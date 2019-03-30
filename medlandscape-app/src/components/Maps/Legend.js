@@ -15,7 +15,7 @@ class Legend extends Component {
 		return (
 			<Control position="bottomright">
 					<div className="legend" style={styles}>
-  							this is the legend
+  							this will be the legend
 					</div>
       		</Control>
 		)
