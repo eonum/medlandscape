@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import DropdrownMenu from './components/DropdownMenu.js';
 import Table from './components/Table.js';
-import CantonList from './components/CantonList.js';
 import CantonMap from './components/CantonMap/CantonMap.js';
 import HospitalMap from './components/HospitalMap/HospitalMap.js';
 import CheckboxList from './components/CheckboxList/CheckboxList.js';
