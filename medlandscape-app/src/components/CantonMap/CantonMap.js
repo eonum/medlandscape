@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, Popup, GeoJSON, MapControl } from 'react-leaflet';
+import { Map, TileLayer, Popup, GeoJSON } from 'react-leaflet';
 import './CantonMap.css';
 import cantons from './cantons/cantons.json';
+import Legend from './Legend.js'
 
 class CantonMap extends Component {
 	constructor(props){
@@ -90,7 +91,12 @@ class CantonMap extends Component {
 	render() {
 		const position = [this.state.lat, this.state.lng]
 		return (
-			<Map center={position} zoom={this.state.zoom}>
+			<Map 
+				center={position} 
+				zoom={this.state.zoom}
+				minZoom={8} // set minimum zoom level
+				maxZoom={14} // set maximum zoom level
+				>
 				<TileLayer
 				  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 				  url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
@@ -107,6 +113,7 @@ class CantonMap extends Component {
 						</GeoJSON>
 					))
 				}
+				<Legend data={undefined} />
 			</Map>
 
 		)
