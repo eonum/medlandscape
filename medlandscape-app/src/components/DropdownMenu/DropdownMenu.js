@@ -35,7 +35,7 @@ class DropdownMenu extends Component {
     */
     filterFunction() {
         let input, filter, a, i, div, txtValue;
-        input = document.getElementById("myInput");
+        input = document.getElementById(this.props.id);
         filter = input.value.toUpperCase();
         div = document.getElementById("dropdownList");
         a = div.getElementsByTagName("div");
@@ -57,9 +57,10 @@ class DropdownMenu extends Component {
     * @return {JSX}  JSX-Code of components
     */
     render() {
+        console.log("rendering");
         return (
             <div className="dropdown">
-                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.props.selectedItem.text*/} ▼</button>
+                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.selectedItem.text*/} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
                     <input type="text" placeholder="Suchen..." className="dropdownElem searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {

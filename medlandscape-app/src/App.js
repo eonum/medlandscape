@@ -109,20 +109,31 @@ class App extends Component {
 
     render() {
         let cantonVars = [], hospitalVars = [];
+        let selectedCanton = {}, selectedHospital = {};
+
         hospitalVars = this.state.var.filter(variable => {
             if (variable.variable_model === "Hospital")
-                return variable
+            return variable
         })
         cantonVars = this.state.var.filter(variable => {
             if (variable.variable_model === "Canton")
-                return variable
+            return variable
         })
+
+        if (this.state.selectedVariable.variable_model === "Hospital") {
+            selectedHospital = this.state.selectedVariable;
+            selectedCanton = cantonVars[0];
+        } else {
+            selectedCanton = this.state.selectedVariable;
+            selectedHospital = hospitalVars[0];
+        }
+
         return (
             <div className="App">
                 <p>Canton Variables:</p>
-                <DropdrownMenu id="CantonVarList" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={cantonVars[0]} />
+                <DropdrownMenu id="CantonVarList" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
                 <p>Hospital Variables:</p>
-                <DropdrownMenu id="HospitalVarList" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={hospitalVars[0]} />
+                <DropdrownMenu id="HospitalVarList" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
             </div>
         );
     }
