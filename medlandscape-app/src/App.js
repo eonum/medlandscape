@@ -36,7 +36,6 @@ class App extends Component {
                 })
             });
         }).then(() => {
-            console.log("createVarInfo");
             this.createVarInfo();
         });
     }
@@ -91,8 +90,6 @@ class App extends Component {
             return obj.attributes[name];
         });
 
-        console.log(this.state[model]);
-
         //work in progress
 
         let obj = {};
@@ -121,7 +118,6 @@ class App extends Component {
      */
     checkboxSelectItem = (object) => {
         let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
-        console.log(selectedObj);
         let newList = [];
         if (this.state[selectedObj].includes(object)) {
             newList = this.state[selectedObj].filter(checkedObj => {
