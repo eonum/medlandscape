@@ -35,9 +35,9 @@ class DropdownMenu extends Component {
     */
     filterFunction() {
         let input, filter, a, i, div, txtValue;
-        input = document.getElementById(this.props.id);
+        input = document.getElementById(this.props.id).querySelector('.searchbar');
         filter = input.value.toUpperCase();
-        div = document.getElementById("dropdownList");
+        div = document.getElementById(this.props.id);
         a = div.getElementsByTagName("div");
         for (i = 0; i < a.length; i++) {
             txtValue = a[i].textContent || a[i].innerText;
@@ -57,7 +57,6 @@ class DropdownMenu extends Component {
     * @return {JSX}  JSX-Code of components
     */
     render() {
-        console.log("rendering");
         return (
             <div className="dropdown">
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.selectedItem.text*/} ▼</button>
