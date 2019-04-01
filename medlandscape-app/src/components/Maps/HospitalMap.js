@@ -23,6 +23,7 @@ class HospitalMap extends Component {
 	drawHospitals(item){
 		return (
 			<CircleMarker
+                    key = {this.props.data.indexOf(item)}
 					center={{lon: item.longitude, lat: item.latitude}}
 					color = {this.calculateCircleColor()}
 					opacity = "0.8"

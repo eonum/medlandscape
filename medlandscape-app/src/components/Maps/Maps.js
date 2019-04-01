@@ -45,7 +45,6 @@ class Maps extends Component {
 
     componentDidMount() {
         maxAndMin = this.setMaxAndMin();
-        console.log(maxAndMin);
     }
 
 	render() {
@@ -61,7 +60,7 @@ class Maps extends Component {
 					url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
 				/>
 
-				{ this.props.variableInfo.model == "Canton"
+				{ this.props.variableInfo.variable_model === "Canton"
         			?
 						<CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={maxAndMin} />
        				:

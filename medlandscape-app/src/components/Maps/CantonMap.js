@@ -33,6 +33,7 @@ class CantonMap extends Component {
 	drawCantons = (item) =>{
 			return(
 				<GeoJSON
+                    key = {this.props.data.indexOf(item)}
 					data = {cantons[item.name]}
 				 	style = {this.getCantonStyle(item)}
 					>
