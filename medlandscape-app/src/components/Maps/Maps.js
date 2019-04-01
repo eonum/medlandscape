@@ -4,11 +4,11 @@ import './Maps.css';
 import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
 
+let min = 1000000000000, max = 0;
 class Maps extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			data: props.objects,
 			lat: 46.87,
 			lng: 8.24,
 			zoom: 8,
@@ -16,28 +16,23 @@ class Maps extends Component {
 	}
 
 	/*returns data value*/
-	returnData(item, keys){
-		let temp = item.attributes;
-		for (let i = 0; i < keys.length; i++){
-			if(temp == null) {
-				return 0;
-			} else {
-				temp = temp[keys[i]];
-			}
-		}
-		if (temp === undefined)
-			temp = 0;
-		return temp;
+	returnData(item) {
+        let varName = this.props.variableInfo.name;
+		let values = item.attributes[varName];
+        let keys = Object.keys(values);
+        let firstEntry = values[keys[0]];
+		return firstEntry;
 	}
 
 	/*iterates through all values of the given key variable and returns the maximum value*/
-	getMaxAndMin(){
-		let max = 0;
-		let min = 1000000000000;
-
-
-        let varName = this.props.variableInfo.name;
-
+	getMaxAndMin() {
+        for (let obj in this.props.objects) {
+            let val = this.returnData(obj);
+            if (val) {
+                max = (max < val) ? val : max;
+                min = (min > val) ? val : max;
+            }
+        }
 
         //
 		// const array = this.props.data.data.map((item) => item);
@@ -61,24 +56,17 @@ class Maps extends Component {
 		// 		}
 		// 	}
 		// }
-		return {
-			max: max,
-			min: min
-		}
 	}
 
 	/* defining canton color classes and color of each canton*/
 	// TODO: extract color definition and color class making into individual functions
-	getCantonStyle(item, keys){
-		const maxAndMin = this.getMaxAndMin();
-		const min = maxAndMin.min;
-		const max = maxAndMin.max;
+	getCantonStyle(item){
 		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
-		const normedVal = (this.returnData(item, keys)-min)/(max-min);
+		const normedVal = (this.returnData(item)-min)/(max-min);
 		let color;
 		// defining color upon classing
 		// array classCollors contains the colors for the classes
-		const classColors = Array("250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "127, 36, 0")
+		const classColors = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "127, 36, 0"]
 		for (let i = 0; i < 5; i++){
 			if (normedVal <= (i+1)*0.2 && normedVal >= (i)*0.2)
 				color = classColors[i];
@@ -99,12 +87,9 @@ class Maps extends Component {
 	}
 
 	/*return normed circle radii*/
-	getNormedRadius(item, keys){
-		const maxAndMin = this.getMaxAndMin();
-		const min = maxAndMin.min;
-		const max = maxAndMin.max;
+	getNormedRadius(item){
 		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
-		const normedVal = (this.returnData(item, keys)-min)/(max-min);
+		const normedVal = (this.returnData(item)-min)/(max-min);
 		const smallest = 4  // minimum pixel size of smallest value
 		const factor = 40; // factor + smallest = maximal size of biggest value
 		return normedVal*factor+smallest;
@@ -114,10 +99,10 @@ class Maps extends Component {
 			return(
 				<GeoJSON
 					data = {cantons[item.name]}
-				 	style = {this.getCantonStyle(item, this.props.data.keys)}
+				 	style = {this.getCantonStyle(item)}
 					>
 					<Popup>
-						{this.returnData(item, this.props.data.keys)}
+						{this.returnData(item)}
 					</Popup>
 				</GeoJSON>
 				)
@@ -126,14 +111,15 @@ class Maps extends Component {
 	drawHospitals(item){
 		return (
 			<CircleMarker
+                    key={this.props.objects.indexOf(item)}
 					center={{lon: item.longitude, lat: item.latitude}}
 					color = {this.calculateCircleColor()}
 					opacity = "0.8"
 					weight = "3" // defining how big the outer line of circle is
-					radius={this.getNormedRadius(item, this.props.data.keys)} // norming function is here
+					radius={this.getNormedRadius(item)} // norming function is here
 					>
 						<Popup>
-							{this.returnData(item, this.props.data.keys)}
+							{this.returnData(item)}
 						</Popup>
 				</CircleMarker>
 			)
@@ -142,12 +128,16 @@ class Maps extends Component {
 	/* simple function deciding*/
 	drawDecision(item){
 		const model = this.props.variableInfo.variable_model;
-		if (model == "Canton")
+		if (model === "Canton")
 			return this.drawCantons(item);
-		if (model == "hospital")
+		if (model === "Hospital")
 			return this.drawHospitals(item);
 		/* TODO: add else statement with error message to control if props are handed in correctly*/
 	}
+
+    componentDidMount() {
+        this.getMaxAndMin();
+    }
 
 	render() {
 		return (
@@ -166,7 +156,7 @@ class Maps extends Component {
 						this.drawDecision(item)
 					))
 				}
-				{ this.props.variableInfo.variable_model == "Canton" // add Legend if canton map is displayed, else add nothing
+				{ this.props.variableInfo.variable_model === "Canton" // add Legend if canton map is displayed, else add nothing
         			? <Legend data={undefined} />
        				: null
       			}

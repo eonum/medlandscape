@@ -26,6 +26,7 @@ class App extends Component {
      * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
      */
     applyVar = (selectedVar) => {
+        console.log("hello");
         const {name, variable_model} = selectedVar;
 
         let query = apiRequest;
@@ -38,9 +39,7 @@ class App extends Component {
                     return obj;
                 })
             });
-        }).then(() => {
-            this.createVarInfo();
-        });
+        })
     }
 
     /**
@@ -74,35 +73,10 @@ class App extends Component {
             this.setState({
                 var : varResultArr,
                 cantons : cantonResultArr,
-                selectedVariable : varResultArr[0]
+                selectedVariable : varResultArr[152]
             });
-            this.applyVar(varResultArr[0]);
+            this.applyVar(varResultArr[152]);
         });
-    }
-
-    /**
-     * Creates an information object about the selected variable, to pass on
-     * to the Map Components.
-     * @return {Object} The variable metadata.
-     */
-    createVarInfo = () => {
-        const {name, variable_model, variable_type, is_time_series} = this.state.selectedVariable;
-        let model = (variable_model === "Hospital") ? "hospitals" : "cantons";
-
-        let appliedData = this.state[model].map((obj) => {
-            return obj.attributes[name];
-        });
-
-        //work in progress
-
-        let obj = {};
-        //     name : name,
-        //     variable_model : model,
-        //     variable_type : variable_type,
-        //     is_time_series : is_time_series,
-        //     data :
-        // }
-        return obj;
     }
 
     /**
@@ -191,7 +165,7 @@ class App extends Component {
         let tableData = this.create2dArr(this.state.cantons[0]);
         return (
             <div className="App">
-                <DropdownMenu listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton}/>
+                <DropdownMenu id="CantonVarList" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton}/><br/>
 				<Maps variableInfo={this.state.selectedVariable} objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} />
             </div>
         );
