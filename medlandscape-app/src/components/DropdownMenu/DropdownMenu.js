@@ -57,9 +57,10 @@ class DropdownMenu extends Component {
     * @return {JSX}  JSX-Code of components
     */
     render() {
+        let varText = (this.props.selectedItem) ? this.props.selectedItem.text : "";
         return (
             <div className="dropdown">
-                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{/*this.selectedItem.text*/} ▼</button>
+                <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
                     <input type="text" placeholder="Suchen..." className="dropdownElem searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {
