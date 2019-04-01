@@ -4,11 +4,11 @@ import './Maps.css';
 import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
 
-class Maps extends Component {  
+class Maps extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			data: props.data,
+			data: props.objects,
 			lat: 46.87,
 			lng: 8.24,
 			zoom: 8,
@@ -34,27 +34,33 @@ class Maps extends Component {
 	getMaxAndMin(){
 		let max = 0;
 		let min = 1000000000000;
-		const array = this.props.data.data.map((item) => item);
-		const keys = this.props.data.keys;
-		for (let i = 0; i < array.length; i++){
-			let item = array[i].attributes;
-			for (let j = 0; j < keys.length; j++){
-				if(item == null) {
-				continue;
-				} else {
-					if (item !== undefined){
-						item = item[keys[j]];
-						if (item !== undefined){
-							if (max < item[keys[1]]) //1 equals the year
-    							max = item[keys[1]]
-    						if (item[keys[1]] < min) //1 equals the year
-    							min = item[keys[1]]
-							console.log("min: " + min); 
-						}
-					}
-				}
-			}
-		}
+
+
+        let varName = this.props.variableInfo.name;
+
+
+        //
+		// const array = this.props.data.data.map((item) => item);
+		// const keys = this.props.data.keys;
+		// for (let i = 0; i < array.length; i++){
+		// 	let item = array[i].attributes;
+		// 	for (let j = 0; j < keys.length; j++){
+		// 		if(item == null) {
+		// 		continue;
+		// 		} else {
+		// 			if (item !== undefined){
+		// 				item = item[keys[j]];
+		// 				if (item !== undefined){
+		// 					if (max < item[keys[1]]) //1 equals the year
+    	// 						max = item[keys[1]]
+    	// 					if (item[keys[1]] < min) //1 equals the year
+    	// 						min = item[keys[1]]
+		// 					console.log("min: " + min);
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
 		return {
 			max: max,
 			min: min
@@ -67,7 +73,7 @@ class Maps extends Component {
 		const maxAndMin = this.getMaxAndMin();
 		const min = maxAndMin.min;
 		const max = maxAndMin.max;
-		// norming variable value to a number from 0 (lowest value) to 1 (highest value) 
+		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
 		const normedVal = (this.returnData(item, keys)-min)/(max-min);
 		let color;
 		// defining color upon classing
@@ -97,7 +103,7 @@ class Maps extends Component {
 		const maxAndMin = this.getMaxAndMin();
 		const min = maxAndMin.min;
 		const max = maxAndMin.max;
-		// norming variable value to a number from 0 (lowest value) to 1 (highest value) 
+		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
 		const normedVal = (this.returnData(item, keys)-min)/(max-min);
 		const smallest = 4  // minimum pixel size of smallest value
 		const factor = 40; // factor + smallest = maximal size of biggest value
@@ -106,10 +112,10 @@ class Maps extends Component {
 
 	drawCantons(item){
 			return(
-				<GeoJSON 
+				<GeoJSON
 					data = {cantons[item.name]}
 				 	style = {this.getCantonStyle(item, this.props.data.keys)}
-					>	
+					>
 					<Popup>
 						{this.returnData(item, this.props.data.keys)}
 					</Popup>
@@ -119,8 +125,8 @@ class Maps extends Component {
 
 	drawHospitals(item){
 		return (
-			<CircleMarker 
-					center={{lon: item.longitude, lat: item.latitude}} 
+			<CircleMarker
+					center={{lon: item.longitude, lat: item.latitude}}
 					color = {this.calculateCircleColor()}
 					opacity = "0.8"
 					weight = "3" // defining how big the outer line of circle is
@@ -135,7 +141,7 @@ class Maps extends Component {
 
 	/* simple function deciding*/
 	drawDecision(item){
-		const model = this.props.data.model;
+		const model = this.props.variableInfo.variable_model;
 		if (model == "Canton")
 			return this.drawCantons(item);
 		if (model == "hospital")
@@ -144,9 +150,9 @@ class Maps extends Component {
 	}
 
 	render() {
-		return ( 
+		return (
 			<Map // set up map
-				center={[this.state.lat, this.state.lng]} 
+				center={[this.state.lat, this.state.lng]}
 				zoom={this.state.zoom}
 				minZoom={8} // set minimum zoom level
 				maxZoom={14} // set maximum zoom level
@@ -154,13 +160,13 @@ class Maps extends Component {
 				<TileLayer // add background layer
 					attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 					url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-				/> 
+				/>
 				{ // go through array and decide what to display
-					this.props.data.data.map((item) => (
+					this.props.objects.map((item) => (
 						this.drawDecision(item)
 					))
 				}
-				{ this.props.data.model == "Canton" // add Legend if canton map is displayed, else add nothing
+				{ this.props.variableInfo.variable_model == "Canton" // add Legend if canton map is displayed, else add nothing
         			? <Legend data={undefined} />
        				: null
       			}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DropdrownMenu from './components/DropdownMenu/DropdownMenu.js';
+import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
 import Table from './components/Table.js';
 import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
@@ -39,7 +39,6 @@ class App extends Component {
                 })
             });
         }).then(() => {
-            console.log("createVarInfo");
             this.createVarInfo();
         });
     }
@@ -94,8 +93,6 @@ class App extends Component {
             return obj.attributes[name];
         });
 
-        console.log(this.state[model]);
-
         //work in progress
 
         let obj = {};
@@ -124,7 +121,6 @@ class App extends Component {
      */
     checkboxSelectItem = (object) => {
         let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
-        console.log(selectedObj);
         let newList = [];
         if (this.state[selectedObj].includes(object)) {
             newList = this.state[selectedObj].filter(checkedObj => {
@@ -195,10 +191,8 @@ class App extends Component {
         let tableData = this.create2dArr(this.state.cantons[0]);
         return (
             <div className="App">
-                { /* <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
-                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
-                <Table tableData={tableData} />*/}
-				<Maps data={cantonObj} />
+                <DropdownMenu listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton}/>
+				<Maps variableInfo={this.state.selectedVariable} objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} />
             </div>
         );
     }
