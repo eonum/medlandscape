@@ -13,86 +13,133 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
-        selectedCantons : []
+        selectedVarInfo : {},
+        selectedCantons : [],
+        selectedHospitals : []
     }
 
+    /**
+     * Fetches Cantons or Hospitals with the selected Variable information.
+     * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
+     */
     applyVar = (selectedVar) => {
         const {name, variable_model} = selectedVar;
 
         let query = apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
-
         query += key + "?variables=" + name;
-        this.apiCall(key, query, this.createVarInfo, selectedVar);
-    }
 
-    apiCall = (key, query, callback, cbArg) => {
-        fetch(apiURL + query).then(res => res.json()).then((results) => {
+        this.apiCall(query).then((results) => {
             this.setState({
                 [key] : results.map(obj => {
                     return obj;
                 })
             });
-            if (callback && cbArg)
-                callback(cbArg);
-            else if (callback)
-                callback(this.state[key][0]);
-        })
+        }).then(() => {
+            console.log("createVarInfo");
+            this.createVarInfo();
+        });
     }
 
+    /**
+     * Sends request to the API.
+     * @param  {String} query The request.
+     * @return {Promise} A Promise Object of the requested API call, results parsed as JSON.
+     */
+    apiCall = (query) => {
+        return fetch(apiURL + query).then(res => res.json());
+    }
+
+    /**
+     * Initialises the state variables with several calls to the API.
+     */
     initApiCall = () => {
-        let key = "var";
-        let query = apiRequest + "variables";
-        this.apiCall(key, query, this.dropdownSelectItem);
+        let varResultArr, cantonResultArr = [];
+
+        this.apiCall((apiRequest + "variables")).then((result) => {
+            varResultArr = result.map(obj => {
+                return obj;
+            })
+        });
 
         // hospitals already fetched in applyVar()
 
-        key = "cantons";
-        query = apiRequest + "cantons";
-        this.apiCall(key, query);
+        this.apiCall((apiRequest + "cantons")).then((result) => {
+            cantonResultArr = result.map(obj => {
+                return obj;
+            })
+        }).then(() => {
+            this.setState({
+                var : varResultArr,
+                cantons : cantonResultArr,
+                selectedVariable : varResultArr[0]
+            });
+            this.applyVar(varResultArr[0]);
+        });
     }
 
-    createVarInfo = (variable) => {
-        const {name, variable_model, variable_type, is_time_series} = variable;
-
+    /**
+     * Creates an information object about the selected variable, to pass on
+     * to the Map Components.
+     * @return {Object} The variable metadata.
+     */
+    createVarInfo = () => {
+        const {name, variable_model, variable_type, is_time_series} = this.state.selectedVariable;
         let model = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        let varData = this.state[model];
-        let keys = [name];
-        if (is_time_series) {
-            let firstEntry = this.create2dArr(varData[0].attributes[name])[0][0];
-            keys = [...keys, firstEntry];
-        }
 
-        let obj = {
-            name : name,
-            variable_model : model,
-            variable_type : variable_type,
-            is_time_series : is_time_series,
-            keys : keys,
-            data : varData
-        }
+        let appliedData = this.state[model].map((obj) => {
+            return obj.attributes[name];
+        });
+
+        console.log(this.state[model]);
+
+        //work in progress
+
+        let obj = {};
+        //     name : name,
+        //     variable_model : model,
+        //     variable_type : variable_type,
+        //     is_time_series : is_time_series,
+        //     data :
+        // }
         return obj;
     }
 
+    /**
+     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
+     * then calls applyVar to fetch data from the API.
+     * @param  {Variable object} item The selected variable.
+     */
     dropdownSelectItem = (item) => {
         this.setState({ selectedVariable : item });
         this.applyVar(item);
     }
 
-    selectCanton = (canton) => {
-        let updatedCantonList = [];
-        if (this.state.selectedCantons.includes(canton)) {
-            updatedCantonList = this.state.selectedCantons.filter(checkedCanton => {
-                return checkedCanton !== canton;
-            })
+    /**
+     * Adds / removes objects to the respective List of selected canton / hospitals.
+     * @param  {Canton/Hospital object} object The object to add / remove from the list.
+     */
+    checkboxSelectItem = (object) => {
+        let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
+        console.log(selectedObj);
+        let newList = [];
+        if (this.state[selectedObj].includes(object)) {
+            newList = this.state[selectedObj].filter(checkedObj => {
+                return checkedObj !== object;
+            });
         } else {
-            updatedCantonList =  [...this.state.selectedCantons, canton];
+            newList = [...this.state[selectedObj], object];
         }
         this.setState({
-            selectedCantons : updatedCantonList
+            [selectedObj] : newList
         })
     }
 
+    /**
+     * Creates a 2d array out of an object (Used for Table Component).
+     * @param  {Object} selectedObject The object to convert to a 2d array.
+     * @return {Array} The 2d array.
+     */
     create2dArr = (selectedObject) => {
         let arr = [];
         for (var key in selectedObject) {
