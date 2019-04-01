@@ -15,7 +15,8 @@ class App extends Component {
         selectedVariable : {},
         selectedVarInfo : {},
         selectedCantons : [],
-        selectedHospitals : []
+        selectedHospitals : [],
+        hasLoaded : false
     }
 
     /**
@@ -33,10 +34,9 @@ class App extends Component {
             this.setState({
                 [key] : results.map(obj => {
                     return obj;
-                })
+                }),
+                hasLoaded : true
             });
-        }).then(() => {
-            this.createVarInfo();
         });
     }
 
@@ -75,31 +75,6 @@ class App extends Component {
             });
             this.applyVar(varResultArr[0]);
         });
-    }
-
-    /**
-     * Creates an information object about the selected variable, to pass on
-     * to the Map Components.
-     * @return {Object} The variable metadata.
-     */
-    createVarInfo = () => {
-        const {name, variable_model, variable_type, is_time_series} = this.state.selectedVariable;
-        let model = (variable_model === "Hospital") ? "hospitals" : "cantons";
-
-        let appliedData = this.state[model].map((obj) => {
-            return obj.attributes[name];
-        });
-
-        //work in progress
-
-        let obj = {};
-        //     name : name,
-        //     variable_model : model,
-        //     variable_type : variable_type,
-        //     is_time_series : is_time_series,
-        //     data :
-        // }
-        return obj;
     }
 
     /**
@@ -174,9 +149,17 @@ class App extends Component {
         return (
             <div className="App">
                 <p>Canton Variables:</p>
-                <DropdrownMenu id="CantonVarList" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+                {
+                    (this.state.hasLoaded)
+                    ? <DropdrownMenu id="CantonVarList" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+                    : "loading..."
+                }
                 <p>Hospital Variables:</p>
-                <DropdrownMenu id="HospitalVarList" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+                {
+                    (this.state.hasLoaded)
+                    ? <DropdrownMenu id="HospitalVarList" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+                    : "loading..."
+                }
             </div>
         );
     }
