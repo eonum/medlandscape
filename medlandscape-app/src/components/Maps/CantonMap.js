@@ -11,7 +11,8 @@ class CantonMap extends Component {
 		const min = this.props.maxAndMin.min;
 		const max = this.props.maxAndMin.max;
 		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
-		const normedVal = (this.props.returnData(item) - min)/ (max - min);
+		const normedVal = (this.props.returnData(item) - min) / (max - min);
+        console.log("max:" + max + ", min: " + min);
 		let color;
 		// defining color upon classing
 		// array classCollors contains the colors for the classes
