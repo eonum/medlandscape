@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Map, TileLayer, CircleMarker, Popup, GeoJSON, Marker, LayerGroup } from 'react-leaflet'
+import { Map, TileLayer } from 'react-leaflet'
 import './Maps.css';
 
 import TestComponent from './TestComponent.js';
@@ -23,53 +23,49 @@ class Maps extends Component {
      * @return {int || float} The selected entry in the item.values object
      */
 	returnData = (item) => {
-        let varName = this.props.variableInfo.name;
+    let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
-        let keys = Object.keys(values);
-        let firstEntry = values[keys[0]];
+    let keys = Object.keys(values);
+    let firstEntry = values[keys[0]];
 		return firstEntry;
 	}
 
-    /**
-     * Iterates through this.props.objects and finds max and min values.
-     */
+	/**
+   * Iterates through this.props.objects and finds max and min values.
+ 	*/
 	setMaxAndMin = () => {
-        let min = 1000000000000, max = 0;
-        this.props.objects.map((obj) => {
-            let val = this.returnData(obj);
-            if (val) {
-                max = (max < val) ? val : max;
-                min = (min > val) ? val : min;
-            }
-        })
-
-        return {
-            max : max,
-            min : min
-        }
+    let min = 1000000000000, max = 0;
+    this.props.objects.map((obj) => {
+      let val = this.returnData(obj);
+      if (val) {
+        max = (max < val) ? val : max;
+        min = (min > val) ? val : min;
+      }
+    })
+  	return {
+      max: max,
+      min: min
+    }
 	}
 
-    /**
-     * Checks if the selected Variable passed through this.props.varInfo
-     * is normable (a number or similar).
-     * @return {Boolean}
-     */
-    isNormable = () => {
-        let type = this.props.variableInfo.variable_type;
-        return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
-    }
+  /**
+   * Checks if the selected Variable passed through this.props.varInfo
+   * is normable (a number or similar).
+   * @return {Boolean}
+  */
+  isNormable = () => {
+    let type = this.props.variableInfo.variable_type;
+    return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
+  }
 
 	render() {
-        let ready = (this.props.hasLoaded && this.isNormable());
-        let componentToRender = null;
-        if (ready) {
-            componentToRender = (this.props.variableInfo.variable_model === "Canton")
-                ?
-                    <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
-                :
-                    <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
+    let ready = (this.props.hasLoaded && this.isNormable());
+    let componentToRender = null;
+    if (ready) {
+      componentToRender = (this.props.variableInfo.variable_model === "Canton")
+      ? <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
+      : <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
         }
-
 		return (
 			<Map // set up map
 				center={[this.state.lat, this.state.lng]}
@@ -81,9 +77,7 @@ class Maps extends Component {
 					attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 					url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
 				/>
-
 				{componentToRender}
-
 			</Map>
 		)
 	}

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Map, TileLayer, CircleMarker, Popup, GeoJSON, Marker, LayerGroup } from 'react-leaflet'
+import { CircleMarker, Popup, LayerGroup } from 'react-leaflet'
 
 class HospitalMap extends Component {
 
     /**
      * Calculates and returns a rgb color
-     * @return {Strin} The rgb color as a string.
+     * @return {String} The rgb color as a string.
      */
 	calculateCircleColor = () =>{
 		return "rgb(255, 5, 0)";
@@ -28,34 +28,26 @@ class HospitalMap extends Component {
 	}
 
     /**
-     * Creates a circle to represent a hospital on a Map
-     * @param  {Hospital Object} item The hospital to represent on the Map
-     * @return {CircleMarker Component} The Hospital as a Component
+     * Creates circles to represent hospitals on a Map
      */
-	drawHospitals = (item) => {
-		return (
-			<CircleMarker
-                key = {this.props.data.indexOf(item)}
-				center={{lon: item.longitude, lat: item.latitude}}
-				color = {this.calculateCircleColor()}
-				opacity = "0.8"
-				weight = "3" // defining how big the outer line of circle is
-				radius={this.getNormedRadius(item)} // norming function is here
-				>
-					<Popup>
-						{this.props.returnData(item)}
-					</Popup>
-			</CircleMarker>
-			)
-	}
-
 	render() {
 		return (
 				<LayerGroup>
 					{
-						this.props.data.map((item) => {
-                            return this.drawHospitals(item)
-                        })
+						this.props.data.map((item) => (
+      				<CircleMarker
+      					key = {this.props.data.indexOf(item)}
+								center={{lon: item.longitude, lat: item.latitude}}
+								color = {this.calculateCircleColor()}
+								opacity = "0.8"
+								weight = "3" // defining how big the outer line of circle is
+								radius={this.getNormedRadius(item)} // norming function is here
+								>
+								<Popup>
+									{this.props.returnData(item)}
+								</Popup>
+							</CircleMarker>
+          	))
 					}
 				</LayerGroup>
 		)
