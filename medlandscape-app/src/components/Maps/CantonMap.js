@@ -4,18 +4,18 @@ import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
 
 class CantonMap extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			data: props.data,
-		};
-	}
-	
-	/* defining canton color classes and color of each canton*/
-	// TODO: extract color definition and color class making into individual functions
-	getCantonStyle(item, keys, min, max){
-		// norming variable value to a number from 0 (lowest value) to 1 (highest value) 
-		const normedVal = (this.props.returnData(item, keys)-min)/(max-min);
+
+    /**
+     * Definines canton color classes and color of each canton
+     * @param  {Canton Object} item The canton to style
+     * @return {Object} The styled canton.
+     */
+    // TODO: extract color definition and color class making into individual functions
+	getCantonStyle = (item) => {
+		const min = this.props.maxAndMin.min;
+		const max = this.props.maxAndMin.max;
+		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
+		const normedVal = (this.props.returnData(item) - min) / (max - min);
 		let color;
 		// defining color upon classing
 		// array classCollors contains the colors for the classes
@@ -33,28 +33,36 @@ class CantonMap extends Component {
 			};
 		return cantonStyle;
 	}
-	
-	
+
+    /**
+     * Draws a canton on the Map
+     * @param  {Canton Object} item The canton to represent on the map
+     * @return {GeoJSON Component} The canton as a Component
+     */
+	drawCantons = (item) =>{
+			return(
+				<GeoJSON
+                    key = {this.props.data.indexOf(item)}
+					data = {cantons[item.name]}
+				 	style = {this.getCantonStyle(item)}
+					>
+					<Popup>
+						{this.props.returnData(item)}
+					</Popup>
+				</GeoJSON>
+				)
+	}
+
 	render() {
-		const maxAndMin = this.props.getMaxAndMin();
-		const min = maxAndMin.min;
-		const max = maxAndMin.max;
-		return ( 
+		return (
 				<LayerGroup>
 					{
-						this.props.data.data.map((item) => (
-							<GeoJSON 
-								data = {cantons[item.name]}
-				 				style = {this.getCantonStyle(item, this.props.data.keys, min, max)}
-								>	
-								<Popup>
-									{this.props.returnData(item, this.props.data.keys)}
-								</Popup>
-							</GeoJSON>
+						this.props.data.map((item) => (
+							this.drawCantons(item)
 						))
 					}
 					<Legend data={undefined}/>
-				
+
 				</LayerGroup>
 		)
 	}
