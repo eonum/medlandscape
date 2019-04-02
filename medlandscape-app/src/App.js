@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import DropdrownMenu from './components/DropdownMenu/DropdownMenu.js';
+import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
+import Table from './components/Table.js';
+import CheckboxList from './components/CheckboxList/CheckboxList.js';
+import Maps from './components/Maps/Maps.js';
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -13,7 +16,6 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
-        selectedVarInfo : {},
         selectedCantons : [],
         selectedHospitals : [],
         hasLoaded : false
@@ -28,7 +30,7 @@ class App extends Component {
 
         let query = apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        query += key + "?variables=" + name;
+        query += key + "?variables=" + encodeURIComponent(name);
 
         this.apiCall(query).then((results) => {
             this.setState({
@@ -37,7 +39,11 @@ class App extends Component {
                 }),
                 hasLoaded : true
             });
-        });
+        }).then(() => {
+            this.setState({
+                hasLoaded : true
+            })
+        })
     }
 
     /**
@@ -83,7 +89,10 @@ class App extends Component {
      * @param  {Variable object} item The selected variable.
      */
     dropdownSelectItem = (item) => {
-        this.setState({ selectedVariable : item });
+        this.setState({
+            selectedVariable : item,
+            hasLoaded : false
+        });
         this.applyVar(item);
     }
 
@@ -148,18 +157,9 @@ class App extends Component {
 
         return (
             <div className="App">
-                <p>Canton Variables:</p>
-                {
-                    (this.state.hasLoaded)
-                    ? <DropdrownMenu id="CantonVarList" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
-                    : "loading..."
-                }
-                <p>Hospital Variables:</p>
-                {
-                    (this.state.hasLoaded)
-                    ? <DropdrownMenu id="HospitalVarList" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
-                    : "loading..."
-                }
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
             </div>
         );
     }
