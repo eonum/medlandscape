@@ -3,12 +3,20 @@ import { Map, TileLayer, CircleMarker, Popup, GeoJSON, Marker, LayerGroup } from
 
 class HospitalMap extends Component {
 
-	/*calculates and returns a rgb color*/
+    /**
+     * Calculates and returns a rgb color
+     * @return {Strin} The rgb color as a string.
+     */
 	calculateCircleColor = () =>{
 		return "rgb(255, 5, 0)";
 	}
 
 	/*return normed circle radii*/
+    /**
+     * Computes the Radius for a hospital point.
+     * @param  {Hospital Object} item The hospital
+     * @return {int} size of the radius
+     */
 	getNormedRadius = (item) => {
 		const min = this.props.maxAndMin.min;
 		const max = this.props.maxAndMin.max;
@@ -19,7 +27,11 @@ class HospitalMap extends Component {
 		return normedVal*factor+smallest;
 	}
 
-
+    /**
+     * Creates a circle to represent a hospital on a Map
+     * @param  {Hospital Object} item The hospital to represent on the Map
+     * @return {CircleMarker Component} The Hospital as a Component
+     */
 	drawHospitals = (item) => {
 		return (
 			<CircleMarker

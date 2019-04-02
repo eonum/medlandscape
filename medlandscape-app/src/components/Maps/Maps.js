@@ -6,7 +6,6 @@ import TestComponent from './TestComponent.js';
 import HospitalMap from './HospitalMap.js';
 import CantonMap from './CantonMap.js';
 
-let maxAndMin = {};
 class Maps extends Component {
 	constructor(props){
 		super(props);
@@ -17,7 +16,12 @@ class Maps extends Component {
 		};
 	}
 
-	/*returns data value*/
+	/**
+     * Returns the values stored in a this.props.objects canton/hospital
+     * !! Currently always returns firstEntry (first available year)
+     * @param  {Canton || Hospital Object} item The object to extract the values from
+     * @return {int || float} The selected entry in the item.values object
+     */
 	returnData = (item) => {
         let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
@@ -26,7 +30,9 @@ class Maps extends Component {
 		return firstEntry;
 	}
 
-	/*iterates through all values of the given key variable and returns the maximum value*/
+    /**
+     * Iterates through this.props.objects and finds max and min values.
+     */
 	setMaxAndMin = () => {
         let min = 1000000000000, max = 0;
         this.props.objects.map((obj) => {
@@ -43,10 +49,14 @@ class Maps extends Component {
         }
 	}
 
+    /**
+     * Checks if the selected Variable passed through this.props.varInfo
+     * is normable (a number or similar).
+     * @return {Boolean}
+     */
     isNormable = () => {
         let type = this.props.variableInfo.variable_type;
-        let bool = (type === "float" || type === "number" || type === "percentage" || type === "relevance");
-        return bool;
+        return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
     }
 
 	render() {

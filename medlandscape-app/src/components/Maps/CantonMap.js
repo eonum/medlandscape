@@ -5,8 +5,12 @@ import Legend from './Legend.js'
 
 class CantonMap extends Component {
 
-	/* defining canton color classes and color of each canton*/
-	// TODO: extract color definition and color class making into individual functions
+    /**
+     * Definines canton color classes and color of each canton
+     * @param  {Canton Object} item The canton to style
+     * @return {Object} The styled canton.
+     */
+    // TODO: extract color definition and color class making into individual functions
 	getCantonStyle = (item) => {
 		const min = this.props.maxAndMin.min;
 		const max = this.props.maxAndMin.max;
@@ -30,6 +34,11 @@ class CantonMap extends Component {
 		return cantonStyle;
 	}
 
+    /**
+     * Draws a canton on the Map
+     * @param  {Canton Object} item The canton to represent on the map
+     * @return {GeoJSON Component} The canton as a Component
+     */
 	drawCantons = (item) =>{
 			return(
 				<GeoJSON
