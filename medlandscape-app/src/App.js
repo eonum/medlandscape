@@ -18,7 +18,8 @@ class App extends Component {
         selectedVariable : {},
         selectedVarInfo : {},
         selectedCantons : [],
-        selectedHospitals : []
+        selectedHospitals : [],
+        hasLoaded : false
     }
 
     /**
@@ -36,7 +37,8 @@ class App extends Component {
             this.setState({
                 [key] : results.map(obj => {
                     return obj;
-                })
+                }),
+                hasLoaded : true
             });
         })
     }
@@ -72,9 +74,9 @@ class App extends Component {
             this.setState({
                 var : varResultArr,
                 cantons : cantonResultArr,
-                selectedVariable : varResultArr[152]
+                selectedVariable : varResultArr[0]
             });
-            this.applyVar(varResultArr[152]);
+            this.applyVar(varResultArr[0]);
         });
     }
 
@@ -84,7 +86,10 @@ class App extends Component {
      * @param  {Variable object} item The selected variable.
      */
     dropdownSelectItem = (item) => {
-        this.setState({ selectedVariable : item });
+        this.setState({
+            selectedVariable : item,
+            hasLoaded : false
+        });
         this.applyVar(item);
     }
 
@@ -163,10 +168,9 @@ class App extends Component {
         let tableData = this.create2dArr(this.state.cantons[0]);
         return (
             <div className="App">
-                { /* <DropdrownMenu listItems={this.state.var} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
-                <CantonList cantons={this.state.cantons} selectCanton={this.selectCanton} selectedCantons={this.selectedCanton}/>
-                <Table tableData={tableData} />*/}
-				<Maps objects={cantonObj} variableInfo={varInfo} />
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
             </div>
         );
     }
