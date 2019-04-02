@@ -13,10 +13,7 @@ class CantonMap extends Component {
 	
 	/* defining canton color classes and color of each canton*/
 	// TODO: extract color definition and color class making into individual functions
-	getCantonStyle(item, keys){
-		const maxAndMin = this.props.getMaxAndMin();
-		const min = maxAndMin.min;
-		const max = maxAndMin.max;
+	getCantonStyle(item, keys, min, max){
 		// norming variable value to a number from 0 (lowest value) to 1 (highest value) 
 		const normedVal = (this.props.returnData(item, keys)-min)/(max-min);
 		let color;
@@ -37,26 +34,23 @@ class CantonMap extends Component {
 		return cantonStyle;
 	}
 	
-	drawCantons(item){
-			return(
-				<GeoJSON 
-					data = {cantons[item.name]}
-				 	style = {this.getCantonStyle(item, this.props.data.keys)}
-					>	
-					<Popup>
-						{this.props.returnData(item, this.props.data.keys)}
-					</Popup>
-				</GeoJSON>
-				)
-	}
-	
 	
 	render() {
+		const maxAndMin = this.props.getMaxAndMin();
+		const min = maxAndMin.min;
+		const max = maxAndMin.max;
 		return ( 
 				<LayerGroup>
 					{
 						this.props.data.data.map((item) => (
-							this.drawCantons(item)
+							<GeoJSON 
+								data = {cantons[item.name]}
+				 				style = {this.getCantonStyle(item, this.props.data.keys, min, max)}
+								>	
+								<Popup>
+									{this.props.returnData(item, this.props.data.keys)}
+								</Popup>
+							</GeoJSON>
 						))
 					}
 					<Legend data={undefined}/>
