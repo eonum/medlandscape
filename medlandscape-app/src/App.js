@@ -31,15 +31,18 @@ class App extends Component {
 
         let query = apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        query += key + "?variables=" + name;
+        query += key + "?variables=" + encodeURIComponent(name);
 
         this.apiCall(query).then((results) => {
             this.setState({
                 [key] : results.map(obj => {
                     return obj;
-                }),
-                hasLoaded : true
+                })
             });
+        }).then(() => {
+            this.setState({
+                hasLoaded : true
+            })
         })
     }
 

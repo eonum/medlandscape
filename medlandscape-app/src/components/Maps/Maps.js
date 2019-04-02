@@ -21,8 +21,6 @@ class Maps extends Component {
 	returnData = (item) => {
         let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
-        console.log(varName);
-        console.log(item);
         let keys = Object.keys(values);
         let firstEntry = values[keys[0]];
 		return firstEntry;
@@ -51,8 +49,9 @@ class Maps extends Component {
     }
 
     componentDidMount() {
-        if (this.isNormable()) {
+        if (this.props.hasLoaded && this.isNormable()) {
             maxAndMin = this.setMaxAndMin();
+            console.log("isReady");
         }
     }
 
@@ -69,12 +68,16 @@ class Maps extends Component {
 					url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
 				/>
 
-				{ (this.props.hasLoaded && this.isNormable() && this.props.variableInfo.variable_model === "Canton")
-        			?
-						<CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={maxAndMin} />
-       				:
-						<HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={maxAndMin} />
-      			}
+				{
+                    (this.props.hasLoaded && this.isNormable()) ?
+                        (this.props.variableInfo.variable_model === "Canton")
+                        ?
+    						<CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={maxAndMin} />
+           				:
+    						<HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={maxAndMin} />
+                    : <p>selected Variable not normable"</p>
+                }
+
 			</Map>
 		)
 	}

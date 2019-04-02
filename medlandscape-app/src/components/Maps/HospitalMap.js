@@ -13,7 +13,7 @@ class HospitalMap extends Component {
 		const min = this.props.maxAndMin.min;
 		const max = this.props.maxAndMin.max;
 		// norming variable value to a number from 0 (lowest value) to 1 (highest value)
-		const normedVal = (this.props.returnData(item)-min)/(max-min);
+		const normedVal = (this.props.returnData(item) - min) / (max - min);
 		const smallest = 4  // minimum pixel size of smallest value
 		const factor = 40; // factor + smallest = maximal size of biggest value
 		return normedVal*factor+smallest;
