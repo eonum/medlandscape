@@ -16,7 +16,6 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
-        selectedVarInfo : {},
         selectedCantons : [],
         selectedHospitals : [],
         hasLoaded : false

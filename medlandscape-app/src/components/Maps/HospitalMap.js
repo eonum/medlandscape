@@ -4,7 +4,7 @@ import { Map, TileLayer, CircleMarker, Popup, GeoJSON, Marker, LayerGroup } from
 class HospitalMap extends Component {
 
 	/*calculates and returns a rgb color*/
-	calculateCircleColor(){
+	calculateCircleColor = () =>{
 		return "rgb(255, 5, 0)";
 	}
 
@@ -20,20 +20,20 @@ class HospitalMap extends Component {
 	}
 
 
-	drawHospitals(item){
+	drawHospitals = (item) => {
 		return (
 			<CircleMarker
-                    key = {this.props.data.indexOf(item)}
-					center={{lon: item.longitude, lat: item.latitude}}
-					color = {this.calculateCircleColor()}
-					opacity = "0.8"
-					weight = "3" // defining how big the outer line of circle is
-					radius={this.getNormedRadius(item)} // norming function is here
-					>
-						<Popup>
-							{this.props.returnData(item)}
-						</Popup>
-				</CircleMarker>
+                key = {this.props.data.indexOf(item)}
+				center={{lon: item.longitude, lat: item.latitude}}
+				color = {this.calculateCircleColor()}
+				opacity = "0.8"
+				weight = "3" // defining how big the outer line of circle is
+				radius={this.getNormedRadius(item)} // norming function is here
+				>
+					<Popup>
+						{this.props.returnData(item)}
+					</Popup>
+			</CircleMarker>
 			)
 	}
 
@@ -42,7 +42,7 @@ class HospitalMap extends Component {
 				<LayerGroup>
 					{
 						this.props.data.map((item) => {
-                            this.drawHospitals(item)
+                            return this.drawHospitals(item)
                         })
 					}
 				</LayerGroup>
