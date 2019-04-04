@@ -4,18 +4,22 @@ import './Legend.css'
 
 class Legend extends Component {
 
+	/**
+	 * takes the class values the legend should display and writes them to strings
+	 * @return {Array} classValues as strings
+	*/
 	returnClassValues = () => {
-		const numberOfClasses = this.props.classColors.length;
-		const min = this.props.maxAndMin.min;
-		const max = this.props.maxAndMin.max;
-		const range = max-min;
-		const classSize = range/numberOfClasses;
-		let classValues = [];
-		for (let i = 0; i < numberOfClasses; i++){
-			const upperBoundary = max-classSize*i;
-			const lowerBoundary = max-classSize*(i+1);
-			// string representation, rounded to have no decimals (0)
-			const value =  lowerBoundary.toFixed(0).toString() + ' - ' + upperBoundary.toFixed(0).toString() + '\n' ;
+		const classValues =[];
+		for (let i = 0; i < this.props.classColors.length && i < this.props.boundaries.length; i++){
+			const upperBoundary = this.props.boundaries[i].upper.toString();
+			const lowerBoundary = this.props.boundaries[i].lower.toString();
+			// string representation
+			let value;
+			if (i == 0) // lowest color class string
+				value = '< ' + upperBoundary + '\n' ;
+			else if (i == this.props.boundaries.length-1) //highest color class string
+				value = lowerBoundary + ' <' + '\n' ;
+			else value =  lowerBoundary + ' - ' + upperBoundary + '\n' ;
 			classValues.push(value);
 			}
 		return classValues;
@@ -29,6 +33,10 @@ class Legend extends Component {
 		return {backgroundColor: 'rgb('+color+')'};
 	}
 
+	/**
+	 * making the colored boxes the legend should display
+	 * @return {Array} box in html
+	*/
 	returnColorBoxes = () => {
 		let boxes = [];
 		for (let i = 0; i < this.props.classColors.length; i++){

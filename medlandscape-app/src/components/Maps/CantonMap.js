@@ -12,10 +12,10 @@ class CantonMap extends Component {
   */
 	getCantonStyle = (item) => {
 		const value = this.props.returnData(item);
-		const normedVal = this.normValue(value);
-		let color = this.returnColor(normedVal);
+		const color = this.returnColor(value);
 		var cantonStyle = {
-				"color": "rgb("+color+")", // outline color
+			"dashArray": 3, // makes outline of cantons appear dashed (higher value = more distance between dashes)
+			"color": "rgb("+color+")", // outline color
     		"fillColor": "rgb("+color+")",
     		"weight": 1,  // defining how big the outline of canton is
     		"opacity": 0.4, // outline opacity
@@ -25,33 +25,72 @@ class CantonMap extends Component {
 	}
 
 	/**
-	 * Norming a value to a number from 0 (lowest value) to 1 (highest value)
-	 * @param  {Number} normedVal (normed Value of a variable)
+	 * Assigns a color to a given value
+	 * @param  {Number} value of a variable)
 	 * @return {String} rgb color as string.
-	*/
-	normValue = (value) => {
-		const min = this.props.maxAndMin.min;
-		const max = this.props.maxAndMin.max;
-		return (value - min) / (max - min);
+ 	*/
+	returnColor = (value) => {
+		const classColors = this.returnColorArray();
+		const boundaries = this.returnBoundaries();
+		for (let i = 0; i < classColors.length && i < boundaries.length; i++){
+			const upperBoundary = boundaries[i].upper;
+			const lowerBoundary = boundaries[i].lower;
+			if (value < lowerBoundary) // check for values below rounded lower boundary
+				return classColors[0];
+			if (value <= upperBoundary && value > lowerBoundary)
+				return classColors[i];
+			if (i == classColors.length -1 && value > upperBoundary) //check for values above rounded upper boundary
+				return classColors[classColors.length-1];
+		}
 	}
 
 	/**
-	 * Assigns a color to a given normed value
-	 * @param  {Number} normedVal (normed Value of a variable)
-	 * @return {String} rgb color as string.
+	 * calculates rounding factor, used to round boundaries to a nice looking number
+	 * @param  {Number} boundary that has to be rounded
+	 * @param  {Number} classSize coming with the boundary
+	 * @return {Number} maxRoundingFactor biggest rounding factor that can be used for the given boundary.
  	*/
-	returnColor = (normedVal) => {
+	returnRoundFactor = (boundary, classSize) => {
+	let maxRoundingFactor = 1, y = 10000000000000000;
+	while (y>1){
+		if (classSize > y){
+			maxRoundingFactor = y/10;
+			break;
+		}
+		y/=10
+	}
+	return maxRoundingFactor;
+	}
+
+	/**
+	 * Calculates nice rounded boundaries for the color classes
+	 * @param  {Number} value of a variable)
+	 * @return {String} rgb color as string.
+	*/
+	returnBoundaries = () => {
+		const min = this.props.maxAndMin.min;
+		const max = this.props.maxAndMin.max;
 		// array classColors contains the colors for the classes
-		const classColors = this.returnColorArray();
-		// defining color upon classing
-		let numberOfClasses = classColors.length;
+		const numberOfClasses = this.returnColorArray().length;
+		const range = max-min;
+		const classSize = range/numberOfClasses;
+		// defining boundaries
+		let boundaries = [];
 		for (let i = 0; i < numberOfClasses; i++){
-			if (normedVal == 0)
-				return classColors[0];
-			if (normedVal <= (i+1)/numberOfClasses && normedVal > (i)/numberOfClasses)
-		 		return classColors[i];
-		 }
-	 }
+			let upperBoundary = max-classSize*i;
+			let lowerBoundary = max-classSize*(i+1);
+			const uBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
+			const lBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
+			upperBoundary = Math.round((upperBoundary)/uBroundFactor)*uBroundFactor;
+			lowerBoundary = Math.round((lowerBoundary)/lBroundFactor)*lBroundFactor;
+			// put oundaries into array the right way
+			boundaries.unshift({
+				upper: upperBoundary,
+				lower: lowerBoundary
+			})
+		}
+		return boundaries;
+	}
 
 	 /**
  	 * Definines canton color classes
@@ -81,7 +120,7 @@ class CantonMap extends Component {
 							</GeoJSON>
 						))
 					}
-					<Legend maxAndMin={this.props.maxAndMin} classColors={this.returnColorArray()}/>
+					<Legend maxAndMin={this.props.maxAndMin} classColors={this.returnColorArray()} boundaries={this.returnBoundaries()}/>
 				</LayerGroup>
 		)
 	}
