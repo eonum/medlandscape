@@ -1,5 +1,6 @@
 import React, { Component, Row, Col } from 'react';
 import Control from 'react-leaflet-control';
+import './Legend.css'
 
 class Legend extends Component {
 
@@ -14,36 +15,18 @@ class Legend extends Component {
 			const upperBoundary = max-classSize*i;
 			const lowerBoundary = max-classSize*(i+1);
 			// string representation, rounded to have no decimals (0)
-			const value =  lowerBoundary.toFixed(0).toString() + ' - ' + upperBoundary.toFixed(0).toString() ;
+			const value =  lowerBoundary.toFixed(0).toString() + ' - ' + upperBoundary.toFixed(0).toString() + '\n' ;
 			classValues.push(value);
 			}
 		return classValues;
 	}
 
 	returnLegendStyle = () => {
-		const styles = {
-			borderRadius: '5px', // round edges for the box
-			margin: '20px', // how far from the map edges it is
-			width: '200px',//this.props.maxAndMin.max,
-			height: this.props.classColors.length*30+'px',
-			backgroundColor: 'white',
-			opacity: '0.7',
-			fontSize: '16px',
-			lineHeight: '30px'
-			}
-		return styles;
+		return {height: this.props.classColors.length*30+'px'};
 	}
 
 	returnBoxStyle = (color) => {
-		const styles = {
-			borderRadius: '5px', // round edges for the box
-			margin: '0px', // how far from the map edges it is
-			width: '30px',
-			height: '30px',
-			backgroundColor: 'rgb('+color+')',
-			opacity: '0.7'
-			}
-		return styles;
+		return {backgroundColor: 'rgb('+color+')'};
 	}
 
 	returnColorBoxes = () => {
@@ -59,14 +42,16 @@ class Legend extends Component {
 		return (
 			<Control position="bottomright">
 					<div className="legend" style={this.returnLegendStyle()}>
-						<div className="row">
-							<div className="col-md-6">
-									{this.returnColorBoxes()}
-							</div>
-							<div className="col-md-6">
-									{this.returnClassValues()}
-							</div>
-						</div>
+						<div className="clrBoxes">
+                            {this.returnColorBoxes().map((line) => {
+                                return line;
+                            })}
+                        </div>
+						<div className="values">
+                            {this.returnClassValues().map((line) => {
+                                return <p>{line}</p>;
+                            })}
+                        </div>
 					</div>
       </Control>
 		)
