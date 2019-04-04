@@ -25,9 +25,8 @@ class Maps extends Component {
 	returnData = (item) => {
         let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
-        let keys = Object.keys(values);
-        let firstEntry = values[keys[0]];
-		return firstEntry;
+        let data = values[this.props.year];
+		return data;
 	}
 
     /**

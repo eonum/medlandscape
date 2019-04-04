@@ -3,6 +3,7 @@ import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
 import Table from './components/Table.js';
 import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
+import Slider from './components/Slider/Slider.js'
 import './App.css';
 
 const apiURL = "https://qm1.ch/";
@@ -18,6 +19,7 @@ class App extends Component {
         selectedVariable : {},
         selectedCantons : [],
         selectedHospitals : [],
+        selectedYear : "",
         hasLoaded : false
     }
 
@@ -37,11 +39,11 @@ class App extends Component {
                 [key] : results.map(obj => {
                     return obj;
                 }),
-                hasLoaded : true
             });
         }).then(() => {
             this.setState({
-                hasLoaded : true
+                hasLoaded : true,
+                selectedYear : this.getYears()[0]
             })
         })
     }
@@ -130,12 +132,32 @@ class App extends Component {
         return arr;
     }
 
+    /**
+     * Returns list of available years depending on variable
+     * @return {Array} The available years.
+     */
+    getYears = () => {
+        let selVar = this.state.selectedVariable;
+        let selObj = (selVar.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons;
+        return Object.keys(selObj[0].attributes[selVar.name]);
+    }
+
+    /**
+     * [setYear description]
+     */
+    setYear = (year) => {
+        this.setState({
+            selectedYear : year,
+            hasLoaded : true
+        })
+    }
+
     componentDidMount() {
         this.initApiCall();
     }
 
     render() {
-        let cantonVars = [], hospitalVars = [];
+        let cantonVars = [], hospitalVars = [], years = [];
         let selectedCanton = {}, selectedHospital = {};
 
         hospitalVars = this.state.var.filter(variable => {
@@ -155,11 +177,18 @@ class App extends Component {
             selectedHospital = hospitalVars[0];
         }
 
+        years = (this.state.hasLoaded) ? this.getYears() : [];
+
         return (
             <div className="App">
                 <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
-				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
+				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
+                {
+                    (years.length > 1)
+                        ? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+                        : null
+                }
             </div>
         );
     }
