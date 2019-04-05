@@ -1,7 +1,10 @@
 {
-  "title": "Anwendung zur Visualisierung und Analyse der schweizer Spitallandschaft",
-  "description": {
-    "part1": "foo",
-    "part2": "bar"
-  }
+    "title": "Anwendung zur Visualisierung und Analyse der schweizer Spitallandschaft",
+    "description": {
+        "part1": "foo",
+        "part2": "bar"
+    },
+    "language_picker": {
+        "info": "Wählen Sie Ihre Sprache"
+    }
 }

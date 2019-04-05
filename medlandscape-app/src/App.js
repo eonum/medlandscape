@@ -4,8 +4,8 @@ import Table from './components/Table.js';
 import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
 import './App.css';
-import i18n from "i18next";
-import { withTranslation } from "react-i18next";
+import { withTranslation } from 'react-i18next';
+import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
 
 const apiURL = "https://qm1.ch/";
 let apiRequest = "/api/medical_landscape/";
@@ -163,6 +163,7 @@ class App extends Component {
 
             <div className="App">
                 <h1>{t('title')}</h1>
+                <LanguagePicker resendInitApiCall={this.initApiCall} />
                 <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
                 <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
@@ -172,5 +173,4 @@ class App extends Component {
     }
 }
 const LocalizedApp = withTranslation()(App);
-
 export default LocalizedApp;

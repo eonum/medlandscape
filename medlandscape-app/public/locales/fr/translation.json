@@ -1,7 +1,10 @@
 {
-  "title": "Application pour la visualisation et l'analyse du milieu hospitalier suisse",
-  "description": {
-    "part1": "foo",
-    "part2": "bar"
-  }
+    "title": "Application pour la visualisation et l'analyse du milieu hospitalier suisse",
+    "description": {
+        "part1": "foo",
+        "part2": "bar"
+    },
+    "language_picker": {
+        "info": "Choisissez votre langue"
+    }
 }
