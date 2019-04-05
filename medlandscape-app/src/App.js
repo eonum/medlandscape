@@ -4,9 +4,11 @@ import Table from './components/Table.js';
 import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
 import './App.css';
+import i18n from "i18next";
+import { withTranslation } from "react-i18next";
 
 const apiURL = "https://qm1.ch/";
-let apiRequest = "de/api/medical_landscape/";
+let apiRequest = "/api/medical_landscape/";
 
 class App extends Component {
 
@@ -22,13 +24,13 @@ class App extends Component {
     }
 
     /**
-     * Fetches Cantons or Hospitals with the selected Variable information.
-     * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
-     */
+    * Fetches Cantons or Hospitals with the selected Variable information.
+    * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
+    */
     applyVar = (selectedVar) => {
         const {name, variable_model} = selectedVar;
 
-        let query = apiRequest;
+        let query = this.props.i18n.language + apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         query += key + "?variables=" + encodeURIComponent(name);
 
@@ -47,21 +49,21 @@ class App extends Component {
     }
 
     /**
-     * Sends request to the API.
-     * @param  {String} query The request.
-     * @return {Promise} A Promise Object of the requested API call, results parsed as JSON.
-     */
+    * Sends request to the API.
+    * @param  {String} query The request.
+    * @return {Promise} A Promise Object of the requested API call, results parsed as JSON.
+    */
     apiCall = (query) => {
         return fetch(apiURL + query).then(res => res.json());
     }
 
     /**
-     * Initialises the state variables with several calls to the API.
-     */
+    * Initialises the state variables with several calls to the API.
+    */
     initApiCall = () => {
         let varResultArr, cantonResultArr = [];
 
-        this.apiCall((apiRequest + "variables")).then((result) => {
+        this.apiCall((this.props.i18n.language + apiRequest + "variables")).then((result) => {
             varResultArr = result.map(obj => {
                 return obj;
             })
@@ -69,7 +71,7 @@ class App extends Component {
 
         // hospitals already fetched in applyVar()
 
-        this.apiCall((apiRequest + "cantons")).then((result) => {
+        this.apiCall((this.props.i18n.language + apiRequest + "cantons")).then((result) => {
             cantonResultArr = result.map(obj => {
                 return obj;
             })
@@ -84,10 +86,10 @@ class App extends Component {
     }
 
     /**
-     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-     * then calls applyVar to fetch data from the API.
-     * @param  {Variable object} item The selected variable.
-     */
+    * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
+    * then calls applyVar to fetch data from the API.
+    * @param  {Variable object} item The selected variable.
+    */
     dropdownSelectItem = (item) => {
         this.setState({
             selectedVariable : item,
@@ -97,9 +99,9 @@ class App extends Component {
     }
 
     /**
-     * Adds / removes objects to the respective List of selected canton / hospitals.
-     * @param  {Canton/Hospital object} object The object to add / remove from the list.
-     */
+    * Adds / removes objects to the respective List of selected canton / hospitals.
+    * @param  {Canton/Hospital object} object The object to add / remove from the list.
+    */
     checkboxSelectItem = (object) => {
         let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
         let newList = [];
@@ -116,10 +118,10 @@ class App extends Component {
     }
 
     /**
-     * Creates a 2d array out of an object (Used for Table Component).
-     * @param  {Object} selectedObject The object to convert to a 2d array.
-     * @return {Array} The 2d array.
-     */
+    * Creates a 2d array out of an object (Used for Table Component).
+    * @param  {Object} selectedObject The object to convert to a 2d array.
+    * @return {Array} The 2d array.
+    */
     create2dArr = (selectedObject) => {
         let arr = [];
         for (var key in selectedObject) {
@@ -155,14 +157,20 @@ class App extends Component {
             selectedHospital = hospitalVars[0];
         }
 
+        const { t } = this.props;
+
         return (
+
             <div className="App">
+                <h1>{t('title')}</h1>
                 <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
-				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
+                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
             </div>
+
         );
     }
 }
+const LocalizedApp = withTranslation()(App);
 
-export default App;
+export default LocalizedApp;
