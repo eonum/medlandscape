@@ -6,5 +6,8 @@
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"
+    },
+    "localization_example": {
+        "example": "Hallo Brudi"
     }
 }

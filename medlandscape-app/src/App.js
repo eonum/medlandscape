@@ -163,6 +163,7 @@ class App extends Component {
 
             <div className="App">
                 <h1>{t('title')}</h1>
+
                 <LanguagePicker resendInitApiCall={this.initApiCall} />
                 <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />

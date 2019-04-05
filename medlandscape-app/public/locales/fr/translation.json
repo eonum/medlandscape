@@ -6,5 +6,8 @@
     },
     "language_picker": {
         "info": "Choisissez votre langue"
+    },
+    "localization_example": {
+        "example": "Bonjour frèri"
     }
 }
