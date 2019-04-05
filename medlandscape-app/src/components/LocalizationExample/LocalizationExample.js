@@ -27,7 +27,7 @@ class LocalizationExample extends Component {
 }
 
 /**
- * When working with class components, it is nessessary to convert the exported
+ * When working with class components, it is necessary to convert the exported
  *  component using the withTranslation() function. Only this way you gain
  *  access to the required props, like the t() function.
  *
