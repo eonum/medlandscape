@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 import { withTranslation } from "react-i18next";
 
 /**
- * Basic Component for selecting the active langue
- */
-
+* Basic component for selecting the active language
+*/
 class LanguagePicker extends Component {
 
+    /**
+    * onLanguageChange - Changes the language, and after that resends the
+    * initApiCall to retrieve the correct variable names.
+    */
     onLanguageChange = (code) => {
         this.props.i18n.changeLanguage(code).then(() => {
             this.props.resendInitApiCall();
         });
     }
 
+
+    /**
+    * render - rendes the component
+    *
+    * @return {JSX}  Component in JSX format
+    */
     render () {
         return (
             <div className="languagePicker">
@@ -23,5 +32,10 @@ class LanguagePicker extends Component {
         );
     }
 }
+
+/**
+ * Convert the component using withTranslation() to have access to t() function
+ *  and other i18next props. Then export it.
+ */
 const LocalizedLanguagePicker = withTranslation()(LanguagePicker)
 export default LocalizedLanguagePicker;

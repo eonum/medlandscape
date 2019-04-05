@@ -15,6 +15,11 @@ const Loader = () => (
     <div className="App"></div>
 );
 
+
+/**
+ * The app component is wrapped inside a Suspense component. This way the
+ * above mentioned effect occurs.
+ */
 ReactDOM.render(
     (
         <Suspense fallback={<Loader />}>

@@ -163,7 +163,6 @@ class App extends Component {
 
             <div className="App">
                 <h1>{t('title')}</h1>
-
                 <LanguagePicker resendInitApiCall={this.initApiCall} />
                 <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
@@ -173,5 +172,10 @@ class App extends Component {
         );
     }
 }
+
+/**
+ * Convert the component using withTranslation() to have access to t() function
+ *  and other i18next props. Then export it.
+ */
 const LocalizedApp = withTranslation()(App);
 export default LocalizedApp;
