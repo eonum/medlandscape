@@ -36,8 +36,6 @@ class CantonMap extends Component {
 			const upperBoundary = boundaries[i].upper;
 			const lowerBoundary = boundaries[i].lower;
 			if (i == 0 && value <= upperBoundary){ // check for values below rounded lower boundary
-				console.log("lowerBD" + upperBoundary);
-				console.log("val"+value);
 				return classColors[0];}
 			if (value <= upperBoundary && value > lowerBoundary)
 				return classColors[i];
