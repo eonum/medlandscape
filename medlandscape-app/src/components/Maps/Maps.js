@@ -24,28 +24,45 @@ class Maps extends Component {
      */
 	returnData = (item) => {
     let varName = this.props.variableInfo.name;
-		let values = item.attributes[varName];
+	let values = item.attributes[varName];
     let keys = Object.keys(values);
     let firstEntry = values[keys[0]];
-		return firstEntry;
+	return firstEntry;
 	}
 
 	/**
-   * Iterates through this.props.objects and finds max and min values.
+   * Iterates through this.props.objects and finds mean, standard deviation, max and min values.
+   * @return {Object} Object.min minimum, Object.max maximum, Object.mean mean, Object.std standard deviation,
  	*/
 	setMaxAndMin = () => {
     let min = 1000000000000, max = 0;
-    this.props.objects.map((obj) => {
-      let val = this.returnData(obj);
-      if (val) {
-        max = (max < val) ? val : max;
-        min = (min > val) ? val : min;
-      }
-    })
-  	return {
-      max: max,
-      min: min
-    }
+		let sum = 0; let counter = 0;
+	    this.props.objects.map((obj) => {
+	      let val = this.returnData(obj);
+	      if (val) {
+	        max = (max < val) ? val : max;
+	        min = (min > val) ? val : min;
+	      }
+		  sum += val;
+		  counter++;
+	    })
+		const mean = sum/counter;
+
+		sum = 0;
+		this.props.objects.map((obj) => {
+			let val = this.returnData(obj);
+			const squareDif = Math.pow(val - mean, 2);
+			sum += squareDif;
+		})
+		const meanSquareDif = sum/counter;
+		const std = Math.sqrt(meanSquareDif);
+
+	  	return {
+			mean: mean,
+			std: std,
+	    	max: max,
+	    	min: min
+	    }
 	}
 
   /**
@@ -71,7 +88,7 @@ class Maps extends Component {
 				center={[this.state.lat, this.state.lng]}
 				zoom={this.state.zoom}
 				minZoom={8} // set minimum zoom level
-				maxZoom={14} // set maximum zoom level
+				maxZoom={16} // set maximum zoom level
 				>
 				<TileLayer // add background layer
 					attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

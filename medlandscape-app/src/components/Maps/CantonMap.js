@@ -36,8 +36,6 @@ class CantonMap extends Component {
 			const upperBoundary = boundaries[i].upper;
 			const lowerBoundary = boundaries[i].lower;
 			if (i == 0 && value <= upperBoundary){ // check for values below rounded lower boundary
-				console.log("lowerBD" + upperBoundary);
-				console.log("val"+value);
 				return classColors[0];}
 			if (value <= upperBoundary && value > lowerBoundary)
 				return classColors[i];
@@ -108,14 +106,15 @@ class CantonMap extends Component {
   	*/
 	returnColorArray = () => {
 		const greenToRed8Classes = ["85, 181, 22", "135, 200, 54", "177, 213, 15", "232, 234, 29", "234, 224, 2", "245, 175, 1", "239, 118, 14", "255, 50, 12"];
+		const redToGreen8Classes = greenToRed8Classes.reverse();
 		const blue8Classes = ["235, 240, 255", "186, 210, 235", "142, 190, 218", "90, 158, 204", "53, 126, 185", "28, 91, 166", "11, 50, 129", "51, 50, 120"];
 		const red8Classes = ["253, 238, 186", "249, 227, 151", "248 ,  199 ,  122", "244,  174,  90", "246,  133,  82" , "235 ,  93,  80", "204,  73,  80",  "165,  50,  50"]
 		const red5Classes = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "140, 0, 0"];
 		// randomness tried
-		//const colorClassesArray = [greenToRed8Classes, blue8Classes, red8Classes];
+		//const colorClassesArray = [greenToRed8Classes, blue8Classes, red8Classes, redToGreen8Classes];
 		//const random = Math.floor((Math.random() * colorClassesArray.length));
 		//return colorClassesArray[random];
-		return blue8Classes;
+		return red8Classes;
 	}
   /**
   	* Draws cantons on the Map
