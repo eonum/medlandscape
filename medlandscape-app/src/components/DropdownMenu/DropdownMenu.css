@@ -1,13 +1,12 @@
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-    position: relative;
-    display: inline;
+    padding: 10px 0 10px 0;
 }
 
 /* Dropdown Button */
 .dropbtn {
     box-sizing: border-box;
-    background-color: #4CAF50;
+    background-color: #1996fa;
     color: white;
     padding: 14px 20px;
     font-size: 16px;
@@ -18,7 +17,7 @@
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #3e8e41;
+    outline: none;
 }
 
 /* The search field */
@@ -38,15 +37,15 @@
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-    box-sizing: border-box;
-    display: none;
     position: absolute;
+    box-sizing: border-box;
     z-index: 1;
     background-color: #f6f6f6;
     border: 1px solid black;
     width: 250px;
     height: 300px;
     overflow: scroll;
+    display: none;
 }
 
 /* Links inside the dropdown */

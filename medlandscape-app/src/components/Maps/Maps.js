@@ -89,6 +89,7 @@ class Maps extends Component {
 				zoom={this.state.zoom}
 				minZoom={8} // set minimum zoom level
 				maxZoom={16} // set maximum zoom level
+                className="map"
 				>
 				<TileLayer // add background layer
 					attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
