@@ -31,8 +31,7 @@
 
 /* The search field when it gets focus/clicked on */
 .searchbar:focus {
-    box-shadow: inset 2px 2px 0 0 #ddd;
-    box-shadow: inset -2px -2px 0 0 #ddd;
+    outline: none;
 }
 
 /* Dropdown Content (Hidden by Default) */
