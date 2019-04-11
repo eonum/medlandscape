@@ -16,8 +16,8 @@ class Legend extends Component {
 		let legendObj = [];
 		for (let i = 0; i < this.props.classColors.length && i < this.props.boundaries.length; i++){
 			let color = this.props.classColors[i];
-            let upperBoundary = this.props.boundaries[i].lower.toString();
-            let lowerBoundary = this.props.boundaries[i].upper.toString();
+            let upperBoundary = this.props.boundaries[i].upper;
+            let lowerBoundary = this.props.boundaries[i].lower;
             let legendLine = {};
 
             legendLine.color = this.returnBoxStyle(color);
@@ -30,19 +30,19 @@ class Legend extends Component {
             else value =  lowerBoundary + ' - ' + upperBoundary + '\n' ;
 
             legendLine.value = value;
-            legendObj[i] = legendLine;
+            legendObj.push(legendLine);
 		}
 		return legendObj;
 	}
 
 	render() {
-
+        let legendLines = this.returnLegendLines();
 		return (
 			<Control position="bottomright">
 					<div className="legend">
                         {
-                            this.returnLegendLines().map((line) => {
-                                return (<div className="line"><div className="box" style={line.color}></div>{line.value}</div>)
+                            legendLines.map((line) => {
+                                return (<div key={legendLines.indexOf(line)} className="line"><div className="box" style={line.color}></div>{line.value}</div>)
                             })
                         }
 					</div>

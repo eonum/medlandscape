@@ -52,7 +52,7 @@ class CantonMap extends Component {
  	*/
 	returnRoundFactor = (boundary, classSize) => {
 	let maxRoundingFactor = 1, y = 100000000000000000;
-	while (y > 1){ // doesnt let maxRoundingFactor become less than 1 (-> wouldn work correctly with math.round)
+	while (y > 1){ // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
 		if (classSize > y){
 			maxRoundingFactor = y/10;
 			break;
@@ -72,25 +72,26 @@ class CantonMap extends Component {
 		const max = this.props.maxAndMin.max;
 		// array classColors contains the colors for the classes
 		const numberOfClasses = this.returnColorArray().length;
-		const range = max-min;
-		const classSize = range/numberOfClasses;
+		const range = max - min;
+		const classSize = range / numberOfClasses;
 		// defining boundaries
 		let boundaries = [];
 		for (let i = 0; i < numberOfClasses; i++){
-			let upperBoundary = max-classSize*i;
-			let lowerBoundary = max-classSize*(i+1);
+			let upperBoundary = max - classSize * i;
+			let lowerBoundary = max - classSize * (i + 1);
 			const uBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
 			const lBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
 			//different rounding for small class sizes
+            console.log(upperBoundary);
 			if (classSize < 5){
 				upperBoundary = upperBoundary.toFixed(1);
 				lowerBoundary = lowerBoundary.toFixed(1);
 			}
 			else {
-				upperBoundary = Math.round((upperBoundary)/uBroundFactor)*uBroundFactor;
-				lowerBoundary = Math.round((lowerBoundary)/lBroundFactor)*lBroundFactor;
+				upperBoundary = Math.round((upperBoundary) / uBroundFactor) * uBroundFactor;
+				lowerBoundary = Math.round((lowerBoundary) / lBroundFactor) * lBroundFactor;
 			}
-			// put oundaries into array the right way
+			// put boundaries into array the right way (unshift adds to the front of array)
 			boundaries.unshift({
 				upper: upperBoundary,
 				lower: lowerBoundary
@@ -99,10 +100,10 @@ class CantonMap extends Component {
 		return boundaries;
 	}
 
-	 /**
- 	 * Definines canton color classes
-	 * If you add or remove colors in the returned array, the Legend.js will adapt dynamically
- 	 * @return {Array} rgb colors as strings.
+	/**
+ 	* Definines canton color classes
+	* If you add or remove colors in the returned array, the Legend.js will adapt dynamically
+ 	* @return {Array} rgb colors as strings.
   	*/
 	returnColorArray = () => {
 		const greenToRed8Classes = ["85, 181, 22", "135, 200, 54", "177, 213, 15", "232, 234, 29", "234, 224, 2", "245, 175, 1", "239, 118, 14", "255, 50, 12"];
@@ -118,10 +119,10 @@ class CantonMap extends Component {
 		//return colorClassesArray[random];
 		return redToGreen8Classes;
 	}
-  /**
+    /**
   	* Draws cantons on the Map
  	*/
-	render() {
+    render() {
 		return (
 				<LayerGroup>
 					{
