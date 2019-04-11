@@ -107,6 +107,8 @@ class CantonMap extends Component {
 	returnColorArray = () => {
 		const greenToRed8Classes = ["85, 181, 22", "135, 200, 54", "177, 213, 15", "232, 234, 29", "234, 224, 2", "245, 175, 1", "239, 118, 14", "255, 50, 12"];
 		const redToGreen8Classes = greenToRed8Classes.reverse();
+		console.log("rTg"+redToGreen8Classes);
+		console.log("gTr"+greenToRed8Classes);
 		const blue8Classes = ["235, 240, 255", "186, 210, 235", "142, 190, 218", "90, 158, 204", "53, 126, 185", "28, 91, 166", "11, 50, 129", "51, 50, 120"];
 		const red8Classes = ["253, 238, 186", "249, 227, 151", "248 ,  199 ,  122", "244,  174,  90", "246,  133,  82" , "235 ,  93,  80", "204,  73,  80",  "165,  50,  50"]
 		const red5Classes = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "140, 0, 0"];
@@ -114,7 +116,7 @@ class CantonMap extends Component {
 		//const colorClassesArray = [greenToRed8Classes, blue8Classes, red8Classes, redToGreen8Classes];
 		//const random = Math.floor((Math.random() * colorClassesArray.length));
 		//return colorClassesArray[random];
-		return red8Classes;
+		return redToGreen8Classes;
 	}
   /**
   	* Draws cantons on the Map

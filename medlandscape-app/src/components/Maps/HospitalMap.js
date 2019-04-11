@@ -18,14 +18,16 @@ class HospitalMap extends Component {
      * @return {int} size of the radius
      */
 	getNormedRadius = (item) => {
+		const max = this.props.maxAndMin.max;
+		const min = this.props.maxAndMin.min;
 		const mean = this.props.maxAndMin.mean;
 		const std = this.props.maxAndMin.std;
-		// const normedVal = ((this.props.returnData(item)-min)/(max-min));
-		// standarddizing values
 		const standardVal = ((this.props.returnData(item)-mean)/std);
-		const smallest = 4  // minimum pixel size of smallest value
-		const factor = 45; // factor + smallest = maximal size of biggest value
-		return standardVal*factor+smallest;
+
+		const a = ((this.props.returnData(item) - Math.abs(min)) * 10 / max);
+		console.log(a);
+
+		return (Math.pow(a / Math.PI, 0.5));
 	}
 
     /**
