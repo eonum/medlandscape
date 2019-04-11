@@ -1,8 +1,7 @@
 {
-    "title": "Application pour la visualisation et l'analyse du milieu hospitalier suisse",
-    "description": {
-        "part1": "foo",
-        "part2": "bar"
+    "variables": {
+        "name_canton": "Variables de canton:",
+        "name_hospital": "Variables d'hôpital:"
     },
     "language_picker": {
         "info": "Choisissez votre langue"

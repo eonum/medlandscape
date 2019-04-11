@@ -164,9 +164,9 @@ class App extends Component {
             <div className="App">
                 <div className="grid-container">
                     <div className="control-panel">
-                        <p>Kantonsvariabeln:</p>
+                        <p>{t('variables.name_canton')}</p>
                         <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
-                        <p>Spitalvariabeln:</p>
+                        <p>{t('variables.name_hospital')}</p>
                         <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
                         <LanguagePicker resendInitApiCall={this.initApiCall} />
                     </div>

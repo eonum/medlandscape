@@ -1,8 +1,7 @@
 {
-    "title": "Anwendung zur Visualisierung und Analyse der schweizer Spitallandschaft",
-    "description": {
-        "part1": "foo",
-        "part2": "bar"
+    "variables": {
+        "name_canton": "Kantonsvariablen:",
+        "name_hospital": "Spitalvariabeln:"
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"
