@@ -30,6 +30,17 @@ class HospitalMap extends Component {
 		return (Math.pow(a / Math.PI, 0.5));
 	}
 
+	/**
+	* Defines what happens if you hover over a hospital with your mouse
+	* @param {Object} item = the hospital you are hovering over
+	* @param {Object} e = the circlemarker object you are hovering over
+	*/
+	onMouseOver = (item, e) => {
+		e.target.bindPopup("<dd>" + item.name + "</dd>" + "<dd>" + item.street + "</dd>" + "<dd>" + item.city + "</dd>", {closeButton: false});
+		e.target.openPopup();
+		console.log(item);
+ 	}
+
     /**
      * Creates circles to represent hospitals on a Map
      */
@@ -45,6 +56,7 @@ class HospitalMap extends Component {
 								opacity = "0.8"
 								weight = "3" // defining how big the outer line of circle is
 								radius={this.getNormedRadius(item)} // norming function is here
+								onMouseOver = {this.onMouseOver.bind(this, item)}
 								>
 								<Popup>
 									{this.props.returnData(item)}
