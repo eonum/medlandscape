@@ -5,6 +5,13 @@ import Legend from './Legend.js'
 
 class CantonMap extends Component {
 
+	constructor(props){
+		super(props);
+		this.state = {
+			colorScheme: ''
+		};
+	}
+
   /**
    * Definines color of each canton
    * @param  {Canton Object} item (The canton to style)
@@ -13,7 +20,7 @@ class CantonMap extends Component {
 	getCantonStyle = (item) => {
 		const value = this.props.returnData(item);
 		const color = this.returnColor(value);
-		var cantonStyle = {
+		const cantonStyle = {
 			"dashArray": 3, // makes outline of cantons appear dashed (higher value = more distance between dashes)
 			"color": "rgb("+color+")", // outline color
     		"fillColor": "rgb("+color+")",
@@ -30,7 +37,7 @@ class CantonMap extends Component {
 	 * @return {String} rgb color as string.
  	*/
 	returnColor = (value) => {
-		const classColors = this.returnColorArray();
+		const classColors = this.returnColorClasses()[this.state.colorScheme];
 		const boundaries = this.returnBoundaries();
 		for (let i = 0; i < classColors.length && i < boundaries.length; i++){
 			const upperBoundary = boundaries[i].upper;
@@ -70,8 +77,7 @@ class CantonMap extends Component {
 	returnBoundaries = () => {
 		const min = this.props.maxAndMin.min;
 		const max = this.props.maxAndMin.max;
-		// array classColors contains the colors for the classes
-		const numberOfClasses = this.returnColorArray().length;
+		const numberOfClasses = this.returnColorClasses()[this.state.colorScheme].length;
 		const range = max - min;
 		const classSize = range / numberOfClasses;
 		// defining boundaries
@@ -82,7 +88,6 @@ class CantonMap extends Component {
 			const uBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
 			const lBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
 			//different rounding for small class sizes
-            console.log(upperBoundary);
 			if (classSize < 5){
 				upperBoundary = upperBoundary.toFixed(1);
 				lowerBoundary = lowerBoundary.toFixed(1);
@@ -101,34 +106,61 @@ class CantonMap extends Component {
 	}
 
 	/**
- 	* Definines canton color classes
+	* Sets state for color scheme
+	* color schemes can be mapped to variables in future (with componentWillReceiveProps())
+	*/
+	componentWillMount(){
+		const colorClassesArray = this.returnColorClasses();
+		const random = Math.floor((Math.random() * colorClassesArray.length));
+		this.setState({
+			colorScheme: random,
+		});
+	}
+
+	/**
+ 	* Defines canton color classes
 	* If you add or remove colors in the returned array, the Legend.js will adapt dynamically
- 	* @return {Array} rgb colors as strings.
+ 	* @return {2D Array} color classes arrays consistiing of rgb colors as strings.
   	*/
-	returnColorArray = () => {
+	returnColorClasses = () => {
 		const greenToRed8Classes = ["85, 181, 22", "135, 200, 54", "177, 213, 15", "232, 234, 29", "234, 224, 2", "245, 175, 1", "239, 118, 14", "255, 50, 12"];
-		const redToGreen8Classes = greenToRed8Classes.reverse();
+		const redToGreen8Classes = greenToRed8Classes.slice().reverse();
 		const blue8Classes = ["235, 240, 255", "186, 210, 235", "142, 190, 218", "90, 158, 204", "53, 126, 185", "28, 91, 166", "11, 50, 129", "51, 50, 120"];
 		const red8Classes = ["253, 238, 186", "249, 227, 151", "248 ,  199 ,  122", "244,  174,  90", "246,  133,  82" , "235 ,  93,  80", "204,  73,  80",  "165,  50,  50"]
 		const red5Classes = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "140, 0, 0"];
-		// randomness tried
-		//const colorClassesArray = [greenToRed8Classes, blue8Classes, red8Classes, redToGreen8Classes];
-		//const random = Math.floor((Math.random() * colorClassesArray.length));
-		//return colorClassesArray[random];
-		return red8Classes;
+		const colorClassesArray = [greenToRed8Classes, blue8Classes, red8Classes, redToGreen8Classes];
+		return colorClassesArray;
 	}
-    /**
-  	* Draws cantons on the Map
- 	*/
+
+	/**
+	* Defines what happens if you hover over a canton with your mouse
+	* @param {Object} item = the canton you are hovering over
+	* @param {Object} e = the geoJSON object you are hovering over
+	*/
+	onMouseOver = (item, e) => {
+		// if hovering should highlight a canton (use onMouseOut to reset style. resetting style hasent worked yet sadly)
+		/*e.target.setStyle({
+			color: '#000',
+			opacity: 1
+		});*/
+		e.layer.bindPopup(item.text + " (" + item.name + ")", {closeButton: false});
+		e.layer.openPopup();
+ 	}
+
+	/**
+	* Draws cantons on the Map
+	*/
     render() {
 		return (
 				<LayerGroup>
 					{
 						this.props.data.map((item) => (
 							<GeoJSON
+								ref="geojson"
 								key = {this.props.data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
+								onMouseOver = {this.onMouseOver.bind(this, item)}
 								>
 								<Popup>
 									{this.props.returnData(item)}
@@ -136,7 +168,7 @@ class CantonMap extends Component {
 							</GeoJSON>
 						))
 					}
-					<Legend maxAndMin={this.props.maxAndMin} classColors={this.returnColorArray()} boundaries={this.returnBoundaries()}/>
+					<Legend maxAndMin={this.props.maxAndMin} classColors={this.returnColorClasses()[this.state.colorScheme]} boundaries={this.returnBoundaries()}/>
 				</LayerGroup>
 		)
 	}

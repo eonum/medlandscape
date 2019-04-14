@@ -23,9 +23,9 @@ class Legend extends Component {
             legendLine.color = this.returnBoxStyle(color);
 
             let value;
-			if (i == 0)
+			if (i === 0)
 				value = '< ' + upperBoundary + '\n' ;
-			else if (i == this.props.boundaries.length - 1)
+			else if (i === this.props.boundaries.length - 1)
 				value = '> ' +  lowerBoundary + '\n' ;
             else value =  lowerBoundary + ' - ' + upperBoundary + '\n' ;
 

@@ -23,11 +23,11 @@ class Maps extends Component {
      * @return {int || float} The selected entry in the item.values object
      */
 	returnData = (item) => {
-    let varName = this.props.variableInfo.name;
-	let values = item.attributes[varName];
-    let keys = Object.keys(values);
-    let firstEntry = values[keys[0]];
-	return firstEntry;
+        let varName = this.props.variableInfo.name;
+        let values = item.attributes[varName];
+        let keys = Object.keys(values);
+        let firstEntry = values[keys[0]];
+        return firstEntry;
 	}
 
 	/**
@@ -35,34 +35,41 @@ class Maps extends Component {
    * @return {Object} Object.min minimum, Object.max maximum, Object.mean mean, Object.std standard deviation,
  	*/
 	setMaxAndMin = () => {
-    let min = 1000000000000, max = 0;
-		let sum = 0; let counter = 0;
-	    this.props.objects.map((obj) => {
-	      let val = this.returnData(obj);
-	      if (val) {
-	        max = (max < val) ? val : max;
-	        min = (min > val) ? val : min;
-	      }
-		  sum += val;
-		  counter++;
-	    })
-		const mean = sum/counter;
+        let min = 1000000000000, max = 0, sum = 0, counter = 0;
 
-		sum = 0;
-		this.props.objects.map((obj) => {
-			let val = this.returnData(obj);
-			const squareDif = Math.pow(val - mean, 2);
-			sum += squareDif;
-		})
-		const meanSquareDif = sum/counter;
-		const std = Math.sqrt(meanSquareDif);
+        this.props.objects.map((obj) => {
+            let val = this.returnData(obj);
+            if (val === 0) {
+                //console.log(obj.name + " has value of 0.");
+            }
+            if (obj.name !== "Ganze Schweiz") {
+                max = (max < val) ? val : max;
+                min = (min > val) ? val : min;
+                sum += val;
+                counter++;
+            }
+        })
 
-	  	return {
-			mean: mean,
-			std: std,
-	    	max: max,
-	    	min: min
-	    }
+        const mean = sum/counter;
+        sum = 0;
+
+        this.props.objects.map((obj) => {
+            let val = this.returnData(obj);
+            if (obj.name !== "Ganze Schweiz") {
+                const squareDif = Math.pow(val - mean, 2);
+                sum += squareDif;
+            }
+        })
+
+        const meanSquareDif = sum/counter;
+        const std = Math.sqrt(meanSquareDif);
+
+        return {
+            mean: mean,
+            std: std,
+            max: max,
+            min: min
+        }
 	}
 
   /**
@@ -76,28 +83,30 @@ class Maps extends Component {
   }
 
 	render() {
-    let ready = (this.props.hasLoaded && this.isNormable());
-    let componentToRender = null;
-    if (ready) {
-      componentToRender = (this.props.variableInfo.variable_model === "Canton")
-      ? <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
-      : <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
+        let ready = (this.props.hasLoaded && this.isNormable());
+        let componentToRender = null;
+
+        if (ready) {
+          componentToRender = (this.props.variableInfo.variable_model === "Canton")
+          ? <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
+          : <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
         }
-		return (
-			<Map // set up map
-				center={[this.state.lat, this.state.lng]}
-				zoom={this.state.zoom}
-				minZoom={8} // set minimum zoom level
-				maxZoom={16} // set maximum zoom level
+
+        return (
+        	<Map // set up map
                 className="map"
-				>
-				<TileLayer // add background layer
-					attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-					url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-				/>
-				{componentToRender}
-			</Map>
-		)
+        		center={[this.state.lat, this.state.lng]}
+        		zoom={this.state.zoom}
+        		minZoom={8} // set minimum zoom level
+        		maxZoom={16} // set maximum zoom level
+        		>
+        		<TileLayer // add background layer
+        			attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        			url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+        		/>
+        		{componentToRender}
+        	</Map>
+        )
 	}
 }
 

@@ -6,3 +6,13 @@
     top: 0;
     left: 0;
 }
+
+.leaflet-popup-content-wrapper{
+    background-color: gray;
+    color: white;
+    opacity: 0.9;
+    line-height: 10px;
+}
+.leaflet-popup-tip {
+    background: red;
+}
