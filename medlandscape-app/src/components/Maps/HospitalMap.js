@@ -11,7 +11,6 @@ class HospitalMap extends Component {
 		return "rgb(255, 5, 0)";
 	}
 
-	/*return normed circle radii*/
     /**
      * Computes the Radius for a hospital point.
      * @param  {Hospital Object} item The hospital
@@ -23,11 +22,16 @@ class HospitalMap extends Component {
 		const mean = this.props.maxAndMin.mean;
 		const std = this.props.maxAndMin.std;
 		const standardVal = ((this.props.returnData(item)-mean)/std);
+        const data = this.props.returnData(item);
+        const biggestRadius = 50;
 
-		const a = ((this.props.returnData(item) - Math.abs(min)) * 10 / max);
-		console.log(a);
+		const a = ((data + Math.abs(min)) / (max + Math.abs(min))) * Math.pow(biggestRadius, 2) * Math.PI;
+        let radius = Math.sqrt(a / Math.PI);
+        if (data === max) {
+            console.log(item.name + ", max: " + max + ", min: " + min + ", radius: " + radius);
+        }
 
-		return (Math.pow(a / Math.PI, 0.5));
+		return radius;
 	}
 
 	/**
@@ -36,9 +40,8 @@ class HospitalMap extends Component {
 	* @param {Object} e = the circlemarker object you are hovering over
 	*/
 	onMouseOver = (item, e) => {
-		e.target.bindPopup("<dd>" + item.name + "</dd>" + "<dd>" + item.street + "</dd>" + "<dd>" + item.city + "</dd>", {closeButton: false});
+		e.target.bindPopup("<dd>" + item.name + "</dd><dd>" + item.street + "</dd><dd>" + item.city + "</dd><dd>" + this.props.returnData(item) + "</dd>", {closeButton: false});
 		e.target.openPopup();
-		console.log(item);
  	}
 
     /**
@@ -46,25 +49,25 @@ class HospitalMap extends Component {
      */
 	render() {
 		return (
-				<LayerGroup>
-					{
-						this.props.data.map((item) => (
-      				<CircleMarker
-      					key = {this.props.data.indexOf(item)}
-								center={{lon: item.longitude, lat: item.latitude}}
-								color = {this.calculateCircleColor()}
-								opacity = "0.8"
-								weight = "3" // defining how big the outer line of circle is
-								radius={this.getNormedRadius(item)} // norming function is here
-								onMouseOver = {this.onMouseOver.bind(this, item)}
-								>
-								<Popup>
-									{this.props.returnData(item)}
-								</Popup>
-							</CircleMarker>
-          	))
-					}
-				</LayerGroup>
+			<LayerGroup>
+				{
+					this.props.data.map((item) => (
+          				<CircleMarker
+          					key = {this.props.data.indexOf(item)}
+        					center={{lon: item.longitude, lat: item.latitude}}
+        					color = {this.calculateCircleColor()}
+        					opacity = "0.8"
+        					weight = "1" // defining how big the outer line of circle is
+        					radius={this.getNormedRadius(item)} // norming function is here
+        					onMouseOver = {this.onMouseOver.bind(this, item)}
+        				>
+        					<Popup>
+        						{this.props.returnData(item)}
+        					</Popup>
+        				</CircleMarker>
+      	             ))
+				}
+			</LayerGroup>
 		)
 	}
 }
