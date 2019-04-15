@@ -16,13 +16,17 @@
     position: absolute;
     display: grid;
     width: 100vw;
+    height: 100vh;
     grid-template-columns: 50px auto 290px 50px;
-    grid-template-rows: 50px auto 50px;
+    grid-template-rows: 50px auto 70px 50px;
     pointer-events: none;
 }
 
+.grid-container > div {
+    pointer-events: auto;
+}
+
 .control-panel {
-    pointer-events:auto;
     grid-column-start: 3;
     grid-row-start: 2;
     place-self: start start;
@@ -36,4 +40,10 @@
     display: block;
     height: 15px;
     line-height: 15px;
+}
+
+.slider {
+    grid-column: 2/3;
+    grid-row-start: 3;
+    place-self: start center;
 }

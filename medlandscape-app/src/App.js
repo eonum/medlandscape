@@ -3,6 +3,7 @@ import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
 import Table from './components/Table.js';
 import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
+import Slider from './components/Slider/Slider.js'
 import './App.css';
 import { withTranslation } from 'react-i18next';
 import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
@@ -20,6 +21,7 @@ class App extends Component {
         selectedVariable : {},
         selectedCantons : [],
         selectedHospitals : [],
+        selectedYear : "",
         hasLoaded : false
     }
 
@@ -39,11 +41,11 @@ class App extends Component {
                 [key] : results.map(obj => {
                     return obj;
                 }),
-                hasLoaded : true
             });
         }).then(() => {
             this.setState({
-                hasLoaded : true
+                hasLoaded : true,
+                selectedYear : this.getYears()[0]
             })
         })
     }
@@ -132,12 +134,33 @@ class App extends Component {
         return arr;
     }
 
+    /**
+     * Returns list of available years depending on variable
+     * @return {Array} The available years.
+     */
+    getYears = () => {
+        let selVar = this.state.selectedVariable;
+        let selObj = (selVar.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons;
+        let years = (selVar.is_time_series) ? Object.keys(selObj[0].attributes[selVar.name]) : ["Aktuell"];
+        return years;
+    }
+
+    /**
+     * [setYear description]
+     */
+    setYear = (year) => {
+        this.setState({
+            selectedYear : year,
+            hasLoaded : true
+        })
+    }
+
     componentDidMount() {
         this.initApiCall();
     }
 
     render() {
-        let cantonVars = [], hospitalVars = [];
+        let cantonVars = [], hospitalVars = [], years = [];
         let selectedCanton = {}, selectedHospital = {};
 
         hospitalVars = this.state.var.filter(variable => {
@@ -158,6 +181,7 @@ class App extends Component {
         }
 
         const { t } = this.props;
+        years = (this.state.hasLoaded) ? this.getYears() : [];
 
         return (
 
@@ -170,8 +194,13 @@ class App extends Component {
                         <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
                         <LanguagePicker resendInitApiCall={this.initApiCall} />
                     </div>
+                    {
+                        (years.length > 1)
+                        ? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+                        : null
+                    }
                 </div>
-                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
+                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
             </div>
 
         );

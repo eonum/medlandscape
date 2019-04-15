@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withTranslation } from "react-i18next";
+import './LanguagePicker.css'
 
 /**
 * Basic component for selecting the active language
@@ -26,8 +27,8 @@ class LanguagePicker extends Component {
         return (
             <div className="languagePicker">
                 <p>{this.props.t('language_picker.info')}:</p>
-                <button onClick={() => this.onLanguageChange('de')}>DE</button>
-                <button onClick={() => this.onLanguageChange('fr')}>FR</button>
+                <button className="langBtn" onClick={() => this.onLanguageChange('de')}>DE</button>
+                <button className="langBtn" onClick={() => this.onLanguageChange('fr')}>FR</button>
             </div>
         );
     }

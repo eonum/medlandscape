@@ -1,0 +1,54 @@
+.slider {
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 15px;
+    position: relative;
+}
+
+.years {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+}
+
+.sliderBar {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    top: 4px;
+    background-color: #999;
+    border-radius: 3px;
+}
+
+.year {
+    position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+}
+
+.year::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #999;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 50%;
+    margin-left: -6px;
+}
+
+.year:hover {
+    cursor: pointer;
+}
+
+.year:hover::after{
+    background-color: #1996fa;
+}
+
+.years > .selected::after {
+    background-color: #1996fa;
+}

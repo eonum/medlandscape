@@ -1,0 +1,18 @@
+.langBtn {
+    width: 80px;
+    height: 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1996fa;
+    color: white;
+    font-size: 14pt;
+}
+
+.langBtn:hover {
+    cursor: pointer;
+}
+
+.langBtn:focus {
+    outline: none;
+}
