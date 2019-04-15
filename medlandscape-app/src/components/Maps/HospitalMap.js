@@ -21,7 +21,7 @@ class HospitalMap extends Component {
 		const min = this.props.maxAndMin.min;
 		const mean = this.props.maxAndMin.mean;
 		const std = this.props.maxAndMin.std;
-		const standardVal = ((this.props.returnData(item)-mean)/std);
+		//const standardVal = ((this.props.returnData(item)-mean)/std);
         const data = this.props.returnData(item);
         const biggestRadius = 50;
 

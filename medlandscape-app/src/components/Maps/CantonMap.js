@@ -42,11 +42,11 @@ class CantonMap extends Component {
 		for (let i = 0; i < classColors.length && i < boundaries.length; i++){
 			const upperBoundary = boundaries[i].upper;
 			const lowerBoundary = boundaries[i].lower;
-			if (i == 0 && value <= upperBoundary){ // check for values below rounded lower boundary
+			if (i === 0 && value <= upperBoundary){ // check for values below rounded lower boundary
 				return classColors[0];}
 			if (value <= upperBoundary && value > lowerBoundary)
 				return classColors[i];
-			if (i == classColors.length -1 && value > upperBoundary) //check for values above rounded upper boundary
+			if (i === classColors.length -1 && value > upperBoundary) //check for values above rounded upper boundary
 				return classColors[classColors.length-1];
 		}
 	}

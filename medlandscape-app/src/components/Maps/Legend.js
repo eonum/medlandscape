@@ -1,4 +1,4 @@
-import React, { Component, Row, Col } from 'react';
+import React, { Component } from 'react';
 import Control from 'react-leaflet-control';
 import './Legend.css'
 

@@ -79,11 +79,11 @@ class DropdownMenu extends Component {
 *
 * listItems: an array containing all list items of the menu
 * selectItem: a function that will be called to inform the parent of the item
-*  that was
+*  that was selected
 * selectedItem: an object that represents the selected item
 */
 DropdownMenu.propTypes = {
-    listItems: PropTypes.array.isRequired, // Yes, the comma is necessary
+    listItems: PropTypes.array.isRequired,
     selectItem: PropTypes.func.isRequired,
     selectedItem: PropTypes.object.isRequired,
 }

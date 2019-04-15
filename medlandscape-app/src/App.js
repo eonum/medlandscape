@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
-import Table from './components/Table.js';
-import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
 import Slider from './components/Slider/Slider.js'
 import './App.css';
