@@ -139,7 +139,8 @@ class App extends Component {
     getYears = () => {
         let selVar = this.state.selectedVariable;
         let selObj = (selVar.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons;
-        return Object.keys(selObj[0].attributes[selVar.name]);
+        let years = (selVar.is_time_series) ? Object.keys(selObj[0].attributes[selVar.name]) : ["Aktuell"];
+        return years;
     }
 
     /**

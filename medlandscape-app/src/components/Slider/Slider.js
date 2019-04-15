@@ -9,14 +9,16 @@ class Slider extends Component {
 
     render() {
         return (
-            <div className="slider years">
-                <div className="sliderBar"></div>
-                {
-                    this.props.years.map((year) => {
-                        let yrStr = "'" + year.slice(-2);
-                        return <div key={this.props.years.indexOf(year)} className={(year === this.props.selectedYear) ? "year selected" : "year"} onClick={this.selectYear.bind(this, year)}>{yrStr}</div>
-                    })
-                }
+            <div className="slider">
+                <div className="years">
+                    <div className="sliderBar"></div>
+                    {
+                        this.props.years.map((year) => {
+                            let yrStr = "'" + year.slice(-2);
+                            return <div key={this.props.years.indexOf(year)} className={(year === this.props.selectedYear) ? "year selected" : "year"} onClick={this.selectYear.bind(this, year)}>{yrStr}</div>
+                        })
+                    }
+                </div>
             </div>
         )
     }
