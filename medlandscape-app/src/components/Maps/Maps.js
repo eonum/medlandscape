@@ -25,7 +25,9 @@ class Maps extends Component {
 	returnData = (item) => {
         let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
-        let data = (values[this.props.year]) ? values[this.props.year] : 0;
+        //let data = (values[this.props.year]) ? values[this.props.year] : 0;
+        // CMI brutto, siehe Wallis
+        let data = (values[this.props.year]);
 		return data;
 	}
 
@@ -39,7 +41,7 @@ class Maps extends Component {
         this.props.objects.map((obj) => {
             let val = this.returnData(obj);
             if (val === 0) {
-                //console.log(obj.name + " has value of 0.");
+                console.log(obj.name + " has value of 0.");
             }
             if (obj.name !== "Ganze Schweiz") {
                 max = (max < val) ? val : max;
