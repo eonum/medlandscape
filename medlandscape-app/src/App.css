@@ -2,7 +2,48 @@
     margin: 0;
     padding: 0;
 }
+.App {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-#mapid{
-	height: 400px;
+.leaflet-control-attribution {
+    display: none;
+}
+
+.grid-container {
+    position: absolute;
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    grid-template-columns: 50px auto 290px 50px;
+    grid-template-rows: 50px auto 70px 50px;
+    pointer-events: none;
+}
+
+.grid-container > div {
+    pointer-events: auto;
+}
+
+.control-panel {
+    grid-column-start: 3;
+    grid-row-start: 2;
+    place-self: start start;
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.control-panel p {
+    display: block;
+    height: 15px;
+    line-height: 15px;
+}
+
+.slider {
+    grid-column: 2/3;
+    grid-row-start: 3;
+    place-self: start center;
 }

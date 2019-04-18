@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
-import Table from './components/Table.js';
-import CheckboxList from './components/CheckboxList/CheckboxList.js';
 import Maps from './components/Maps/Maps.js';
+import Slider from './components/Slider/Slider.js'
 import './App.css';
+import { withTranslation } from 'react-i18next';
+import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
 
 const apiURL = "https://qm1.ch/";
-let apiRequest = "de/api/medical_landscape/";
+let apiRequest = "/api/medical_landscape/";
 
 class App extends Component {
 
@@ -18,17 +19,18 @@ class App extends Component {
         selectedVariable : {},
         selectedCantons : [],
         selectedHospitals : [],
+        selectedYear : "",
         hasLoaded : false
     }
 
     /**
-     * Fetches Cantons or Hospitals with the selected Variable information.
-     * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
-     */
+    * Fetches Cantons or Hospitals with the selected Variable information.
+    * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
+    */
     applyVar = (selectedVar) => {
         const {name, variable_model} = selectedVar;
 
-        let query = apiRequest;
+        let query = this.props.i18n.language + apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         query += key + "?variables=" + encodeURIComponent(name);
 
@@ -37,31 +39,31 @@ class App extends Component {
                 [key] : results.map(obj => {
                     return obj;
                 }),
-                hasLoaded : true
             });
         }).then(() => {
             this.setState({
-                hasLoaded : true
+                hasLoaded : true,
+                selectedYear : this.getYears()[0]
             })
         })
     }
 
     /**
-     * Sends request to the API.
-     * @param  {String} query The request.
-     * @return {Promise} A Promise Object of the requested API call, results parsed as JSON.
-     */
+    * Sends request to the API.
+    * @param  {String} query The request.
+    * @return {Promise} A Promise Object of the requested API call, results parsed as JSON.
+    */
     apiCall = (query) => {
         return fetch(apiURL + query).then(res => res.json());
     }
 
     /**
-     * Initialises the state variables with several calls to the API.
-     */
+    * Initialises the state variables with several calls to the API.
+    */
     initApiCall = () => {
         let varResultArr, cantonResultArr = [];
 
-        this.apiCall((apiRequest + "variables")).then((result) => {
+        this.apiCall((this.props.i18n.language + apiRequest + "variables")).then((result) => {
             varResultArr = result.map(obj => {
                 return obj;
             })
@@ -69,7 +71,7 @@ class App extends Component {
 
         // hospitals already fetched in applyVar()
 
-        this.apiCall((apiRequest + "cantons")).then((result) => {
+        this.apiCall((this.props.i18n.language + apiRequest + "cantons")).then((result) => {
             cantonResultArr = result.map(obj => {
                 return obj;
             })
@@ -84,10 +86,10 @@ class App extends Component {
     }
 
     /**
-     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-     * then calls applyVar to fetch data from the API.
-     * @param  {Variable object} item The selected variable.
-     */
+    * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
+    * then calls applyVar to fetch data from the API.
+    * @param  {Variable object} item The selected variable.
+    */
     dropdownSelectItem = (item) => {
         this.setState({
             selectedVariable : item,
@@ -97,9 +99,9 @@ class App extends Component {
     }
 
     /**
-     * Adds / removes objects to the respective List of selected canton / hospitals.
-     * @param  {Canton/Hospital object} object The object to add / remove from the list.
-     */
+    * Adds / removes objects to the respective List of selected canton / hospitals.
+    * @param  {Canton/Hospital object} object The object to add / remove from the list.
+    */
     checkboxSelectItem = (object) => {
         let selectedObj = (object.text) ? "selectedCantons" : "selectedHospitals";
         let newList = [];
@@ -116,10 +118,10 @@ class App extends Component {
     }
 
     /**
-     * Creates a 2d array out of an object (Used for Table Component).
-     * @param  {Object} selectedObject The object to convert to a 2d array.
-     * @return {Array} The 2d array.
-     */
+    * Creates a 2d array out of an object (Used for Table Component).
+    * @param  {Object} selectedObject The object to convert to a 2d array.
+    * @return {Array} The 2d array.
+    */
     create2dArr = (selectedObject) => {
         let arr = [];
         for (var key in selectedObject) {
@@ -130,12 +132,33 @@ class App extends Component {
         return arr;
     }
 
+    /**
+     * Returns list of available years depending on variable
+     * @return {Array} The available years.
+     */
+    getYears = () => {
+        let selVar = this.state.selectedVariable;
+        let selObj = (selVar.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons;
+        let years = (selVar.is_time_series) ? Object.keys(selObj[0].attributes[selVar.name]) : ["Aktuell"];
+        return years;
+    }
+
+    /**
+     * [setYear description]
+     */
+    setYear = (year) => {
+        this.setState({
+            selectedYear : year,
+            hasLoaded : true
+        })
+    }
+
     componentDidMount() {
         this.initApiCall();
     }
 
     render() {
-        let cantonVars = [], hospitalVars = [];
+        let cantonVars = [], hospitalVars = [], years = [];
         let selectedCanton = {}, selectedHospital = {};
 
         hospitalVars = this.state.var.filter(variable => {
@@ -155,14 +178,36 @@ class App extends Component {
             selectedHospital = hospitalVars[0];
         }
 
+        const { t } = this.props;
+        years = (this.state.hasLoaded) ? this.getYears() : [];
+
         return (
+
             <div className="App">
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
-				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} hasLoaded={this.state.hasLoaded} />
+                <div className="grid-container">
+                    <div className="control-panel">
+                        <p>{t('variables.name_canton')}</p>
+                        <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+                        <p>{t('variables.name_hospital')}</p>
+                        <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+                        <LanguagePicker resendInitApiCall={this.initApiCall} />
+                    </div>
+                    {
+                        (years.length > 1)
+                        ? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+                        : null
+                    }
+                </div>
+                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
             </div>
+
         );
     }
 }
 
-export default App;
+/**
+ * Convert the component using withTranslation() to have access to t() function
+ *  and other i18next props. Then export it.
+ */
+const LocalizedApp = withTranslation()(App);
+export default LocalizedApp;

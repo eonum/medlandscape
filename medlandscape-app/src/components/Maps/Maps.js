@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Map, TileLayer, CircleMarker, Popup, GeoJSON, Marker, LayerGroup } from 'react-leaflet'
+import { Map, TileLayer } from 'react-leaflet'
 import './Maps.css';
 
 import TestComponent from './TestComponent.js';
@@ -25,67 +25,89 @@ class Maps extends Component {
 	returnData = (item) => {
         let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
-        let keys = Object.keys(values);
-        let firstEntry = values[keys[0]];
-		return firstEntry;
+        //let data = (values[this.props.year]) ? values[this.props.year] : 0;
+        // CMI brutto, siehe Wallis
+        let data = (values[this.props.year]);
+		return data;
 	}
 
-    /**
-     * Iterates through this.props.objects and finds max and min values.
-     */
+	/**
+   * Iterates through this.props.objects and finds mean, standard deviation, max and min values.
+   * @return {Object} Object.min minimum, Object.max maximum, Object.mean mean, Object.std standard deviation,
+ 	*/
 	setMaxAndMin = () => {
-        let min = 1000000000000, max = 0;
+        let min = 1000000000000, max = 0, sum = 0, counter = 0;
+
         this.props.objects.map((obj) => {
             let val = this.returnData(obj);
-            if (val) {
+            if (val === 0) {
+                console.log(obj.name + " has value of 0.");
+            }
+            if (obj.name !== "Ganze Schweiz") {
                 max = (max < val) ? val : max;
                 min = (min > val) ? val : min;
+                sum += val;
+                counter++;
             }
         })
 
+        const mean = sum/counter;
+        sum = 0;
+
+        this.props.objects.map((obj) => {
+            let val = this.returnData(obj);
+            if (obj.name !== "Ganze Schweiz") {
+                const squareDif = Math.pow(val - mean, 2);
+                sum += squareDif;
+            }
+        })
+
+        const meanSquareDif = sum/counter;
+        const std = Math.sqrt(meanSquareDif);
+
         return {
-            max : max,
-            min : min
+            mean: mean,
+            std: std,
+            max: max,
+            min: min
         }
 	}
 
-    /**
-     * Checks if the selected Variable passed through this.props.varInfo
-     * is normable (a number or similar).
-     * @return {Boolean}
-     */
-    isNormable = () => {
-        let type = this.props.variableInfo.variable_type;
-        return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
-    }
+  /**
+   * Checks if the selected Variable passed through this.props.varInfo
+   * is normable (a number or similar).
+   * @return {Boolean}
+  */
+  isNormable = () => {
+    let type = this.props.variableInfo.variable_type;
+    return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
+  }
 
 	render() {
         let ready = (this.props.hasLoaded && this.isNormable());
         let componentToRender = null;
+
         if (ready) {
-            componentToRender = (this.props.variableInfo.variable_model === "Canton")
-                ?
-                    <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
-                :
-                    <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
+          componentToRender = (this.props.variableInfo.variable_model === "Canton")
+          ? <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
+          : <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
         }
 
-		return (
-			<Map // set up map
-				center={[this.state.lat, this.state.lng]}
-				zoom={this.state.zoom}
-				minZoom={8} // set minimum zoom level
-				maxZoom={14} // set maximum zoom level
-				>
-				<TileLayer // add background layer
-					attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-					url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-				/>
-
-				{componentToRender}
-
-			</Map>
-		)
+        return (
+        	<Map // set up map
+                className="map"
+        		center={[this.state.lat, this.state.lng]}
+        		zoom={this.state.zoom}
+        		minZoom={8} // set minimum zoom level
+        		maxZoom={16} // set maximum zoom level
+        		>
+        		<TileLayer // add background layer
+        			attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        			url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+        		/>
+        		{componentToRender}
+        	</Map>
+        )
 	}
 }
 

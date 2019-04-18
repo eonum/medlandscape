@@ -1,0 +1,12 @@
+{
+    "variables": {
+        "name_canton": "Variables de canton:",
+        "name_hospital": "Variables d'hôpital:"
+    },
+    "language_picker": {
+        "info": "Choisissez votre langue"
+    },
+    "localization_example": {
+        "example": "Bonjour frèri"
+    }
+}

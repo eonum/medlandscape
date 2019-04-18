@@ -1,5 +1,18 @@
-.leaflet-container {
-		height: 650px;
-		width: 1000px;
-        z-index: 0;
+.map {
+	height: 100vh;
+	width: 100vw;
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.leaflet-popup-content-wrapper{
+    background-color: gray;
+    color: white;
+    opacity: 0.9;
+    line-height: 10px;
+}
+.leaflet-popup-tip {
+    background: red;
 }
