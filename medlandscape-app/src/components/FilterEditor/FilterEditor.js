@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
+import CheckboxList from '../CheckboxList/CheckboxList.js';
 
 /**
  * Example component to show how to work with react-i18next localization
  */
 class FilterEditor extends Component {
 	state = {
-		variables: []
+		variables: [],
+        selectedVariable: undefined,
+        selectedValues: [],
 	};
-	
+
 	componentDidUpdate() {
 		if(this.props.hasLoaded && this.state.variables.length == 0){
-			
+
 			let enumVariables = this.findEnumVariables()
 			this.setState({variables: enumVariables});
 		}
@@ -20,7 +23,7 @@ class FilterEditor extends Component {
 	findEnumVariables = () => {
 		let i;
 		let enumVariables = [];
-		
+
 		for(i = 0; i < this.props.variables.length; i++){
 			if(this.props.variables[i].variable_type == "enum") {
 				enumVariables.push(this.props.variables[i]);
@@ -28,34 +31,39 @@ class FilterEditor extends Component {
 		}
 		return enumVariables;
 	}
-	
+
 	/**
-    * 
+    *
     */
     dropdownSelectItem = (item) => {
-        console.log(item);
+        this.setState({
+            selectedVariable : item,
+            selectedValues : [],
+        });
     }
-	
-	
-	
+
+    checkboxSelectItem = (item) => {
+        let values = this.state.selectedValues;
+        let index = values.indexOf(item);
+        if (index !== -1)
+            values.splice(index, 1);
+        else values.push(item);
+        this.setState({
+            selectedValues : values,
+        });
+        console.log(this.state.selectedValues);
+    }
+
 	filter = () => {
 		if (this.props.hasLoaded){
-		var i;
-		var array = [];
-		for(i = 0; i < 10; i++){
-			array.push(this.props.hospitals[i]);
-		}
-		this.props.updateHospitals(array);
-		}
+        }
 	}
 
     render () {
         return (
 			<div className="control-panel">
-				<button onClick={this.filter}>
-					First 10 Hospitals
-				</button>
-				<DropdownMenu id="filterDropDown" listItems={this.state.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.variables[0]} />
+				<DropdownMenu id="filterDropDown" listItems={this.state.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedVariable} />
+                {(this.state.selectedVariable !== undefined) ? <CheckboxList objects={this.state.selectedVariable.values} checkboxSelectItem={this.checkboxSelectItem} /> : null}
 			</div>
         );
     }

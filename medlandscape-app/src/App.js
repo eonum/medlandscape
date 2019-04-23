@@ -201,6 +201,7 @@ class App extends Component {
 
         const { t } = this.props;
         years = (this.state.hasLoaded) ? this.getYears() : [];
+        console.log(this.state.variables);
         return (
 			<div className="App">
 				<div className="grid-container">
