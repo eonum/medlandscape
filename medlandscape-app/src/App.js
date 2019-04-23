@@ -15,7 +15,7 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            var: [],
+            variables: [],
             cantons : [],
             hospitals : [],
 
@@ -88,7 +88,7 @@ class App extends Component {
             })
         }).then(() => {
             this.setState({
-                var : varResultArr,
+                variables : varResultArr,
                 cantons : cantonResultArr,
                 selectedVariable : varResultArr[0]
             });
@@ -164,6 +164,10 @@ class App extends Component {
         })
     }
 
+    /**
+     * Set selectedHospitals to
+     * @param {Array} the selected hospitals.
+     */
     updateSelectedHospitals = (selectedHospitals) => {
         this.setState({
             selectedHospitals: selectedHospitals
@@ -178,11 +182,11 @@ class App extends Component {
         let cantonVars = [], hospitalVars = [], years = [];
         let selectedCanton = {}, selectedHospital = {};
 
-        hospitalVars = this.state.var.filter(variable => {
+        hospitalVars = this.state.variables.filter(variable => {
             if (variable.variable_model === "Hospital")
             return variable
         })
-        cantonVars = this.state.var.filter(variable => {
+        cantonVars = this.state.variables.filter(variable => {
             if (variable.variable_model === "Canton")
             return variable
         })
@@ -214,7 +218,7 @@ class App extends Component {
 					}
 				</div>
 				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals = {this.state.hospitals} updateHospitals = {this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded}/>
+				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables}/>
 			</div>
         );
     }
