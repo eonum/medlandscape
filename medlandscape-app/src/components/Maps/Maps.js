@@ -103,7 +103,7 @@ class Maps extends Component {
         		>
         		<TileLayer // add background layer
         			attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        			url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+        			url="https://api.mapbox.com/styles/v1/nathi/cjf8cggx93p3u2qrqrgwoh5nh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF0aGkiLCJhIjoiY2pmOGJ4ZXJmMXMyZDJ4bzRoYWRxbzhteCJ9.x2dbGjsVZTA9HLw6VWaQow"
         		/>
         		{componentToRender}
         	</Map>

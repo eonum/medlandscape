@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
 import Maps from './components/Maps/Maps.js';
 import Slider from './components/Slider/Slider.js'
+import FilterEditor from './components/FilterEditor/FilterEditor.js';
 import './App.css';
 import { withTranslation } from 'react-i18next';
 import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
@@ -182,25 +183,24 @@ class App extends Component {
         years = (this.state.hasLoaded) ? this.getYears() : [];
 
         return (
-
-            <div className="App">
-                <div className="grid-container">
-                    <div className="control-panel">
-                        <p>{t('variables.name_canton')}</p>
-                        <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
-                        <p>{t('variables.name_hospital')}</p>
-                        <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
-                        <LanguagePicker resendInitApiCall={this.initApiCall} />
-                    </div>
-                    {
-                        (years.length > 1)
-                        ? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
-                        : null
-                    }
-                </div>
-                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-            </div>
-
+			<div className="App">
+				<div className="grid-container">
+					<div className="control-panel">
+						<p>{t('variables.name_canton')}</p>
+						<DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+						<p>{t('variables.name_hospital')}</p>
+						<DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+						<LanguagePicker resendInitApiCall={this.initApiCall} />
+					</div>
+					{
+						(years.length > 1)
+						? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+						: null
+					}
+				</div>
+				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
+				<FilterEditor />
+			</div>
         );
     }
 }
