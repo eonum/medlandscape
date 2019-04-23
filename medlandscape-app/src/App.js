@@ -12,16 +12,20 @@ let apiRequest = "/api/medical_landscape/";
 
 class App extends Component {
 
-    state = {
-        var: [],
-        cantons : [],
-        hospitals : [],
+    constructor(props) {
+        super(props)
+        this.state = {
+            var: [],
+            cantons : [],
+            hospitals : [],
 
-        selectedVariable : {},
-        selectedCantons : [],
-        selectedHospitals : [],
-        selectedYear : "",
-        hasLoaded : false
+            selectedVariable : {},
+            selectedCantons : [],
+            selectedHospitals : [],
+            selectedYear : "",
+            hasLoaded : false
+        }
+        this.updateSelectedHospitals = this.updateSelectedHospitals.bind(this)
     }
 
     /**
@@ -41,11 +45,17 @@ class App extends Component {
                     return obj;
                 }),
             });
+            if (key === "hospitals"){
+                this.setState({selectedHospitals : results.map(obj => {
+                    return obj;
+                    }),
+                });
+            }
         }).then(() => {
             this.setState({
                 hasLoaded : true,
                 selectedYear : this.getYears()[0]
-            })
+            });
         })
     }
 
@@ -139,7 +149,7 @@ class App extends Component {
      */
     getYears = () => {
         let selVar = this.state.selectedVariable;
-        let selObj = (selVar.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons;
+        let selObj = (selVar.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons;
         let years = (selVar.is_time_series) ? Object.keys(selObj[0].attributes[selVar.name]) : ["Aktuell"];
         return years;
     }
@@ -151,6 +161,12 @@ class App extends Component {
         this.setState({
             selectedYear : year,
             hasLoaded : true
+        })
+    }
+
+    updateSelectedHospitals = (selectedHospitals) => {
+        this.setState({
+            selectedHospitals: selectedHospitals
         })
     }
 
@@ -181,7 +197,6 @@ class App extends Component {
 
         const { t } = this.props;
         years = (this.state.hasLoaded) ? this.getYears() : [];
-
         return (
 			<div className="App">
 				<div className="grid-container">
@@ -198,8 +213,8 @@ class App extends Component {
 						: null
 					}
 				</div>
-				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.hospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor />
+				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
+				<FilterEditor hospitals = {this.state.hospitals} updateHospitals = {this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded}/>
 			</div>
         );
     }
