@@ -41,7 +41,7 @@ class Maps extends Component {
         this.props.objects.map((obj) => {
             let val = this.returnData(obj);
             if (val === 0) {
-                console.log(obj.name + " has value of 0.");
+                //console.log(obj.name + " has value of 0.");
             }
             if (obj.name !== "Ganze Schweiz") {
                 max = (max < val) ? val : max;

@@ -200,7 +200,7 @@ class App extends Component {
 
         const { t } = this.props;
         years = (this.state.hasLoaded) ? this.getYears() : [];
-        console.log(this.state.variables);
+
         return (
 			<div className="App">
 				<div className="grid-container">
@@ -218,7 +218,7 @@ class App extends Component {
 					}
 				</div>
 				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables}/>
+				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables} selectedYear={this.state.selectedYear}/>
 			</div>
         );
     }
