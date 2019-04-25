@@ -51,11 +51,15 @@ class FilterEditor extends Component {
         this.setState({
             selectedValues : values,
         });
+		this.filter();
         console.log(this.state.selectedValues);
     }
 
 	filter = () => {
+		const array = [];
+		array.push(this.props.hospitals[0]);
 		if (this.props.hasLoaded){
+			this.props.updateHospitals(array);
         }
 	}
 

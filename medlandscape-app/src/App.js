@@ -25,7 +25,6 @@ class App extends Component {
             selectedYear : "",
             hasLoaded : false
         }
-        this.updateSelectedHospitals = this.updateSelectedHospitals.bind(this)
     }
 
     /**

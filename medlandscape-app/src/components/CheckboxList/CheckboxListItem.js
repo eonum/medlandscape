@@ -7,7 +7,7 @@ class CheckboxListItem extends Component {
         return (
             <div className="checkbox-list-item">
                 <label>
-                    <input type="checkbox" className="list-item-cb" onChange={this.props.checkboxSelectItem.bind(this, this.props.object)}/>
+                    <input type="checkbox" className="list-item-cb" onChange={this.props.checkboxSelectItem.bind(this, this.props.object)} autoComplete="off"/>
                     <div className="list-item-name">
                         {this.props.object}
                     </div>
