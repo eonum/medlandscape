@@ -59,7 +59,7 @@ class HospitalMap extends Component {
         					opacity = "0.8"
         					weight = "1" // defining how big the outer line of circle is
         					radius={this.getNormedRadius(item)} // norming function is here
-        					onMouseOver = {this.onMouseOver.bind(this, item)}
+        					onClick = {this.onMouseOver.bind(this, item)}
         				>
         					<Popup>
         						{this.props.returnData(item)}

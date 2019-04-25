@@ -13,6 +13,13 @@
     opacity: 0.9;
     line-height: 10px;
 }
-.leaflet-popup-tip {
+.leaflet-popup-tip{
     background: red;
+	opacity: 0;
+}
+.leaflet-fade-anim .leaflet-popup{
+	transition: none;
+	-webkit-transition: none;
+	-moz-transition: none;
+	pointer-events: none;
 }
