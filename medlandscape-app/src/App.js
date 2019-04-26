@@ -6,6 +6,7 @@ import FilterEditor from './components/FilterEditor/FilterEditor.js';
 import './App.css';
 import { withTranslation } from 'react-i18next';
 import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
+import InteractiveTable from './components/InteractiveTable/InteractiveTable.js';
 
 const apiURL = "https://qm1.ch/";
 let apiRequest = "/api/medical_landscape/";
@@ -204,22 +205,7 @@ class App extends Component {
         console.log(this.state.variables);
         return (
 			<div className="App">
-				<div className="grid-container">
-					<div className="control-panel">
-						<p>{t('variables.name_canton')}</p>
-						<DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
-						<p>{t('variables.name_hospital')}</p>
-						<DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
-						<LanguagePicker resendInitApiCall={this.initApiCall} />
-					</div>
-					{
-						(years.length > 1)
-						? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
-						: null
-					}
-				</div>
-				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables}/>
+				<InteractiveTable variables={hospitalVars} hospitals={this.state.hospitals} />
 			</div>
         );
     }

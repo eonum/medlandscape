@@ -25,7 +25,7 @@ class DropdownMenu extends Component {
     * @param  {Object} item the list item that was selected
     */
     selectItem(item) {
-        this.props.selectItem(item);
+        this.props.selectItem(item, this.props.id);
         this.toggleDropdown();
     }
 
@@ -57,7 +57,7 @@ class DropdownMenu extends Component {
     * @return {JSX}  JSX-Code of components
     */
     render() {
-        let varText = (this.props.selectedItem) ? this.props.selectedItem.text : "";
+        let varText = (this.props.selectedItem) ? (this.props.selectedItem.text ? this.props.selectedItem.text : this.props.selectedItem.name) : "";
         return (
             <div className="dropdown">
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>
@@ -65,7 +65,7 @@ class DropdownMenu extends Component {
                     <input type="text" placeholder="Suchen..." className="dropdownElem searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {
                         this.props.listItems.map((item) => (
-                            <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.text}</div>
+                            <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.text ? item.text : item.name}</div>
                         ))
                     }
                 </div>
