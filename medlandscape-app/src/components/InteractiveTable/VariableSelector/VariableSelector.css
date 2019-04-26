@@ -5,8 +5,6 @@
 
 /* Dropdown Button */
 .dropbtn {
-	position: relative;
-	top: 0; left: 50px;
     box-sizing: border-box;
     background-color: #1996fa;
     color: white;

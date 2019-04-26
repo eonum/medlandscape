@@ -3,8 +3,14 @@
     padding: 10px 0 10px 0;
 }
 
+.addHospitalButton{
+	position: relative;
+	top:0; left: 0px;
+}
 /* Dropdown Button */
 .dropbtn {
+	position: relative;
+	top:0; left: 0px;
     box-sizing: border-box;
     background-color: #1996fa;
     color: white;

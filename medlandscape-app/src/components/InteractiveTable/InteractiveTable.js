@@ -65,11 +65,11 @@ class InteractiveTable extends Component {
         let newSelectedVariables = [];
 
         let newSelectedVariable = {};
-        let newDropdown = <DropdownMenu id={this.state.nextVarId} listItems={this.props.variables} selectItem={this.selectVariable}
+        let newDrp = <DropdownMenu id={this.state.nextVarId} listItems={this.props.variables} selectItem={this.selectVariable}
                             selectedItem={newSelectedVariable} />
 
         let nextVarIdInc = this.state.nextVarId + 1;
-        newVariables = [...this.state.variableDropdowns, newVariables];
+        newVariables = [...this.state.variableDropdowns, newDrp];
         newSelectedVariables = [...this.state.selectedVariables, newSelectedVariable];
 
         this.setState({
