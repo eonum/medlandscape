@@ -21,6 +21,7 @@ class App extends Component {
         selectedVariable : {},
         selectedCantons : [],
         selectedHospitals : [],
+        years : [],
         selectedYear : "",
         hasLoaded : false
     }
@@ -29,23 +30,37 @@ class App extends Component {
     * Sets the selected variable as selectedVariable
     * Fetches Cantons or Hospitals with the selectedVariable information.
     * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
-    * @param  {boolean} init Flag to see if initApiCall was called, if yes sets selectedHospitals to hospitals
+    * @param  {boolean} init Flag to see if initApiCall was called, if true: sets selectedHospitals to hospitals
     */
-    applyVariable = (selectedVar, init) => {
-        const {name, variable_model} = selectedVar;
-
+    applyVariable = (selectedVar) => {
+        const {name, variable_model} = selectedVar[0];
         let query = this.props.i18n.language + apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        query += key + "?variables=" + encodeURIComponent(name);
+        query += key + "?variables=";
+
+        for (var i = 0; i < selectedVar.length; i++) {
+            query += encodeURIComponent(selectedVar[i].name);
+        }
 
         this.apiCall(query).then((results) => {
+            if (key === "hospitals") {
+                this.setState({
+                    [key] : results,
+                    selectedHospitals : results
+                });
+            } else {
+                this.setState({
+                    [key] : results,
+                });
+            }
+        }).then(() => {
+            let years = this.getYears(this.state.selectedVariable);
             this.setState({
-                [key] : results,
-                selectedVariable : selectedVar,
-                selectedHospitals : (init && key === "hospitals") ? results : [], // janky but stable for now
+                years : years,
+                selectedYear : years[0],
                 hasLoaded : true
-            });
-        })
+            })
+        });
     }
 
     /**
@@ -71,9 +86,9 @@ class App extends Component {
             })
             this.setState({
                 variables : result,
-                enums : enumVars,
+                enums : enumVars
             });
-            this.applyVariable(result[0], true);
+            this.applyVariable([result[1]]);
         });
     }
 
@@ -84,9 +99,10 @@ class App extends Component {
     */
     selectVariable = (item) => {
         this.setState({
+            selectedVariable : item,
             hasLoaded : false
         });
-        this.applyVariable(item);
+        this.applyVariable([item]);
     }
 
     /**
@@ -125,12 +141,18 @@ class App extends Component {
 
     /**
      * Returns list of available years depending on variable
+     * @param {Variable Object}
      * @return {Array} The available years.
      */
-    getYears = () => {
-        let selObj = (this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons;
-        let years = (this.state.selectedVariable.is_time_series) ? Object.keys(selObj[0].attributes[this.state.selectedVariable.name]) : ["Aktuell"];
-        return years;
+    getYears = (selectedVariable) => {
+        const {variable_model, is_time_series, name} = selectedVariable;
+        let selObj = (variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons;
+        let maxYears = [], years;
+        for (var i = 0; i < selObj.length; i++) {
+            years = Object.keys(selObj[i].attributes[name]);
+            maxYears = (years.length > maxYears.length) ? years : maxYears
+        }
+        return maxYears;
     }
 
     /**
@@ -148,7 +170,7 @@ class App extends Component {
      */
     updateSelectedHospitals = (selectedHospitals) => {
         this.setState({
-            selectedHospitals: selectedHospitals
+            selectedHospitals : selectedHospitals
         })
     }
 
@@ -161,7 +183,7 @@ class App extends Component {
         let selectedCanton = {}, selectedHospital = {};
 
         hospitalVars = this.state.variables.filter(variable => {
-            return variable.variable_model === "Hospital"
+            return (variable.variable_model === "Hospital") && (variable.variable_type !== "enum")
         })
         cantonVars = this.state.variables.filter(variable => {
             return variable.variable_model === "Canton"
@@ -176,7 +198,6 @@ class App extends Component {
         }
 
         const { t } = this.props;
-        years = (this.state.hasLoaded) ? this.getYears() : [];
 
         return (
 			<div className="App">
@@ -189,13 +210,13 @@ class App extends Component {
 						<LanguagePicker resendInitApiCall={this.initApiCall} />
 					</div>
 					{
-						(years.length > 1)
-						? <Slider years={years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+						(this.state.years.length > 1)
+						? <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
 						: null
 					}
 				</div>
 				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables} selectedYear={this.state.selectedYear} enums={this.state.enums}/>
+				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} selectEnum={this.applyVariable} hasLoaded={this.state.hasLoaded} selectedYear={this.state.selectedYear} enums={this.state.enums}/>
 			</div>
         );
     }
