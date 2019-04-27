@@ -12,11 +12,11 @@ class InteractiveTable extends Component {
     constructor(props) {
         super(props)
         this.state = {
-			nextVarId : 0,
+			nextVariableId : 'var-' + 0,
 			variableDropdowns : [],
             selectedVariables : [],
 
-            nextDropdownId : 0,
+            nextHospitalId : 'hos-' + 0,
             hospitalDropdowns : [],
             selectedHospitals : []
 
@@ -29,15 +29,17 @@ class InteractiveTable extends Component {
         let newSelectedHospitals = [];
 
         let newSelectedHospital = {};
-        let newDropdown = <DropdownMenu id={this.state.nextDropdownId} listItems={this.props.hospitals} selectItem={this.selectHospital}
+        let newDropdown = <DropdownMenu id={this.state.nextHospitalId} listItems={this.props.hospitals} selectItem={this.selectHospital}
                             selectedItem={newSelectedHospital} />
 
-        let nextDropdownIdInc = this.state.nextDropdownId + 1;
+        let id_parts = this.state.nextHospitalId.split("-");
+        let nextHospitalIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);
+
         newDropdowns = [...this.state.hospitalDropdowns, newDropdown];
         newSelectedHospitals = [...this.state.selectedHospitals, newSelectedHospital];
 
         this.setState({
-            nextDropdownId: nextDropdownIdInc,
+            nextHospitalId: nextHospitalIdInc,
             hospitalDropdowns : newDropdowns,
             selectedHospitals : newSelectedHospitals
         });
@@ -65,15 +67,16 @@ class InteractiveTable extends Component {
         let newSelectedVariables = [];
 
         let newSelectedVariable = {};
-        let newDrp = <DropdownMenu id={this.state.nextVarId} listItems={this.props.variables} selectItem={this.selectVariable}
+        let newDrp = <DropdownMenu id={this.state.nextVariableId} listItems={this.props.variables} selectItem={this.selectVariable}
                             selectedItem={newSelectedVariable} />
 
-        let nextVarIdInc = this.state.nextVarId + 1;
+        let id_parts = this.state.nextVariableId.split("-");
+        let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);;
         newVariables = [...this.state.variableDropdowns, newDrp];
         newSelectedVariables = [...this.state.selectedVariables, newSelectedVariable];
 
         this.setState({
-            nextVarId: nextVarIdInc,
+            nextVariableId: nextVariableIdInc,
             variableDropdowns : newVariables,
             selectedVariables : newSelectedVariables
         });
