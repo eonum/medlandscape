@@ -12,26 +12,26 @@ let apiRequest = "/api/medical_landscape/";
 
 class App extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            variables: [],
-            cantons : [],
-            hospitals : [],
+    state = {
+        variables: [],
+        enums : [],
+        cantons : [],
+        hospitals : [],
 
-            selectedVariable : {},
-            selectedCantons : [],
-            selectedHospitals : [],
-            selectedYear : "",
-            hasLoaded : false
-        }
+        selectedVariable : {},
+        selectedCantons : [],
+        selectedHospitals : [],
+        selectedYear : "",
+        hasLoaded : false
     }
 
     /**
-    * Fetches Cantons or Hospitals with the selected Variable information.
+    * Sets the selected variable as selectedVariable
+    * Fetches Cantons or Hospitals with the selectedVariable information.
     * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
+    * @param  {boolean} init Flag to see if initApiCall was called, if yes sets selectedHospitals to hospitals
     */
-    applyVar = (selectedVar) => {
+    applyVariable = (selectedVar, init) => {
         const {name, variable_model} = selectedVar;
 
         let query = this.props.i18n.language + apiRequest;
@@ -40,20 +40,10 @@ class App extends Component {
 
         this.apiCall(query).then((results) => {
             this.setState({
-                [key] : results.map(obj => {
-                    return obj;
-                }),
-            });
-            if (key === "hospitals"){
-                this.setState({selectedHospitals : results.map(obj => {
-                    return obj;
-                    }),
-                });
-            }
-        }).then(() => {
-            this.setState({
-                hasLoaded : true,
-                selectedYear : this.getYears()[0]
+                [key] : results,
+                selectedVariable : selectedVar,
+                selectedHospitals : (init && key === "hospitals") ? results : [], // janky but stable for now
+                hasLoaded : true
             });
         })
     }
@@ -68,44 +58,35 @@ class App extends Component {
     }
 
     /**
-    * Initialises the state variables with several calls to the API.
+    * Initialises the state variables with a call to the API.
     */
     initApiCall = () => {
-        let varResultArr, cantonResultArr = [];
+        let varResultArr, enumVars = [];
 
+        // fetches all Variables from the API
         this.apiCall((this.props.i18n.language + apiRequest + "variables")).then((result) => {
-            varResultArr = result.map(obj => {
-                return obj;
+            // filters out enum variables (relevant for FilterEditor)
+            enumVars = result.filter(obj => {
+                return obj.variable_type === "enum";
             })
-        });
-
-        // hospitals already fetched in applyVar()
-
-        this.apiCall((this.props.i18n.language + apiRequest + "cantons")).then((result) => {
-            cantonResultArr = result.map(obj => {
-                return obj;
-            })
-        }).then(() => {
             this.setState({
-                variables : varResultArr,
-                cantons : cantonResultArr,
-                selectedVariable : varResultArr[0]
+                variables : result,
+                enums : enumVars,
             });
-            this.applyVar(varResultArr[0]);
+            this.applyVariable(result[0], true);
         });
     }
 
     /**
     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-    * then calls applyVar to fetch data from the API.
+    * then calls applyVariable to fetch data from the API.
     * @param  {Variable object} item The selected variable.
     */
-    dropdownSelectItem = (item) => {
+    selectVariable = (item) => {
         this.setState({
-            selectedVariable : item,
             hasLoaded : false
         });
-        this.applyVar(item);
+        this.applyVariable(item);
     }
 
     /**
@@ -147,9 +128,8 @@ class App extends Component {
      * @return {Array} The available years.
      */
     getYears = () => {
-        let selVar = this.state.selectedVariable;
-        let selObj = (selVar.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons;
-        let years = (selVar.is_time_series) ? Object.keys(selObj[0].attributes[selVar.name]) : ["Aktuell"];
+        let selObj = (this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons;
+        let years = (this.state.selectedVariable.is_time_series) ? Object.keys(selObj[0].attributes[this.state.selectedVariable.name]) : ["Aktuell"];
         return years;
     }
 
@@ -159,7 +139,6 @@ class App extends Component {
     setYear = (year) => {
         this.setState({
             selectedYear : year,
-            hasLoaded : true
         })
     }
 
@@ -182,12 +161,10 @@ class App extends Component {
         let selectedCanton = {}, selectedHospital = {};
 
         hospitalVars = this.state.variables.filter(variable => {
-            if (variable.variable_model === "Hospital")
-            return variable
+            return variable.variable_model === "Hospital"
         })
         cantonVars = this.state.variables.filter(variable => {
-            if (variable.variable_model === "Canton")
-            return variable
+            return variable.variable_model === "Canton"
         })
 
         if (this.state.selectedVariable.variable_model === "Hospital") {
@@ -206,9 +183,9 @@ class App extends Component {
 				<div className="grid-container">
 					<div className="control-panel">
 						<p>{t('variables.name_canton')}</p>
-						<DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.dropdownSelectItem} selectedItem={selectedCanton} />
+						<DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} />
 						<p>{t('variables.name_hospital')}</p>
-						<DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.dropdownSelectItem} selectedItem={selectedHospital} />
+						<DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} />
 						<LanguagePicker resendInitApiCall={this.initApiCall} />
 					</div>
 					{
@@ -218,7 +195,7 @@ class App extends Component {
 					}
 				</div>
 				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables} selectedYear={this.state.selectedYear}/>
+				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} hasLoaded={this.state.hasLoaded} variables={this.state.variables} selectedYear={this.state.selectedYear} enums={this.state.enums}/>
 			</div>
         );
     }

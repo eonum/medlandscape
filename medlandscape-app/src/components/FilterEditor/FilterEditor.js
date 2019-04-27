@@ -15,22 +15,8 @@ class FilterEditor extends Component {
 
 	componentDidUpdate() {
 		if(this.props.hasLoaded && this.state.variables.length == 0){
-
-			let enumVariables = this.findEnumVariables()
-			this.setState({variables: enumVariables});
+			this.setState({variables: this.props.enums});
 		}
-	}
-
-	findEnumVariables = () => {
-		let i;
-		let enumVariables = [];
-
-		for(i = 0; i < this.props.variables.length; i++){
-			if(this.props.variables[i].variable_type == "enum") {
-				enumVariables.push(this.props.variables[i]);
-			}
-		}
-		return enumVariables;
 	}
 
 	/**
@@ -72,7 +58,7 @@ class FilterEditor extends Component {
 					for(i = 0; i < this.state.selectedValues.length; i++){
 						const valueArray = item.attributes[this.state.selectedVariable.name][selectedYear]
 							.split(", ");
-						if(valueArray.indexOf(this.state.selectedValues[i]) == -1){
+						if(valueArray.indexOf(this.state.selectedValues[i]) === -1){
 							return false;
 						}
 					}
