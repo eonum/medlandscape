@@ -8,5 +8,8 @@
     },
     "localization_example": {
         "example": "Hallo Brudi"
+    },
+    "interactive_table": {
+        "btn_create_table": "Tabelle generieren"
     }
 }

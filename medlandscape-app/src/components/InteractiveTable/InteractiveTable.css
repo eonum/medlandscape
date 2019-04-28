@@ -2,19 +2,26 @@
     grid-area: varSel;
 }
 .hospitalSelector {
-    gird-area: hospSel;
+    grid-area: hospSel;
 }
-
 .empty {
+    grid-area: empty;
     width: 300px;
     height: 75px;
 }
-
+.btnGenerateTable {
+    grid-area: genTabBtn;
+    width: 300px;
+}
+.resultTable {
+    grid-area: table;
+}
 .interactiveTable {
     display: grid;
     grid-template-areas:
         'empty varSel'
-        'hospSel table';
+        'hospSel table'
+        'genTabBtn genTabBtn';
     grid-template-columns: 300px 100%;
     grid-template-rows: 75px auto;
 }

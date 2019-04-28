@@ -24,7 +24,8 @@ class App extends Component {
             selectedCantons : [],
             selectedHospitals : [],
             selectedYear : "",
-            hasLoaded : false
+            hasLoaded : false,
+            tableDataLoaded: false
         }
         this.updateSelectedHospitals = this.updateSelectedHospitals.bind(this)
     }
@@ -108,6 +109,37 @@ class App extends Component {
             hasLoaded : false
         });
         this.applyVar(item);
+    }
+
+    requestTableData = (vars) => {
+        let requestedVars = "";
+
+        for (let variable of vars) {
+            requestedVars += variable.name + '$';
+        }
+
+        requestedVars = requestedVars.substring(0, requestedVars.length - 1);
+
+        let query = this.props.i18n.language + apiRequest;
+        query += 'hospitals' + "?variables=" + encodeURIComponent(requestedVars);
+
+        this.apiCall(query).then((results) => {
+            this.setState({
+                hospitals : results.map(obj => {
+                    return obj;
+                }),
+            });
+        }).then(() => {
+            this.setState({
+                tableDataLoaded : true
+            })
+        });
+    }
+
+    tableDataGenerated = () => {
+        this.setState({
+            tableDataLoaded : false
+        });
     }
 
     /**
@@ -205,7 +237,12 @@ class App extends Component {
         console.log(this.state.variables);
         return (
 			<div className="App">
-				<InteractiveTable variables={hospitalVars} hospitals={this.state.hospitals} />
+				<InteractiveTable
+                    variables={hospitalVars}
+                    hospitals={this.state.hospitals}
+                    requestData={this.requestTableData}
+                    tableDataLoaded={this.state.tableDataLoaded}
+                    tableDataGenerated={this.tableDataGenerated}/>
 			</div>
         );
     }

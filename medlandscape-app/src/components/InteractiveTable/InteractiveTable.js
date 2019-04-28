@@ -4,7 +4,9 @@ import './InteractiveTable.css';
 import HospitalSelector from './HospitalSelector/HospitalSelector.js';
 import VariableSelector from './VariableSelector/VariableSelector.js';
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
+import ResultTable from './ResultTable/ResultTable.js';
 import update from 'immutability-helper';
+import { withTranslation } from 'react-i18next';
 
 /**
  * Represents the Table view which can be used to create and display a 2d-table
@@ -37,6 +39,17 @@ class InteractiveTable extends Component {
         }
     }
 
+
+    /**
+     * componentDidMount - Should add a dropdown on each dimension by default.
+     *  this however does not work yet because the first dropdown is always
+     *  empty (guess this has to do with the filtering in App.js's render())
+     */
+    componentDidMount() {
+        // this.addHospital();
+        // this.addVariable();
+    }
+
     /**
      * Creates a new dropdown menu to select a hospital to display, with a new
      *  unique id. Then updates the state accordingly.
@@ -55,6 +68,7 @@ class InteractiveTable extends Component {
             </div>
         );
 
+        // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
         let id_parts = this.state.nextHospitalId.split("-");
         let nextHospitalIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);
 
@@ -73,7 +87,7 @@ class InteractiveTable extends Component {
      *  the dropdown that called this function to identify it's index in the
      *  dropdowns array and update its displayed text. The index is as well used
      *  to identify the according object in the array of selected items and
-     *  update it.
+     *  update it. Immutabilit-helper is used for that.
      */
     selectHospital = (item, senderId) => {
         let index;
@@ -109,6 +123,7 @@ class InteractiveTable extends Component {
             </div>
         );
 
+        // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
         let id_parts = this.state.nextVariableId.split("-");
         let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);;
         newVariables = [...this.state.variableDropdowns, newDrp];
@@ -126,7 +141,7 @@ class InteractiveTable extends Component {
      *  the dropdown that called this function to identify it's index in the
      *  dropdowns array and update its displayed text. The index is as well used
      *  to identify the according object in the array of selected items and
-     *  update it.
+     *  update it. Immutabilit-helper is used for that.
      */
 	selectVariable = (item, senderId) => {
 		let index;
@@ -138,7 +153,6 @@ class InteractiveTable extends Component {
 		}
 
 		this.setState({
-
 			selectedVariables: update(this.state.selectedVariables, {[index]: {$set: item}}),
 			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {props: {selectedItem: {$set: item}}}}}})
 		});
@@ -150,18 +164,32 @@ class InteractiveTable extends Component {
      * @return {JSX}  JSX of the component
      */
     render() {
+        const { t } = this.props;
         return (
             <div className="interactiveTable">
                 <div className="empty"></div>
-                <VariableSelector className="variableSelector"
+                <VariableSelector
+                    className="variableSelector"
                     variables={this.props.variables}
                     variableDropdowns={this.state.variableDropdowns}
 					addVariable={this.addVariable} />
-                <HospitalSelector className="hospitalSelector"
+                <HospitalSelector
+                    className="hospitalSelector"
                     hospitals={this.props.hospitals}
                     hospitalDropdowns={this.state.hospitalDropdowns}
                     selectedHospitals={this.state.selectedHospitals}
                     addHospital={this.addHospital} />
+                <ResultTable
+                    className="resultTable"
+                    selectedHospitals={this.state.selectedHospitals}
+                    selectedVariables={this.state.selectedVariables}
+                    hospitalData={this.props.hospitals}
+                    dataLoaded={this.props.tableDataLoaded}
+                    dataGenerated={this.props.tableDataGenerated} />
+                <button
+                    className="btnGenerateTable"
+                    onClick={() => this.props.requestData(this.state.selectedVariables)}>{t('interactive_table.btn_create_table')}
+                </button>
 			</div>
         );
     }
@@ -176,6 +204,8 @@ class InteractiveTable extends Component {
 InteractiveTable.propTypes = {
     variables: PropTypes.array.isRequired,
     hospitals: PropTypes.array.isRequired,
+    requestData: PropTypes.func.isRequired,
 }
 
-export default InteractiveTable;
+const LocalizedInteractiveTable = withTranslation()(InteractiveTable);
+export default LocalizedInteractiveTable;
