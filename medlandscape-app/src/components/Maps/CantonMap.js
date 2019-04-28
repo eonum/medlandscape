@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GeoJSON, Popup, LayerGroup } from 'react-leaflet'
+import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
 
@@ -133,19 +133,43 @@ class CantonMap extends Component {
 	}
 
 	/**
-	* Defines what happens if you hover over a canton with your mouse
-	* @param {Object} item = the canton you are hovering over
-	* @param {Object} e = the geoJSON object you are hovering over
+	* Open an info popup if you click on a canton with your mouse
+	* @param {Object} item = the canton you are clicking
+	* @param {Object} e = the geoJSON object you are clicking
 	*/
-	onMouseOver = (item, e) => {
-		// if hovering should highlight a canton (use onMouseOut to reset style. resetting style hasent worked yet sadly)
-		/*e.target.setStyle({
-			color: '#000',
-			opacity: 1
-		});*/
-		e.layer.bindPopup(item.text + " (" + item.name + ")", {closeButton: false});
+	onClick = (item, e) => {
+		e.target.closeTooltip();
+		const popup =   "<table><tr><td>" + "Kanton:" + "</td><td>" + item.text + " (" + item.name + ")" + "</td></tr>"
+						+ "<tr><td>" + this.props.variableInfo.text + ":" + "</td><td>" + this.props.returnData(item) + "</td></tr></table>";
+		const popupOptions = {
+		    'maxWidth': '250',
+			'closeButton': false,
+		}
+		e.layer.bindPopup(popup, popupOptions);
 		e.layer.openPopup();
  	}
+
+	/**
+	* Changes canton style if you hover on a canton with your mouse
+	* @param {Object} e = the geoJSON object (canton) you are hovering over
+	*/
+	onMouseOver = (e) => {
+		e.target.setStyle({
+			color: "#000",
+			opacity: 1
+		});
+		e.target.bringToFront();
+	}
+
+	/**
+	* Set back canton style if you hover off a canton with your mouse
+	* @param {Object} item = the canton you are hovering off
+	* @param {Object} e = the geoJSON object (canton) you are hovering off
+	*/
+	onMouseOut = (item, e) => {
+		const style = this.getCantonStyle(item);
+		e.target.setStyle(style);
+	}
 
 	/**
 	* Draws cantons on the Map
@@ -160,11 +184,13 @@ class CantonMap extends Component {
 								key = {this.props.data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
-								onMouseOver = {this.onMouseOver.bind(this, item)}
+								onClick = {this.onClick.bind(this, item)}
+								onMouseOver = {this.onMouseOver.bind(this)}
+								onMouseOut = {this.onMouseOut.bind(this, item)}
 								>
-								<Popup>
-									{this.props.returnData(item)}
-								</Popup>
+								<Tooltip>
+									{item.text + " (" + item.name + ")"}
+								</Tooltip>
 							</GeoJSON>
 						))
 					}
