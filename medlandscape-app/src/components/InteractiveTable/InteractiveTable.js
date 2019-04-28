@@ -29,8 +29,14 @@ class InteractiveTable extends Component {
         let newSelectedHospitals = [];
 
         let newSelectedHospital = {};
-        let newDropdown = <DropdownMenu id={this.state.nextHospitalId} listItems={this.props.hospitals} selectItem={this.selectHospital}
-                            selectedItem={newSelectedHospital} />
+        let newDropdown = (
+            <div id='hospitalDropdown' key={this.state.nextHospitalId}>
+                <DropdownMenu id={this.state.nextHospitalId}
+                    listItems={this.props.hospitals}
+                    selectItem={this.selectHospital}
+                    selectedItem={newSelectedHospital} />
+            </div>
+        );
 
         let id_parts = this.state.nextHospitalId.split("-");
         let nextHospitalIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);
@@ -50,7 +56,7 @@ class InteractiveTable extends Component {
         let index;
 
         for (let hD of this.state.hospitalDropdowns) {
-            if (hD.props.id === senderId) {
+            if (hD.props.children.props.id === senderId) {
                 index = this.state.hospitalDropdowns.indexOf(hD);
             }
         }
@@ -58,7 +64,7 @@ class InteractiveTable extends Component {
         this.setState({
             // selectedHospitals : newList
             selectedHospitals: update(this.state.selectedHospitals, {[index]: {$set: item}}),
-            hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {selectedItem: {$set: item}}}})
+            hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {children: {props: {selectedItem: {$set: item}}}}}})
         });
     }
 
@@ -67,8 +73,14 @@ class InteractiveTable extends Component {
         let newSelectedVariables = [];
 
         let newSelectedVariable = {};
-        let newDrp = <DropdownMenu id={this.state.nextVariableId} listItems={this.props.variables} selectItem={this.selectVariable}
-                            selectedItem={newSelectedVariable} />
+        let newDrp = (
+            <div id='variableDropdown' key={this.state.nextVariableId}>
+                <DropdownMenu id={this.state.nextVariableId}
+                    listItems={this.props.variables}
+                    selectItem={this.selectVariable}
+                    selectedItem={newSelectedVariable} />
+            </div>
+        );
 
         let id_parts = this.state.nextVariableId.split("-");
         let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);;
@@ -87,7 +99,7 @@ class InteractiveTable extends Component {
 		let index;
 
 		for (let vD of this.state.variableDropdowns) {
-			if (vD.props.id === senderId) {
+			if (vD.props.children.props.id === senderId) {
 				index = this.state.variableDropdowns.indexOf(vD);
 			}
 		}
@@ -95,17 +107,24 @@ class InteractiveTable extends Component {
 		this.setState({
 
 			selectedVariables: update(this.state.selectedVariables, {[index]: {$set: item}}),
-			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {selectedItem: {$set: item}}}})
+			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {props: {selectedItem: {$set: item}}}}}})
 		});
 	}
 
     render() {
         return (
-            <div className="InteractiveTable">
-                <HospitalSelector hospitals={this.props.hospitals} hospitalDropdowns={this.state.hospitalDropdowns} selectedHospitals={this.state.selectedHospitals}
-                    addHospital={this.addHospital} />
-				<VariableSelector variables={this.props.variables} variableDropdowns={this.state.variableDropdowns} selectedVariables={this.state.selectedVariables}
+            <div className="interactiveTable">
+                <div className="empty"></div>
+                <VariableSelector className="variableSelector"
+                    variables={this.props.variables}
+                    variableDropdowns={this.state.variableDropdowns}
+                    selectedVariables={this.state.selectedVariables}
 					addVariable={this.addVariable} />
+                <HospitalSelector className="hospitalSelector"
+                    hospitals={this.props.hospitals}
+                    hospitalDropdowns={this.state.hospitalDropdowns}
+                    selectedHospitals={this.state.selectedHospitals}
+                    addHospital={this.addHospital} />
 			</div>
         );
     }
