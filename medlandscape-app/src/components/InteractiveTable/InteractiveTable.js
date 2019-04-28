@@ -6,9 +6,22 @@ import VariableSelector from './VariableSelector/VariableSelector.js';
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import update from 'immutability-helper';
 
-
+/**
+ * Represents the Table view which can be used to create and display a 2d-table
+ *  to compare different hospitals and their values on selected variables
+ *
+ * The relevant state consists of an array that holds all dropdowns for hospitals
+ *  and one that holds all selected items of those dropdowns. Those arrays
+ *  exist for variables as well.
+ */
 class InteractiveTable extends Component {
 
+    /**
+     * constructor - initializes the component by calling the superclass's
+     *  constructor and setting the inital state
+     *
+     * @param  {ojbect} props props handed over by parent component
+     */
     constructor(props) {
         super(props)
         this.state = {
@@ -24,6 +37,10 @@ class InteractiveTable extends Component {
         }
     }
 
+    /**
+     * Creates a new dropdown menu to select a hospital to display, with a new
+     *  unique id. Then updates the state accordingly.
+     */
     addHospital = () => {
         let newDropdowns = [];
         let newSelectedHospitals = [];
@@ -51,8 +68,14 @@ class InteractiveTable extends Component {
         });
     }
 
+    /**
+     * Called when a hospital is selected on a dropdown menu. It uses the id of
+     *  the dropdown that called this function to identify it's index in the
+     *  dropdowns array and update its displayed text. The index is as well used
+     *  to identify the according object in the array of selected items and
+     *  update it.
+     */
     selectHospital = (item, senderId) => {
-
         let index;
 
         for (let hD of this.state.hospitalDropdowns) {
@@ -68,6 +91,10 @@ class InteractiveTable extends Component {
         });
     }
 
+    /**
+     * Creates a new dropdown menu to select a variable to display, with a new
+     *  unique id. Then updates the state accordingly.
+     */
 	addVariable = () => {
         let newVariables = [];
         let newSelectedVariables = [];
@@ -94,8 +121,14 @@ class InteractiveTable extends Component {
         });
     }
 
+    /**
+     * Called when a variable is selected on a dropdown menu. It uses the id of
+     *  the dropdown that called this function to identify it's index in the
+     *  dropdowns array and update its displayed text. The index is as well used
+     *  to identify the according object in the array of selected items and
+     *  update it.
+     */
 	selectVariable = (item, senderId) => {
-
 		let index;
 
 		for (let vD of this.state.variableDropdowns) {
@@ -111,6 +144,11 @@ class InteractiveTable extends Component {
 		});
 	}
 
+    /**
+     * render - renders the component to the screen
+     *
+     * @return {JSX}  JSX of the component
+     */
     render() {
         return (
             <div className="interactiveTable">
@@ -118,7 +156,6 @@ class InteractiveTable extends Component {
                 <VariableSelector className="variableSelector"
                     variables={this.props.variables}
                     variableDropdowns={this.state.variableDropdowns}
-                    selectedVariables={this.state.selectedVariables}
 					addVariable={this.addVariable} />
                 <HospitalSelector className="hospitalSelector"
                     hospitals={this.props.hospitals}
@@ -130,6 +167,12 @@ class InteractiveTable extends Component {
     }
 }
 
+/**
+ * PropTypes:
+ *
+ * variables: list of variables one can choose from
+ * hospitals: list of hospitals one can choose from
+ */
 InteractiveTable.propTypes = {
     variables: PropTypes.array.isRequired,
     hospitals: PropTypes.array.isRequired,
