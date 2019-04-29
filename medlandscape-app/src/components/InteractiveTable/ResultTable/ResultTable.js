@@ -31,10 +31,14 @@ class ResultTable extends Component {
                     break;
                 }
                 for (let variable of this.props.selectedVariables) {
-                    const latestYear = Object.keys(currentHosp.attributes[variable.name])
-                        .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
-                    const obj = currentHosp.attributes[variable.name];
-                    newRow.push(obj[latestYear]);
+                    if (variable.is_time_series) {
+                        const latestYear = Object.keys(currentHosp.attributes[variable.name])
+                            .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+                        const obj = currentHosp.attributes[variable.name];
+                        newRow.push(obj[latestYear]);
+                    } else {
+                        newRow.push(currentHosp.attributes[variable.name]);
+                    }
                 }
                 tableData.push(newRow);
             }
