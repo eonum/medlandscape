@@ -29,18 +29,15 @@ class App extends Component {
     /**
     * Sets the selected variable as selectedVariable
     * Fetches Cantons or Hospitals with the selectedVariable information.
-    * @param  {Variable Object} selectedVar The selected Variable to apply to Hospitals or Cantons.
+    * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
     * @param  {boolean} init Flag to see if initApiCall was called, if true: sets selectedHospitals to hospitals
     */
-    applyVariable = (selectedVar) => {
-        const {name, variable_model} = selectedVar[0];
+    fetchMapData = (variable) => {
+        const {name, variable_model} = variable;
         let query = this.props.i18n.language + apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         query += key + "?variables=";
-
-        for (var i = 0; i < selectedVar.length; i++) {
-            query += encodeURIComponent(selectedVar[i].name);
-        }
+        query += encodeURIComponent(variable.name);
 
         this.apiCall(query).then((results) => {
             if (key === "hospitals") {
@@ -53,6 +50,27 @@ class App extends Component {
                     [key] : results,
                 });
             }
+        }).then(() => {
+            let years = this.getYears(this.state.selectedVariable);
+            this.setState({
+                years : years,
+                selectedYear : years[0],
+                hasLoaded : true
+            })
+        });
+    }
+
+    fetchEnumData = (variable) => {
+        const {name} = variable;
+        let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
+        query += encodeURIComponent(this.state.selectedVariable.name + "$");
+        query += encodeURIComponent(name);
+
+        return this.apiCall(query).then((results) => {
+            this.setState({
+                hospitals : results,
+                selectedHospitals : results
+            });
         }).then(() => {
             let years = this.getYears(this.state.selectedVariable);
             this.setState({
@@ -88,13 +106,13 @@ class App extends Component {
                 variables : result,
                 enums : enumVars
             });
-            this.applyVariable([result[1]]);
+            this.fetchMapData(result[1]);
         });
     }
 
     /**
     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-    * then calls applyVariable to fetch data from the API.
+    * then calls fetchMapData to fetch data from the API.
     * @param  {Variable object} item The selected variable.
     */
     selectVariable = (item) => {
@@ -102,7 +120,7 @@ class App extends Component {
             selectedVariable : item,
             hasLoaded : false
         });
-        this.applyVariable([item]);
+        this.fetchMapData(item);
     }
 
     /**
@@ -160,7 +178,7 @@ class App extends Component {
      */
     setYear = (year) => {
         this.setState({
-            selectedYear : year,
+            selectedYear : year
         })
     }
 
@@ -182,12 +200,13 @@ class App extends Component {
         let cantonVars = [], hospitalVars = [], years = [];
         let selectedCanton = {}, selectedHospital = {};
 
-        hospitalVars = this.state.variables.filter(variable => {
-            return (variable.variable_model === "Hospital") && (variable.variable_type !== "enum")
-        })
         cantonVars = this.state.variables.filter(variable => {
             return variable.variable_model === "Canton"
-        })
+        });
+
+        hospitalVars = this.state.variables.filter(variable => {
+            return (variable.variable_model === "Hospital") && (variable.variable_type !== "enum")
+        });
 
         if (this.state.selectedVariable.variable_model === "Hospital") {
             selectedHospital = this.state.selectedVariable;
@@ -216,7 +235,7 @@ class App extends Component {
 					}
 				</div>
 				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} selectEnum={this.applyVariable} hasLoaded={this.state.hasLoaded} selectedYear={this.state.selectedYear} enums={this.state.enums}/>
+				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} fetchData={this.fetchEnumData} hasLoaded={this.state.hasLoaded} selectedYear={this.state.selectedYear} enums={this.state.enums} />
 			</div>
         );
     }
