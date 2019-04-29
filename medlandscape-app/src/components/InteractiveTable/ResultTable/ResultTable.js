@@ -17,39 +17,51 @@ class ResultTable extends Component {
     componentDidUpdate() {
         let tableData = [];
         if (this.props.dataLoaded) {
+            // check if all dropdowns selected something, else throw error
+            let shouldGenerate = true;
             for (let hosp of this.props.selectedHospitals) {
-                let newRow = [];
-                let currentHosp;
-                for (let hosp2 of this.props.hospitalData) {
-                    if (hosp.name === hosp2.name) {
-                        currentHosp = hosp2;
-                        break;
-                    }
-                }
-                if (!currentHosp) {
+                if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+                    shouldGenerate = false;
                     window.alert('please select something')
                     break;
                 }
+            }
+            if (shouldGenerate) {
                 for (let variable of this.props.selectedVariables) {
                     if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+                        shouldGenerate = false;
                         window.alert('please select something')
                         break;
                     }
-                    if (variable.is_time_series) {
-                        const latestYear = Object.keys(currentHosp.attributes[variable.name])
-                            .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
-                        const obj = currentHosp.attributes[variable.name];
-                        newRow.push(obj[latestYear]);
-                    } else {
-                        newRow.push(currentHosp.attributes[variable.name]);
-                    }
                 }
-                tableData.push(newRow);
             }
-            this.setState({
-                resultTableData: tableData
-            })
-            this.props.dataGenerated(); //throws warning but still works (?)
+            if (shouldGenerate) {
+                for (let hosp of this.props.selectedHospitals) {
+                    let newRow = [];
+                    let currentHosp;
+                    for (let hosp2 of this.props.hospitalData) {
+                        if (hosp.name === hosp2.name) {
+                            currentHosp = hosp2;
+                            break;
+                        }
+                    }
+                    for (let variable of this.props.selectedVariables) {
+                        if (variable.is_time_series) {
+                            const latestYear = Object.keys(currentHosp.attributes[variable.name])
+                                .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+                            const obj = currentHosp.attributes[variable.name];
+                            newRow.push(obj[latestYear]);
+                        } else {
+                            newRow.push(currentHosp.attributes[variable.name]);
+                        }
+                    }
+                    tableData.push(newRow);
+                }
+                this.setState({
+                    resultTableData: tableData
+                })
+            }
+            this.props.dataGenerated();
         }
     }
     /**
