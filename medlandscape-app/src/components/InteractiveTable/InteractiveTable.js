@@ -46,8 +46,8 @@ class InteractiveTable extends Component {
      *  empty (guess this has to do with the filtering in App.js's render())
      */
     componentDidMount() {
-        // this.addHospital();
-        // this.addVariable();
+        this.addHospital();
+        this.addVariable();
     }
 
     /**

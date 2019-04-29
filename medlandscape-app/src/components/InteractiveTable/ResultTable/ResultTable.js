@@ -13,12 +13,8 @@ class ResultTable extends Component {
             resultTableData: []
         }
     }
-    /**
-     * render - renders the component to the screen
-     *
-     * @return {JSX}  JSX of the component
-     */
-    render() {
+
+    componentDidUpdate() {
         let tableData = [];
         if (this.props.dataLoaded) {
             for (let hosp of this.props.selectedHospitals) {
@@ -43,6 +39,13 @@ class ResultTable extends Component {
             })
             this.props.dataGenerated(); //throws warning but still works (?)
         }
+    }
+    /**
+     * render - renders the component to the screen
+     *
+     * @return {JSX}  JSX of the component
+     */
+    render() {
         return (
             <div>
                 <Table tableData={this.state.resultTableData} />
