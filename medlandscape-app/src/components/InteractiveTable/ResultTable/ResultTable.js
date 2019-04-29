@@ -26,6 +26,10 @@ class ResultTable extends Component {
                         break;
                     }
                 }
+                if (!currentHosp) {
+                    window.alert('please select something')
+                    break;
+                }
                 for (let variable of this.props.selectedVariables) {
                     const latestYear = Object.keys(currentHosp.attributes[variable.name])
                         .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];

@@ -121,7 +121,7 @@ class App extends Component {
         requestedVars = requestedVars.substring(0, requestedVars.length - 1);
 
         let query = this.props.i18n.language + apiRequest;
-        query += 'hospitals' + "?variables=" + encodeURIComponent(requestedVars);
+        query += 'hospitals' + "?variables=" + requestedVars;
 
         this.apiCall(query).then((results) => {
             this.setState({
@@ -242,7 +242,8 @@ class App extends Component {
                     hospitals={this.state.hospitals}
                     requestData={this.requestTableData}
                     tableDataLoaded={this.state.tableDataLoaded}
-                    tableDataGenerated={this.tableDataGenerated}/>
+                    tableDataGenerated={this.tableDataGenerated}
+                    hasLoaded={this.state.hasLoaded}/>
 			</div>
         );
     }

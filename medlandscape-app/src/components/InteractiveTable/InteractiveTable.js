@@ -33,9 +33,29 @@ class InteractiveTable extends Component {
 
             nextHospitalId : 'hos-' + 0,
             hospitalDropdowns : [],
-            selectedHospitals : []
+            selectedHospitals : [],
+
+            dropdownsNeedUpdate : true
 
             // selectedYear : ""
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.hasLoaded && this.state.dropdownsNeedUpdate) {
+            let newHospitalDropdowns = this.state.hospitalDropdowns;
+            for (let i = 0; i < this.state.hospitalDropdowns.length; i++) {
+                newHospitalDropdowns = update(newHospitalDropdowns, {[i]: {props: {children: {props: {listItems: {$set: this.props.hospitals}}}}}});
+            }
+            let newVariableDropdowns = this.state.variableDropdowns;
+            for (let i = 0; i < this.state.variableDropdowns.length; i++) {
+                newVariableDropdowns = update(newVariableDropdowns, {[i]: {props: {children: {props: {listItems: {$set: this.props.variables}}}}}});
+            }
+            this.setState({
+                hospitalDropdowns : newHospitalDropdowns,
+                variableDropdowns : newVariableDropdowns,
+                dropdownsNeedUpdate : false
+            });
         }
     }
 
@@ -205,6 +225,7 @@ InteractiveTable.propTypes = {
     variables: PropTypes.array.isRequired,
     hospitals: PropTypes.array.isRequired,
     requestData: PropTypes.func.isRequired,
+    hasLoaded: PropTypes.bool.isRequired,
 }
 
 const LocalizedInteractiveTable = withTranslation()(InteractiveTable);
