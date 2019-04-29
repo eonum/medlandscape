@@ -31,6 +31,10 @@ class ResultTable extends Component {
                     break;
                 }
                 for (let variable of this.props.selectedVariables) {
+                    if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+                        window.alert('please select something')
+                        break;
+                    }
                     if (variable.is_time_series) {
                         const latestYear = Object.keys(currentHosp.attributes[variable.name])
                             .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
