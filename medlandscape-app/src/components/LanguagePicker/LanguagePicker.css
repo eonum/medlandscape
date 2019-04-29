@@ -1,7 +1,17 @@
+.languagePicker {
+    margin-top: 40px;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: space-evenly;
+    height: 60px
+}
+
 .langBtn {
     width: 80px;
     height: 30px;
-    margin: 10px;
+    margin: auto;
     border: none;
     border-radius: 15px;
     background-color: #1996fa;

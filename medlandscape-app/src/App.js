@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import DropdownMenu from './components/DropdownMenu/DropdownMenu.js';
 import Maps from './components/Maps/Maps.js';
 import Slider from './components/Slider/Slider.js'
-import FilterEditor from './components/FilterEditor/FilterEditor.js';
 import './App.css';
 import { withTranslation } from 'react-i18next';
-import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
+import ControlPanel from './components/ControlPanel/ControlPanel.js'
 
 const apiURL = "https://qm1.ch/";
 let apiRequest = "/api/medical_landscape/";
@@ -23,23 +21,17 @@ class App extends Component {
         selectedHospitals : [],
         years : [],
         selectedYear : "",
+        view : "1",
         hasLoaded : false
     }
 
     /**
-    * Sets the selected variable as selectedVariable
-    * Fetches Cantons or Hospitals with the selectedVariable information.
-    * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
-    * @param  {boolean} init Flag to see if initApiCall was called, if true: sets selectedHospitals to hospitals
+    * Calls the API with specific query
+    * @param {String} key String value that is either hospitals or cantons.
+    * @param  {String} query The specific query to use for the API call.
     */
-    fetchMapData = (variable) => {
-        const {name, variable_model} = variable;
-        let query = this.props.i18n.language + apiRequest;
-        let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        query += key + "?variables=";
-        query += encodeURIComponent(variable.name);
-
-        this.apiCall(query).then((results) => {
+    applyVariables = (key, query) => {
+        return this.apiCall(query).then((results) => {
             if (key === "hospitals") {
                 this.setState({
                     [key] : results,
@@ -50,27 +42,6 @@ class App extends Component {
                     [key] : results,
                 });
             }
-        }).then(() => {
-            let years = this.getYears(this.state.selectedVariable);
-            this.setState({
-                years : years,
-                selectedYear : years[0],
-                hasLoaded : true
-            })
-        });
-    }
-
-    fetchEnumData = (variable) => {
-        const {name} = variable;
-        let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
-        query += encodeURIComponent(this.state.selectedVariable.name + "$");
-        query += encodeURIComponent(name);
-
-        return this.apiCall(query).then((results) => {
-            this.setState({
-                hospitals : results,
-                selectedHospitals : results
-            });
         }).then(() => {
             let years = this.getYears(this.state.selectedVariable);
             this.setState({
@@ -94,25 +65,23 @@ class App extends Component {
     * Initialises the state variables with a call to the API.
     */
     initApiCall = () => {
-        let varResultArr, enumVars = [];
+        let varResultArr = [];
 
         // fetches all Variables from the API
         this.apiCall((this.props.i18n.language + apiRequest + "variables")).then((result) => {
-            // filters out enum variables (relevant for FilterEditor)
-            enumVars = result.filter(obj => {
-                return obj.variable_type === "enum";
-            })
             this.setState({
                 variables : result,
-                enums : enumVars
             });
-            this.fetchMapData(result[1]);
+            this.selectVariable(result[1]);
+            let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
+            query += encodeURIComponent(result[1].name);
+            this.applyVariables("cantons", query);
         });
     }
 
     /**
     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-    * then calls fetchMapData to fetch data from the API.
+    * then calls applyVariables to fetch data from the API.
     * @param  {Variable object} item The selected variable.
     */
     selectVariable = (item) => {
@@ -120,7 +89,6 @@ class App extends Component {
             selectedVariable : item,
             hasLoaded : false
         });
-        this.fetchMapData(item);
     }
 
     /**
@@ -143,21 +111,6 @@ class App extends Component {
     }
 
     /**
-    * Creates a 2d array out of an object (Used for Table Component).
-    * @param  {Object} selectedObject The object to convert to a 2d array.
-    * @return {Array} The 2d array.
-    */
-    create2dArr = (selectedObject) => {
-        let arr = [];
-        for (var key in selectedObject) {
-            if (typeof selectedObject[key] !== 'object' && selectedObject[key] !== null) {
-                arr.push([key, selectedObject[key]]);
-            }
-        }
-        return arr;
-    }
-
-    /**
      * Returns list of available years depending on variable
      * @param {Variable Object}
      * @return {Array} The available years.
@@ -174,11 +127,22 @@ class App extends Component {
     }
 
     /**
-     * [setYear description]
+     * Setter for the selectedYear state variable.
+     * @param {String} year The selected year.
      */
     setYear = (year) => {
         this.setState({
             selectedYear : year
+        })
+    }
+
+    /**
+     * Setter for the view state variable.
+     * @param {int} view The selected view.
+     */
+    setView = (view) => {
+        this.setState({
+            view : view
         })
     }
 
@@ -197,45 +161,28 @@ class App extends Component {
     }
 
     render() {
-        let cantonVars = [], hospitalVars = [], years = [];
-        let selectedCanton = {}, selectedHospital = {};
-
-        cantonVars = this.state.variables.filter(variable => {
-            return variable.variable_model === "Canton"
-        });
-
-        hospitalVars = this.state.variables.filter(variable => {
-            return (variable.variable_model === "Hospital") && (variable.variable_type !== "enum")
-        });
-
-        if (this.state.selectedVariable.variable_model === "Hospital") {
-            selectedHospital = this.state.selectedVariable;
-            selectedCanton = cantonVars[0];
-        } else {
-            selectedCanton = this.state.selectedVariable;
-            selectedHospital = hospitalVars[0];
-        }
-
-        const { t } = this.props;
-
         return (
 			<div className="App">
+                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
 				<div className="grid-container">
-					<div className="control-panel">
-						<p>{t('variables.name_canton')}</p>
-						<DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} />
-						<p>{t('variables.name_hospital')}</p>
-						<DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} />
-						<LanguagePicker resendInitApiCall={this.initApiCall} />
-					</div>
+                    <ControlPanel
+                        view={this.state.view}
+                        setView={this.setView}
+                        hospitals={this.state.hospitals}
+                        selectVariable={this.selectVariable}
+                        variables={this.state.variables}
+                        resendInitApiCall={this.initApiCall}
+                        fetchData={this.applyVariables}
+                        updateHospitals={this.updateSelectedHospitals}
+                        year={this.state.selectedYear}
+                        hasLoaded={this.state.hasLoaded}
+                    />
 					{
 						(this.state.years.length > 1)
 						? <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
 						: null
 					}
 				</div>
-				<Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
-				<FilterEditor hospitals={this.state.hospitals} updateHospitals={this.updateSelectedHospitals} fetchData={this.fetchEnumData} hasLoaded={this.state.hasLoaded} selectedYear={this.state.selectedYear} enums={this.state.enums} />
 			</div>
         );
     }

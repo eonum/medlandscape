@@ -1,12 +1,21 @@
 {
-    "variables": {
-        "name_canton": "Kantonsvariablen:",
-        "name_hospital": "Spitalvariabeln:"
+    "mapView": {
+        "title": "Karte",
+        "variables" : "Variabeln",
+        "cantons": "Kantone",
+        "hospitals": "Spitäler"
+    },
+    "tableView": {
+        "title": "Tabelle"
+    },
+    "graphView": {
+        "title": "Graph"
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"
     },
-    "localization_example": {
-        "example": "Hallo Brudi"
+    "filter": {
+        "title": "Filter",
+        "checkbox": "Werte"
     }
 }

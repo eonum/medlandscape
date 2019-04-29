@@ -27,8 +27,10 @@ class LanguagePicker extends Component {
         return (
             <div className="languagePicker">
                 <p>{this.props.t('language_picker.info')}:</p>
-                <button className="langBtn" onClick={() => this.onLanguageChange('de')}>DE</button>
-                <button className="langBtn" onClick={() => this.onLanguageChange('fr')}>FR</button>
+                <div className="btnContainer">
+                    <button className="langBtn" onClick={() => this.onLanguageChange('de')}>DE</button>
+                    <button className="langBtn" onClick={() => this.onLanguageChange('fr')}>FR</button>
+                </div>
             </div>
         );
     }
