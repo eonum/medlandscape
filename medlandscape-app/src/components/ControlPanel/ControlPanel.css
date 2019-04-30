@@ -86,5 +86,5 @@
 
 .separator {
     color: #aaa;
-    cursor:
+    pointer-events: none;
 }

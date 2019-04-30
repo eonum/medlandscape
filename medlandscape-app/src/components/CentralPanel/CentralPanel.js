@@ -54,7 +54,7 @@ class CentralPanel extends Component {
         );
 
         let mainView;
-        switch (this.state.view) {
+        switch (this.props.view) {
             case 1:
                 mainView = null;
                 break;

@@ -105,6 +105,7 @@ class ControlPanel extends Component {
             <div className="mapViewHospitals">
                 <p>{t('mapView.variables')}</p>
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} />
+                <p>{t('filter.title')}</p>
                 <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} fetchData={this.fetchEnumData} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} />
             </div>
         )

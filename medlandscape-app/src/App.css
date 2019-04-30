@@ -37,3 +37,9 @@
     grid-row-start: 3;
     place-self: center start;
 }
+
+.central-panel {
+    /* pointer-events: none;
+    grid-column-start: 3;
+    grid-row-start: 2; */
+}
