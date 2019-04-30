@@ -4,6 +4,8 @@ import Slider from './components/Slider/Slider.js'
 import './App.css';
 import { withTranslation } from 'react-i18next';
 import ControlPanel from './components/ControlPanel/ControlPanel.js'
+import CentralPanel from './components/CentralPanel/CentralPanel.js'
+import InteractiveTable from './components/InteractiveTable/InteractiveTable.js';
 
 const apiURL = "https://qm1.ch/";
 let apiRequest = "/api/medical_landscape/";
@@ -21,8 +23,9 @@ class App extends Component {
         selectedHospitals : [],
         years : [],
         selectedYear : "",
-        view : "1",
-        hasLoaded : false
+        view : 1,
+        hasLoaded : false,
+        tableDataLoaded: false
     }
 
     /**
@@ -88,6 +91,37 @@ class App extends Component {
         this.setState({
             selectedVariable : item,
             hasLoaded : false
+        });
+    }
+
+    requestTableData = (vars) => {
+        let requestedVars = "";
+
+        for (let variable of vars) {
+            requestedVars += variable.name + '$';
+        }
+
+        requestedVars = requestedVars.substring(0, requestedVars.length - 1);
+
+        let query = this.props.i18n.language + apiRequest;
+        query += 'hospitals' + "?variables=" + requestedVars;
+
+        this.apiCall(query).then((results) => {
+            this.setState({
+                hospitals : results.map(obj => {
+                    return obj;
+                }),
+            });
+        }).then(() => {
+            this.setState({
+                tableDataLoaded : true
+            })
+        });
+    }
+
+    tableDataGenerated = () => {
+        this.setState({
+            tableDataLoaded : false
         });
     }
 
@@ -163,7 +197,13 @@ class App extends Component {
     render() {
         return (
 			<div className="App">
-                <Maps objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons} variableInfo={this.state.selectedVariable} year={this.state.selectedYear} hasLoaded={this.state.hasLoaded} />
+                <Maps
+                    objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons}
+                    variableInfo={this.state.selectedVariable}
+                    year={this.state.selectedYear}
+                    hasLoaded={this.state.hasLoaded}
+                    view={this.state.view}
+                />
 				<div className="grid-container">
                     <ControlPanel
                         view={this.state.view}
@@ -182,6 +222,12 @@ class App extends Component {
 						? <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
 						: null
 					}
+                    <CentralPanel
+                        view={this.state.view}
+                        variables={this.state.variables}
+                        hasLoaded={this.state.hasLoaded}
+                        fetchData={this.applyVariables}
+                    />
 				</div>
 			</div>
         );

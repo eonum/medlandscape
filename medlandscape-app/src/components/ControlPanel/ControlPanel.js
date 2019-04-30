@@ -149,19 +149,19 @@ class ControlPanel extends Component {
             </div>
         );
 
-        let selectedView;
+        let controlPanelView;
         switch(this.props.view) {
             case 1:
-                selectedView = mapView;
+                controlPanelView = mapView;
                 break;
             case 2:
-                selectedView = tableView;
+                controlPanelView = tableView;
                 break;
             case 3:
-                selectedView = graphView;
+                controlPanelView = graphView;
                 break;
             default:
-                selectedView = mapView;
+                controlPanelView = mapView;
         }
 
         return (
@@ -172,7 +172,7 @@ class ControlPanel extends Component {
                     <div id="t3" className="tab" onClick={this.setTabView.bind(this, 3)}></div>
                 </div>
                 <div className="tabContent">
-                    {selectedView}
+                    {controlPanelView}
                     <LanguagePicker resendInitApiCall={this.props.initApiCall} />
                 </div>
 			</div>

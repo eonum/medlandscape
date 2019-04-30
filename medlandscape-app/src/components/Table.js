@@ -21,8 +21,8 @@ class Table extends Component {
                     <tbody>
                     { // for each row, each element is added to the DOM
                         this.props.tableData.map((row) => {
-                            return (<tr key={row[0]}>{row.map((cell) => {
-                                return <td key={cell}>{cell}</td>
+                            return (<tr key={this.props.tableData.indexOf(row)}>{row.map((cell) => {
+                                return <td key={row.length * this.props.tableData.indexOf(row) + row.indexOf(cell)}>{cell}</td>
                             })}</tr>)
                         })
                     }

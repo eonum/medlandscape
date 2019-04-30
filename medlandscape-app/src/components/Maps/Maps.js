@@ -87,7 +87,7 @@ class Maps extends Component {
         let ready = (this.props.hasLoaded && this.isNormable());
         let componentToRender = null;
 
-        if (ready) {
+        if (ready && this.props.view === 1) {
           componentToRender = (this.props.variableInfo.variable_model === "Canton")
           ? <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />
           : <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} />

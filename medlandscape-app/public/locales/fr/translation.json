@@ -17,5 +17,11 @@
     "filter": {
         "title": "Filtre",
         "checkbox": "Options"
+    },
+    "localization_example": {
+        "example": "Bonjour frèri"
+    },
+    "interactive_table": {
+        "btn_create_table": "Générer table"
     }
 }
