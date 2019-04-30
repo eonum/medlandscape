@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { CircleMarker, Popup, LayerGroup } from 'react-leaflet'
+import { CircleMarker, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 
 class HospitalMap extends Component {
 
@@ -35,14 +35,41 @@ class HospitalMap extends Component {
 	}
 
 	/**
-	* Defines what happens if you hover over a hospital with your mouse
-	* @param {Object} item = the hospital you are hovering over
-	* @param {Object} e = the circlemarker object you are hovering over
+	*  Open an info popup if you click on a hospital with your mouse
+	* @param {Object} item = the hospital you are clicking
+	* @param {Object} e = the circlemarker object you are clicking
 	*/
-	onMouseOver = (item, e) => {
-		e.target.bindPopup("<dd>" + item.name + "</dd><dd>" + item.street + "</dd><dd>" + item.city + "</dd><dd>" + this.props.returnData(item) + "</dd>", {closeButton: false});
+	onClick = (item, e) => {
+		e.target.closeTooltip();
+		const popup =   "<table><tr><td>" + "Spital:" + "</td><td>"+ item.name + "</td></tr>"
+						+ "<tr><td>" + "Adresse:" + "</td><td><dd>" + item.street + ", </dd>" + item.city + "</td></tr>"
+						+ "<tr><td>" + this.props.variableInfo.text + ":</td><td>"+ this.props.returnData(item) + "</td></tr></table>";
+		const popupOptions = {
+			'maxWidth': '250',
+			'closeButton': false,
+		}
+		e.target.bindPopup(popup, popupOptions);
 		e.target.openPopup();
  	}
+	/**
+	* Changes hospital style if you hover on a hospital with your mouse
+	* @param {Object} e = the circlemarker (hospital) object you are hovering over
+	*/
+	onMouseOver = (e) => {
+		e.target.setStyle({
+			color: '#1996fa',
+			opacity: 1
+		});
+	}
+
+	/**
+	* Set back hospital style if you hover off a hospital with your mouse
+	* @param {Object} e = the circlemarker (hospital) object you are hovering off
+	*/
+	onMouseOut = (e) => {
+		const oldColor = this.calculateCircleColor();
+		e.target.setStyle({color: oldColor});
+	}
 
     /**
      * Creates circles to represent hospitals on a Map
@@ -59,11 +86,13 @@ class HospitalMap extends Component {
         					opacity = "0.8"
         					weight = "1" // defining how big the outer line of circle is
         					radius={this.getNormedRadius(item)} // norming function is here
-        					onClick = {this.onMouseOver.bind(this, item)}
+        					onClick = {this.onClick.bind(this, item)}
+							onMouseOver = {this.onMouseOver.bind(this)}
+							onMouseOut = {this.onMouseOut.bind(this)}
         				>
-        					<Popup>
-        						{this.props.returnData(item)}
-        					</Popup>
+        					<Tooltip>
+        						{item.name}
+        					</Tooltip>
         				</CircleMarker>
       	             ))
 				}
