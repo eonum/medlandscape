@@ -19,7 +19,7 @@ class VariableSelector extends Component {
         return (
             <div className="variableSelector">
                 {this.props.variableDropdowns}
-                <button className="addVariableButton" onClick={() => this.props.addVariable()}>+</button>
+                <button className="addVariableButton addButton" onClick={() => this.props.addVariable()}>+</button>
             </div>
         );
     }

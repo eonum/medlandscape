@@ -18,7 +18,7 @@ class HospitalSelector extends Component {
         return (
             <div className="hospitalSelector">
                 {this.props.hospitalDropdowns}
-                <button className="addHospitalButton" onClick={() => this.props.addHospital()}>+</button>
+                <button className="addHospitalButton addButton" onClick={() => this.props.addHospital()}>+</button>
             </div>
         );
     }

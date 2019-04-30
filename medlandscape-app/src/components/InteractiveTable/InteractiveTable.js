@@ -135,7 +135,7 @@ class InteractiveTable extends Component {
 
         let newSelectedVariable = {};
         let newDrp = (
-            <div id='variableDropdown' key={this.state.nextVariableId}>
+            <div className="variableDropdown" key={this.state.nextVariableId}>
                 <DropdownMenu id={this.state.nextVariableId}
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
@@ -187,7 +187,6 @@ class InteractiveTable extends Component {
         const { t } = this.props;
         return (
             <div className="interactiveTable">
-                <div className="empty"></div>
                 <VariableSelector
                     className="variableSelector"
                     variables={this.props.variables}

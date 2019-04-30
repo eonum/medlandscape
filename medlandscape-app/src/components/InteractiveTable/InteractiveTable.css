@@ -1,27 +1,38 @@
 .variableSelector {
-    grid-area: varSel;
+    grid-row-start: 1;
+	grid-column-start: 2;
 }
 .hospitalSelector {
-    grid-area: hospSel;
-}
-.empty {
-    grid-area: empty;
-    width: 300px;
-    height: 75px;
+	grid-row-start: 2;
+	grid-column-start: 1;
 }
 .btnGenerateTable {
-    grid-area: genTabBtn;
-    width: 300px;
+    grid-row-start: 1;
+	grid-column-start: 1;
+    width: 200px;
+	height: 50px;
+	border: none;
+	justify-self: center;
+
 }
 .resultTable {
     grid-area: table;
+	border-spacing: 20px;
 }
+
 .interactiveTable {
+	width: 100%;
     display: grid;
-    grid-template-areas:
-        'empty varSel'
-        'hospSel table'
-        'genTabBtn genTabBtn';
-    grid-template-columns: 300px 100%;
-    grid-template-rows: 75px auto;
+    grid-template-columns: 250px auto;
+    grid-template-rows: auto auto 50px;
+}
+
+.addButton {
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	color: white;
+	border: none;
+	background-color: #1996f6;
+	font-size: 20pt;
 }

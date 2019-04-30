@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import InteractiveTable from '../InteractiveTable/InteractiveTable.js';
+import './centralPanel.css'
 
 const apiURL = "https://qm1.ch/";
 let apiRequest = "/api/medical_landscape/";
@@ -23,7 +24,7 @@ class CentralPanel extends Component {
         let query = this.props.i18n.language + apiRequest;
         query += 'hospitals' + "?variables=" + requestedVars;
 
-        this.props.fetchData(query).then(() => {
+        this.props.fetchData("hospitals", query).then(() => {
             this.setState({
                 tableDataLoaded : true
             })
@@ -43,15 +44,17 @@ class CentralPanel extends Component {
         })
 
         let tableView = (
-            <InteractiveTable
-                variables={hospitalVars}
-                hospitals={this.props.hospitals}
-                requestData={this.requestTableData}
-                tableDataLoaded={this.state.tableDataLoaded}
-                tableDataGenerated={this.tableDataGenerated}
-                hasLoaded={this.props.hasLoaded}
-            />
+	            <InteractiveTable
+	                variables={hospitalVars}
+	                hospitals={this.props.hospitals}
+	                requestData={this.requestTableData}
+	                tableDataLoaded={this.state.tableDataLoaded}
+	                tableDataGenerated={this.tableDataGenerated}
+	                hasLoaded={this.props.hasLoaded}
+	            />
         );
+
+		console.log(this.props.hospitals);
 
         let mainView;
         switch (this.props.view) {
@@ -68,10 +71,12 @@ class CentralPanel extends Component {
                 mainView = null;
         }
 
+		let viewController = (mainView === null) ? "hide" : ""
+
         return (
-            <div className="central-panel">
-                {mainView}
-            </div>
+			<div className={"central-panel " + viewController}>
+            	{mainView}
+			</div>
         );
     }
 }

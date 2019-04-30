@@ -8,6 +8,7 @@
     box-sizing: border-box;
     background-color: #1996fa;
     color: white;
+	min-height: 50px;
     padding: 14px 20px;
     font-size: 16px;
     border: none;

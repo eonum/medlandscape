@@ -1,3 +1,15 @@
-#variableDropdown {
-    float: left;
+.variableSelector {
+	max-height: 100px;
+	height: auto;
+	border: 1px solid red;
+	display: flex;
+	align-items: flex-end;
+}
+
+.variableDropdown {
+	margin-right: 10px;
+}
+
+.variableDropdown > .dropdown {
+	padding: 0;
 }

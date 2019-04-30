@@ -39,7 +39,11 @@
 }
 
 .central-panel {
-    /* pointer-events: none;
+    pointer-events: none;
     grid-column-start: 3;
-    grid-row-start: 2; */
+    grid-row-start: 2;
+	background-color: white;
+	border-radius: 15px;
+	margin-left: 20px;
+	padding: 40px; 
 }

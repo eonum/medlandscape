@@ -94,31 +94,6 @@ class App extends Component {
         });
     }
 
-    requestTableData = (vars) => {
-        let requestedVars = "";
-
-        for (let variable of vars) {
-            requestedVars += variable.name + '$';
-        }
-
-        requestedVars = requestedVars.substring(0, requestedVars.length - 1);
-
-        let query = this.props.i18n.language + apiRequest;
-        query += 'hospitals' + "?variables=" + requestedVars;
-
-        this.apiCall(query).then((results) => {
-            this.setState({
-                hospitals : results.map(obj => {
-                    return obj;
-                }),
-            });
-        }).then(() => {
-            this.setState({
-                tableDataLoaded : true
-            })
-        });
-    }
-
     tableDataGenerated = () => {
         this.setState({
             tableDataLoaded : false
@@ -225,6 +200,7 @@ class App extends Component {
                     <CentralPanel
                         view={this.state.view}
                         variables={this.state.variables}
+						hospitals={this.state.hospitals}
                         hasLoaded={this.state.hasLoaded}
                         fetchData={this.applyVariables}
                     />
