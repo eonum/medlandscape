@@ -174,7 +174,7 @@ class ControlPanel extends Component {
                 </div>
                 <div className="tabContent">
                     {controlPanelView}
-                    <LanguagePicker resendInitApiCall={this.props.initApiCall} />
+                    <LanguagePicker resendInitApiCall={this.props.resendInitApiCall} />
                 </div>
 			</div>
         );

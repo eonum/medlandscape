@@ -54,8 +54,6 @@ class CentralPanel extends Component {
             />
         );
 
-		console.log(this.props.hospitals);
-
         let mainView;
         switch (this.props.view) {
             case 1:

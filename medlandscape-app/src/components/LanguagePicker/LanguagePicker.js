@@ -24,6 +24,8 @@ class LanguagePicker extends Component {
     * @return {JSX}  Component in JSX format
     */
     render () {
+        console.log("language picker props");
+        console.log(this.props);
         return (
             <div className="languagePicker">
                 <p>{this.props.t('language_picker.info')}:</p>
