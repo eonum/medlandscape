@@ -80,7 +80,7 @@ class InteractiveTable extends Component {
 
         let newSelectedHospital = {};
         let newDropdown = (
-            <div id='hospitalDropdown' key={this.state.nextHospitalId}>
+            <div className='hospitalDropdown' key={this.state.nextHospitalId}>
                 <DropdownMenu id={this.state.nextHospitalId}
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}

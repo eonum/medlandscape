@@ -40,18 +40,18 @@ class CentralPanel extends Component {
     render() {
 
         let hospitalVars = this.props.variables.filter(variable => {
-            return (this.props.variable_model === "Hospital")
-        })
+            return (variable.variable_model === "Hospital")
+        });
 
         let tableView = (
-	            <InteractiveTable
-	                variables={hospitalVars}
-	                hospitals={this.props.hospitals}
-	                requestData={this.requestTableData}
-	                tableDataLoaded={this.state.tableDataLoaded}
-	                tableDataGenerated={this.tableDataGenerated}
-	                hasLoaded={this.props.hasLoaded}
-	            />
+            <InteractiveTable
+                variables={hospitalVars}
+                hospitals={this.props.hospitals}
+                requestData={this.requestTableData}
+                tableDataLoaded={this.state.tableDataLoaded}
+                tableDataGenerated={this.tableDataGenerated}
+                hasLoaded={this.props.hasLoaded}
+            />
         );
 
 		console.log(this.props.hospitals);

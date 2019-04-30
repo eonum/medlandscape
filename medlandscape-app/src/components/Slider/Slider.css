@@ -1,4 +1,5 @@
 .slider {
+    margin-left: 20px;
     padding: 20px;
     box-sizing: border-box;
     background-color: white;
@@ -8,7 +9,7 @@
 
 .years {
     display: inline-flex;
-    align-items: center;
+    align-items: start;
     position: relative;
 }
 

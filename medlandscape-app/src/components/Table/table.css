@@ -1,0 +1,19 @@
+.table {
+    background-color: rgba(160, 160, 160, .2);
+}
+
+.table tr {
+    min-height: 50px;
+}
+.table tr:nth-child(even) {
+    background-color: rgba(180, 180, 180, .2);
+}
+.table td {
+    width: 250px;
+    padding:0 10px 10px 0;
+    text-align: center;
+    line-height: 50px;
+}
+.table td:nth-child(even) {
+    background-color: rgba(200, 200, 200, .2);
+}

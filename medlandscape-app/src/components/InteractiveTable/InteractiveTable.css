@@ -12,7 +12,11 @@
     width: 200px;
 	height: 50px;
 	border: none;
+    border-radius: 25px;
+    font-size: 11pt;
+    background-color: #ccc;
 	justify-self: center;
+    align-self: center;
 
 }
 .resultTable {

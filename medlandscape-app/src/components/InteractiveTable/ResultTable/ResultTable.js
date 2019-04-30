@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Table from './../../Table.js'
+import Table from '../../Table/Table.js'
 import './ResultTable.css';
 
 /**
