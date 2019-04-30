@@ -3,14 +3,16 @@
     background-color: white;
     border-radius: 15px;
     width: 290px;
+    max-height: 600px;
 }
 
 .control-panel h1 {
-    font-size: 22pt;
+    font-size: 17pt;
     display: inline-block;
 }
 
 .control-panel p {
+    font-size: 11pt;
     height: 15px;
     line-height: 15px;
 }
@@ -68,14 +70,11 @@
     padding-bottom: 4px;
     display: flex;
     justify-content: space-evenly;
+    align-items: baseline;
 }
 
 .viewSwitcher p {
     font-size: 11pt;
-}
-
-.label {
-    padding: 0 3px;
 }
 
 .label:hover, .selectedLabel {
@@ -85,6 +84,7 @@
 }
 
 .separator {
-    color: #aaa;
+    color: #ddd;
     pointer-events: none;
+    padding: 0 5px;
 }

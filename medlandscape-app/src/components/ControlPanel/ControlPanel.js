@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import FilterEditor from '../FilterEditor/FilterEditor.js';
 import { withTranslation } from 'react-i18next';
-import LanguagePicker from '../LanguagePicker/LanguagePicker.js';
 import './ControlPanel.css'
 
 let apiRequest = "/api/medical_landscape/";
@@ -67,7 +66,7 @@ class ControlPanel extends Component {
     }
 
     setMapView = (view) => {
-        if (this.state.mapView !== view) {
+        if (this.state.view !== view) {
             document.getElementById('l1').classList.toggle('selectedLabel');
             document.getElementById('l2').classList.toggle('selectedLabel');
             this.setState({
@@ -75,7 +74,6 @@ class ControlPanel extends Component {
             });
         }
     }
-
 
     render() {
         let cantonVars = [], hospitalVars = [], years = [], enums = [];
@@ -122,7 +120,7 @@ class ControlPanel extends Component {
                     <h1>{t('mapView.title')}</h1>
                     <div className="viewSwitcher">
                         <p id="l1" className="label selectedLabel" onClick={this.setMapView.bind(this, 1)}>{t('mapView.hospitals')}</p>
-                        <p className="separator">||</p>
+                        <p className="separator">|</p>
                         <p id="l2" className="label" onClick={this.setMapView.bind(this, 2)}>{t('mapView.cantons')}</p>
                     </div>
                 </div>
@@ -174,7 +172,6 @@ class ControlPanel extends Component {
                 </div>
                 <div className="tabContent">
                     {controlPanelView}
-                    <LanguagePicker resendInitApiCall={this.props.resendInitApiCall} />
                 </div>
 			</div>
         );

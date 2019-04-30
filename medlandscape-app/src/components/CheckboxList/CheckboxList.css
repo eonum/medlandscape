@@ -1,6 +1,6 @@
 .checkbox-list{
     width: 250px;
-    max-height: 500px;
+    max-height: 220px;
     overflow-y: auto;
     margin: 10px 0 10px 0;
     box-sizing: border-box;
@@ -9,19 +9,19 @@
 .checkbox-list-item {
     box-sizing: border-box;
     width: 250px;
-    font-size: 16px;
-    padding: 3px 0 3px 10px;
-    display: inline-flex;
-    align-items: center;
+    font-size: 9pt;
+    min-height: 25px;
+    padding: 5px 0;
     border-bottom: 1px solid #eee;
 }
 
+.checkbox-list-item label {
+    display: flex;
+    align-items: center;
+}
 
 .list-item-name {
-    box-sizing: border-box;
-    display: inline;
-    height: 30px;
-    line-height: 30px;
+    line-height: 15px;
     padding-left: 10px;
 }
 

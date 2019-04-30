@@ -17,8 +17,8 @@
     display: grid;
     width: 100vw;
     height: 100vh;
-    grid-template-columns: 50px 290px auto 50px;
-    grid-template-rows: 80px auto 100px 30px;
+    grid-template-columns: 50px 290px 10px auto 50px;
+    grid-template-rows: 10px 600px 10px 80px;
     pointer-events: none;
 }
 
@@ -32,19 +32,22 @@
     place-self: start start;
 }
 
-.slider {
-    grid-column: 3;
-    grid-row-start: 3;
-    place-self: center start;
-}
-
 .central-panel {
     pointer-events: none;
-    grid-column-start: 3;
+    grid-column-start: 4;
     grid-row-start: 2;
 	background-color: white;
 	border-radius: 15px;
-	margin-left: 20px;
 	padding: 20px;
     overflow: auto;
+}
+
+.languagePicker {
+    grid-column: 2;
+    grid-row: 4;
+}
+
+.slider {
+    grid-column: 4;
+    grid-row: 4;
 }

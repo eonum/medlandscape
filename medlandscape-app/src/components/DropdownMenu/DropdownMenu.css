@@ -5,12 +5,12 @@
 
 /* Dropdown Button */
 .dropbtn {
+    font-size: 11pt;
     box-sizing: border-box;
     background-color: #1996fa;
     color: white;
 	min-height: 50px;
     padding: 14px 20px;
-    font-size: 16px;
     border: none;
     cursor: pointer;
     width: 250px;
@@ -37,11 +37,13 @@
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
+    font-size: 9pt;
     position: absolute;
     box-sizing: border-box;
     z-index: 1;
     background-color: #f6f6f6;
     border: 1px solid black;
+    border-top: none;
     width: 250px;
     height: 300px;
     overflow: scroll;

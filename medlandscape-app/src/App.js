@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Maps from './components/Maps/Maps.js';
-import Slider from './components/Slider/Slider.js'
 import './App.css';
 import { withTranslation } from 'react-i18next';
 import ControlPanel from './components/ControlPanel/ControlPanel.js'
 import CentralPanel from './components/CentralPanel/CentralPanel.js'
+import LanguagePicker from './components/LanguagePicker/LanguagePicker.js';
+import Slider from './components/Slider/Slider.js'
 import InteractiveTable from './components/InteractiveTable/InteractiveTable.js';
 
 const apiURL = "https://qm1.ch/";
@@ -186,17 +187,11 @@ class App extends Component {
                         hospitals={this.state.hospitals}
                         selectVariable={this.selectVariable}
                         variables={this.state.variables}
-                        resendInitApiCall={this.initApiCall}
                         fetchData={this.applyVariables}
                         updateHospitals={this.updateSelectedHospitals}
                         year={this.state.selectedYear}
                         hasLoaded={this.state.hasLoaded}
                     />
-					{
-						(this.state.years.length > 1)
-						? <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
-						: null
-					}
                     <CentralPanel
                         view={this.state.view}
                         variables={this.state.variables}
@@ -204,6 +199,12 @@ class App extends Component {
                         hasLoaded={this.state.hasLoaded}
                         fetchData={this.applyVariables}
                     />
+                    <LanguagePicker resendInitApiCall={this.initApiCall} />
+                    {
+                        (this.state.years.length > 1)
+                        ? <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+                        : null
+                    }
 				</div>
 			</div>
         );
