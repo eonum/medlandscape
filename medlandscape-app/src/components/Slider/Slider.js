@@ -14,11 +14,19 @@ class Slider extends Component {
                     <div className="sliderBar"></div>
                     {
                         this.props.years.map((year) => {
-                            let yrStr = year;
-                            if (this.props.years.length > 15) {
-                                let yrStr = "'" + yrStr.slice(-2);
+                            let yearString = year;
+                            if (this.props.years.length > 12) {
+                                yearString = year.slice(0, 2);
                             }
-                            return <div key={this.props.years.indexOf(year)} className={(year === this.props.selectedYear) ? "year selected" : "year"} onClick={this.selectYear.bind(this, year)}>{yrStr}</div>
+                            return (
+                                <div
+                                    key={this.props.years.indexOf(year)}
+                                    className={(year === this.props.selectedYear) ? "year selected" : "year"}
+                                    onClick={this.selectYear.bind(this, year)}
+                                >
+                                    {yearString}
+                                </div>
+                            )
                         })
                     }
                 </div>

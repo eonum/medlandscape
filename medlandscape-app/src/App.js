@@ -47,12 +47,18 @@ class App extends Component {
                 });
             }
         }).then(() => {
-            let years = this.getYears(this.state.selectedVariable);
-            this.setState({
-                years : years,
-                selectedYear : years[0],
-                hasLoaded : true
-            })
+            if (this.state.view !== 1) {
+                let years = this.getYears(this.state.selectedVariable);
+                this.setState({
+                    years : years,
+                    selectedYear : years[0],
+                    hasLoaded : true
+                })
+            } else {
+                this.setState({
+                    hasLoaded : true
+                })
+            }
         });
     }
 
@@ -158,7 +164,7 @@ class App extends Component {
 
     /**
      * Set selectedHospitals to
-     * @param {Array} the selected hospitals.
+     * @param {Array} selectedHospitals The selected hospitals.
      */
     updateSelectedHospitals = (selectedHospitals) => {
         this.setState({
@@ -185,6 +191,13 @@ class App extends Component {
             : null
         ;
 
+        let slider = (this.state.years.length > 1 && this.state.view === 1)
+            ? (
+                <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
+            )
+            : null
+        ;
+
         return (
 			<div className="App">
                 <Maps
@@ -200,6 +213,7 @@ class App extends Component {
                         setView={this.setView}
                         hospitals={this.state.hospitals}
                         selectVariable={this.selectVariable}
+                        selectedVariable={this.state.selectedVariable}
                         variables={this.state.variables}
                         fetchData={this.applyVariables}
                         updateHospitals={this.updateSelectedHospitals}
@@ -208,11 +222,7 @@ class App extends Component {
                     />
                     {centralPanel}
                     <LanguagePicker resendInitApiCall={this.initApiCall} />
-                    {
-                        (this.state.years.length > 1)
-                        ? <Slider years={this.state.years} selectedYear={this.state.selectedYear} setYear={this.setYear}/>
-                        : null
-                    }
+                    {slider}
 				</div>
 			</div>
         );

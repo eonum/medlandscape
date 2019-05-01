@@ -9,7 +9,6 @@ let apiRequest = "/api/medical_landscape/";
 class ControlPanel extends Component {
 
     state = {
-        selectedVariable : {},
         mapView : 1
     }
 
@@ -36,7 +35,7 @@ class ControlPanel extends Component {
     fetchEnumData = (variable) => {
         const {name} = variable;
         let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
-        query += encodeURIComponent(this.state.selectedVariable.name + "$");
+        query += encodeURIComponent(this.props.selectedVariable.name + "$");
         query += encodeURIComponent(name);
         return this.props.fetchData("hospitals", query);
     }
@@ -48,10 +47,6 @@ class ControlPanel extends Component {
      * @param  {Variable object} item The selected variable.
      */
     selectVariable = (item) => {
-        console.log("variable selection");
-        this.setState({
-            selectedVariable : item,
-        });
         this.props.selectVariable(item);
         return this.fetchMapData(item);
     }
@@ -89,11 +84,11 @@ class ControlPanel extends Component {
         });
 
         // setting selectedItem for Dropdowns
-        if (this.state.selectedVariable.variable_model === "Hospital") {
-            selectedHospital = this.state.selectedVariable;
+        if (this.props.selectedVariable.variable_model === "Hospital") {
+            selectedHospital = this.props.selectedVariable;
             selectedCanton = cantonVars[0];
         } else {
-            selectedCanton = this.state.selectedVariable;
+            selectedCanton = this.props.selectedVariable;
             selectedHospital = hospitalVars[0];
         }
 

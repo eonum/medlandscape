@@ -18,7 +18,6 @@ class FilterEditor extends Component {
     *
     */
     dropdownSelectItem = (item) => {
-		const {mappingObject} = this.state;
 		let mapObj = {};
 		for (let i = 0; i < item.values.length; i++)
 			mapObj[item.values[i]] = item.values_text[i];
@@ -52,7 +51,6 @@ class FilterEditor extends Component {
 		if (hasLoaded) {
 			let filteredHospitals = hospitals.filter((item) => {
 				for(let i = 0; i < this.state.selectedValues.length; i++){
-					// checks if
 					if (item.attributes[this.state.selectedEnum.name][selectedYear]) {
 						const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear].split(", ");
 						if (valueArray.indexOf(this.state.selectedValues[i]) === -1) {
