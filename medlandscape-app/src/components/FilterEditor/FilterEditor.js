@@ -70,7 +70,7 @@ class FilterEditor extends Component {
     render () {
         return (
 			<div className="filter-editor">
-				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} />
+				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} defaultText="Filter Variabeln"/>
                 {
 					(this.state.selectedEnum !== undefined)
 					?

@@ -57,7 +57,20 @@ class DropdownMenu extends Component {
     * @return {JSX}  JSX-Code of components
     */
     render() {
-        let varText = (this.props.selectedItem) ? (this.props.selectedItem.text ? this.props.selectedItem.text : this.props.selectedItem.name) : "";
+        let varText;
+
+        // if an item was passed as selectedItem
+        if (this.props.selectedItem) {
+            // if dropdown contains hospitals
+            if (this.props.selectedItem.text) {
+                varText = this.props.selectedItem.text;
+            } else { // if contains cantons / variables
+                varText = this.props.selectedItem.name;
+            }
+        } else { // fallback if no item was passed as selectedItem
+            varText = this.props.defaultText;
+        }
+
         return (
             <div className="dropdown">
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>

@@ -84,7 +84,9 @@ class InteractiveTable extends Component {
                 <DropdownMenu id={this.state.nextHospitalId}
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
-                    selectedItem={newSelectedHospital} />
+                    selectedItem={undefined}
+                    defaultText="Spital"
+                />
             </div>
         );
 
@@ -139,7 +141,9 @@ class InteractiveTable extends Component {
                 <DropdownMenu id={this.state.nextVariableId}
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
-                    selectedItem={newSelectedVariable} />
+                    selectedItem={undefined}
+                    defaultText="Variable"
+                />
             </div>
         );
 
