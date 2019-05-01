@@ -32,11 +32,15 @@ class FilterEditor extends Component {
 	}
 
     checkboxSelectItem = (item) => {
-        let values = this.state.selectedValues;
-        let index = values.indexOf(item);
-        if (index !== -1)
-            values.splice(index, 1);
-        else values.push(item);
+        // removes item if in selectedValues
+        let values = this.state.selectedValues.filter((value) => {
+            return (value !== item)
+        });
+
+        // adds item if not in selectedValues
+        if (values.length === this.state.selectedValues.length) {
+            values.push(item);
+        }
 
         this.setState({
             selectedValues : values
@@ -46,36 +50,35 @@ class FilterEditor extends Component {
     }
 
 	filter = () => {
-		const {selectedYear, hasLoaded, hospitals} = this.props;
+		const {selectedYear, hospitals} = this.props;
 
-		if (hasLoaded) {
-			let filteredHospitals = hospitals.filter((item) => {
-				for(let i = 0; i < this.state.selectedValues.length; i++){
-					if (item.attributes[this.state.selectedEnum.name][selectedYear]) {
-						const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear].split(", ");
-						if (valueArray.indexOf(this.state.selectedValues[i]) === -1) {
-							return false;
-						}
-					} else {
+		let filteredHospitals = hospitals.filter((item) => {
+			for(let i = 0; i < this.state.selectedValues.length; i++){
+				if (item.attributes[this.state.selectedEnum.name][selectedYear]) {
+					const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear].split(", ");
+					if (!valueArray.includes(this.state.selectedValues[i])) {
 						return false;
 					}
+				} else {
+					return false;
 				}
-				return true;
-			});
+			}
+			return true;
+		});
 
-			this.props.updateHospitals(filteredHospitals);
-        }
+		this.props.updateHospitals(filteredHospitals);
 	}
 
     render () {
+        const { t } = this.props;
         return (
 			<div className="filter-editor">
-				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} defaultText="Filter Variabeln"/>
+				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} defaultText={t('dropDowns.filterFallback')}/>
                 {
 					(this.state.selectedEnum !== undefined)
 					?
 					<div className="filterCheckbox">
-						<p>{this.props.t('filter.checkbox')}</p>
+						<p>{t('mapView.checkbox')}</p>
 						<CheckboxList objects={this.state.selectedEnum.values} checkboxSelectItem={this.checkboxSelectItem} mappingObject={this.state.mappingObject} />
 					</div>
 					: null

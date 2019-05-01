@@ -4,14 +4,11 @@ import FilterEditor from '../FilterEditor/FilterEditor.js';
 import { withTranslation } from 'react-i18next';
 import './ControlPanel.css'
 
-let apiRequest = "/api/medical_landscape/";
-
 class ControlPanel extends Component {
 
     state = {
         mapView : 1
     }
-
 
     /**
      * Called when asking for a Variable to be displayed on the map
@@ -20,9 +17,8 @@ class ControlPanel extends Component {
      */
     fetchMapData = (variable) => {
         const {name, variable_model} = variable;
-        let query = this.props.i18n.language + apiRequest;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
-        query += key + "?variables=";
+        let query = key + "?variables=";
         query += encodeURIComponent(variable.name);
         return this.props.fetchData(key, query);
     }
@@ -34,7 +30,7 @@ class ControlPanel extends Component {
      */
     fetchEnumData = (variable) => {
         const {name} = variable;
-        let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
+        let query ="hospitals?variables=";
         query += encodeURIComponent(this.props.selectedVariable.name + "$");
         query += encodeURIComponent(name);
         return this.props.fetchData("hospitals", query);
@@ -97,8 +93,8 @@ class ControlPanel extends Component {
         let mapViewHospitals = (
             <div className="mapViewHospitals">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} defaultText="Spitalsvariabeln"/>
-                <p>{t('filter.title')}</p>
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} defaultText={t('dropDowns.cantonFallback')}/>
+                <p>{t('mapView.filter')}</p>
                 <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} fetchData={this.fetchEnumData} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} />
             </div>
         )
@@ -106,7 +102,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText="Kantonsvariabeln"/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.cantonFallback')}/>
             </div>
         )
 

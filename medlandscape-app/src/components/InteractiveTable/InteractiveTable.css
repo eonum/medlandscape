@@ -20,15 +20,17 @@
 
 }
 .resultTable {
-    grid-area: table;
-	border-spacing: 20px;
+    grid-column: 2;
+    grid-row: 2;
 }
 
 .interactiveTable {
-	width: 100%;
+	max-width: 100%;
+    height: 100%;
     display: grid;
     grid-template-columns: 250px auto;
-    grid-template-rows: auto auto 50px;
+    grid-template-rows: 100px auto;
+    background-color: rgba(160, 160, 160, .2);
 }
 
 .addButton {

@@ -1,9 +1,17 @@
 {
     "mapView": {
         "title": "Karte",
-        "variables" : "Variabeln",
+        "variables" : "Ausgewählte Kennzahl",
         "cantons": "Kantone",
-        "hospitals": "Spitäler"
+        "hospitals": "Spitäler",
+        "filter": "Ausgewählter Filter",
+        "checkbox": "Werte"
+    },
+    "dropDowns":{
+        "hospitalFallback": "Spital wählen",
+        "cantonFallback": "Kanton wählen",
+        "variablesFallback": "Kennzahl wählen",
+        "filterFallback": "Filter wählen"
     },
     "tableView": {
         "title": "Tabelle"
@@ -13,10 +21,6 @@
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"
-    },
-    "filter": {
-        "title": "Filter",
-        "checkbox": "Werte"
     },
     "localization_example": {
         "example": "Hallo Brudi"

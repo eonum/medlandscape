@@ -1,9 +1,17 @@
 {
     "mapView": {
         "title": "Carte",
-        "variables" : "Variables",
+        "variables" : "Variable seléctionnée",
         "cantons": "Cantons",
-        "hospitals": "Hopitaux"
+        "hospitals": "Hopitaux",
+        "filter": "Filtre seléctionné",
+        "checkbox": "Options"
+    },
+    "dropDowns":{
+        "hospitalFallback": "Choisir Hopital",
+        "cantonFallback": "Choisir Canton",
+        "variablesFallback": "Choisir Variable",
+        "filterFallback": "Choisir filtre"
     },
     "tableView": {
         "title": "Tableau"
@@ -14,14 +22,10 @@
     "language_picker": {
         "info": "Choisissez votre langue"
     },
-    "filter": {
-        "title": "Filtre",
-        "checkbox": "Options"
-    },
     "localization_example": {
         "example": "Bonjour frèri"
     },
     "interactive_table": {
-        "btn_create_table": "Générer tableau"
+        "btn_create_table": "Créer tableau"
     }
 }

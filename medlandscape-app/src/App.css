@@ -33,13 +33,11 @@
 }
 
 .central-panel {
-    pointer-events: none;
     grid-column-start: 4;
     grid-row-start: 2;
 	background-color: white;
 	border-radius: 15px;
 	padding: 20px;
-    overflow: auto;
 }
 
 .languagePicker {

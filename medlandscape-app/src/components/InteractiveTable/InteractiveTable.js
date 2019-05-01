@@ -85,7 +85,7 @@ class InteractiveTable extends Component {
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
                     selectedItem={undefined}
-                    defaultText="Spital"
+                    defaultText={this.props.t('dropDowns.hospitalFallback')}
                 />
             </div>
         );
@@ -142,7 +142,7 @@ class InteractiveTable extends Component {
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
                     selectedItem={undefined}
-                    defaultText="Variable"
+                    defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
             </div>
         );

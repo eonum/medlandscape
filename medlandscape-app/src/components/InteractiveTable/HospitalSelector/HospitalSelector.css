@@ -1,7 +1,4 @@
-.hospitalSelector {
-    background-color: rgba(160, 160, 160, .2);
-}
-.hospitalSelector > .hospitalDropdown:nth-child(even) {
+ .hospitalSelector > .hospitalDropdown:nth-child(even) {
     background-color: rgba(180, 180, 180, .2);
 }
 .hospitalDropdown > .dropdown {

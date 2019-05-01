@@ -68,7 +68,7 @@ class App extends Component {
     * @return {Promise} A Promise Object of the requested API call, results parsed as JSON.
     */
     apiCall = (query) => {
-        return fetch(apiURL + query).then(res => res.json());
+        return fetch(apiURL + this.props.i18n.language + apiRequest + query).then(res => res.json());
     }
 
     /**
@@ -78,12 +78,12 @@ class App extends Component {
         let varResultArr = [];
 
         // fetches all Variables from the API
-        this.apiCall((this.props.i18n.language + apiRequest + "variables")).then((result) => {
+        this.apiCall(("variables")).then((result) => {
             this.setState({
                 variables : result,
             });
             this.selectVariable(result[1]);
-            let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
+            let query = "hospitals?variables=";
             query += encodeURIComponent(result[1].name);
             this.applyVariables("hospitals", query);
         });

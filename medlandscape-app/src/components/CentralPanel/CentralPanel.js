@@ -21,8 +21,7 @@ class CentralPanel extends Component {
 
         requestedVars = requestedVars.substring(0, requestedVars.length - 1);
 
-        let query = this.props.i18n.language + apiRequest;
-        query += 'hospitals' + "?variables=" + requestedVars;
+        let query = "hospitals?variables=" + requestedVars;
 
         this.props.fetchData("hospitals", query).then(() => {
             this.setState({
@@ -56,9 +55,6 @@ class CentralPanel extends Component {
 
         let mainView;
         switch (this.props.view) {
-            case 1:
-                mainView = null;
-                break;
             case 2:
                 mainView = tableView;
                 break;
