@@ -32,16 +32,19 @@
     box-sizing: border-box;
     margin: auto;
     border-bottom: 1px solid #ccc;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 30px 30px;
 }
 
-.t1{
-
+#t1{
+    background-image: url('icons/map.png');
 }
-.t2{
-
+#t2{
+    background-image: url('icons/table.png');
 }
-.t3{
-
+#t3{
+    background-image: url('icons/graph.png');
 }
 
 .selectedTab {
