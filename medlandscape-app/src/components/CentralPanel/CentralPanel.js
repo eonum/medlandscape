@@ -69,10 +69,8 @@ class CentralPanel extends Component {
                 mainView = null;
         }
 
-		let viewController = (mainView === null) ? "hide" : ""
-
         return (
-			<div className={"central-panel " + viewController}>
+			<div className={"central-panel"}>
             	{mainView}
 			</div>
         );

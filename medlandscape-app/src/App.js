@@ -79,7 +79,7 @@ class App extends Component {
             this.selectVariable(result[1]);
             let query = this.props.i18n.language + apiRequest + "hospitals?variables=";
             query += encodeURIComponent(result[1].name);
-            this.applyVariables("cantons", query);
+            this.applyVariables("hospitals", query);
         });
     }
 
@@ -171,6 +171,20 @@ class App extends Component {
     }
 
     render() {
+
+        let centralPanel = (this.state.view !== 1)
+            ? (
+                <CentralPanel
+                    view={this.state.view}
+                    variables={this.state.variables}
+                    hospitals={this.state.hospitals}
+                    hasLoaded={this.state.hasLoaded}
+                    fetchData={this.applyVariables}
+                />
+            )
+            : null
+        ;
+
         return (
 			<div className="App">
                 <Maps
@@ -192,13 +206,7 @@ class App extends Component {
                         year={this.state.selectedYear}
                         hasLoaded={this.state.hasLoaded}
                     />
-                    <CentralPanel
-                        view={this.state.view}
-                        variables={this.state.variables}
-						hospitals={this.state.hospitals}
-                        hasLoaded={this.state.hasLoaded}
-                        fetchData={this.applyVariables}
-                    />
+                    {centralPanel}
                     <LanguagePicker resendInitApiCall={this.initApiCall} />
                     {
                         (this.state.years.length > 1)

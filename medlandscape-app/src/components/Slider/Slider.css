@@ -1,5 +1,5 @@
 .slider {
-    padding: 20px;
+    padding: 30px 20px 0 20px;
     box-sizing: border-box;
     background-color: white;
     border-radius: 15px;
@@ -7,7 +7,7 @@
 }
 
 .years {
-    display: inline-flex;
+    display: flex;
     justify-content: space-evenly;
     position: relative;
 }
@@ -22,7 +22,7 @@
 }
 
 .year {
-    flex-grow: 1;
+    text-align: center;
     position: relative;
     padding-left: 10px;
     padding-right: 10px;

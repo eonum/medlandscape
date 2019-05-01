@@ -67,8 +67,6 @@ class ControlPanel extends Component {
 
     setMapView = (view) => {
         if (this.state.view !== view) {
-            document.getElementById('l1').classList.toggle('selectedLabel');
-            document.getElementById('l2').classList.toggle('selectedLabel');
             this.setState({
                 mapView : view
             });
@@ -79,6 +77,7 @@ class ControlPanel extends Component {
         let cantonVars = [], hospitalVars = [], years = [], enums = [];
         let selectedCanton = {}, selectedHospital = {};
 
+        // filtering variables
         this.props.variables.filter(variable => {
             if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
                 hospitalVars.push(variable);
@@ -89,6 +88,7 @@ class ControlPanel extends Component {
             }
         });
 
+        // setting selectedItem for Dropdowns
         if (this.state.selectedVariable.variable_model === "Hospital") {
             selectedHospital = this.state.selectedVariable;
             selectedCanton = cantonVars[0];
@@ -107,6 +107,7 @@ class ControlPanel extends Component {
                 <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} fetchData={this.fetchEnumData} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} />
             </div>
         )
+
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
@@ -119,9 +120,9 @@ class ControlPanel extends Component {
                 <div className="header">
                     <h1>{t('mapView.title')}</h1>
                     <div className="viewSwitcher">
-                        <p id="l1" className="label selectedLabel" onClick={this.setMapView.bind(this, 1)}>{t('mapView.hospitals')}</p>
+                        <p id="l1" className={(this.state.mapView === 1) ? "label selectedLabel" : "label"} onClick={this.setMapView.bind(this, 1)}>{t('mapView.hospitals')}</p>
                         <p className="separator">|</p>
-                        <p id="l2" className="label" onClick={this.setMapView.bind(this, 2)}>{t('mapView.cantons')}</p>
+                        <p id="l2" className={(this.state.mapView === 2) ? "label selectedLabel" : "label"} onClick={this.setMapView.bind(this, 2)}>{t('mapView.cantons')}</p>
                     </div>
                 </div>
                 {
