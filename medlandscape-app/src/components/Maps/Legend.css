@@ -1,9 +1,8 @@
 .legend {
-    border-radius: 5px;
-    margin: 0 50px 120px 0;
+    border-radius: 15px;
+    margin: 0 40px 110px 0;
     background-color: #fff;
     font-size: 12px;
-    opacity: 0.8;
     line-height: 30px;
     padding: 10px;
 }

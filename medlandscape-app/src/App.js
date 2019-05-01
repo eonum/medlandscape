@@ -48,14 +48,14 @@ class App extends Component {
             }
         }).then(() => {
             if (this.state.view !== 1) {
+                this.setState({
+                    hasLoaded : true
+                })
+            } else {
                 let years = this.getYears(this.state.selectedVariable);
                 this.setState({
                     years : years,
                     selectedYear : years[0],
-                    hasLoaded : true
-                })
-            } else {
-                this.setState({
                     hasLoaded : true
                 })
             }

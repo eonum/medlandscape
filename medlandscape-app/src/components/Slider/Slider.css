@@ -1,5 +1,5 @@
 .slider {
-    padding: 30px 20px 0 20px;
+    padding: 20px;
     box-sizing: border-box;
     background-color: white;
     border-radius: 15px;
@@ -24,9 +24,11 @@
 .year {
     text-align: center;
     position: relative;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 20px;
+    padding-top: 30px;
+}
+
+.selected {
+    color: #1996f6;
 }
 
 .year::after {
@@ -44,6 +46,7 @@
 
 .year:hover {
     cursor: pointer;
+    color: #1996f6;
 }
 
 .year:hover::after{

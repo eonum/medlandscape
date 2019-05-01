@@ -16,7 +16,7 @@ class Slider extends Component {
                         this.props.years.map((year) => {
                             let yearString = year;
                             if (this.props.years.length > 12) {
-                                yearString = year.slice(0, 2);
+                                yearString = year.substring(2);
                             }
                             return (
                                 <div
