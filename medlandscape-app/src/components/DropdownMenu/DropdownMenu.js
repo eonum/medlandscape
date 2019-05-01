@@ -14,8 +14,18 @@ class DropdownMenu extends Component {
     * toggleDropdown - toggles whether the DropdownMenu is opened or closed
     */
     toggleDropdown() {
-        let dropdownListDiv = document.getElementById(this.props.id);
-        dropdownListDiv.classList.toggle('show');
+        let allDropDowns = document.getElementsByClassName('dropdown-content');
+        let thisDropDown = document.getElementById(this.props.id);
+        for (let i = 0; i < allDropDowns.length; i++) {
+            if (allDropDowns[i] === thisDropDown) {
+                allDropDowns[i].classList.toggle('show');
+            } else {
+                allDropDowns[i].classList.remove('show');
+            }
+        }
+        if (thisDropDown.classList.contains('show')) {
+            thisDropDown.firstChild.focus();
+        }
     }
 
     /**
@@ -24,7 +34,7 @@ class DropdownMenu extends Component {
     *
     * @param  {Object} item the list item that was selected
     */
-    selectItem(item) {
+    selectItem = (item) => {
         this.props.selectItem(item, this.props.id);
         this.toggleDropdown();
     }
@@ -33,12 +43,13 @@ class DropdownMenu extends Component {
     * filterFunction - filters the displayed listitems using input from the
     * textfield
     */
-    filterFunction() {
+    filterFunction = () => {
         let input, filter, a, i, div, txtValue;
         input = document.getElementById(this.props.id).querySelector('.searchbar');
         filter = input.value.toUpperCase();
         div = document.getElementById(this.props.id);
-        a = div.getElementsByTagName("div");
+        a = div.getElementsByClassName('dropdownElem');
+
         for (i = 0; i < a.length; i++) {
             txtValue = a[i].textContent || a[i].innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -75,7 +86,7 @@ class DropdownMenu extends Component {
             <div className="dropdown">
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
-                    <input type="text" placeholder="Suchen..." className="dropdownElem searchbar" onKeyUp={this.filterFunction.bind(this)} />
+                    <input type="text" placeholder="Suchen..." className="searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {
                         this.props.listItems.map((item) => (
                             <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.text ? item.text : item.name}</div>

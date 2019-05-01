@@ -8,7 +8,7 @@
 .dropbtn {
     font-size: 11pt;
     box-sizing: border-box;
-    background-color: #1996fa;
+    background-color: #1996f6;
     color: white;
 	min-height: 50px;
     padding: 14px 20px;
@@ -25,10 +25,12 @@
 /* The search field */
 .searchbar {
     font-size: 16px;
+    border: none;
+    box-sizing: border-box;
 }
 
 .searchbar:hover {
-    cursor: default;
+    background-color: white;
 }
 
 /* The search field when it gets focus/clicked on */
@@ -47,17 +49,18 @@
     border-top: none;
     width: 250px;
     height: 300px;
-    overflow: scroll;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
     display: none;
 }
 
 /* Links inside the dropdown */
-.dropdownElem {
+.dropdownElem, .searchbar {
     box-sizing: border-box;
     border: none;
     border-bottom: 1px solid #ddd;
     color: black;
-    padding: 12px 16px;
+    padding: 12px;
     width: 250px;
 }
 

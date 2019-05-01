@@ -15,7 +15,6 @@ class App extends Component {
 
     state = {
         variables: [],
-        enums : [],
         cantons : [],
         hospitals : [],
 

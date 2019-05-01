@@ -8,8 +8,8 @@ class CheckboxList extends Component {
         return (
             <div className="checkbox-list">
             {
-                this.props.objects.map((obj) => (
-                    <CheckboxListItem key={this.props.objects.indexOf(obj)} object={obj} checkboxSelectItem={this.props.checkboxSelectItem} mappingObject={this.props.mappingObject}/>
+                this.props.items.map((item) => (
+                    <CheckboxListItem key={this.props.items.indexOf(item)} item={item} checkboxSelectItem={this.props.checkboxSelectItem} mappingObject={this.props.mappingObject}/>
                 ))
             }
             </div>

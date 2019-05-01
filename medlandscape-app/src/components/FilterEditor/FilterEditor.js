@@ -9,9 +9,9 @@ import './FilterEditor.css'
  */
 class FilterEditor extends Component {
 	state = {
-        selectedEnum: undefined,
-        selectedValues: [],
-		mappingObject: {},
+        selectedEnum : undefined,
+        selectedValues : [],
+		mappingObject : {},
 	};
 
 	/**
@@ -44,19 +44,19 @@ class FilterEditor extends Component {
 
         this.setState({
             selectedValues : values
-        });
+        })
 
-		this.filter();
+		this.filter(values);
     }
 
-	filter = () => {
+	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;
 
 		let filteredHospitals = hospitals.filter((item) => {
-			for(let i = 0; i < this.state.selectedValues.length; i++){
+			for(let i = 0; i < selectedValues.length; i++){
 				if (item.attributes[this.state.selectedEnum.name][selectedYear]) {
 					const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear].split(", ");
-					if (!valueArray.includes(this.state.selectedValues[i])) {
+					if (!valueArray.includes(selectedValues[i])) {
 						return false;
 					}
 				} else {
@@ -79,7 +79,7 @@ class FilterEditor extends Component {
 					?
 					<div className="filterCheckbox">
 						<p>{t('mapView.checkbox')}</p>
-						<CheckboxList objects={this.state.selectedEnum.values} checkboxSelectItem={this.checkboxSelectItem} mappingObject={this.state.mappingObject} />
+						<CheckboxList items={this.state.selectedEnum.values} checkboxSelectItem={this.checkboxSelectItem} mappingObject={this.state.mappingObject} />
 					</div>
 					: null
 				}
@@ -87,6 +87,7 @@ class FilterEditor extends Component {
         );
     }
 }
+
 /**
  * Convert the component using withTranslation() to have access to t() function
  *  and other i18next props. Then export it.
