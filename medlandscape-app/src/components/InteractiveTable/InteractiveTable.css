@@ -17,8 +17,12 @@
     background-color: #ccc;
 	justify-self: center;
     align-self: center;
-
 }
+
+.btnGenerateTable:hover, .addButton:hover {
+    cursor: pointer;
+}
+
 .resultTable {
     grid-column: 2;
     grid-row: 2;
@@ -26,6 +30,8 @@
 
 .interactiveTable {
     width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     padding-bottom: 300px;
     overflow: auto;
     display: grid;

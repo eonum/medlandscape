@@ -41,15 +41,23 @@ class InteractiveTable extends Component {
         }
     }
 
+    /**
+     * componentDidUpdate
+     *
+     * Fills the dropdown-lists that were present before the api request was
+     *  complete with the correct data. Otherwise they would be empty lists.
+     *
+     * @return {type}  description
+     */
     componentDidUpdate() {
         if (this.props.hasLoaded && this.state.dropdownsNeedUpdate) {
             let newHospitalDropdowns = this.state.hospitalDropdowns;
             for (let i = 0; i < this.state.hospitalDropdowns.length; i++) {
-                newHospitalDropdowns = update(newHospitalDropdowns, {[i]: {props: {children: {props: {listItems: {$set: this.props.hospitals}}}}}});
+                newHospitalDropdowns = update(newHospitalDropdowns, {[i]: {props: {children: {0: {props: {listItems: {$set: this.props.hospitals}}}}}}});
             }
             let newVariableDropdowns = this.state.variableDropdowns;
             for (let i = 0; i < this.state.variableDropdowns.length; i++) {
-                newVariableDropdowns = update(newVariableDropdowns, {[i]: {props: {children: {props: {listItems: {$set: this.props.variables}}}}}});
+                newVariableDropdowns = update(newVariableDropdowns, {[i]: {props: {children: {0: {props: {listItems: {$set: this.props.variables}}}}}}});
             }
             this.setState({
                 hospitalDropdowns : newHospitalDropdowns,
@@ -78,6 +86,8 @@ class InteractiveTable extends Component {
         let newDropdowns = [];
         let newSelectedHospitals = [];
 
+        let nextHospitalId = this.state.nextHospitalId + "";
+
         let newSelectedHospital = {};
         let newDropdown = (
             <div className='hospitalDropdown' key={this.state.nextHospitalId}>
@@ -87,6 +97,7 @@ class InteractiveTable extends Component {
                     selectedItem={undefined}
                     defaultText={this.props.t('dropDowns.hospitalFallback')}
                 />
+            <button className="btnSubtractVariable" onClick={() => this.subtractHospital(nextHospitalId)}>-</button>
             </div>
         );
 
@@ -105,6 +116,33 @@ class InteractiveTable extends Component {
     }
 
     /**
+     * Gets called when the remove button is clicked. Removes the according
+     *  dropdown from state.
+     */
+    subtractHospital = (senderId) => {
+        let index;
+
+		for (let hD of this.state.hospitalDropdowns) {
+			if (hD.props.children[0].props.id === senderId) {
+				index = this.state.hospitalDropdowns.indexOf(hD);
+			}
+		}
+
+        let updSelHos1 = this.state.selectedHospitals.slice(0, index);
+        let updSelHos2 = this.state.selectedHospitals.slice(index + 1, this.state.selectedHospitals.length);
+        let updSelHos = updSelHos1.concat(updSelHos2);
+
+        let updHosDrp1 = this.state.hospitalDropdowns.slice(0, index);
+        let updHosDrp2 = this.state.hospitalDropdowns.slice(index + 1, this.state.hospitalDropdowns.length);
+        let updHosDrp = updHosDrp1.concat(updHosDrp2);
+
+        this.setState({
+			selectedHospitals: updSelHos,
+			hospitalDropdowns: updHosDrp
+		});
+    }
+
+    /**
      * Called when a hospital is selected on a dropdown menu. It uses the id of
      *  the dropdown that called this function to identify it's index in the
      *  dropdowns array and update its displayed text. The index is as well used
@@ -115,7 +153,7 @@ class InteractiveTable extends Component {
         let index;
 
         for (let hD of this.state.hospitalDropdowns) {
-            if (hD.props.children.props.id === senderId) {
+            if (hD.props.children[0].props.id === senderId) {
                 index = this.state.hospitalDropdowns.indexOf(hD);
             }
         }
@@ -123,7 +161,7 @@ class InteractiveTable extends Component {
         this.setState({
             // selectedHospitals : newList
             selectedHospitals: update(this.state.selectedHospitals, {[index]: {$set: item}}),
-            hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {children: {props: {selectedItem: {$set: item}}}}}})
+            hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
         });
     }
 
@@ -135,6 +173,8 @@ class InteractiveTable extends Component {
         let newVariables = [];
         let newSelectedVariables = [];
 
+        let nextVariableId = this.state.nextVariableId + "";
+
         let newSelectedVariable = {};
         let newDrp = (
             <div className="variableDropdown" key={this.state.nextVariableId}>
@@ -144,6 +184,7 @@ class InteractiveTable extends Component {
                     selectedItem={undefined}
                     defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
+            <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>-</button>
             </div>
         );
 
@@ -161,6 +202,33 @@ class InteractiveTable extends Component {
     }
 
     /**
+     * Gets called when the remove button is clicked. Removes the according
+     *  dropdown from state.
+     */
+    subtractVariable = (senderId) => {
+        let index;
+
+		for (let vD of this.state.variableDropdowns) {
+			if (vD.props.children[0].props.id === senderId) {
+				index = this.state.variableDropdowns.indexOf(vD);
+			}
+		}
+
+        let updSelVar1 = this.state.selectedVariables.slice(0, index);
+        let updSelVar2 = this.state.selectedVariables.slice(index + 1, this.state.selectedVariables.length);
+        let updSelVar = updSelVar1.concat(updSelVar2);
+
+        let updVarDrp1 = this.state.variableDropdowns.slice(0, index);
+        let updVarDrp2 = this.state.variableDropdowns.slice(index + 1, this.state.variableDropdowns.length);
+        let updVarDrp = updVarDrp1.concat(updVarDrp2);
+
+        this.setState({
+			selectedVariables: updSelVar,
+			variableDropdowns: updVarDrp
+		});
+    }
+
+    /**
      * Called when a variable is selected on a dropdown menu. It uses the id of
      *  the dropdown that called this function to identify it's index in the
      *  dropdowns array and update its displayed text. The index is as well used
@@ -171,14 +239,14 @@ class InteractiveTable extends Component {
 		let index;
 
 		for (let vD of this.state.variableDropdowns) {
-			if (vD.props.children.props.id === senderId) {
+			if (vD.props.children[0].props.id === senderId) {
 				index = this.state.variableDropdowns.indexOf(vD);
 			}
 		}
 
 		this.setState({
 			selectedVariables: update(this.state.selectedVariables, {[index]: {$set: item}}),
-			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {props: {selectedItem: {$set: item}}}}}})
+			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
 		});
 	}
 
@@ -226,6 +294,8 @@ class InteractiveTable extends Component {
  *
  * variables: list of variables one can choose from
  * hospitals: list of hospitals one can choose from
+ * requestData: function that will be called to download the requested data
+ * hasLoaded: bool that will be true if the data is loaded
  */
 InteractiveTable.propTypes = {
     variables: PropTypes.array.isRequired,
