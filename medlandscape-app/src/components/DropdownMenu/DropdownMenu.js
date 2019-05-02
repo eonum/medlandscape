@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './DropdownMenu.css';
+import { withTranslation } from "react-i18next";
 
 /**
 * DropdownMenu-Component that contains a search bar to filter the displayed
@@ -82,11 +83,13 @@ class DropdownMenu extends Component {
             varText = this.props.defaultText;
         }
 
+        const {t} = this.props;
+
         return (
             <div className="dropdown">
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
-                    <input type="text" placeholder="Suchen..." className="searchbar" onKeyUp={this.filterFunction.bind(this)} />
+                    <input type="text" placeholder={t('dropDowns.search')} className="searchbar" onKeyUp={this.filterFunction.bind(this)} />
                     {
                         this.props.listItems.map((item) => (
                             <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.text ? item.text : item.name}</div>
@@ -112,4 +115,5 @@ DropdownMenu.propTypes = {
     selectedItem: PropTypes.object.isRequired,
 }
 
-export default DropdownMenu;
+const LocalizedDropdownMenu = withTranslation()(DropdownMenu);
+export default LocalizedDropdownMenu;

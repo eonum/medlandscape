@@ -11,7 +11,8 @@
         "hospitalFallback": "Spital wählen",
         "cantonFallback": "Kanton wählen",
         "variablesFallback": "Kennzahl wählen",
-        "filterFallback": "Filter wählen"
+        "filterFallback": "Filter wählen",
+        "search" : "Suchen..."
     },
     "tableView": {
         "title": "Tabelle"

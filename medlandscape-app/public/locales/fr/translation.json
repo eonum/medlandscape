@@ -11,7 +11,8 @@
         "hospitalFallback": "Choisir Hôpital",
         "cantonFallback": "Choisir Canton",
         "variablesFallback": "Choisir Variable",
-        "filterFallback": "Choisir filtre"
+        "filterFallback": "Choisir filtre",
+        "search" : "Chercher..."
     },
     "tableView": {
         "title": "Tableau"
