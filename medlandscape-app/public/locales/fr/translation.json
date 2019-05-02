@@ -3,12 +3,12 @@
         "title": "Carte",
         "variables" : "Variable seléctionnée",
         "cantons": "Cantons",
-        "hospitals": "Hopitaux",
+        "hospitals": "Hôpitaux",
         "filter": "Filtre seléctionné",
         "checkbox": "Options"
     },
     "dropDowns":{
-        "hospitalFallback": "Choisir Hopital",
+        "hospitalFallback": "Choisir Hôpital",
         "cantonFallback": "Choisir Canton",
         "variablesFallback": "Choisir Variable",
         "filterFallback": "Choisir filtre"
@@ -27,5 +27,10 @@
     },
     "interactive_table": {
         "btn_create_table": "Créer tableau"
+    },
+    "popup": {
+        "address": "Adresse",
+        "hospital": "Hôpital",
+        "canton": "Canton"
     }
 }
