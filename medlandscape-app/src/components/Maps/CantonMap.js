@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
+import { withTranslation } from 'react-i18next';
 
 class CantonMap extends Component {
 
@@ -25,8 +26,8 @@ class CantonMap extends Component {
 			"color": "rgb("+color+")", // outline color
     		"fillColor": "rgb("+color+")",
     		"weight": 3,  // defining how big the outline of canton is
-    		"opacity": 0.4, // outline opacity
-    		"fillOpacity": 0.6
+    		"opacity": 0.6, // outline opacity
+    		"fillOpacity": 0.8
 			};
 		return cantonStyle;
 	}
@@ -139,7 +140,8 @@ class CantonMap extends Component {
 	*/
 	onClick = (item, e) => {
 		e.target.closeTooltip();
-		const popup =   "<table><tr><td>" + "Kanton:" + "</td><td>" + item.text + " (" + item.name + ")" + "</td></tr>"
+		let canton = this.props.t("popup.canton"); // translation for "address"
+		const popup =   "<table><tr><td>" + canton + "</td><td>" + item.text + " (" + item.name + ")" + "</td></tr>"
 						+ "<tr><td>" + this.props.variableInfo.text + ":" + "</td><td>" + this.props.returnData(item) + "</td></tr></table>";
 		const popupOptions = {
 		    'maxWidth': '250',
@@ -199,4 +201,6 @@ class CantonMap extends Component {
 		)
 	}
 }
-export default CantonMap;
+
+const LocalizedCantonMap = withTranslation()(CantonMap);
+export default LocalizedCantonMap;

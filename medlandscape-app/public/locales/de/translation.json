@@ -28,5 +28,10 @@
     },
     "interactive_table": {
         "btn_create_table": "Tabelle generieren"
+    },
+    "popup": {
+        "address": "Adresse",
+        "hospital": "Spital",
+        "canton": "Kanton"
     }
 }

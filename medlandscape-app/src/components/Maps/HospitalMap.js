@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { CircleMarker, Popup, LayerGroup, Tooltip } from 'react-leaflet'
+import { withTranslation } from 'react-i18next';
 
 class HospitalMap extends Component {
 
@@ -41,8 +42,10 @@ class HospitalMap extends Component {
 	*/
 	onClick = (item, e) => {
 		e.target.closeTooltip();
-		const popup =   "<table><tr><td>" + "Spital:" + "</td><td>"+ item.name + "</td></tr>"
-						+ "<tr><td>" + "Adresse:" + "</td><td><dd>" + item.street + ", </dd>" + item.city + "</td></tr>"
+		let address = this.props.t("popup.address"); // translation for "address"
+		let hospital = this.props.t("popup.hospital"); // translation for "hospital"
+		const popup =   "<table><tr><td>" + hospital + "</td><td>"+ item.name + "</td></tr>"
+						+ "<tr><td>" + address + "</td><td><dd>" + item.street + ", </dd>" + item.city + "</td></tr>"
 						+ "<tr><td>" + this.props.variableInfo.text + ":</td><td>"+ this.props.returnData(item) + "</td></tr></table>";
 		const popupOptions = {
 			'maxWidth': '250',
@@ -100,4 +103,5 @@ class HospitalMap extends Component {
 		)
 	}
 }
-export default HospitalMap;
+const LocalizedHospitalMap = withTranslation()(HospitalMap);
+export default LocalizedHospitalMap;
