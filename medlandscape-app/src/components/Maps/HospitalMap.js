@@ -37,9 +37,9 @@ class HospitalMap extends Component {
 
 	/**
 	* Changes hospital style if you hover on a hospital with your mouse
-	* @param {Object} e = the circlemarker (hospital) object you are hovering over
+	* @param {Object} e the event
 	*/
-	onMouseOver = (e) => {
+	setNewStyle = (e) => {
 		e.target.setStyle({
 			color: '#1996fa',
 			opacity: 1
@@ -48,9 +48,18 @@ class HospitalMap extends Component {
 
 	/**
 	* Set back hospital style if you hover off a hospital with your mouse
-	* @param {Object} e = the circlemarker (hospital) object you are hovering off
+	* @param {Object} e the event
 	*/
 	onMouseOut = (e) => {
+		if (!e.target.isPopupOpen())
+			this.resetStyle(e);
+	}
+
+	/**
+	* Set back hospital style
+	* @param {Object} e the event
+	*/
+	resetStyle = (e) => {
 		const oldColor = this.calculateCircleColor();
 		e.target.setStyle({color: oldColor});
 	}
@@ -72,8 +81,10 @@ class HospitalMap extends Component {
         					opacity = "0.8"
         					weight = "1" // defining how big the outer line of circle is
         					radius={this.getNormedRadius(item)} // norming function is here
-							onMouseOver = {this.onMouseOver.bind(this)}
+							onMouseOver = {this.setNewStyle.bind(this)}
 							onMouseOut = {this.onMouseOut.bind(this)}
+							onClick = {this.setNewStyle.bind(this)}
+							onPopupClose = {this.resetStyle.bind(this)}
         				>
         					<Tooltip>
         						{item.name}

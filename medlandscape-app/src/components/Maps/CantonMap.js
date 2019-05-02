@@ -135,7 +135,7 @@ class CantonMap extends Component {
 
 	/**
 	* Changes canton style if you hover on a canton with your mouse
-	* @param {Object} e = the geoJSON object (canton) you are hovering over
+	* @param {Object} e the event
 	*/
 	onMouseOver = (e) => {
 		e.target.setStyle({
@@ -148,9 +148,19 @@ class CantonMap extends Component {
 	/**
 	* Set back canton style if you hover off a canton with your mouse
 	* @param {Object} item = the canton you are hovering off
-	* @param {Object} e = the geoJSON object (canton) you are hovering off
+	* @param {Object} e the event
 	*/
 	onMouseOut = (item, e) => {
+		if (!e.target.isPopupOpen())
+		this.resetStyle(item, e);
+	}
+
+	/**
+	* Set back canton style
+	* @param {Object} item = the canton
+	* @param {Object} e the event
+	*/
+	resetStyle = (item, e) => {
 		const style = this.getCantonStyle(item);
 		e.target.setStyle(style);
 	}
@@ -166,12 +176,12 @@ class CantonMap extends Component {
 					{
 						this.props.data.map((item) => (
 							<GeoJSON
-								ref="geojson"
 								key = {this.props.data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
 								onMouseOver = {this.onMouseOver.bind(this)}
 								onMouseOut = {this.onMouseOut.bind(this, item)}
+								onPopupClose = {this.resetStyle.bind(this, item)}
 								>
 								<Tooltip>
 									{item.text + " (" + item.name + ")"}
