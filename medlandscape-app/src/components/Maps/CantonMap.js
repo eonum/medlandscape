@@ -134,24 +134,6 @@ class CantonMap extends Component {
 	}
 
 	/**
-	* Open an info popup if you click on a canton with your mouse
-	* @param {Object} item = the canton you are clicking
-	* @param {Object} e = the geoJSON object you are clicking
-	*/
-	onClick = (item, e) => {
-		e.target.closeTooltip();
-		let canton = this.props.t("popup.canton"); // translation for "address"
-		const popup =   "<table><tr><td>" + canton + "</td><td>" + item.text + " (" + item.name + ")" + "</td></tr>"
-						+ "<tr><td>" + this.props.variableInfo.text + ":" + "</td><td>" + this.props.returnData(item) + "</td></tr></table>";
-		const popupOptions = {
-		    'maxWidth': '250',
-			'closeButton': false,
-		}
-		e.layer.bindPopup(popup, popupOptions);
-		e.layer.openPopup();
- 	}
-
-	/**
 	* Changes canton style if you hover on a canton with your mouse
 	* @param {Object} e = the geoJSON object (canton) you are hovering over
 	*/
@@ -174,8 +156,10 @@ class CantonMap extends Component {
 	}
 
 	/**
-	* Draws cantons on the Map
-	*/
+	 * Draws cantons on the map
+	 * Adds popup an tooltip with canton information to each geoJSON
+	 * @return {JSX}
+	 */
     render() {
 		return (
 				<LayerGroup>
@@ -186,13 +170,27 @@ class CantonMap extends Component {
 								key = {this.props.data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
-								onClick = {this.onClick.bind(this, item)}
 								onMouseOver = {this.onMouseOver.bind(this)}
 								onMouseOut = {this.onMouseOut.bind(this, item)}
 								>
 								<Tooltip>
 									{item.text + " (" + item.name + ")"}
 								</Tooltip>
+								<Popup
+									maxWidth = "250"
+									closeButton = {false}
+								>
+									<table>
+										<tr>
+											<td>{this.props.t("popup.canton")}</td>
+											<td>{item.text} ({item.name})</td>
+										</tr>
+										<tr>
+											<td>{this.props.variableInfo.text}:</td>
+											<td>{this.props.returnData(item)}</td>
+										</tr>
+									</table>
+								</Popup>
 							</GeoJSON>
 						))
 					}

@@ -36,25 +36,6 @@ class HospitalMap extends Component {
 	}
 
 	/**
-	*  Open an info popup if you click on a hospital with your mouse
-	* @param {Object} item = the hospital you are clicking
-	* @param {Object} e = the circlemarker object you are clicking
-	*/
-	onClick = (item, e) => {
-		e.target.closeTooltip();
-		let address = this.props.t("popup.address"); // translation for "address"
-		let hospital = this.props.t("popup.hospital"); // translation for "hospital"
-		const popup =   "<table><tr><td>" + hospital + "</td><td>"+ item.name + "</td></tr>"
-						+ "<tr><td>" + address + "</td><td><dd>" + item.street + ", </dd>" + item.city + "</td></tr>"
-						+ "<tr><td>" + this.props.variableInfo.text + ":</td><td>"+ this.props.returnData(item) + "</td></tr></table>";
-		const popupOptions = {
-			'maxWidth': '250',
-			'closeButton': false,
-		}
-		e.target.bindPopup(popup, popupOptions);
-		e.target.openPopup();
- 	}
-	/**
 	* Changes hospital style if you hover on a hospital with your mouse
 	* @param {Object} e = the circlemarker (hospital) object you are hovering over
 	*/
@@ -76,6 +57,8 @@ class HospitalMap extends Component {
 
     /**
      * Creates circles to represent hospitals on a Map
+	 * Adds popup an tooltip with hospital information to each circle
+	 * @return {JSX}
      */
 	render() {
 		return (
@@ -89,13 +72,31 @@ class HospitalMap extends Component {
         					opacity = "0.8"
         					weight = "1" // defining how big the outer line of circle is
         					radius={this.getNormedRadius(item)} // norming function is here
-        					onClick = {this.onClick.bind(this, item)}
 							onMouseOver = {this.onMouseOver.bind(this)}
 							onMouseOut = {this.onMouseOut.bind(this)}
         				>
         					<Tooltip>
         						{item.name}
         					</Tooltip>
+							<Popup
+								maxWidth = "250"
+								closeButton = {false}
+							>
+								<table>
+									<tr>
+										<td>{this.props.t("popup.hospital")}</td>
+										<td>{item.name}</td>
+									</tr>
+									<tr>
+										<td>{this.props.t("popup.address")}</td>
+										<td><dd>{item.street},</dd>{item.city}</td>
+									</tr>
+									<tr>
+										<td>{this.props.variableInfo.text}:</td>
+										<td>{this.props.returnData(item)}</td>
+									</tr>
+								</table>
+							</Popup>
         				</CircleMarker>
       	             ))
 				}
