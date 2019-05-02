@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Map, TileLayer } from 'react-leaflet'
 import './Maps.css';
 
+import MapInfo from '../MapInfo/MapInfo.js';
 import TestComponent from './TestComponent.js';
 import HospitalMap from './HospitalMap.js';
 import CantonMap from './CantonMap.js';
@@ -86,11 +87,32 @@ class Maps extends Component {
 	render() {
         let ready = (this.props.hasLoaded && this.isNormable());
         let componentToRender = null;
+        let mapInfo = null;
 
         if (ready && this.props.view === 1) {
-          componentToRender = (this.props.variableInfo.variable_model === "Canton")
-          ? <CantonMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} variableInfo={this.props.variableInfo} />
-          : <HospitalMap data={this.props.objects} returnData={this.returnData} maxAndMin={this.setMaxAndMin()} variableInfo={this.props.variableInfo}/>
+            mapInfo = (
+                <MapInfo
+                    year={this.props.year}
+                    selectedVariable={this.props.variableInfo}
+                    nrOfObjects={this.props.objects.length}
+                />
+            )
+            componentToRender = (this.props.variableInfo.variable_model === "Canton")
+            ? (
+                <CantonMap
+                    data={this.props.objects}
+                    returnData={this.returnData}
+                    maxAndMin={this.setMaxAndMin()}
+                    variableInfo={this.props.variableInfo}
+                />
+            )
+            : (
+                <HospitalMap data={this.props.objects}
+                    returnData={this.returnData}
+                    maxAndMin={this.setMaxAndMin()}
+                    variableInfo={this.props.variableInfo}
+                />
+            );
         }
 
         return (
@@ -105,6 +127,7 @@ class Maps extends Component {
         			attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         			url="https://api.mapbox.com/styles/v1/nathi/cjf8cggx93p3u2qrqrgwoh5nh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF0aGkiLCJhIjoiY2pmOGJ4ZXJmMXMyZDJ4bzRoYWRxbzhteCJ9.x2dbGjsVZTA9HLw6VWaQow"
         		/>
+                {mapInfo}
         		{componentToRender}
         	</Map>
         )

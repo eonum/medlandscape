@@ -7,7 +7,7 @@
         "filter": "Ausgewählter Filter",
         "checkbox": "Werte"
     },
-    "dropDowns":{
+    "dropDowns": {
         "hospitalFallback": "Spital wählen",
         "cantonFallback": "Kanton wählen",
         "variablesFallback": "Kennzahl wählen",
@@ -33,5 +33,12 @@
         "address": "Adresse",
         "hospital": "Spital",
         "canton": "Kanton"
+    },
+    "mapInfo": {
+        "map": "Angezeigte Karte",
+        "hospitals": "Spitäler",
+        "cantons": "Kantone",
+        "year": "Jahr",
+        "filter": "Angezeigte"
     }
 }
