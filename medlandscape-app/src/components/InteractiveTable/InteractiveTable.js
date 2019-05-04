@@ -180,7 +180,6 @@ class InteractiveTable extends Component {
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
                     selectedItem={undefined}
-                    defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
             <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>-</button>
             </div>
