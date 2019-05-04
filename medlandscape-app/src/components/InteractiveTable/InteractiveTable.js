@@ -69,9 +69,7 @@ class InteractiveTable extends Component {
 
 
     /**
-     * componentDidMount - Should add a dropdown on each dimension by default.
-     *  this however does not work yet because the first dropdown is always
-     *  empty (guess this has to do with the filtering in App.js's render())
+     * componentDidMount - Adds a dropdown on each dimension by default.
      */
     componentDidMount() {
         this.addHospital();

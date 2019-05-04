@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Table from '../../Table/Table.js'
 import './ResultTable.css';
+import { withTranslation } from 'react-i18next';
 
 /**
  * Represents the part of the table which displays the results
@@ -22,7 +23,7 @@ class ResultTable extends Component {
             for (let hosp of this.props.selectedHospitals) {
                 if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
                     shouldGenerate = false;
-                    window.alert('please select something')
+                    window.alert(this.props.t('tableView.selectSomethingAlert'));
                     break;
                 }
             }
@@ -30,7 +31,7 @@ class ResultTable extends Component {
                 for (let variable of this.props.selectedVariables) {
                     if (Object.keys(variable).length === 0 && variable.constructor === Object) {
                         shouldGenerate = false;
-                        window.alert('please select something')
+                        window.alert(this.props.t('tableView.selectSomethingAlert'));
                         break;
                     }
                 }
@@ -91,4 +92,5 @@ ResultTable.propTypes = {
     hospitalData: PropTypes.array.isRequired,
 }
 
-export default ResultTable;
+const LocalizedResultTable = withTranslation()(ResultTable);
+export default LocalizedResultTable;

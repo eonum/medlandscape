@@ -15,7 +15,8 @@
         "search" : "Chercher..."
     },
     "tableView": {
-        "title": "Tableau"
+        "title": "Tableau",
+        "selectSomethingAlert": "Veuillez sélectionner quelque chose dans chaque menu déroulant"
     },
     "graphView": {
         "title": "Graph"
