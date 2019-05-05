@@ -16,7 +16,11 @@
     },
     "tableView": {
         "title": "Tabelle",
-        "selectSomethingAlert": "Bitte wählen Sie in jedem Dropdown Menü etwas aus"
+        "selectSomethingAlert": "Bitte wählen Sie in jedem Dropdown Menü etwas aus",
+        "sortAsc": "Aufsteigend",
+        "sortDesc": "Absteigend",
+        "btnCreateTable": "Tabelle generieren",
+        "btnAddAllHospitals": "Alle Spitäler hinzufügen"
     },
     "graphView": {
         "title": "Graph"
@@ -26,9 +30,6 @@
     },
     "localization_example": {
         "example": "Hallo Brudi"
-    },
-    "interactive_table": {
-        "btn_create_table": "Tabelle generieren"
     },
     "popup": {
         "address": "Adresse",

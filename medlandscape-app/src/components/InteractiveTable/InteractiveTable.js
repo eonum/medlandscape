@@ -80,13 +80,16 @@ class InteractiveTable extends Component {
      * Creates a new dropdown menu to select a hospital to display, with a new
      *  unique id. Then updates the state accordingly.
      */
-    addHospital = () => {
+    addHospital = (selectedHosp) => {
         let newDropdowns = [];
         let newSelectedHospitals = [];
 
         let nextHospitalId = this.state.nextHospitalId + "";
 
         let newSelectedHospital = {};
+        if (selectedHosp) {
+            newSelectedHospital = selectedHosp;
+        }
         let newDropdown = (
             <div className='hospitalDropdown' key={this.state.nextHospitalId}>
                 <DropdownMenu id={this.state.nextHospitalId}
@@ -122,6 +125,7 @@ class InteractiveTable extends Component {
 		for (let hD of this.state.hospitalDropdowns) {
 			if (hD.props.children[0].props.id === senderId) {
 				index = this.state.hospitalDropdowns.indexOf(hD);
+                break;
 			}
 		}
 
@@ -152,6 +156,7 @@ class InteractiveTable extends Component {
         for (let hD of this.state.hospitalDropdowns) {
             if (hD.props.children[0].props.id === senderId) {
                 index = this.state.hospitalDropdowns.indexOf(hD);
+                break;
             }
         }
 
@@ -209,6 +214,7 @@ class InteractiveTable extends Component {
 		for (let vD of this.state.variableDropdowns) {
 			if (vD.props.children[0].props.id === senderId) {
 				index = this.state.variableDropdowns.indexOf(vD);
+                break;
 			}
 		}
 
@@ -317,6 +323,7 @@ class InteractiveTable extends Component {
 		for (let vD of this.state.variableDropdowns) {
 			if (vD.props.children[0].props.id === senderId) {
 				index = this.state.variableDropdowns.indexOf(vD);
+                break;
 			}
 		}
 
@@ -325,6 +332,18 @@ class InteractiveTable extends Component {
 			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
 		});
 	}
+
+    addAllHospitals = () => {
+        for (let hosp of this.props.hospitals) {
+            this.sleep(0.5).then(() => {
+                this.addHospital(hosp);
+            });
+        }
+    }
+
+    sleep = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     /**
      * render - renders the component to the screen
@@ -358,7 +377,11 @@ class InteractiveTable extends Component {
                 />
                 <button
                     className="btnGenerateTable"
-                    onClick={() => this.props.requestData(this.state.selectedVariables)}>{t('interactive_table.btn_create_table')}
+                    onClick={() => this.props.requestData(this.state.selectedVariables)}>{t('tableView.btnCreateTable')}
+                </button>
+                <button
+                    className="btnAddAllHospitals"
+                    onClick={() => this.addAllHospitals()}>{t('tableView.btnAddAllHospitals')}
                 </button>
 			</div>
         );
