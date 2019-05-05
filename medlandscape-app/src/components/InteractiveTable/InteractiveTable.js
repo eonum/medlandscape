@@ -92,10 +92,9 @@ class InteractiveTable extends Component {
                 <DropdownMenu id={this.state.nextHospitalId}
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
-                    selectedItem={undefined}
-                    defaultText={this.props.t('dropDowns.hospitalFallback')}
+                    selectedItem={newSelectedHospital}
                 />
-            <button className="btnSubtractVariable" onClick={() => this.subtractHospital(nextHospitalId)}>-</button>
+            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(nextHospitalId)}>-</button>
             </div>
         );
 
@@ -179,9 +178,11 @@ class InteractiveTable extends Component {
                 <DropdownMenu id={this.state.nextVariableId}
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
-                    selectedItem={undefined}
+                    selectedItem={newSelectedVariable}
                 />
-            <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>-</button>
+                <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>-</button>
+                <button className="btnSortAsc" onClick={() => this.sortHospitals(nextVariableId, 'asc')}>{this.props.t('tableView.sortAsc')}</button>
+                <button className="btnSortDesc" onClick={() => this.sortHospitals(nextVariableId, 'desc')}>{this.props.t('tableView.sortDesc')}</button>
             </div>
         );
 
@@ -223,6 +224,84 @@ class InteractiveTable extends Component {
 			selectedVariables: updSelVar,
 			variableDropdowns: updVarDrp
 		});
+    }
+
+    /**
+     * Sorts selectedHospitals and hospitalDropdowns according to their value on
+     *  the variable with senderId.
+     *
+     * @param {String} senderId the id of the variable according to which the
+     *  hospitals should be sorted
+     * @param {String} order either 'asc' for sorting in ascending order or 'desc'
+     *  for sorting in descending order
+     */
+    sortHospitals = (senderId, order) => {
+        // first get the whole variable object using the senderId
+        let senderIndex;
+
+		for (let vD of this.state.variableDropdowns) {
+			if (vD.props.children[0].props.id === senderId) {
+				senderIndex = this.state.variableDropdowns.indexOf(vD);
+			}
+		}
+
+        let variable = this.state.selectedVariables[senderIndex];
+
+        // then create an array containing arrays of length 2 that contain the
+        // index of the selectedHospital and its value on the variable
+        let selectedHospitals = this.state.selectedHospitals;
+        let referenceArr = [];
+
+
+        for (let i = 0; i < selectedHospitals.length; i++) {
+            let currentHosp;
+            for (let hosp of this.props.hospitals) {
+                if (hosp.name === selectedHospitals[i].name) {
+                    currentHosp = hosp;
+                    break;
+                }
+            }
+            const latestYear = Object.keys(currentHosp.attributes[variable.name])
+                .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+            let attributes = currentHosp.attributes[variable.name];
+            referenceArr.push([i, attributes[latestYear]]);
+        }
+
+        // then sort this array according to the value on the variable
+        const sortFunction = (
+            function sortFunction(a, b) {
+                if (a[1] === b[1]) { return 0; }
+                else {
+                    if (order === 'asc') {
+                        return (a[1] < b[1]) ? -1 : 1;
+                    }
+                    else {
+                        return (a[1] > b[1]) ? -1 : 1;
+                    }
+                }
+            }
+        );
+
+        referenceArr.sort(sortFunction);
+
+        // according to the indices in the referenceArr, fill new sorted arrays
+        // for dropdowns and selected hospitals
+        let newHospitalDropdowns = [];
+        let newSelectedHospitals = [];
+
+        for (let i = 0; i < referenceArr.length; i++) {
+            let index = referenceArr[i][0];
+            newSelectedHospitals.push(selectedHospitals[index]);
+            newHospitalDropdowns.push(this.state.hospitalDropdowns[index]);
+        }
+
+        // then set the state
+        this.setState({
+            hospitalDropdowns : newHospitalDropdowns,
+            selectedHospitals : newSelectedHospitals
+        });
+
+        this.props.retriggerTableGeneration();
     }
 
     /**
@@ -293,12 +372,15 @@ class InteractiveTable extends Component {
  * hospitals: list of hospitals one can choose from
  * requestData: function that will be called to download the requested data
  * hasLoaded: bool that will be true if the data is loaded
+ * retriggerTableGeneration: will cause resultTable to regenerate its table
+ *  without resending a request
  */
 InteractiveTable.propTypes = {
     variables: PropTypes.array.isRequired,
     hospitals: PropTypes.array.isRequired,
     requestData: PropTypes.func.isRequired,
     hasLoaded: PropTypes.bool.isRequired,
+    retriggerTableGeneration: PropTypes.func.isRequired,
 }
 
 const LocalizedInteractiveTable = withTranslation()(InteractiveTable);

@@ -36,6 +36,12 @@ class CentralPanel extends Component {
         });
     }
 
+    retriggerTableGeneration = () => {
+        this.setState({
+            tableDataLoaded : true
+        });
+    }
+
     render() {
 
         let hospitalVars = this.props.variables.filter(variable => {
@@ -49,6 +55,7 @@ class CentralPanel extends Component {
                 requestData={this.requestTableData}
                 tableDataLoaded={this.state.tableDataLoaded}
                 tableDataGenerated={this.tableDataGenerated}
+                retriggerTableGeneration={this.retriggerTableGeneration}
                 hasLoaded={this.props.hasLoaded}
             />
         );
