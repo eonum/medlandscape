@@ -59,7 +59,7 @@ class CentralPanel extends Component {
 			<BoxPlot
 				objects={this.props.objects}
                 variableInfo={this.props.variableInfo}
-                year={this.props.selectedYear}
+                year={this.props.year}
                 hasLoaded={this.props.hasLoaded}
 			/>	
 		);
