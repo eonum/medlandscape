@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import InteractiveTable from '../InteractiveTable/InteractiveTable.js';
 import BoxPlot from '../Graphs/BoxPlot.js';
+import LinearRegression from '../Graphs/LinearRegression.js';
 import './centralPanel.css'
 
 const apiURL = "https://qm1.ch/";
@@ -55,13 +56,20 @@ class CentralPanel extends Component {
         );
 		
 		let graphView = (
-			
-			<BoxPlot
-				objects={this.props.objects}
-                variableInfo={this.props.variableInfo}
-                year={this.props.year}
-                hasLoaded={this.props.hasLoaded}
-			/>	
+			<div>
+				<BoxPlot
+					objects={this.props.objects}
+					variableInfo={this.props.variableInfo}
+					year={this.props.year}
+					hasLoaded={this.props.hasLoaded}
+				/>
+				<LinearRegression
+					objects={this.props.objects}
+					variableInfo={this.props.variableInfo}
+					year={this.props.year}
+					hasLoaded={this.props.hasLoaded}
+				/>
+			</div>
 		);
 
         let mainView;
