@@ -18,15 +18,12 @@ class Maps extends Component {
 
 	/**
      * Returns the values stored in a this.props.objects canton/hospital
-     * !! Currently always returns firstEntry (first available year)
      * @param  {Canton || Hospital Object} item The object to extract the values from
      * @return {int || float} The selected entry in the item.values object
      */
 	returnData = (item) => {
         let varName = this.props.variableInfo.name;
 		let values = item.attributes[varName];
-        //let data = (values[this.props.year]) ? values[this.props.year] : 0;
-        // CMI brutto, siehe Wallis
         let data = (values[this.props.year]);
 		return data;
 	}
