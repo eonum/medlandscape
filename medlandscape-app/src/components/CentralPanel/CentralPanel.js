@@ -55,8 +55,12 @@ class CentralPanel extends Component {
         );
 		
 		let graphView = (
+			
 			<BoxPlot
-				
+				objects={this.props.objects}
+                variableInfo={this.props.variableInfo}
+                year={this.props.selectedYear}
+                hasLoaded={this.props.hasLoaded}
 			/>	
 		);
 

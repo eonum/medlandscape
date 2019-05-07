@@ -185,6 +185,10 @@ class App extends Component {
                     hospitals={this.state.hospitals}
                     hasLoaded={this.state.hasLoaded}
                     fetchData={this.applyVariables}
+					
+					objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons}
+                    variableInfo={this.state.selectedVariable}
+                    year={this.state.selectedYear}
                 />
             )
             : null
