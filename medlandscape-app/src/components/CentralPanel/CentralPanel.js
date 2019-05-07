@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import InteractiveTable from '../InteractiveTable/InteractiveTable.js';
+import BoxPlot from '../Graphs/BoxPlot.js';
 import './centralPanel.css'
 
 const apiURL = "https://qm1.ch/";
@@ -52,6 +53,12 @@ class CentralPanel extends Component {
                 hasLoaded={this.props.hasLoaded}
             />
         );
+		
+		let graphView = (
+			<BoxPlot
+				
+			/>	
+		);
 
         let mainView;
         switch (this.props.view) {
@@ -59,7 +66,7 @@ class CentralPanel extends Component {
                 mainView = tableView;
                 break;
             case 3:
-                mainView = null;
+                mainView = graphView;
                 break;
             default:
                 mainView = null;
