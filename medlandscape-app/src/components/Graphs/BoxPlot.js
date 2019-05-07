@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import * as d3 from "d3";
 
 class BoxPlot extends Component {
+
 	componentDidMount(){
 		if (this.props.hasLoaded)
 			this.drawChart();
 	}
 
 	/**
-	 * Drawing a BoxPlot
+	 * Draws a BoxPlot
 	 */
 	drawChart() {
 		// set the dimensions and margins of the graph
@@ -22,12 +23,10 @@ class BoxPlot extends Component {
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 			.append("g")
-			.attr("transform",
-			"translate(" + margin.left + "," + margin.top + ")");
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 		// create dummy data
 		let data = this.makeDataArray();
-		console.log(data);
 		let minVal = Math.min(...data);
 		let maxVal = Math.max(...data);
 
@@ -42,9 +41,8 @@ class BoxPlot extends Component {
 
 		// Show the Y scale
 		var y = d3.scaleLinear()
-		  .domain([minVal,maxVal])
-		  .range([height, 0])
-		  .interpolate(d3.interpolateRound);
+			.domain([minVal,maxVal])
+			.range([height, 0])
 		svg.call(d3.axisLeft(y))
 
 		// a few features for the box
@@ -52,30 +50,27 @@ class BoxPlot extends Component {
 		var width = 100
 
 		// Show the main vertical line
-		svg
-		.append("line")
-		  .attr("x1", center)
-		  .attr("x2", center)
-		  .attr("y1", y(min) )
-		  .attr("y2", y(max) )
-		  .attr("stroke", "black")
+		svg.append("line")
+			.attr("x1", center)
+			.attr("x2", center)
+			.attr("y1", y(min) )
+			.attr("y2", y(max) )
+			.attr("stroke", "black")
 
 		// Show the box
-		svg
-		.append("rect")
-		  .attr("x", center - width/2)
-		  .attr("y", y(q3) )
-		  .attr("height", (y(q1)-y(q3)) )
-		  .attr("width", width )
-		  .attr("stroke", "black")
-		  .style("fill", "#69b3a2")
+		svg.append("rect")
+			.attr("x", center - width/2)
+			.attr("y", y(q3) )
+			.attr("height", (y(q1)-y(q3)) )
+			.attr("width", width )
+			.attr("stroke", "black")
+			.style("fill", "#69b3a2")
 
 		// show median, min and max horizontal lines
-		svg
-		.selectAll("toto")
-		.data([min, median, max])
-		.enter()
-		.append("line")
+		svg.selectAll("toto")
+			.data([min, median, max])
+			.enter()
+			.append("line")
 			.attr("x1", center-width/2)
 			.attr("x2", center+width/2)
 			.attr("y1", function(d){ return(y(d))} )
