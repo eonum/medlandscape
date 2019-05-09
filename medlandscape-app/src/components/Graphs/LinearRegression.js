@@ -11,33 +11,65 @@ class LinearRegression extends Component {
         yVariable : undefined,
 	};
 
-
 	componentDidUpdate(){
+		// check if response is there and draw chart if so
 		if(this.props.tableDataLoaded)
 			this.drawChart();
 	}
 
+	/**
+	* Returns the values stored in a this.props.objects canton/hospital
+	* @param  {Canton || Hospital Object} item The object to extract the values from
+	* @return {Object} with x: Data for the xVariable and y: Data for the yVariable
+	*/
+   returnData = (item) => {
+	   let xVarName = this.state.xVariable.name;
+	   let yVarName = this.state.yVariable.name;
+	   let xValues = item.attributes[xVarName];
+	   let yValues = item.attributes[yVarName];
+	   let xData = xValues[this.props.year];
+	   let yData = yValues[this.props.year];
+	   return {
+		   x: xData,
+		   y: yData,
+	   };
+   }
 
-
-
+   /**
+	* Returns an Object with arrays containing all Values of the chosen variables
+	* @return {Object} with x: all data values for the xVariable and y: all data values for the yVariable
+	*/
+   makeDataArrays = () => {
+	   let xArray = [];
+	   let yArray = [];
+	   this.props.hospitals.map((obj) => {
+		   let data = this.returnData(obj);
+		   if (data.x && data.y){ // sort out undefined values for given year
+				xArray.push(data.x);
+				yArray.push(data.y);
+		   }
+	   })
+	   return {
+		   x: xArray,
+		   y: yArray,
+	   };
+   }
 
 	/**
 	 * Draws a Scatterplot with a regression line
 	 */
 	drawChart() {
-		console.log(this.props.hospitals);
-		
 		//remove old svg
 		d3.select("#linearregressionsvg").remove();
-		
+
 		var w = 960;
 		var h = 500;
 		var padding = 30;
 
 		//create data points
-		var dataset = this.create_data();
+		var dataset = this.createChartdata();
 
-		// function for creation of line
+		// function for creation of regression line
 		var newline = d3.line()
 			.x(function(d) {
 				return xScale(d.x);
@@ -55,10 +87,10 @@ class LinearRegression extends Component {
 		var yScale = d3.scaleLinear()
 			.domain([
 				d3.min(dataset, function(d){
-				  return(d.y);
+					return(d.y);
 				}),
 				d3.max(dataset, function(d){
-			  	return d.y;
+			  		return d.y;
 				})
 			]) //y range is reversed because svg
 			.range([h-padding, padding]);
@@ -70,9 +102,7 @@ class LinearRegression extends Component {
 		var yAxis = d3.axisLeft()
 			.scale(yScale)
 			.ticks(5);
-		
-		
-			
+
 		// create svg
 		var svg = d3.select("#linearregression")
 			.append("svg")
@@ -99,13 +129,12 @@ class LinearRegression extends Component {
 			.append("circle")
 			.attr("class", "dot")
 			.attr("cx", function(d){
-			  return xScale(d.x);
+				return xScale(d.x);
 			})
 			.attr("cy", function(d){
-			  return yScale(d.y);
+				return yScale(d.y);
 			})
 			.attr("r", 3.5);
-
 
 		// append regression line
 		svg.append("path")
@@ -124,42 +153,42 @@ class LinearRegression extends Component {
 			.attr("class", "y axis")
 			.attr("transform", "translate(" + padding + ",0)")
 			.call(yAxis);
-		
+
+		// call this to set back and prepare for reupdate
 		this.props.tableDataGenerated();
 	}
 
-	create_data = () => {
-		var x = [];
-		var y = [];
-		var n = 10;
-		var x_mean = 0;
-		var y_mean = 0;
-		var term1 = 0;
-		var term2 = 0;
+	createChartdata = () => {
+		let dataArrays = this.makeDataArrays();
+		var x = dataArrays.x;
+		var y = dataArrays.y;
+		var n = x.length;
 
-		// create x and y values
+		// create x and y sums
+		let xSum = 0;
+		let ySum = 0;
 		for (var i = 0; i < n; i++) {
-			y.push(i);
-			x.push(Math.pow(i, 2));
-			x_mean += x[i] // actually the sum, not mean
-			y_mean += y[i]
+			xSum += x[i]
+			ySum += y[i]
 		}
 
 		// calculate mean x and y
-		x_mean /= n;
-		y_mean /= n;
+		let xMean = xSum / n;
+		let yMean = ySum / n;
 
 		// calculate coefficients
 		var xvariance = 0;
 		var yvariance = 0;
+		var term1 = 0;
+		var term2 = 0;
 		for (i = 0; i < x.length; i++) {
-			xvariance = x[i] - x_mean;
-			yvariance = y[i] - y_mean;
+			xvariance = x[i] - xMean;
+			yvariance = y[i] - yMean;
 			term1 += xvariance * yvariance;
 			term2 += xvariance * xvariance;
 			}
 		var b1 = term1 / term2;
-		var b0 = y_mean - (b1 * x_mean);
+		var b0 = yMean - (b1 * xMean);
 
 		// perform regression
 		let yhat = [];
@@ -182,7 +211,7 @@ class LinearRegression extends Component {
 	}
 
 	/**
-    * 
+    *
     */
     selectXAxis = (item) => {
 		this.setState({
@@ -193,7 +222,7 @@ class LinearRegression extends Component {
 	}
 
 	/**
-    * 
+    *
     */
     selectYAxis = (item) => {
 		this.setState({
@@ -202,7 +231,7 @@ class LinearRegression extends Component {
 			this.updateChart();
 		});
 	}
-	
+
 	updateChart() {
 		if(this.state.xVariable && this.state.yVariable) {
 			this.props.requestData([this.state.xVariable,this.state.yVariable]);
@@ -226,7 +255,7 @@ class LinearRegression extends Component {
                     defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
 			</div>
-			
+
         )
 	}
 }

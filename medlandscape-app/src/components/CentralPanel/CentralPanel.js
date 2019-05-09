@@ -53,7 +53,7 @@ class CentralPanel extends Component {
                 hasLoaded={this.props.hasLoaded}
             />
         );
-		
+
 		let graphView = (
 			<div>
 				<BoxPlot
