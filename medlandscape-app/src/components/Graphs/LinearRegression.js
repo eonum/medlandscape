@@ -59,7 +59,13 @@ class LinearRegression extends Component {
 	 * Draws a Scatterplot with a regression line
 	 */
 	drawChart() {
+<<<<<<< HEAD
 		//remove old svg
+=======
+		console.log(this.props.hospitals);
+		
+		
+>>>>>>> 429d15d67d7a68983c0959b4c91232b591377e55
 		d3.select("#linearregressionsvg").remove();
 
 		var w = 960;
