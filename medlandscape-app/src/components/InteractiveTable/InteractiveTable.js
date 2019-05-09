@@ -35,8 +35,9 @@ class InteractiveTable extends Component {
             hospitalDropdowns : [],
             selectedHospitals : [],
 
-            dropdownsNeedUpdate : true
+            dropdownsNeedUpdate : true,
 
+            previousLanguage : props.i18n.language
             // selectedYear : ""
         }
     }
@@ -64,6 +65,22 @@ class InteractiveTable extends Component {
                 variableDropdowns : newVariableDropdowns,
                 dropdownsNeedUpdate : false
             });
+        }
+
+        if (this.state.previousLanguage !== this.props.i18n.language) {
+
+            this.setState({
+                nextVariableId : 'var-' + 0,
+    			variableDropdowns : [],
+                selectedVariables : [],
+
+                nextHospitalId : 'hos-' + 0,
+                hospitalDropdowns : [],
+                selectedHospitals : [],
+
+                previousLanguage: this.props.i18n.language
+            });
+
         }
     }
 
@@ -258,56 +275,76 @@ class InteractiveTable extends Component {
         let selectedHospitals = this.state.selectedHospitals;
         let referenceArr = [];
 
-
-        for (let i = 0; i < selectedHospitals.length; i++) {
-            let currentHosp;
-            for (let hosp of this.props.hospitals) {
-                if (hosp.name === selectedHospitals[i].name) {
-                    currentHosp = hosp;
-                    break;
+        let shouldGenerate = true;
+        for (let hosp of selectedHospitals) {
+            if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+                shouldGenerate = false;
+                window.alert(this.props.t('tableView.selectSomethingAlert'));
+                break;
+            }
+        }
+        if (shouldGenerate) {
+            if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+                shouldGenerate = false;
+                window.alert(this.props.t('tableView.selectSomethingAlert'));
+            } else {
+                if (!selectedHospitals[0].attributes[variable.name]) {
+                    shouldGenerate = false;
+                    window.alert("request data first -> to translate");
                 }
             }
-            const latestYear = Object.keys(currentHosp.attributes[variable.name])
-                .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
-            let attributes = currentHosp.attributes[variable.name];
-            referenceArr.push([i, attributes[latestYear]]);
         }
-
-        // then sort this array according to the value on the variable
-        const sortFunction = (
-            function sortFunction(a, b) {
-                if (a[1] === b[1]) { return 0; }
-                else {
-                    if (order === 'asc') {
-                        return (a[1] < b[1]) ? -1 : 1;
+        if (shouldGenerate) {
+            for (let i = 0; i < selectedHospitals.length; i++) {
+                let currentHosp;
+                for (let hosp of this.props.hospitals) {
+                    if (hosp.name === selectedHospitals[i].name) {
+                        currentHosp = hosp;
+                        break;
                     }
+                }
+                const latestYear = Object.keys(currentHosp.attributes[variable.name])
+                    .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+                let attributes = currentHosp.attributes[variable.name];
+                referenceArr.push([i, attributes[latestYear]]);
+            }
+
+            // then sort this array according to the value on the variable
+            const sortFunction = (
+                function sortFunction(a, b) {
+                    if (a[1] === b[1]) { return 0; }
                     else {
-                        return (a[1] > b[1]) ? -1 : 1;
+                        if (order === 'asc') {
+                            return (a[1] < b[1]) ? -1 : 1;
+                        }
+                        else {
+                            return (a[1] > b[1]) ? -1 : 1;
+                        }
                     }
                 }
+            );
+
+            referenceArr.sort(sortFunction);
+
+            // according to the indices in the referenceArr, fill new sorted arrays
+            // for dropdowns and selected hospitals
+            let newHospitalDropdowns = [];
+            let newSelectedHospitals = [];
+
+            for (let i = 0; i < referenceArr.length; i++) {
+                let index = referenceArr[i][0];
+                newSelectedHospitals.push(selectedHospitals[index]);
+                newHospitalDropdowns.push(this.state.hospitalDropdowns[index]);
             }
-        );
 
-        referenceArr.sort(sortFunction);
+            // then set the state
+            this.setState({
+                hospitalDropdowns : newHospitalDropdowns,
+                selectedHospitals : newSelectedHospitals
+            });
 
-        // according to the indices in the referenceArr, fill new sorted arrays
-        // for dropdowns and selected hospitals
-        let newHospitalDropdowns = [];
-        let newSelectedHospitals = [];
-
-        for (let i = 0; i < referenceArr.length; i++) {
-            let index = referenceArr[i][0];
-            newSelectedHospitals.push(selectedHospitals[index]);
-            newHospitalDropdowns.push(this.state.hospitalDropdowns[index]);
+            this.props.retriggerTableGeneration();
         }
-
-        // then set the state
-        this.setState({
-            hospitalDropdowns : newHospitalDropdowns,
-            selectedHospitals : newSelectedHospitals
-        });
-
-        this.props.retriggerTableGeneration();
     }
 
     /**
