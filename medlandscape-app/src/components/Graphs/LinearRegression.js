@@ -1,17 +1,35 @@
 import React, { Component } from 'react'
 import * as d3 from "d3";
 import './LinearRegression.css'
+import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
+import { withTranslation } from 'react-i18next';
 
 class LinearRegression extends Component {
 
-	componentDidMount(){
-		this.drawChart();
+	state = {
+        xVariable : undefined,
+        yVariable : undefined,
+	};
+
+
+	componentDidUpdate(){
+		if(this.props.tableDataLoaded)
+			this.drawChart();
 	}
+
+
+
+
 
 	/**
 	 * Draws a Scatterplot with a regression line
 	 */
 	drawChart() {
+		console.log(this.props.hospitals);
+		
+		//remove old svg
+		d3.select("#linearregressionsvg").remove();
+		
 		var w = 960;
 		var h = 500;
 		var padding = 30;
@@ -52,10 +70,13 @@ class LinearRegression extends Component {
 		var yAxis = d3.axisLeft()
 			.scale(yScale)
 			.ticks(5);
-
+		
+		
+			
 		// create svg
-		var svg = d3.select("body")
+		var svg = d3.select("#linearregression")
 			.append("svg")
+			.attr("id","linearregressionsvg")
 			.attr("width",w)
 			.attr("height", h);
 
@@ -103,6 +124,8 @@ class LinearRegression extends Component {
 			.attr("class", "y axis")
 			.attr("transform", "translate(" + padding + ",0)")
 			.call(yAxis);
+		
+		this.props.tableDataGenerated();
 	}
 
 	create_data = () => {
@@ -158,11 +181,55 @@ class LinearRegression extends Component {
 		return (data);
 	}
 
+	/**
+    * 
+    */
+    selectXAxis = (item) => {
+		this.setState({
+			xVariable : item,
+		}, () => {
+			this.updateChart();
+		});
+	}
+
+	/**
+    * 
+    */
+    selectYAxis = (item) => {
+		this.setState({
+			yVariable : item,
+		}, () => {
+			this.updateChart();
+		});
+	}
+	
+	updateChart() {
+		if(this.state.xVariable && this.state.yVariable) {
+			this.props.requestData([this.state.xVariable,this.state.yVariable]);
+		}
+	}
+
 	render() {
         return (
-        	<div id="linearregression"></div>
+        	<div>
+				<div id="linearregression"></div>
+				<DropdownMenu id="xAxis"
+                    listItems={this.props.variables}
+                    selectItem={this.selectXAxis}
+                    selectedItem={this.state.xVariable}
+                    defaultText={this.props.t('dropDowns.variablesFallback')}
+                />
+				<DropdownMenu id="yAxis"
+                    listItems={this.props.variables}
+                    selectItem={this.selectYAxis}
+                    selectedItem={this.state.yVariable}
+                    defaultText={this.props.t('dropDowns.variablesFallback')}
+                />
+			</div>
+			
         )
 	}
 }
 
-export default LinearRegression;
+const LocalizedLinearRegression = withTranslation()(LinearRegression);
+export default LocalizedLinearRegression;

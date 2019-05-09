@@ -43,7 +43,6 @@ class CentralPanel extends Component {
         let hospitalVars = this.props.variables.filter(variable => {
             return (variable.variable_model === "Hospital")
         });
-
         let tableView = (
             <InteractiveTable
                 variables={hospitalVars}
@@ -64,8 +63,11 @@ class CentralPanel extends Component {
 					hasLoaded={this.props.hasLoaded}
 				/>
 				<LinearRegression
-					objects={this.props.objects}
-					variableInfo={this.props.variableInfo}
+					hospitals={this.props.hospitals}
+					requestData={this.requestTableData}
+					tableDataLoaded={this.state.tableDataLoaded}
+					tableDataGenerated={this.tableDataGenerated}
+					variables={hospitalVars}
 					year={this.props.year}
 					hasLoaded={this.props.hasLoaded}
 				/>
