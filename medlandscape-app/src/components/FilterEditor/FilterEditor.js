@@ -55,7 +55,7 @@ class FilterEditor extends Component {
 		let filteredHospitals = hospitals.filter((item) => {
 			for(let i = 0; i < selectedValues.length; i++){
 				if (item.attributes[this.state.selectedEnum.name][selectedYear]) {
-					const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear].split(", ");
+					const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear];
 					if (!valueArray.includes(selectedValues[i])) {
 						return false;
 					}

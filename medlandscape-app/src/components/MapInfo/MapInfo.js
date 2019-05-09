@@ -11,6 +11,7 @@ class MapInfo extends Component {
 
         let isCanton = (selectedVariable.variable_model === "Canton");
         let selectedMap = isCanton ? t('mapInfo.cantons') : t('mapInfo.hospitals');
+        let selectedVar = t('mapInfo.variable') +  ": " + selectedVariable.text;
         let mapInfo = t('mapInfo.map') + ": " + selectedMap;
         let yearInfo = t('mapInfo.year') + ": " + year;
         let filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
@@ -19,6 +20,7 @@ class MapInfo extends Component {
             <Control position="topleft">
         		<div className="mapInfo">
                     <h1>{mapInfo}</h1>
+                    <h2>{selectedVar}</h2>
                     <h2>{(!isCanton) ? filterInfo : ""}</h2>
                     <h2>{yearInfo}</h2>
         		</div>
