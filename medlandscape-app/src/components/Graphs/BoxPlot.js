@@ -1,11 +1,43 @@
 import React, { Component } from 'react'
 import * as d3 from "d3";
 
+/**
+* BoxPlot is the entity we use to calculate and draw a boxplot from data given as props
+*/
 class BoxPlot extends Component {
 
 	componentDidMount(){
+		// draw a chart if the variable information has been loaded via api-call
 		if (this.props.hasLoaded)
 			this.drawChart();
+	}
+
+	/**
+	 * Returns the values stored in a this.props.objects canton/hospital
+	 * @param  {Canton || Hospital Object} item The object to extract the values from
+	 * @return {int || float} The selected entry in the item.values object
+	 */
+	returnData = (item) => {
+		let varName = this.props.variableInfo.name;
+		let values = item.attributes[varName];
+		let data = (values[this.props.year]);
+		return data;
+	}
+
+	/**
+	 * Returns an Array where all defined values for given year are stored
+	 * This needed to sort the values and draw the boxplot
+	 * @return {array} dataArray
+	 */
+	makeDataArray = () => {
+		let dataArray = [];
+		this.props.objects.map((obj) => {
+			let data = this.returnData(obj);
+			if (data) // sort out undefined values for given year
+				dataArray.push(data);
+		})
+
+		return dataArray;
 	}
 
 	/**
@@ -14,8 +46,8 @@ class BoxPlot extends Component {
 	drawChart() {
 		// set the dimensions and margins of the graph
 		var margin = {top: 10, right: 30, bottom: 30, left: 40},
-		  width = 400 - margin.left - margin.right,
-		  height = 400 - margin.top - margin.bottom;
+			width = 400 - margin.left - margin.right,
+			height = 400 - margin.top - margin.bottom;
 
 		// append the svg object to the body of the page
 		var svg = d3.select("#boxplot")
@@ -27,10 +59,10 @@ class BoxPlot extends Component {
 
 		// create dummy data
 		let data = this.makeDataArray();
-		//var data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9]; 
+		//var data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9];
 		let minVal = Math.min(...data);
 		let maxVal = Math.max(...data);
-		
+
 
 		// Compute summary statistics used for the box:
 		var data_sorted = data.sort(d3.ascending)
@@ -40,8 +72,8 @@ class BoxPlot extends Component {
 		var interQuantileRange = q3 - q1
 		var min = minVal //q1 - 1.5 * interQuantileRange
 		var max = maxVal //q1 + 1.5 * interQuantileRange
-		
-		
+
+
 		// Show the Y scale
 		var y = d3.scaleLinear()
 			.domain([minVal - 0.5 * median,maxVal +0.5 * median ])
@@ -79,34 +111,6 @@ class BoxPlot extends Component {
 			.attr("y1", function(d){ return(y(d))} )
 			.attr("y2", function(d){ return(y(d))} )
 			.attr("stroke", "black")
-	}
-
-	/**
-	 * Returns the values stored in a this.props.objects canton/hospital
-	 * @param  {Canton || Hospital Object} item The object to extract the values from
-	 * @return {int || float} The selected entry in the item.values object
-	 */
-	returnData = (item) => {
-		let varName = this.props.variableInfo.name;
-		let values = item.attributes[varName];
-		let data = (values[this.props.year]);
-		return data;
-	}
-
-	/**
-	 * Returns an Array where all defined values for given year are stored
-	 * This needed to sort the values and draw the boxplot
-	 * @return {array} dataArray
-	 */
-	makeDataArray = () => {
-		let dataArray = [];
-		this.props.objects.map((obj) => {
-			let data = this.returnData(obj);
-			if (data) // sort out undefined values for given year
-				dataArray.push(data);
-		})
-		
-		return dataArray;
 	}
 
 	render() {

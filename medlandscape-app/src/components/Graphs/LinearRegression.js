@@ -4,6 +4,11 @@ import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import { withTranslation } from 'react-i18next';
 
+/**
+* LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
+* The rendered JSX also consists of two dropdowns where variables can be selected to display a scatterplot.
+* The currently selected variables and language are stored in the state.
+*/
 class LinearRegression extends Component {
 
 	state = {
@@ -43,16 +48,19 @@ class LinearRegression extends Component {
    makeDataArrays = () => {
 	   let xArray = [];
 	   let yArray = [];
+	   let nameArray = [];
 	   this.props.hospitals.map((obj) => {
 		   let data = this.returnData(obj);
 		   if (data.x && data.y){ // sort out undefined values for given year
 				xArray.push(data.x);
 				yArray.push(data.y);
+				nameArray.push(obj.name);
 		   }
 	   })
 	   return {
 		   x: xArray,
 		   y: yArray,
+		   names: nameArray,
 	   };
    }
 
@@ -110,11 +118,6 @@ class LinearRegression extends Component {
 		    .append("div")
 		    .style("opacity", 0)
 		    .attr("class", "tooltip")
-		    .style("background-color", "white")
-		    .style("border", "solid")
-		    .style("border-width", "1px")
-		    .style("border-radius", "5px")
-		    .style("padding", "10px")
 
      	// function that changes  tooltip when the user hovers over a point.
      	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
@@ -193,6 +196,10 @@ class LinearRegression extends Component {
 		this.props.tableDataGenerated();
 	}
 
+	findHospitalInfo = (x, y, xArr, yArr) => {
+
+	}
+
 	createChartdata = () => {
 		let dataArrays = this.makeDataArrays();
 		var x = dataArrays.x;
@@ -221,7 +228,7 @@ class LinearRegression extends Component {
 			yvariance = y[i] - yMean;
 			term1 += xvariance * yvariance;
 			term2 += xvariance * xvariance;
-			}
+		}
 		var b1 = term1 / term2;
 		var b0 = yMean - (b1 * xMean);
 
@@ -235,7 +242,7 @@ class LinearRegression extends Component {
 
 		// create actual data objects
 		var data = [];
-		for (i = 0; i < y.length; i++) {
+		for (i = 0; i < y.length && i < x.length; i++) {
 			data.push({
 				"yhat": yhat[i],
 				"y": y[i],
