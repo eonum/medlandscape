@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import InteractiveTable from '../InteractiveTable/InteractiveTable.js';
+import BoxPlot from '../Graphs/BoxPlot.js';
+import LinearRegression from '../Graphs/LinearRegression.js';
 import './centralPanel.css'
 
 const apiURL = "https://qm1.ch/";
@@ -41,7 +43,6 @@ class CentralPanel extends Component {
         let hospitalVars = this.props.variables.filter(variable => {
             return (variable.variable_model === "Hospital")
         });
-
         let tableView = (
             <InteractiveTable
                 variables={hospitalVars}
@@ -53,13 +54,33 @@ class CentralPanel extends Component {
             />
         );
 
+		let graphView = (
+			<div>
+				<BoxPlot
+					objects={this.props.objects}
+					variableInfo={this.props.variableInfo}
+					year={this.props.year}
+					hasLoaded={this.props.hasLoaded}
+				/>
+				<LinearRegression
+					hospitals={this.props.hospitals}
+					requestData={this.requestTableData}
+					tableDataLoaded={this.state.tableDataLoaded}
+					tableDataGenerated={this.tableDataGenerated}
+					variables={hospitalVars}
+					year={this.props.year}
+					hasLoaded={this.props.hasLoaded}
+				/>
+			</div>
+		);
+
         let mainView;
         switch (this.props.view) {
             case 2:
                 mainView = tableView;
                 break;
             case 3:
-                mainView = null;
+                mainView = graphView;
                 break;
             default:
                 mainView = null;
