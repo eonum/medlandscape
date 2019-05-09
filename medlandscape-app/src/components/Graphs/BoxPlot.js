@@ -27,8 +27,10 @@ class BoxPlot extends Component {
 
 		// create dummy data
 		let data = this.makeDataArray();
+		//var data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9]; 
 		let minVal = Math.min(...data);
 		let maxVal = Math.max(...data);
+		
 
 		// Compute summary statistics used for the box:
 		var data_sorted = data.sort(d3.ascending)
@@ -36,14 +38,15 @@ class BoxPlot extends Component {
 		var median = d3.quantile(data_sorted, .5)
 		var q3 = d3.quantile(data_sorted, .75)
 		var interQuantileRange = q3 - q1
-		var min = q1 - 1.5 * interQuantileRange
-		var max = q1 + 1.5 * interQuantileRange
-
+		var min = minVal //q1 - 1.5 * interQuantileRange
+		var max = maxVal //q1 + 1.5 * interQuantileRange
+		
+		
 		// Show the Y scale
 		var y = d3.scaleLinear()
-			.domain([minVal,maxVal])
+			.domain([minVal - 0.5 * median,maxVal +0.5 * median ])
 			.range([height, 0])
-		svg.call(d3.axisLeft(y))
+		svg.call(d3.axisLeft(y).ticks(20, "s"))
 
 		// a few features for the box
 		var center = 200
@@ -102,6 +105,7 @@ class BoxPlot extends Component {
 			if (data) // sort out undefined values for given year
 				dataArray.push(data);
 		})
+		
 		return dataArray;
 	}
 

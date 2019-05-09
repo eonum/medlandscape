@@ -27,7 +27,7 @@ class LinearRegression extends Component {
 	drawChart() {
 		console.log(this.props.hospitals);
 		
-		//remove old svg
+		
 		d3.select("#linearregressionsvg").remove();
 		
 		var w = 960;
