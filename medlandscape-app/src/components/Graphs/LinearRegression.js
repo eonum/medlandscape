@@ -9,6 +9,7 @@ class LinearRegression extends Component {
 	state = {
         xVariable : undefined,
         yVariable : undefined,
+		language: this.props.i18n.language,
 	};
 
 	componentDidUpdate(){
@@ -207,11 +208,12 @@ class LinearRegression extends Component {
 				"x": x[i]
 			})
 		}
-		return (data);
+		return data;
 	}
 
 	/**
-    *
+    * defining behaviour on dropdown click
+	* write the selected variable to state and update chart on X axis
     */
     selectXAxis = (item) => {
 		this.setState({
@@ -222,7 +224,8 @@ class LinearRegression extends Component {
 	}
 
 	/**
-    *
+    * defining behaviour on dropdown click
+	* write the selected variable to state and update chart on Y axis
     */
     selectYAxis = (item) => {
 		this.setState({
@@ -232,12 +235,31 @@ class LinearRegression extends Component {
 		});
 	}
 
+	/**
+	* check if both x and y variable have been selected
+	* update selected variables in state if so
+	*/
 	updateChart() {
-		if(this.state.xVariable && this.state.yVariable) {
+		if(this.state.xVariable && this.state.yVariable)
 			this.props.requestData([this.state.xVariable,this.state.yVariable]);
+	}
+
+	componentWillUpdate(){
+		// if the language is changed,set back variables and remove chart
+		if (this.props.i18n.language !== this.state.language){
+			this.setState({
+				language : this.props.i18n.language,
+				xVariable: undefined,
+				yVariable: undefined,
+			});
+			d3.select("#linearregressionsvg").remove();
 		}
 	}
 
+	/**
+	 * Creates zwo dropdowns and scatterplot with regression line
+	 * @return {JSX}
+	 */
 	render() {
         return (
         	<div>
