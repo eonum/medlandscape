@@ -385,11 +385,15 @@ class InteractiveTable extends Component {
     sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-	createCsvData =()  =>{
-		this.setState({
-			csvData: this.state.selectedHospitals
-		}, () => {this.csvLink.link.click()
-		})
+
+    submitTableData = (data) => {
+        this.setState({
+            csvData : data
+        });
+    }
+
+	createCsvData = ()  => {
+		this.csvLink.link.click();
 	}
 
 
@@ -422,6 +426,7 @@ class InteractiveTable extends Component {
                     hospitalData={this.props.hospitals}
                     dataLoaded={this.props.tableDataLoaded}
                     dataGenerated={this.props.tableDataGenerated}
+                    submitTableData={this.submitTableData}
                 />
 				<CSVLink
 					data={this.state.csvData}

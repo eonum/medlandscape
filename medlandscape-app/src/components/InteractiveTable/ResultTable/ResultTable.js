@@ -61,8 +61,9 @@ class ResultTable extends Component {
                 this.setState({
                     resultTableData: tableData
                 })
+                this.props.submitTableData(tableData);
             }
-            this.props.dataGenerated();
+            this.props.dataGenerated()
         }
     }
     /**
@@ -90,6 +91,7 @@ ResultTable.propTypes = {
     selectedHospitals: PropTypes.array.isRequired,
     selectedVariables: PropTypes.array.isRequired,
     hospitalData: PropTypes.array.isRequired,
+    submitTableData: PropTypes.func.isRequired,
 }
 
 const LocalizedResultTable = withTranslation()(ResultTable);
