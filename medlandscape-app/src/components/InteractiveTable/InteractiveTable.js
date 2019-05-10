@@ -7,6 +7,9 @@ import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import ResultTable from './ResultTable/ResultTable.js';
 import update from 'immutability-helper';
 import { withTranslation } from 'react-i18next';
+import { CSVLink, CSVDownload } from "react-csv";
+
+
 
 /**
  * Represents the Table view which can be used to create and display a 2d-table
@@ -36,6 +39,7 @@ class InteractiveTable extends Component {
             selectedHospitals : [],
 
             dropdownsNeedUpdate : true,
+			csvData : [],
 
             previousLanguage : props.i18n.language
             // selectedYear : ""
@@ -381,6 +385,13 @@ class InteractiveTable extends Component {
     sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+	createCsvData =()  =>{
+		this.setState({
+			csvData: this.state.selectedHospitals
+		}, () => {this.csvLink.link.click()
+		})
+	}
+
 
     /**
      * render - renders the component to the screen
@@ -412,6 +423,18 @@ class InteractiveTable extends Component {
                     dataLoaded={this.props.tableDataLoaded}
                     dataGenerated={this.props.tableDataGenerated}
                 />
+				<CSVLink
+					data={this.state.csvData}
+					filename="medlandscapeCSV.csv"
+					className="CSVButton"
+					ref={(r) => this.csvLink = r}
+					target="_blank"
+				/>
+
+				<button className="btnCreateCSV"
+				onClick={() => this.createCsvData()}>
+				{t('tableView.btnCreateCSV')}
+				</button>
                 <button
                     className="btnGenerateTable"
                     onClick={() => this.props.requestData(this.state.selectedVariables)}>{t('tableView.btnCreateTable')}
@@ -420,6 +443,7 @@ class InteractiveTable extends Component {
                     className="btnAddAllHospitals"
                     onClick={() => this.addAllHospitals()}>{t('tableView.btnAddAllHospitals')}
                 </button>
+
 			</div>
         );
     }

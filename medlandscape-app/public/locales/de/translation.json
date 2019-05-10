@@ -20,7 +20,9 @@
         "sortAsc": "Aufsteigend",
         "sortDesc": "Absteigend",
         "btnCreateTable": "Tabelle generieren",
-        "btnAddAllHospitals": "Alle Spitäler hinzufügen"
+        "btnAddAllHospitals": "Alle Spitäler hinzufügen",
+		"btnCreateCSV": "CSV-Datei erstellen"
+
     },
     "graphView": {
         "title": "Graph"

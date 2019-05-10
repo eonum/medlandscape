@@ -8,6 +8,7 @@
     "immutability-helper": "^3.0.0",
     "leaflet": "^1.4.0",
     "react": "^16.8.4",
+    "react-csv": "^1.1.1",
     "react-dom": "^16.8.4",
     "react-i18next": "^10.6.1",
     "react-leaflet": "^2.2.1",
