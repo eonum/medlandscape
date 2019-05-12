@@ -10,8 +10,6 @@ import update from 'immutability-helper';
 import { withTranslation } from 'react-i18next';
 import { CSVLink, CSVDownload } from "react-csv";
 
-
-
 /**
  * Represents the Table view which can be used to create and display a 2d-table
  *  to compare different hospitals and their values on selected variables
@@ -38,10 +36,6 @@ class InteractiveTable extends Component {
             nextHospitalId : 'hos-' + 0,
             hospitalDropdowns : [],
             selectedHospitals : [],
-
-            nextYearId : 'yea-' + 0,
-            yearDropdowns : [],
-            selectedYears : [],
 
             dropdownsNeedUpdate : true,
 			csvData : [],
@@ -141,11 +135,8 @@ class InteractiveTable extends Component {
     addHospital = (selectedHosp) => {
         let newDropdowns = [];
         let newSelectedHospitals = [];
-        let newYearDropdowns = [];
-        let newSelectedYears = [];
 
         let nextHospitalId = this.state.nextHospitalId + "";
-        let nextYearId = this.state.nextYearId + "";
 
         let newSelectedHospital = {};
         if (selectedHosp) {
@@ -161,36 +152,18 @@ class InteractiveTable extends Component {
             <button className="btnSubtractHospital" onClick={() => this.subtractHospital(nextHospitalId)}>-</button>
             </div>
         );
-        let newSelectedYear = {};
-        let newYearDropdown = (
-            <div className='yearDropdown' key={this.state.nextYearId}>
-                <DropdownMenu id={this.state.nextYearId}
-                    listItems={[]}
-                    selectItem={this.selectYear}
-                    selectedItem={newSelectedYear}
-                />
-            </div>
-        );
 
         // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
         let hosp_id_parts = this.state.nextHospitalId.split("-");
         let nextHospitalIdInc = hosp_id_parts[0] + "-" + (Number(hosp_id_parts[1]) + 1);
 
-        let year_id_parts = this.state.nextYearId.split("-");
-        let nextYearIdInc = year_id_parts[0] + "-" + (Number(year_id_parts[1]) + 1);
-
         newDropdowns = [...this.state.hospitalDropdowns, newDropdown];
         newSelectedHospitals = [...this.state.selectedHospitals, newSelectedHospital];
-        newYearDropdowns = [...this.state.yearDropdowns, newYearDropdown];
-        newSelectedYears = [...this.state.selectedYears, newSelectedYear];
 
         this.setState({
             nextHospitalId: nextHospitalIdInc,
             hospitalDropdowns : newDropdowns,
             selectedHospitals : newSelectedHospitals,
-            nextYearId : nextYearIdInc,
-            yearDropdowns : newYearDropdowns,
-            selectedYears : newSelectedYears
         });
     }
 
@@ -318,6 +291,37 @@ class InteractiveTable extends Component {
 		});
     }
 
+    canTableBeSorted = () => {
+        let shouldGenerate = true;
+
+        // check if in each hospital dropdown something was selected
+        for (let hosp of this.state.selectedHospitals) {
+            if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+                shouldGenerate = false;
+                break;
+            }
+        }
+        // check the same for variables
+        if (shouldGenerate) {
+            for (let variable of this.state.selectedVariables) {
+                if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+                    shouldGenerate = false;
+                    break;
+                }
+                // also check if for the selected variables the data was fetched
+                if (!this.props.hospitals[0].attributes[variable.name]) {
+                    shouldGenerate = false;
+                    break;
+                }
+            }
+        }
+        if (!shouldGenerate) {
+            window.alert(this.props.t('tableView.missingData'));
+        }
+
+        return shouldGenerate;
+    }
+
     /**
      * Sorts selectedHospitals and hospitalDropdowns according to their value on
      *  the variable with senderId.
@@ -344,40 +348,40 @@ class InteractiveTable extends Component {
         let selectedHospitals = this.state.selectedHospitals;
         let referenceArr = [];
 
-        let shouldGenerate = true;
+        // let shouldGenerate = true;
 
-        if (Object.keys(variable).length === 0 && variable.constructor === Object) {
-            shouldGenerate = false;
-            window.alert(this.props.t('tableView.selectSomethingAlert'));
-        }
-        if (shouldGenerate) {
-            for (let hosp of selectedHospitals) {
-                let currentHosp;
-                for (let hosp2 of this.props.hospitals) {
-                    if (hosp.name === hosp2.name) {
-                        currentHosp = hosp2;
-                        break;
-                    }
-                }
-                if (!currentHosp) {
-                    shouldGenerate = false;
-                    window.alert(this.props.t('tableView.selectSomethingAlert'));
-                }
-                if (shouldGenerate) {
-                    if (Object.keys(currentHosp).length === 0 && currentHosp.constructor === Object) {
-                        shouldGenerate = false;
-                        window.alert(this.props.t('tableView.selectSomethingAlert'));
-                        break;
-                    }
-                    if (!currentHosp.attributes[variable.name]) {
-                        shouldGenerate = false;
-                        window.alert(this.props.t('tableView.generateBeforeSortAlert'));
-                        break;
-                    }
-                }
-            }
-        }
-        if (shouldGenerate) {
+        // if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+        //     shouldGenerate = false;
+        //     window.alert(this.props.t('tableView.selectSomethingAlert'));
+        // }
+        // if (shouldGenerate) {
+        //     for (let hosp of selectedHospitals) {
+        //         let currentHosp;
+        //         for (let hosp2 of this.props.hospitals) {
+        //             if (hosp.name === hosp2.name) {
+        //                 currentHosp = hosp2;
+        //                 break;
+        //             }
+        //         }
+        //         if (!currentHosp) {
+        //             shouldGenerate = false;
+        //             window.alert(this.props.t('tableView.selectSomethingAlert'));
+        //         }
+        //         if (shouldGenerate) {
+        //             if (Object.keys(currentHosp).length === 0 && currentHosp.constructor === Object) {
+        //                 shouldGenerate = false;
+        //                 window.alert(this.props.t('tableView.selectSomethingAlert'));
+        //                 break;
+        //             }
+        //             if (!currentHosp.attributes[variable.name]) {
+        //                 shouldGenerate = false;
+        //                 window.alert(this.props.t('tableView.generateBeforeSortAlert'));
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+        if (this.canTableBeSorted()) {
             for (let i = 0; i < selectedHospitals.length; i++) {
                 let currentHosp;
                 for (let hosp of this.props.hospitals) {

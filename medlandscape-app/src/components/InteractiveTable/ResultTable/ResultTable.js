@@ -15,28 +15,44 @@ class ResultTable extends Component {
         }
     }
 
-    componentDidUpdate() {
-        let tableData = [];
-        if (this.props.dataLoaded) {
-            // check if all dropdowns selected something, else throw error
-            let shouldGenerate = true;
-            for (let hosp of this.props.selectedHospitals) {
-                if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+    canTableBeGenerated = () => {
+        let shouldGenerate = true;
+
+        // check if in each hospital dropdown something was selected
+        for (let hosp of this.props.selectedHospitals) {
+            if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+                shouldGenerate = false;
+                break;
+            }
+        }
+        // check the same for variables
+        if (shouldGenerate) {
+            for (let variable of this.props.selectedVariables) {
+                if (Object.keys(variable).length === 0 && variable.constructor === Object) {
                     shouldGenerate = false;
-                    window.alert(this.props.t('tableView.selectSomethingAlert'));
+                    break;
+                }
+                // also check if for the selected variables the data was fetched
+                if (!this.props.hospitalData[0].attributes[variable.name]) {
+                    shouldGenerate = false;
                     break;
                 }
             }
-            if (shouldGenerate) {
-                for (let variable of this.props.selectedVariables) {
-                    if (Object.keys(variable).length === 0 && variable.constructor === Object) {
-                        shouldGenerate = false;
-                        window.alert(this.props.t('tableView.selectSomethingAlert'));
-                        break;
-                    }
-                }
-            }
-            if (shouldGenerate) {
+        }
+        if (!shouldGenerate) {
+            window.alert(this.props.t('tableView.missingData'));
+        }
+
+        return shouldGenerate;
+    }
+
+    componentDidUpdate() {
+        let tableData = [];
+
+        if (this.props.dataLoaded) {
+            // check if all dropdowns selected something, else throw error
+
+            if (this.canTableBeGenerated()) {
                 for (let hosp of this.props.selectedHospitals) {
                     let newRow = [];
                     let currentHosp;
