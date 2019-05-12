@@ -42,7 +42,6 @@ class ResultTable extends Component {
         if (!shouldGenerate) {
             window.alert(this.props.t('tableView.missingData'));
         }
-
         return shouldGenerate;
     }
 
@@ -50,8 +49,6 @@ class ResultTable extends Component {
         let tableData = [];
 
         if (this.props.dataLoaded) {
-            // check if all dropdowns selected something, else throw error
-
             if (this.canTableBeGenerated()) {
                 for (let hosp of this.props.selectedHospitals) {
                     let newRow = [];

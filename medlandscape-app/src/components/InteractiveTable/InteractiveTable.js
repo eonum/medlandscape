@@ -132,39 +132,75 @@ class InteractiveTable extends Component {
      * Creates a new dropdown menu to select a hospital to display, with a new
      *  unique id. Then updates the state accordingly.
      */
-    addHospital = (selectedHosp) => {
-        let newDropdowns = [];
-        let newSelectedHospitals = [];
+    addHospital = () => {
+        let nextHospId = this.state.nextHospitalId + "";
+        let hosp = this.createNewHospital({}, nextHospId);
 
-        let nextHospitalId = this.state.nextHospitalId + "";
+        // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
+        let hosp_id_parts = nextHospId.split("-");
+        nextHospId = hosp_id_parts[0] + "-" + (Number(hosp_id_parts[1]) + 1);
 
+        let newSelectedHospitals = [...this.state.selectedHospitals, hosp[0]];
+        let newDropdowns = newDropdowns = [...this.state.hospitalDropdowns, hosp[1]];
+
+        this.setState({
+            hospitalDropdowns : newDropdowns,
+            selectedHospitals : newSelectedHospitals,
+            nextHospitalId : nextHospId
+        });
+    }
+
+    addAllHospitals = () => {
+        let hospDropdowns = [];
+        let selectedHosps = [];
+
+        let nextHospId = this.state.nextHospitalId + "";
+
+        for (let hosp of this.props.hospitals) {
+            let data = this.createNewHospital(hosp, nextHospId);
+
+            selectedHosps.push(hosp);
+            hospDropdowns.push(data[1]);
+
+            // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
+            let hosp_id_parts = nextHospId.split("-");
+            nextHospId = hosp_id_parts[0] + "-" + (Number(hosp_id_parts[1]) + 1);
+        }
+
+        this.setState({
+            hospitalDropdowns : hospDropdowns,
+            selectedHospitals : selectedHosps,
+            nextHospitalId : nextHospId
+        });
+    }
+
+    /**
+     * createNewHospital
+     *
+     * creates a new hospitalDropdown and the according selectedVariable which
+     *  is undefined by default, but can be set using the parameter selectedHosp
+     *
+     * @param {Object} selectedHosp the hospital that will be selected by default
+     *
+     * @return {Array} Array containing the selectedHospital variable at index 0
+     *  and the new dropdown at index 1
+     */
+    createNewHospital = (selectedHosp, id) => {
         let newSelectedHospital = {};
         if (selectedHosp) {
             newSelectedHospital = selectedHosp;
         }
         let newDropdown = (
-            <div className='hospitalDropdown' key={this.state.nextHospitalId}>
-                <DropdownMenu id={this.state.nextHospitalId}
+            <div className='hospitalDropdown' key={id}>
+                <DropdownMenu id={id}
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
                     selectedItem={newSelectedHospital}
                 />
-            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(nextHospitalId)}>-</button>
+            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>-</button>
             </div>
         );
-
-        // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
-        let hosp_id_parts = this.state.nextHospitalId.split("-");
-        let nextHospitalIdInc = hosp_id_parts[0] + "-" + (Number(hosp_id_parts[1]) + 1);
-
-        newDropdowns = [...this.state.hospitalDropdowns, newDropdown];
-        newSelectedHospitals = [...this.state.selectedHospitals, newSelectedHospital];
-
-        this.setState({
-            nextHospitalId: nextHospitalIdInc,
-            hospitalDropdowns : newDropdowns,
-            selectedHospitals : newSelectedHospitals,
-        });
+        return [newSelectedHospital, newDropdown];
     }
 
     /**
@@ -348,39 +384,6 @@ class InteractiveTable extends Component {
         let selectedHospitals = this.state.selectedHospitals;
         let referenceArr = [];
 
-        // let shouldGenerate = true;
-
-        // if (Object.keys(variable).length === 0 && variable.constructor === Object) {
-        //     shouldGenerate = false;
-        //     window.alert(this.props.t('tableView.selectSomethingAlert'));
-        // }
-        // if (shouldGenerate) {
-        //     for (let hosp of selectedHospitals) {
-        //         let currentHosp;
-        //         for (let hosp2 of this.props.hospitals) {
-        //             if (hosp.name === hosp2.name) {
-        //                 currentHosp = hosp2;
-        //                 break;
-        //             }
-        //         }
-        //         if (!currentHosp) {
-        //             shouldGenerate = false;
-        //             window.alert(this.props.t('tableView.selectSomethingAlert'));
-        //         }
-        //         if (shouldGenerate) {
-        //             if (Object.keys(currentHosp).length === 0 && currentHosp.constructor === Object) {
-        //                 shouldGenerate = false;
-        //                 window.alert(this.props.t('tableView.selectSomethingAlert'));
-        //                 break;
-        //             }
-        //             if (!currentHosp.attributes[variable.name]) {
-        //                 shouldGenerate = false;
-        //                 window.alert(this.props.t('tableView.generateBeforeSortAlert'));
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
         if (this.canTableBeSorted()) {
             for (let i = 0; i < selectedHospitals.length; i++) {
                 let currentHosp;
@@ -459,18 +462,6 @@ class InteractiveTable extends Component {
 			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
 		});
 	}
-
-    addAllHospitals = () => {
-        for (let hosp of this.props.hospitals) {
-            this.sleep(0.5).then(() => {
-                this.addHospital(hosp);
-            });
-        }
-    }
-
-    sleep = (ms) => {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
 
     /**
      * Called when the ResultTable finished generating
