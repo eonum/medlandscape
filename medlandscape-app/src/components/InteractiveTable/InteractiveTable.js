@@ -52,10 +52,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * componentDidUpdate
-     *
-     * Fills the dropdown-lists that were present before the api request was
-     *  complete with the correct data. Otherwise they would be empty lists.
+     * componentDidUpdate - updates the dropdowns if needed and checks if the
+     *  language has changed -> if yes, the table is cleared
      */
     componentDidUpdate() {
         if ((this.props.hasLoaded && this.state.dropdownsNeedUpdate)) {
@@ -84,6 +82,12 @@ class InteractiveTable extends Component {
         }
     }
 
+    /**
+     * updateAllDropdowns
+     *
+     * Fills the dropdown-lists that were present before the api request was
+     *  complete with the correct data. Otherwise they would be empty lists.
+     */
     updateAllDropdowns = (newProps) => {
         let props = this.props;
         if (newProps) {
@@ -106,6 +110,10 @@ class InteractiveTable extends Component {
         });
     }
 
+    /**
+     * componentWillReceiveProps - when the language was changed, the listItems
+     *  of the existing dropdowns need an update to display the correct items
+     */
     componentWillReceiveProps(nextProps) {
         if (this.state.languageDidChange) {
             if (this.props.variables[0].text !== nextProps.variables[0].text) {
@@ -189,6 +197,8 @@ class InteractiveTable extends Component {
     /**
      * Gets called when the remove button is clicked. Removes the according
      *  dropdown from state.
+     *
+     * @param {String} senderId Id of the dropdown that should be removed
      */
     subtractHospital = (senderId) => {
         let index;
@@ -220,6 +230,9 @@ class InteractiveTable extends Component {
      *  dropdowns array and update its displayed text. The index is as well used
      *  to identify the according object in the array of selected items and
      *  update it. Immutabilit-helper is used for that.
+     *
+     * @param {Object} item the selected item
+     * @param {String} senderId Id of the dropdown that selected something
      */
     selectHospital = (item, senderId) => {
         let index;
@@ -278,6 +291,8 @@ class InteractiveTable extends Component {
     /**
      * Gets called when the remove button is clicked. Removes the according
      *  dropdown from state.
+     *
+     * @param {String} senderId Id of the dropdown that should be removed
      */
     subtractVariable = (senderId) => {
         let index;
@@ -421,6 +436,9 @@ class InteractiveTable extends Component {
      *  dropdowns array and update its displayed text. The index is as well used
      *  to identify the according object in the array of selected items and
      *  update it. Immutabilit-helper is used for that.
+     *
+     * @param {Object} item the selected item
+     * @param {String} senderId Id of the dropdown that selected something
      */
 	selectVariable = (item, senderId) => {
 		let index;
@@ -450,16 +468,20 @@ class InteractiveTable extends Component {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    /**
+     * Called when the ResultTable finished generating
+     *
+     * @param {Object} data the generated 2D array
+     */
     submitTableData = (data) => {
         this.setState({
             csvData : data
         });
     }
 
-	createCsvData = ()  => {
-		this.csvLink.link.click();
-	}
-
+    /**
+     * Called when the API-Request is completed
+     */
     dataFetched = () => {
         console.log('whoeeh');
     }
@@ -508,7 +530,7 @@ class InteractiveTable extends Component {
                 />*/}
 
 				<button className="btnCreateCSV"
-				onClick={() => this.createCsvData()}>
+				onClick={() => this.csvLink.link.click()}>
 				{t('tableView.btnCreateCSV')}
 				</button>
                 <button
