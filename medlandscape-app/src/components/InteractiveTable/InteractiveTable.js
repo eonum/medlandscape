@@ -51,8 +51,6 @@ class InteractiveTable extends Component {
      *
      * Fills the dropdown-lists that were present before the api request was
      *  complete with the correct data. Otherwise they would be empty lists.
-     *
-     * @return {type}  description
      */
     componentDidUpdate() {
         if (this.props.hasLoaded && this.state.dropdownsNeedUpdate) {
@@ -82,7 +80,9 @@ class InteractiveTable extends Component {
                 hospitalDropdowns : [],
                 selectedHospitals : [],
 
-                previousLanguage: this.props.i18n.language
+                previousLanguage: this.props.i18n.language,
+
+                dropdownsNeedUpdate: true
             });
 
         }
@@ -280,21 +280,33 @@ class InteractiveTable extends Component {
         let referenceArr = [];
 
         let shouldGenerate = true;
-        for (let hosp of selectedHospitals) {
-            if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
-                shouldGenerate = false;
-                window.alert(this.props.t('tableView.selectSomethingAlert'));
-                break;
-            }
+
+        if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+            shouldGenerate = false;
+            window.alert(this.props.t('tableView.selectSomethingAlert'));
         }
-        if (shouldGenerate) {
-            if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+        for (let hosp of selectedHospitals) {
+            let currentHosp;
+            for (let hosp2 of this.props.hospitals) {
+                if (hosp.name === hosp2.name) {
+                    currentHosp = hosp2;
+                    break;
+                }
+            }
+            if (!currentHosp) {
                 shouldGenerate = false;
                 window.alert(this.props.t('tableView.selectSomethingAlert'));
-            } else {
-                if (!selectedHospitals[0].attributes[variable.name]) {
+            }
+            if (shouldGenerate) {
+                if (Object.keys(currentHosp).length === 0 && currentHosp.constructor === Object) {
+                    shouldGenerate = false;
+                    window.alert(this.props.t('tableView.selectSomethingAlert'));
+                    break;
+                }
+                if (!currentHosp.attributes[variable.name]) {
                     shouldGenerate = false;
                     window.alert("request data first -> to translate");
+                    break;
                 }
             }
         }
