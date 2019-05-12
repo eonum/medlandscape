@@ -335,28 +335,30 @@ class InteractiveTable extends Component {
             shouldGenerate = false;
             window.alert(this.props.t('tableView.selectSomethingAlert'));
         }
-        for (let hosp of selectedHospitals) {
-            let currentHosp;
-            for (let hosp2 of this.props.hospitals) {
-                if (hosp.name === hosp2.name) {
-                    currentHosp = hosp2;
-                    break;
+        if (shouldGenerate) {
+            for (let hosp of selectedHospitals) {
+                let currentHosp;
+                for (let hosp2 of this.props.hospitals) {
+                    if (hosp.name === hosp2.name) {
+                        currentHosp = hosp2;
+                        break;
+                    }
                 }
-            }
-            if (!currentHosp) {
-                shouldGenerate = false;
-                window.alert(this.props.t('tableView.selectSomethingAlert'));
-            }
-            if (shouldGenerate) {
-                if (Object.keys(currentHosp).length === 0 && currentHosp.constructor === Object) {
+                if (!currentHosp) {
                     shouldGenerate = false;
                     window.alert(this.props.t('tableView.selectSomethingAlert'));
-                    break;
                 }
-                if (!currentHosp.attributes[variable.name]) {
-                    shouldGenerate = false;
-                    window.alert(this.props.t('tableView.generateBeforeSortAlert'));
-                    break;
+                if (shouldGenerate) {
+                    if (Object.keys(currentHosp).length === 0 && currentHosp.constructor === Object) {
+                        shouldGenerate = false;
+                        window.alert(this.props.t('tableView.selectSomethingAlert'));
+                        break;
+                    }
+                    if (!currentHosp.attributes[variable.name]) {
+                        shouldGenerate = false;
+                        window.alert(this.props.t('tableView.generateBeforeSortAlert'));
+                        break;
+                    }
                 }
             }
         }
