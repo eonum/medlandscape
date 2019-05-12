@@ -305,7 +305,7 @@ class InteractiveTable extends Component {
                 }
                 if (!currentHosp.attributes[variable.name]) {
                     shouldGenerate = false;
-                    window.alert("request data first -> to translate");
+                    window.alert(this.props.t('tableView.generateBeforeSortAlert'));
                     break;
                 }
             }

@@ -17,6 +17,7 @@
     "tableView": {
         "title": "Tabelle",
         "selectSomethingAlert": "Bitte wählen Sie in jedem Dropdown Menü etwas aus",
+        "generateBeforeSortAlert": "Bitte generieren Sie die Tabelle bevor Sie sie sortieren",
         "sortAsc": "Aufsteigend",
         "sortDesc": "Absteigend",
         "btnCreateTable": "Tabelle generieren",

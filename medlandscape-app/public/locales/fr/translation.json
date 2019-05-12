@@ -17,6 +17,7 @@
     "tableView": {
         "title": "Tableau",
         "selectSomethingAlert": "Veuillez sélectionner quelque chose dans chaque menu déroulant",
+        "generateBeforeSortAlert": "Veuillez générer le tableau avant de le trier",
         "sortAsc": "Ascendant",
         "sortDesc": "Descendant",
         "btnCreateTable": "Créer tableau",
