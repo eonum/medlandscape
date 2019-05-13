@@ -485,6 +485,9 @@ class InteractiveTable extends Component {
         });
     }
 
+	 /* Creates 2 arrays. The first with the titles of the selected Variables and the second with the title of
+	 * the selected Hospitals, to later be added to the CSV.
+	 */
 	createHeaders = () => {
 		let variableNames : []
 		let hospitalNames : []
@@ -498,6 +501,8 @@ class InteractiveTable extends Component {
 		console.log("whee");
 	}
 
+	/*exports a CSV-file with the selected Data directly to the desired Download-Folder
+	*/
 	createCsvData = ()  => {
 		this.csvLink.link.click();
 	}
