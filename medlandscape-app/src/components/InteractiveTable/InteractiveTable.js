@@ -509,6 +509,14 @@ class InteractiveTable extends Component {
 
 
     /**
+     * dataFetched - Called when the API-Request is completed
+     */
+    dataFetched = () => {
+        console.log('whoeeh');
+    }
+
+
+    /**
      * render - renders the component to the screen
      *
      * @return {JSX}  JSX of the component
@@ -558,7 +566,7 @@ class InteractiveTable extends Component {
 				</button>
                 <button
                     className="btnGenerateTable"
-                    onClick={() => this.props.requestData(this.state.selectedVariables) + this.createHeaders()}>{t('tableView.btnCreateTable')}
+                    onClick={() => this.props.requestData(this.state.selectedVariables, this.dataFetched)+ this.createHeaders()}>{t('tableView.btnCreateTable')}
                 </button>
                 <button
                     className="btnAddAllHospitals"
