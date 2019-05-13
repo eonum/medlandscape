@@ -475,38 +475,32 @@ class InteractiveTable extends Component {
 	}
 
     /**
-     * submitTableData - Called when the ResultTable finished generating
+     * submitTableData - Called when the ResultTable finished generating.
+     *  Adds row and column names to the array.
      *
      * @param {Object} data the generated 2D array
      */
     submitTableData = (data) => {
+        const {selectedVariables, selectedHospitals} = this.state;
+
+        let namedData = [];
+
+        let headers = [];
+        headers.push("-");
+        for (let v of selectedVariables) {
+            headers.push(v.text);
+        }
+        namedData.push(headers);
+
+        for (let i = 0; i < data.length; i++) {
+            let row = [selectedHospitals[i].name].concat(data[i]);
+            namedData.push(row);
+        }
+
         this.setState({
-            csvData : data
+            csvData : namedData
         });
     }
-
-	 /* Creates 2 arrays. The first with the titles of the selected Variables and the second with the title of
-	 * the selected Hospitals, to later be added to the CSV.
-	 */
-	createHeaders = () => {
-		let variableNames : []
-		let hospitalNames : []
-		this.setState({
-			variableNames : this.state.selectedVariables.map(x =>x.text),
-			hospitalNames : this.state.selectedHospitals.map(y =>y.name)
-		})
-	}
-
-	callBack = () => {
-		console.log("whee");
-	}
-
-	/*exports a CSV-file with the selected Data directly to the desired Download-Folder
-	*/
-	createCsvData = ()  => {
-		this.csvLink.link.click();
-	}
-
 
     /**
      * dataFetched - Called when the API-Request is completed
@@ -549,7 +543,6 @@ class InteractiveTable extends Component {
                 />
 				<CSVLink
 					data={this.state.csvData}
-					headers ={this.state.variableNames}
 					filename="medlandscapeCSV.csv"
 					className="CSVButton"
 					ref={(r) => this.csvLink = r}
@@ -566,13 +559,12 @@ class InteractiveTable extends Component {
 				</button>
                 <button
                     className="btnGenerateTable"
-                    onClick={() => this.props.requestData(this.state.selectedVariables, this.dataFetched)+ this.createHeaders()}>{t('tableView.btnCreateTable')}
+                    onClick={() => this.props.requestData(this.state.selectedVariables, this.dataFetched)}>{t('tableView.btnCreateTable')}
                 </button>
                 <button
                     className="btnAddAllHospitals"
                     onClick={() => this.addAllHospitals()}>{t('tableView.btnAddAllHospitals')}
                 </button>
-
 			</div>
         );
     }
