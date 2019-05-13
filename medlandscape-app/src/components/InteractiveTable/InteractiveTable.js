@@ -392,6 +392,18 @@ class InteractiveTable extends Component {
         });
     }
 
+	createHeaders = () => {
+		let variableNames : []
+		let hospitalNames : []
+		this.setState({
+			variableNames : this.state.selectedVariables.map(x =>x.text),
+			hospitalNames : this.state.selectedHospitals.map(y =>y.name)
+		})
+
+		console.log(variableNames);
+		console.log(hospitalNames);
+	}
+
 	createCsvData = ()  => {
 		this.csvLink.link.click();
 	}
@@ -430,6 +442,7 @@ class InteractiveTable extends Component {
                 />
 				<CSVLink
 					data={this.state.csvData}
+					headers ={this.state.variableNames}
 					filename="medlandscapeCSV.csv"
 					className="CSVButton"
 					ref={(r) => this.csvLink = r}
@@ -442,7 +455,7 @@ class InteractiveTable extends Component {
 				</button>
                 <button
                     className="btnGenerateTable"
-                    onClick={() => this.props.requestData(this.state.selectedVariables)}>{t('tableView.btnCreateTable')}
+                    onClick={() => this.props.requestData(this.state.selectedVariables) + this.createHeaders()}>{t('tableView.btnCreateTable')}
                 </button>
                 <button
                     className="btnAddAllHospitals"
@@ -470,6 +483,7 @@ InteractiveTable.propTypes = {
     requestData: PropTypes.func.isRequired,
     hasLoaded: PropTypes.bool.isRequired,
     retriggerTableGeneration: PropTypes.func.isRequired,
+
 }
 
 const LocalizedInteractiveTable = withTranslation()(InteractiveTable);
