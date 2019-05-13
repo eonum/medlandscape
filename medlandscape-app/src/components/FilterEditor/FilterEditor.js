@@ -51,18 +51,35 @@ class FilterEditor extends Component {
 
 	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;
+        const {name} = this.state.selectedEnum;
 
 		let filteredHospitals = hospitals.filter((item) => {
-			for(let i = 0; i < selectedValues.length; i++){
-				if (item.attributes[this.state.selectedEnum.name][selectedYear]) {
-					const valueArray = item.attributes[this.state.selectedEnum.name][selectedYear];
-					if (!valueArray.includes(selectedValues[i])) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-			}
+            // or
+            if (name === "KT" || name === "LA" || name === "RForm" || name === "Typ") {
+                let counter = 0;
+                for (let i = 0; i < selectedValues.length; i++) {
+                    if (item.attributes[name][selectedYear]) {
+                        const values = item.attributes[name][selectedYear];
+                        if (values.includes(selectedValues[i])) {
+                            counter++;
+                        }
+                    }
+                }
+                if (counter === 0) {
+                    return false;
+                }
+            } else { // and
+                for (let i = 0; i < selectedValues.length; i++) {
+                    if (item.attributes[name][selectedYear]) {
+                        const values = item.attributes[name][selectedYear];
+                        if (!values.includes(selectedValues[i])) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+            }
 			return true;
 		});
 
