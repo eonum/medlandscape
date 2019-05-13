@@ -41,7 +41,6 @@ class InteractiveTable extends Component {
 			csvData : [],
 
             previousLanguage : props.i18n.language
-            // selectedYear : ""
         }
     }
 
@@ -77,10 +76,12 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * updateAllDropdowns
+     * updateAllDropdowns - Fills the dropdown-lists that were present before
+     *  the api request was complete with the correct data. Otherwise they
+     *  would be empty lists.
      *
-     * Fills the dropdown-lists that were present before the api request was
-     *  complete with the correct data. Otherwise they would be empty lists.
+     * @param {Object} newProps if provided, these will be used to update the
+     *  dropdowns instead of this.props
      */
     updateAllDropdowns = (newProps) => {
         let props = this.props;
@@ -129,8 +130,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Creates a new dropdown menu to select a hospital to display, with a new
-     *  unique id. Then updates the state accordingly.
+     * addHospital - Creates a new dropdown menu to select a hospital to
+     *  display, with a new unique id. Then updates the state accordingly.
      */
     addHospital = () => {
         let nextHospId = this.state.nextHospitalId + "";
@@ -150,6 +151,10 @@ class InteractiveTable extends Component {
         });
     }
 
+    /**
+     * addAllHospitals - Adds all hospitals available in this.props.hospitals to
+     *  the table, deleting existing ones.
+     */
     addAllHospitals = () => {
         let hospDropdowns = [];
         let selectedHosps = [];
@@ -175,10 +180,9 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * createNewHospital
-     *
-     * creates a new hospitalDropdown and the according selectedVariable which
-     *  is undefined by default, but can be set using the parameter selectedHosp
+     * createNewHospital - creates a new hospitalDropdown and the according
+     *  selectedVariable which is undefined by default, but can be set using
+     *  the parameter selectedHosp
      *
      * @param {Object} selectedHosp the hospital that will be selected by default
      *
@@ -204,8 +208,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Gets called when the remove button is clicked. Removes the according
-     *  dropdown from state.
+     * subtractHospital - Gets called when the remove button is clicked. Removes
+     *  the according dropdown from state.
      *
      * @param {String} senderId Id of the dropdown that should be removed
      */
@@ -234,11 +238,11 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Called when a hospital is selected on a dropdown menu. It uses the id of
-     *  the dropdown that called this function to identify it's index in the
-     *  dropdowns array and update its displayed text. The index is as well used
-     *  to identify the according object in the array of selected items and
-     *  update it. Immutabilit-helper is used for that.
+     * selectHospital - Called when a hospital is selected on a dropdown menu.
+     *  It uses the id of the dropdown that called this function to identify it's
+     *  index in the dropdowns array and update its displayed text. The index is
+     *  as well used to identify the according object in the array of selected
+     *  items and update it. Immutabilit-helper is used for that.
      *
      * @param {Object} item the selected item
      * @param {String} senderId Id of the dropdown that selected something
@@ -261,8 +265,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Creates a new dropdown menu to select a variable to display, with a new
-     *  unique id. Then updates the state accordingly.
+     * addVariable - Creates a new dropdown menu to select a variable to display,
+     *  with a new unique id. Then updates the state accordingly.
      */
 	addVariable = () => {
         let newVariables = [];
@@ -298,8 +302,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Gets called when the remove button is clicked. Removes the according
-     *  dropdown from state.
+     * subtractVariable - Gets called when the remove button is clicked.
+     *  Removes the according dropdown from state.
      *
      * @param {String} senderId Id of the dropdown that should be removed
      */
@@ -327,6 +331,13 @@ class InteractiveTable extends Component {
 		});
     }
 
+    /**
+     * canTableBeSorted - checks if in each dropdown something is selected,
+     *  and if the data has been fetched for these selected things.
+     *
+     * @return {bool} true, if everything is selected and the data is loaded,
+     *  false otherwise    
+     */
     canTableBeSorted = () => {
         let shouldGenerate = true;
 
@@ -359,8 +370,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Sorts selectedHospitals and hospitalDropdowns according to their value on
-     *  the variable with senderId.
+     * sortHospitals - Sorts selectedHospitals and hospitalDropdowns according
+     *  to their value on the variable with senderId.
      *
      * @param {String} senderId the id of the variable according to which the
      *  hospitals should be sorted
@@ -438,11 +449,11 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Called when a variable is selected on a dropdown menu. It uses the id of
-     *  the dropdown that called this function to identify it's index in the
-     *  dropdowns array and update its displayed text. The index is as well used
-     *  to identify the according object in the array of selected items and
-     *  update it. Immutabilit-helper is used for that.
+     * selectVariable - Called when a variable is selected on a dropdown menu.
+     *  It uses the id of the dropdown that called this function to identify it's
+     *  index in the dropdowns array and update its displayed text. The index is
+     *  as well used to identify the according object in the array of selected
+     *  items and update it. Immutabilit-helper is used for that.
      *
      * @param {Object} item the selected item
      * @param {String} senderId Id of the dropdown that selected something
@@ -464,7 +475,7 @@ class InteractiveTable extends Component {
 	}
 
     /**
-     * Called when the ResultTable finished generating
+     * submitTableData - Called when the ResultTable finished generating
      *
      * @param {Object} data the generated 2D array
      */
@@ -475,7 +486,7 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * Called when the API-Request is completed
+     * dataFetched - Called when the API-Request is completed
      */
     dataFetched = () => {
         console.log('whoeeh');

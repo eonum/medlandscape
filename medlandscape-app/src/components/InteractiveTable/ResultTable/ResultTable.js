@@ -15,6 +15,13 @@ class ResultTable extends Component {
         }
     }
 
+    /**
+     * canTableBeGenerated - checks if in each dropdown something is selected,
+     *  and if the data has been fetched for these selected things.
+     *
+     * @return {bool} true, if everything is selected and the data is loaded,
+     *  false otherwise
+     */
     canTableBeGenerated = () => {
         let shouldGenerate = true;
 
@@ -45,6 +52,12 @@ class ResultTable extends Component {
         return shouldGenerate;
     }
 
+    /**
+     * componentDidUpdate - generates a 2D-array from selectedVariables and
+     *  selectedHospitals and sets the state.
+     *
+     * @return {type}  description
+     */
     componentDidUpdate() {
         let tableData = [];
 
@@ -99,6 +112,8 @@ class ResultTable extends Component {
 * selectedHospitals: array containing all selected hospitals
 * selectedVariables: array containing all selected variables
 * hospitals: array containing all hospitals and values of the selected variables
+* submitTableData: function that is called to give the generated 2D-array to
+*   the parent component
 */
 ResultTable.propTypes = {
     selectedHospitals: PropTypes.array.isRequired,
