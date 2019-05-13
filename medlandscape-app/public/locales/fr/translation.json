@@ -16,7 +16,7 @@
     },
     "tableView": {
         "title": "Tableau",
-        "selectSomethingAlert": "Veuillez sélectionner quelque chose dans chaque menu déroulant",
+        "missingData": "Veuillez sélectionner quelque chose dans chaque menu déroulant et vous assurer que le tableau a été généré avant de le trier.",
         "sortAsc": "Ascendant",
         "sortDesc": "Descendant",
         "btnCreateTable": "Créer tableau",
