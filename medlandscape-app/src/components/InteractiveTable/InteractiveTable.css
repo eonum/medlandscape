@@ -17,8 +17,12 @@
     background-color: #ccc;
 	justify-self: center;
     align-self: center;
-
 }
+
+.btnGenerateTable:hover, .addButton:hover {
+    cursor: pointer;
+}
+
 .resultTable {
     grid-column: 2;
     grid-row: 2;
@@ -26,6 +30,8 @@
 
 .interactiveTable {
     width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     padding-bottom: 300px;
     overflow: auto;
     display: grid;
@@ -42,4 +48,34 @@
 	border: none;
 	background-color: #1996f6;
 	font-size: 20pt;
+}
+.btnCreateCSV{
+	width: 250px;
+	height: 50px;
+	grid-column:3;
+    grid-row: 1;
+	border: 10px;
+    border-radius: 25px;
+    font-size: 11pt;
+    background-color: #ccc;
+	justify-self: center;
+    align-self: center;
+}
+.btnCreateCSV:hover{
+	cursor: pointer;
+}
+.btnAddAllHospitals{
+	width: 250px;
+	height: 50px;
+	grid-column:1;
+	grid-row: 3;
+	border: none;
+	border-radius: 25px;
+	font-size: 11pt;
+	background-color: #ccc;
+	justify-self: center;
+	align-self: center;
+}
+.btnAddAllHospitals:hover{
+	cursor: pointer;
 }

@@ -116,7 +116,7 @@ class ControlPanel extends Component {
         let mapViewHospitals = (
             <div className="mapViewHospitals">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}/>
                 <p>{t('mapView.filter')}</p>
                 <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} setEnum={this.setEnum}/>
             </div>
@@ -125,7 +125,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton}/>
             </div>
         )
 

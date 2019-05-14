@@ -70,6 +70,7 @@ class DropdownMenu extends Component {
     */
     render() {
         let varText;
+        const {t} = this.props;
 
         // if an item was passed as selectedItem
         if (this.props.selectedItem) {
@@ -80,10 +81,8 @@ class DropdownMenu extends Component {
                 varText = this.props.selectedItem.name;
             }
         } else { // fallback if no item was passed as selectedItem
-            varText = this.props.defaultText;
+            varText = t('dropDowns.variablesFallback');
         }
-
-        const {t} = this.props;
 
         return (
             <div className="dropdown">

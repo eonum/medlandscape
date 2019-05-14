@@ -20,9 +20,9 @@ class Table extends Component {
             <table className="table">
                 <tbody>
                 { // for each row, each element is added to the DOM
-                    this.props.tableData.map((row) => {
-                        return (<tr key={this.props.tableData.indexOf(row)}>{row.map((cell) => {
-                            return <td key={row.length * this.props.tableData.indexOf(row) + row.indexOf(cell)}>{cell}</td>
+                    this.props.tableData.map((row, rowIndex) => {
+                        return (<tr key={this.props.tableData.indexOf(row)}>{row.map((cell, cellIndex) => {
+                            return <td key={row.length * rowIndex + cellIndex}>{cell}</td>
                         })}</tr>)
                     })
                 }

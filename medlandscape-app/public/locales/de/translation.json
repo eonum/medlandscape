@@ -15,7 +15,14 @@
         "search" : "Suchen..."
     },
     "tableView": {
-        "title": "Tabelle"
+        "title": "Tabelle",
+        "missingData": "Bitte wählen Sie in jedem Dropdown Menü etwas aus, und stellen Sie sicher, dass die Tabelle generiert wurde, bevor Sie sie sortieren.",
+        "sortAsc": "Aufsteigend",
+        "sortDesc": "Absteigend",
+        "btnCreateTable": "Tabelle generieren",
+        "btnAddAllHospitals": "Alle Spitäler hinzufügen",
+		"btnCreateCSV": "CSV-Datei erstellen"
+
     },
     "graphView": {
         "title": "Graph"
@@ -25,9 +32,6 @@
     },
     "localization_example": {
         "example": "Hallo Brudi"
-    },
-    "interactive_table": {
-        "btn_create_table": "Tabelle generieren"
     },
     "popup": {
         "address": "Adresse",
