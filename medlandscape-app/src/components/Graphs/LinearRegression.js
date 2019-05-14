@@ -48,19 +48,19 @@ class LinearRegression extends Component {
    makeDataArrays = () => {
 	   let xArray = [];
 	   let yArray = [];
-	   let nameArray = [];
+	   let objArray = [];
 	   this.props.hospitals.map((obj) => {
 		   let data = this.returnData(obj);
 		   if (data.x && data.y){ // sort out undefined values for given year
 				xArray.push(data.x);
 				yArray.push(data.y);
-				nameArray.push(obj.name);
+				objArray.push(obj);
 		   }
 	   })
 	   return {
 		   x: xArray,
 		   y: yArray,
-		   names: nameArray,
+		   obj: objArray, //pointer to the hospital
 	   };
    }
 
@@ -122,18 +122,19 @@ class LinearRegression extends Component {
      	// function that changes  tooltip when the user hovers over a point.
      	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
     	var mouseover = function(d) {
-       		tooltip.style("opacity", 1)
+       		d3.select("#linearregression .tooltip").style("opacity", 1)
+				.text(d.obj.name);
 		}
 
     	var mousemove = function(d) {
-       		tooltip.html("tooltip")
+       		d3.select("#linearregression .tooltip")
 				.style("left", (d3.event.pageX) + "px")
 				.style("top", (d3.event.pageY - 28) + "px");
     	}
 
      	// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
     	var mouseleave = function(d) {
-       		tooltip.transition()
+       		d3.select("#linearregression .tooltip").transition()
         		.duration(200)
         		.style("opacity", 0)
     	}
@@ -159,7 +160,7 @@ class LinearRegression extends Component {
 			.attr("id", "circles")
 			.attr("clip-path", "url(#chart-area)")
 			.selectAll("circle")
-			.data(dataset)
+			.data(dataset, function(d){return d;})
 			.enter()
 			.append("circle")
 			.attr("class", "dot")
@@ -204,6 +205,7 @@ class LinearRegression extends Component {
 		let dataArrays = this.makeDataArrays();
 		var x = dataArrays.x;
 		var y = dataArrays.y;
+		var obj = dataArrays.obj;
 		var n = x.length;
 
 		// create x and y sums
@@ -244,9 +246,10 @@ class LinearRegression extends Component {
 		var data = [];
 		for (i = 0; i < y.length && i < x.length; i++) {
 			data.push({
-				"yhat": yhat[i],
-				"y": y[i],
-				"x": x[i]
+				yhat: yhat[i],
+				y: y[i],
+				x: x[i],
+				obj: obj[i],
 			})
 		}
 		return data;

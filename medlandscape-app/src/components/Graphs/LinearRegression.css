@@ -31,11 +31,8 @@ div.tooltip {
     color: white;
     position: absolute;
     text-align: center;
-    line-height: 10px;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 13px;
+    padding: 3px;
+    font-size: 13px;
     background: #1996fa;
     border: 0px;
     border-radius: 8px;
