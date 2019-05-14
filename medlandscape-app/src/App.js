@@ -51,7 +51,7 @@ class App extends Component {
                     hasLoaded : true
                 })
             } else {
-                let years = this.getYears(this.state.selectedVariable);
+                let years = this.getYears(this.state[key]);
                 this.setState({
                     years : years,
                     selectedYear : years[0],
@@ -126,17 +126,16 @@ class App extends Component {
     }
 
     /**
-     * Returns list of available years depending on variable
-     * @param {Variable Object}
+     * Returns list of available years for selected Variable.
      * @return {Array} The available years.
      */
-    getYears = (selectedVariable) => {
-        const {variable_model, is_time_series, name} = selectedVariable;
-        let selObj = (variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons;
+    getYears = (objects) => {
+        const {variable_model, is_time_series, name} = this.state.selectedVariable;
         let maxYears = [], years;
-        for (var i = 0; i < selObj.length; i++) {
-            years = Object.keys(selObj[i].attributes[name]);
-            maxYears = (years.length > maxYears.length) ? years : maxYears
+        for (var i = 0; i < objects.length; i++) {
+            console.log(objects[i]);
+            years = Object.keys(objects[i].attributes[name]);
+            maxYears = (years.length > maxYears.length) ? years : maxYears;
         }
         return maxYears;
     }
@@ -185,7 +184,7 @@ class App extends Component {
                     hospitals={this.state.hospitals}
                     hasLoaded={this.state.hasLoaded}
                     fetchData={this.applyVariables}
-					
+
 					objects={(this.state.selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons}
                     variableInfo={this.state.selectedVariable}
                     year={this.state.selectedYear}

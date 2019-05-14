@@ -22,13 +22,12 @@ class FilterEditor extends Component {
 		for (let i = 0; i < item.values.length; i++)
 			mapObj[item.values[i]] = item.values_text[i];
 
-		this.props.fetchData(item).then(() => {
-			this.setState({
-				selectedEnum : item,
-				selectedValues : [],
-				mappingObject : mapObj,
-			});
-		})
+        this.setState({
+            selectedEnum : item,
+            selectedValues : [],
+            mappingObject : mapObj,
+        });
+        this.props.setEnum(item);
 	}
 
     checkboxSelectItem = (item) => {
@@ -53,13 +52,13 @@ class FilterEditor extends Component {
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.state.selectedEnum;
 
-		let filteredHospitals = hospitals.filter((item) => {
+		let filteredHospitals = hospitals.filter((hospital) => {
             // or
             if (name === "KT" || name === "LA" || name === "RForm" || name === "Typ") {
                 let counter = 0;
-                for (let i = 0; i < selectedValues.length; i++) {
-                    if (item.attributes[name][selectedYear]) {
-                        const values = item.attributes[name][selectedYear];
+                if (selectedYear in hospital.attributes[name]) {
+                    const values = hospital.attributes[name][selectedYear];
+                    for (let i = 0; i < selectedValues.length; i++) {
                         if (values.includes(selectedValues[i])) {
                             counter++;
                         }
@@ -69,15 +68,15 @@ class FilterEditor extends Component {
                     return false;
                 }
             } else { // and
-                for (let i = 0; i < selectedValues.length; i++) {
-                    if (item.attributes[name][selectedYear]) {
-                        const values = item.attributes[name][selectedYear];
+                if (selectedYear in hospital.attributes[name]) {
+                    const values = hospital.attributes[name][selectedYear];
+                    for (let i = 0; i < selectedValues.length; i++) {
                         if (!values.includes(selectedValues[i])) {
                             return false;
                         }
-                    } else {
-                        return false;
                     }
+                } else {
+                    return false;
                 }
             }
 			return true;

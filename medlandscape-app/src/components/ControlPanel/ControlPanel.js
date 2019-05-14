@@ -28,14 +28,27 @@ class ControlPanel extends Component {
      * Prepares correct query to ask App.js
      * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
      */
-    fetchEnumData = (variable) => {
-        const {name} = variable;
+    fetchEnumData = () => {
+        const {name} = this.state.selectedEnum;
         let query ="hospitals?variables=";
         query += encodeURIComponent(this.props.selectedVariable.name + "$");
         query += encodeURIComponent(name);
         return this.props.fetchData("hospitals", query);
     }
 
+    /**
+     * Sets the state for selected Enum variable
+     * Gets data after changing it
+     * @param {Variable Object} variable The chosen variable.
+     */
+    setEnum = (variable) => {
+        this.setState({
+            selectedEnum : variable
+        }, () => {
+            console.log("enum set, asking for data...");
+            this.fetchEnumData();
+        })
+    }
 
     /**
      * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
@@ -44,7 +57,11 @@ class ControlPanel extends Component {
      */
     selectVariable = (item) => {
         this.props.selectVariable(item);
-        return this.fetchMapData(item);
+        if (!this.state.selectedEnum) {
+            return this.fetchMapData(item);
+        } else {
+            return this.fetchEnumData();
+        }
     }
 
     setTabView = (view) => {
@@ -95,7 +112,7 @@ class ControlPanel extends Component {
                 <p>{t('mapView.variables')}</p>
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} defaultText={t('dropDowns.variablesFallback')}/>
                 <p>{t('mapView.filter')}</p>
-                <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} fetchData={this.fetchEnumData} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} />
+                <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} setEnum={this.setEnum}/>
             </div>
         )
 
