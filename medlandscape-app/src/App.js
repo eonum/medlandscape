@@ -34,10 +34,7 @@ class App extends Component {
     * @param  {String} query The specific query to use for the API call.
     */
     applyVariables = (key, query) => {
-        let years;
-        console.log(query);
         return this.apiCall(query).then((results) => {
-            years = this.getYears(results);
             if (key === "hospitals") {
                 this.setState({
                     [key] : results,
@@ -54,6 +51,7 @@ class App extends Component {
                     hasLoaded : true
                 })
             } else {
+                let years = this.getYears(this.state[key]);
                 this.setState({
                     years : years,
                     selectedYear : years[0],
@@ -83,6 +81,8 @@ class App extends Component {
             this.setState({
                 variables : result,
             });
+
+            // the default variable chosen when loading the app
             this.selectVariable(result[1]);
             let query = "hospitals?variables=";
             query += encodeURIComponent(result[1].name);
@@ -102,6 +102,9 @@ class App extends Component {
         });
     }
 
+    /**
+     * Comment here please
+     */
     tableDataGenerated = () => {
         this.setState({
             tableDataLoaded : false
@@ -165,7 +168,7 @@ class App extends Component {
      * Set selectedHospitals to
      * @param {Array} selectedHospitals The selected hospitals.
      */
-    updateSelectedHospitals = (selectedHospitals) => {
+    setSelectedHospitals = (selectedHospitals) => {
         this.setState({
             selectedHospitals : selectedHospitals
         })
@@ -219,7 +222,7 @@ class App extends Component {
                         selectedVariable={this.state.selectedVariable}
                         variables={this.state.variables}
                         fetchData={this.applyVariables}
-                        updateHospitals={this.updateSelectedHospitals}
+                        updateHospitals={this.setSelectedHospitals}
                         year={this.state.selectedYear}
                         hasLoaded={this.state.hasLoaded}
                     />

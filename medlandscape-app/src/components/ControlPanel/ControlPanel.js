@@ -8,7 +8,7 @@ class ControlPanel extends Component {
 
     state = {
         mapView : 1,
-        selectedEnum : undefined,
+        selectedEnum : undefined
     }
 
     /**
@@ -64,6 +64,9 @@ class ControlPanel extends Component {
         }
     }
 
+    /**
+     * sets the view to be displayed on the ControlPanel.
+     */
     setTabView = (view) => {
         let oldView = this.props.view;
         if (oldView !== view) {
@@ -73,6 +76,9 @@ class ControlPanel extends Component {
         }
     }
 
+    /**
+     * Sets the view to be displayed on the 'Maps' tab of the ControlPanel.
+     */
     setMapView = (view) => {
         if (this.state.view !== view) {
             this.setState({

@@ -53,7 +53,7 @@ class FilterEditor extends Component {
         const {name} = this.state.selectedEnum;
 
 		let filteredHospitals = hospitals.filter((hospital) => {
-            // or
+            // Enum variables to be filtered with "OR"
             if (name === "KT" || name === "LA" || name === "RForm" || name === "Typ") {
                 let counter = 0;
                 if (selectedYear in hospital.attributes[name]) {
@@ -67,7 +67,7 @@ class FilterEditor extends Component {
                 if (counter === 0) {
                     return false;
                 }
-            } else { // and
+            } else { // Enum variables to be filtered with "AND"
                 if (selectedYear in hospital.attributes[name]) {
                     const values = hospital.attributes[name][selectedYear];
                     for (let i = 0; i < selectedValues.length; i++) {
