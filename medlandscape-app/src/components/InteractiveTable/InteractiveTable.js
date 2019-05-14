@@ -541,14 +541,14 @@ class InteractiveTable extends Component {
                     dataGenerated={this.props.tableDataGenerated}
                     submitTableData={this.submitTableData}
                 />
-				<CSVLink
+				{/*<CSVLink
 					data={this.state.csvData}
 					filename="medlandscapeCSV.csv"
 					className="CSVButton"
 					ref={(r) => this.csvLink = r}
 					target="_blank"
 				/>
-                {/*<YearSelector
+                <YearSelector
                     className='yearSelector'
                     yearDropdowns={this.state.yearDropdowns}
                 />*/}
