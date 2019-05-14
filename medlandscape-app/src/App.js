@@ -34,7 +34,10 @@ class App extends Component {
     * @param  {String} query The specific query to use for the API call.
     */
     applyVariables = (key, query) => {
+        let years;
+        console.log(query);
         return this.apiCall(query).then((results) => {
+            years = this.getYears(results);
             if (key === "hospitals") {
                 this.setState({
                     [key] : results,
@@ -51,7 +54,6 @@ class App extends Component {
                     hasLoaded : true
                 })
             } else {
-                let years = this.getYears(this.state[key]);
                 this.setState({
                     years : years,
                     selectedYear : years[0],
@@ -133,7 +135,6 @@ class App extends Component {
         const {variable_model, is_time_series, name} = this.state.selectedVariable;
         let maxYears = [], years;
         for (var i = 0; i < objects.length; i++) {
-            console.log(objects[i]);
             years = Object.keys(objects[i].attributes[name]);
             maxYears = (years.length > maxYears.length) ? years : maxYears;
         }

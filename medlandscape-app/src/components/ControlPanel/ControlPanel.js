@@ -7,7 +7,8 @@ import './ControlPanel.css'
 class ControlPanel extends Component {
 
     state = {
-        mapView : 1
+        mapView : 1,
+        selectedEnum : undefined,
     }
 
     /**
@@ -26,13 +27,13 @@ class ControlPanel extends Component {
     /**
      * Called when filtering Hospital variables.
      * Prepares correct query to ask App.js
+     * Adds current selectedEnum to query.
      * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
      */
-    fetchEnumData = () => {
+    fetchEnumData = (variable) => {
         const {name} = this.state.selectedEnum;
         let query ="hospitals?variables=";
-        query += encodeURIComponent(this.props.selectedVariable.name + "$");
-        query += encodeURIComponent(name);
+        query += encodeURIComponent(variable.name + "$" + name);
         return this.props.fetchData("hospitals", query);
     }
 
@@ -45,8 +46,7 @@ class ControlPanel extends Component {
         this.setState({
             selectedEnum : variable
         }, () => {
-            console.log("enum set, asking for data...");
-            this.fetchEnumData();
+            this.fetchEnumData(this.props.selectedVariable);
         })
     }
 
@@ -60,7 +60,7 @@ class ControlPanel extends Component {
         if (!this.state.selectedEnum) {
             return this.fetchMapData(item);
         } else {
-            return this.fetchEnumData();
+            return this.fetchEnumData(item);
         }
     }
 
