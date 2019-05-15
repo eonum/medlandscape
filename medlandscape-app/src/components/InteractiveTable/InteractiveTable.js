@@ -542,16 +542,23 @@ class InteractiveTable extends Component {
      * @param {Object} data the generated 2D array
      */
     submitTableData = (data) => {
-        const {selectedVariables, selectedHospitals} = this.state;
+        const {selectedVariables, selectedHospitals, selectedYears} = this.state;
 
         let namedData = [];
 
         let headers = [];
-        headers.push("-");
+        headers.push("Variable");
         for (let v of selectedVariables) {
             headers.push(v.text);
         }
         namedData.push(headers);
+
+        let years = [];
+        years.push("Year");
+        for (let y of selectedYears) {
+            years.push(y);
+        }
+        namedData.push(years);
 
         for (let i = 0; i < data.length; i++) {
             let row = [selectedHospitals[i].name].concat(data[i]);
@@ -564,7 +571,7 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * dataFetched - Called when the API-Request is completed
+     * dataFetched - Called when the API-Request is completed (description)
      */
     dataFetched = () => {
         let updatedDropdowns = this.state.variableDropdowns;
