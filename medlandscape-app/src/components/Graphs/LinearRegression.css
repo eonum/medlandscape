@@ -32,10 +32,10 @@ div.tooltip {
     position: absolute;
     text-align: center;
     padding: 3px;
-    font-size: 13px;
+    font-size: 16px;
     background: #1996fa;
     border: 0px;
-    border-radius: 8px;
+    border-radius: 3px;
     pointer-events: none;
 }
 
