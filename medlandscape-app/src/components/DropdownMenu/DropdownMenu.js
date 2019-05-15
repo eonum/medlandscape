@@ -81,7 +81,7 @@ class DropdownMenu extends Component {
                 varText = this.props.selectedItem.name;
             }
         } else { // fallback if no item was passed as selectedItem
-            varText = t('dropDowns.variablesFallback');
+            varText = this.props.defaultText;
         }
 
         return (

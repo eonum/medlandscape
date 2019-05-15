@@ -33,6 +33,10 @@ class InteractiveTable extends Component {
 			variableDropdowns : [],
             selectedVariables : [],
 
+            nextYearId : 'yea-' + 0,
+            yearDropdowns : [],
+            selectedYears : [],
+
             nextHospitalId : 'hos-' + 0,
             hospitalDropdowns : [],
             selectedHospitals : [],
@@ -193,7 +197,7 @@ class InteractiveTable extends Component {
      *  and the new dropdown at index 1
      */
     createNewHospital = (selectedHosp, id) => {
-        let newSelectedHospital = {};
+        let newSelectedHospital = undefined;
         if (selectedHosp) {
             newSelectedHospital = selectedHosp;
         }
@@ -203,8 +207,9 @@ class InteractiveTable extends Component {
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
                     selectedItem={newSelectedHospital}
+                    defaultText={this.props.t('dropDowns.hospitalFallback')}
                 />
-            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>X</button>
+                <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>X</button>
             </div>
         );
         return [newSelectedHospital, newDropdown];
@@ -279,13 +284,12 @@ class InteractiveTable extends Component {
 
         let nextVariableId = this.state.nextVariableId + "";
 
-        let newSelectedVariable = {};
         let newDrp = (
             <div className="variableDropdown" key={this.state.nextVariableId}>
                 <DropdownMenu id={this.state.nextVariableId}
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
-                    selectedItem={newSelectedVariable}
+                    defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
                 <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>X</button>
                 <button className="btnSortAsc" onClick={() => this.sortHospitals(nextVariableId, 'asc')}>{this.props.t('tableView.sortAsc')}</button>
@@ -295,9 +299,10 @@ class InteractiveTable extends Component {
 
         // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
         let id_parts = this.state.nextVariableId.split("-");
-        let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);;
+        let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);
+
         newVariables = [...this.state.variableDropdowns, newDrp];
-        newSelectedVariables = [...this.state.selectedVariables, newSelectedVariable];
+        newSelectedVariables = [...this.state.selectedVariables, {}];
 
         this.setState({
             nextVariableId: nextVariableIdInc,
