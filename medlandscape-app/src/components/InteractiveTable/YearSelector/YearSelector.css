@@ -1,6 +1,0 @@
- .yearSelector > .yearDropdown:nth-child(even) {
-    background-color: rgba(180, 180, 180, .2);
-}
-.yearDropdown > .dropdown {
-	padding: 0 0 10px 0;
-}
