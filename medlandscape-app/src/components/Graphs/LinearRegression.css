@@ -26,3 +26,15 @@
     stroke: #293b47;
     fill: #7A99AC
 }
+
+div.tooltip {
+    color: white;
+    position: absolute;
+    text-align: center;
+    padding: 3px;
+    font-size: 13px;
+    background: #1996fa;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
