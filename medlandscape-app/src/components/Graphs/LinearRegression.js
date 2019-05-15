@@ -70,7 +70,9 @@ class LinearRegression extends Component {
 	drawChart() {
 		//remove old svg
 		d3.select("#linearregressionsvg").remove();
-
+		d3.select("#popup").remove();
+		d3.select("#linearregression .tooltip").remove();
+	
 		var w = 960;
 		var h = 500;
 		var padding = 30;
@@ -118,6 +120,53 @@ class LinearRegression extends Component {
 		    .append("div")
 		    .style("opacity", 0)
 		    .attr("class", "tooltip")
+			
+		var popup = d3.select("#linearregression")
+			.append("div")
+			.style("display", "none")
+			.attr("id", "popup");
+			
+		var table = popup
+			.append("table");
+			
+		var firstRow = table
+			.append("tr");
+		firstRow
+			.append("td")
+			.text(this.props.t("popup.hospital"));
+		firstRow
+			.append("td")
+			.attr("id", "popupName");
+			
+		var secondRow = table
+			.append("tr");
+		secondRow
+			.append("td")
+			.text(this.props.t("popup.address"));
+		secondRow
+			.append("td")
+			.attr("id", "popupAddress");
+			
+		var thirdRow = table
+			.append("tr");
+		thirdRow
+			.append("td")
+			.text(this.state.xVariable.text);
+		thirdRow
+			.append("td")
+			.attr("id", "popupXVariable");
+		
+		var fourthRow = table
+			.append("tr");
+		fourthRow
+			.append("td")
+			.text(this.state.yVariable.text);
+		fourthRow
+			.append("td")
+			.attr("id", "popupYVariable");
+			
+		
+		
 
      	// function that changes  tooltip when the user hovers over a point.
      	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
@@ -130,6 +179,34 @@ class LinearRegression extends Component {
        		d3.select("#linearregression .tooltip")
 				.style("left", (d3.event.pageX) + "px")
 				.style("top", (d3.event.pageY - 28) + "px");
+    	}
+		
+		
+		// close popup if you click outside
+		var func = function(e) {
+			
+			d3.select("#popup")
+				.style("display", "none");
+			document.removeEventListener("click", func);
+		}
+		
+		var mouseclick = function(d) {
+       		d3.select("#popup")
+				.style("display", "block")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px")
+			d3.select("#popupName")
+				.text(d.obj.name);
+			d3.select("#popupAddress")
+				.html("<dd>" + d.obj.street + ",</dd>" + d.obj.city);
+			d3.select("#popupXVariable")
+				.text(d.x);
+			d3.select("#popupYVariable")
+				.text(d.y);
+			
+			// prevent, that the click event closes the popup
+			d3.event.stopPropagation();
+			document.addEventListener("click", func);
     	}
 
      	// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
@@ -173,7 +250,8 @@ class LinearRegression extends Component {
 			.attr("r", 3.5)
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave);
+			.on("mouseleave", mouseleave)
+			.on("click", mouseclick);
 
 		// append regression line
 		svg.append("path")
