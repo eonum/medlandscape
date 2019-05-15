@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
+import HospitalTypeFilter from './HospitalTypeFilter/HospitalTypeFilter.js';
 import { withTranslation } from 'react-i18next';
 import './FilterEditor.css'
 
@@ -11,21 +12,21 @@ class FilterEditor extends Component {
 	state = {
         selectedEnum : undefined,
         selectedValues : [],
-		mappingObject : {},
+		titles : [],
 	};
 
 	/**
     *
     */
     dropdownSelectItem = (item) => {
-		let mapObj = {};
+		let titles = [];
 		for (let i = 0; i < item.values.length; i++)
-			mapObj[item.values[i]] = item.values_text[i];
+			titles.push(item.values[i] + ": " + item.values_text[i]);
 
         this.setState({
             selectedEnum : item,
             selectedValues : [],
-            mappingObject : mapObj,
+            titles : titles,
         });
         this.props.setEnum(item);
 	}
@@ -89,13 +90,17 @@ class FilterEditor extends Component {
         const { t } = this.props;
         return (
 			<div className="filter-editor">
+				<p>Spitaltyp</p>
+				{
+					(!!this.props.variables[7]) ? <HospitalTypeFilter item={this.props.variables[7]} /> : null
+				}
 				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} defaultText={t('dropDowns.filterFallback')}/>
                 {
 					(this.state.selectedEnum !== undefined)
 					?
 					<div className="filterCheckbox">
 						<p>{t('mapView.checkbox')}</p>
-						<CheckboxList items={this.state.selectedEnum.values} checkboxSelectItem={this.checkboxSelectItem} mappingObject={this.state.mappingObject} />
+						<CheckboxList items={this.state.selectedEnum.values} checkboxSelectItem={this.checkboxSelectItem} titles={this.state.titles} />
 					</div>
 					: null
 				}

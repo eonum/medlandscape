@@ -9,7 +9,7 @@ class CheckboxListItem extends Component {
                 <label>
                     <input type="checkbox" className="list-item-cb" onChange={this.props.checkboxSelectItem.bind(this, this.props.item)}/>
                     <div className="list-item-name">
-                        {this.props.item}: {this.props.mappingObject[this.props.item]}
+                        {this.props.title}
                     </div>
                 </label>
             </div>
