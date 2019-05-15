@@ -434,17 +434,20 @@ class LinearRegression extends Component {
 	 * @return {JSX}
 	 */
 	render() {
-        return (
+		let variables = this.props.variables.filter((variable)=>{
+			return(variable.variable_type !== "enum" && variable.variable_type !== "string")
+		});
+		return (
         	<div>
 				<div id="linearregression"></div>
 				<DropdownMenu id="xAxis"
-                    listItems={this.props.variables}
+                    listItems={variables}
                     selectItem={this.selectXAxis}
                     selectedItem={this.state.xVariable}
                     defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
 				<DropdownMenu id="yAxis"
-                    listItems={this.props.variables}
+                    listItems={variables}
                     selectItem={this.selectYAxis}
                     selectedItem={this.state.yVariable}
                     defaultText={this.props.t('dropDowns.variablesFallback')}
