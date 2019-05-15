@@ -36,9 +36,8 @@ div.tooltip {
     background: #1996fa;
     border: 0px;
     border-radius: 3px;
-    pointer-events: none;
+    pointer-events: auto;
 }
-
 
 #popup{
 	position: absolute;

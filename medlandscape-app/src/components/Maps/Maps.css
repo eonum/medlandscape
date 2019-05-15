@@ -37,6 +37,10 @@
 	pointer-events: none;
 }
 
+.leaflet-tooltip::before{
+	opacity: 0;
+}
+
 .map th, .map tr, .map td {
 	font-size: 13px;
 	padding: 4px 0;

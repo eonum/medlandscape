@@ -249,6 +249,7 @@ class LinearRegression extends Component {
 				return yScale(d.y);
 			})
 			.attr("r", 3.5)
+			.style("cursor", "pointer")
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave)
