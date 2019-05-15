@@ -72,12 +72,18 @@ class ResultTable extends Component {
                             break;
                         }
                     }
-                    for (let variable of this.props.selectedVariables) {
+                    for (let i = 0; i < this.props.selectedVariables.length; i++) {
+                        let variable = this.props.selectedVariables[i];
                         if (variable.is_time_series) {
-                            const latestYear = Object.keys(currentHosp.attributes[variable.name])
-                                .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+                            // const latestYear = Object.keys(currentHosp.attributes[variable.name])
+                            //     .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+                            const year = this.props.selectedYears[i];
                             const obj = currentHosp.attributes[variable.name];
-                            newRow.push(obj[latestYear]);
+                            let value = "";
+                            if (typeof obj[year] !== 'undefined') {
+                                value = obj[year];
+                            }
+                            newRow.push(value);
                         } else {
                             newRow.push(currentHosp.attributes[variable.name]);
                         }
@@ -124,6 +130,7 @@ class ResultTable extends Component {
 ResultTable.propTypes = {
     selectedHospitals: PropTypes.array.isRequired,
     selectedVariables: PropTypes.array.isRequired,
+    selectedYears: PropTypes.array.isRequired,
     hospitalData: PropTypes.array.isRequired,
     dataLoaded: PropTypes.bool.isRequired,
     submitTableData: PropTypes.func.isRequired,

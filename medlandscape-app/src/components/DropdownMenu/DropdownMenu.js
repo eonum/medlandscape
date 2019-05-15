@@ -111,7 +111,6 @@ class DropdownMenu extends Component {
 DropdownMenu.propTypes = {
     listItems: PropTypes.array.isRequired,
     selectItem: PropTypes.func.isRequired,
-    selectedItem: PropTypes.object.isRequired,
 }
 
 const LocalizedDropdownMenu = withTranslation()(DropdownMenu);
