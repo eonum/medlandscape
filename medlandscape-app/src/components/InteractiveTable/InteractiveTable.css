@@ -2,10 +2,12 @@
     grid-row-start: 1;
 	grid-column-start: 2;
 }
+
 .hospitalSelector {
 	grid-row-start: 2;
 	grid-column-start: 1;
 }
+
 .btnGenerateTable {
     grid-row-start: 1;
 	grid-column-start: 1;
@@ -49,7 +51,8 @@
 	background-color: #1996f6;
 	font-size: 20pt;
 }
-.btnCreateCSV{
+
+.btnCreateCSV {
 	width: 250px;
 	height: 50px;
 	grid-column:3;
@@ -61,10 +64,12 @@
 	justify-self: center;
     align-self: center;
 }
+
 .btnCreateCSV:hover{
 	cursor: pointer;
 }
-.btnAddAllHospitals{
+
+.btnAddAllHospitals {
 	width: 250px;
 	height: 50px;
 	grid-column:1;
@@ -76,6 +81,7 @@
 	justify-self: center;
 	align-self: center;
 }
-.btnAddAllHospitals:hover{
+
+.btnAddAllHospitals:hover {
 	cursor: pointer;
 }

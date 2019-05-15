@@ -201,7 +201,7 @@ class InteractiveTable extends Component {
                     selectItem={this.selectHospital}
                     selectedItem={newSelectedHospital}
                 />
-            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>-</button>
+            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>X</button>
             </div>
         );
         return [newSelectedHospital, newDropdown];
@@ -282,7 +282,7 @@ class InteractiveTable extends Component {
                     selectItem={this.selectVariable}
                     selectedItem={newSelectedVariable}
                 />
-                <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>-</button>
+                <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>X</button>
                 <button className="btnSortAsc" onClick={() => this.sortHospitals(nextVariableId, 'asc')}>{this.props.t('tableView.sortAsc')}</button>
                 <button className="btnSortDesc" onClick={() => this.sortHospitals(nextVariableId, 'desc')}>{this.props.t('tableView.sortDesc')}</button>
             </div>

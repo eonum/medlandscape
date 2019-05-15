@@ -1,6 +1,32 @@
  .hospitalSelector > .hospitalDropdown:nth-child(even) {
     background-color: rgba(180, 180, 180, .2);
 }
+
 .hospitalDropdown > .dropdown {
 	padding: 0 0 10px 0;
+}
+
+.hospitalDropdown {
+    position: relative;
+}
+
+.hospitalDropdown:hover > .btnSubtractHospital {
+    display: block;
+}
+
+.btnSubtractHospital {
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    background-color: black;
+    color: white;
+    position: absolute;
+    border: none;
+    top: -5px;
+    right: -5px;
+    display: none;
+}
+
+.btnSubtractHospital:hover {
+    cursor: pointer;
 }
