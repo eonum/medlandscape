@@ -14,7 +14,7 @@ class CentralPanel extends Component {
         tableDataLoaded : false
     }
 
-    requestTableData = (vars, callback) => {
+    requestTableData = (vars) => {
         let requestedVars = "";
 
         for (let variable of vars) {
@@ -28,7 +28,7 @@ class CentralPanel extends Component {
         this.props.fetchData("hospitals", query).then(() => {
             this.setState({
                 tableDataLoaded : true
-            }, () => { callback() })
+            })
         })
     }
 
