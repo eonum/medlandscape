@@ -40,7 +40,8 @@ class InteractiveTable extends Component {
             dropdownsNeedUpdate : true,
 			csvData : [],
 
-            previousLanguage : props.i18n.language
+            previousLanguage : props.i18n.language,
+            selectionChanged: false
         }
     }
 
@@ -147,7 +148,8 @@ class InteractiveTable extends Component {
         this.setState({
             hospitalDropdowns : newDropdowns,
             selectedHospitals : newSelectedHospitals,
-            nextHospitalId : nextHospId
+            nextHospitalId : nextHospId,
+            selectionChanged: true
         });
     }
 
@@ -175,7 +177,8 @@ class InteractiveTable extends Component {
         this.setState({
             hospitalDropdowns : hospDropdowns,
             selectedHospitals : selectedHosps,
-            nextHospitalId : nextHospId
+            nextHospitalId : nextHospId,
+            selectionChanged: true
         });
     }
 
@@ -233,7 +236,8 @@ class InteractiveTable extends Component {
 
         this.setState({
 			selectedHospitals: updSelHos,
-			hospitalDropdowns: updHosDrp
+			hospitalDropdowns: updHosDrp,
+            selectionChanged: true
 		});
     }
 
@@ -260,7 +264,8 @@ class InteractiveTable extends Component {
         this.setState({
             // selectedHospitals : newList
             selectedHospitals: update(this.state.selectedHospitals, {[index]: {$set: item}}),
-            hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
+            hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}}),
+            selectionChanged: true
         });
     }
 
@@ -297,7 +302,8 @@ class InteractiveTable extends Component {
         this.setState({
             nextVariableId: nextVariableIdInc,
             variableDropdowns : newVariables,
-            selectedVariables : newSelectedVariables
+            selectedVariables : newSelectedVariables,
+            selectionChanged: true
         });
     }
 
@@ -327,7 +333,8 @@ class InteractiveTable extends Component {
 
         this.setState({
 			selectedVariables: updSelVar,
-			variableDropdowns: updVarDrp
+			variableDropdowns: updVarDrp,
+            selectionChanged: true
 		});
     }
 
@@ -470,8 +477,9 @@ class InteractiveTable extends Component {
 
 		this.setState({
 			selectedVariables: update(this.state.selectedVariables, {[index]: {$set: item}}),
-			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
-		});
+			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}}),
+            selectionChanged: true
+        });
 	}
 
     /**
@@ -509,6 +517,14 @@ class InteractiveTable extends Component {
         console.log('whoeeh');
     }
 
+    /**
+     * resultTableAcknowledgedChange - description
+     */
+    resultTableAcknowledgedChange = () => {
+        this.setState({
+            selectionChanged: false
+        });
+    }
 
     /**
      * render - renders the component to the screen
@@ -540,15 +556,17 @@ class InteractiveTable extends Component {
                     dataLoaded={this.props.tableDataLoaded}
                     dataGenerated={this.props.tableDataGenerated}
                     submitTableData={this.submitTableData}
+                    selectionChanged={this.state.selectionChanged}
+                    changeAcknowledged={this.resultTableAcknowledgedChange}
                 />
-				{/*<CSVLink
+				<CSVLink
 					data={this.state.csvData}
 					filename="medlandscapeCSV.csv"
 					className="CSVButton"
 					ref={(r) => this.csvLink = r}
 					target="_blank"
 				/>
-                <YearSelector
+                {/*<YearSelector
                     className='yearSelector'
                     yearDropdowns={this.state.yearDropdowns}
                 />*/}

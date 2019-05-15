@@ -87,20 +87,26 @@ class ResultTable extends Component {
                 this.setState({
                     resultTableData: tableData
                 })
+                this.props.changeAcknowledged();
                 this.props.submitTableData(tableData);
             }
             this.props.dataGenerated()
         }
     }
+
     /**
      * render - renders the component to the screen
      *
      * @return {JSX}  JSX of the component
      */
     render() {
+        let table;
+        if (!this.props.selectionChanged) {
+            table = (<Table tableData={this.state.resultTableData} />);
+        }
         return (
             <div>
-                <Table tableData={this.state.resultTableData} />
+                {table}
             </div>
         );
     }
@@ -119,7 +125,10 @@ ResultTable.propTypes = {
     selectedHospitals: PropTypes.array.isRequired,
     selectedVariables: PropTypes.array.isRequired,
     hospitalData: PropTypes.array.isRequired,
+    dataLoaded: PropTypes.bool.isRequired,
     submitTableData: PropTypes.func.isRequired,
+    selectionChanged: PropTypes.bool.isRequired,
+    changeAcknowledged: PropTypes.func.isRequired
 }
 
 const LocalizedResultTable = withTranslation()(ResultTable);
