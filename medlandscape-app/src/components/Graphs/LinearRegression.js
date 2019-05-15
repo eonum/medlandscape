@@ -8,6 +8,7 @@ import { withTranslation } from 'react-i18next';
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
 * The rendered JSX also consists of two dropdowns where variables can be selected to display a scatterplot.
 * The currently selected variables and language are stored in the state.
+* Width, heigth and passing of the chart are also stored in the state.
 */
 class LinearRegression extends Component {
 
@@ -15,7 +16,26 @@ class LinearRegression extends Component {
         xVariable : undefined,
         yVariable : undefined,
 		language: this.props.i18n.language,
+		w : 960,
+		h : 500,
+		padding : 30,
 	};
+
+	componentDidMount(){
+		this.drawEmptyChart();
+	}
+
+	componentWillUpdate(){
+		// if the language is changed,set back variables and remove chart
+		if (this.props.i18n.language !== this.state.language){
+			this.setState({
+				language : this.props.i18n.language,
+				xVariable: undefined,
+				yVariable: undefined,
+			});
+		this.drawEmptyChart();
+		}
+	}
 
 	componentDidUpdate(){
 		// check if response is there and draw chart if so
@@ -67,15 +87,12 @@ class LinearRegression extends Component {
 	/**
 	 * Draws a Scatterplot with a regression line
 	 */
-	drawChart() {
+	drawChart = () => {
 		//remove old svg
-		d3.select("#linearregressionsvg").remove();
-		d3.select("#popup").remove();
-		d3.select("#linearregression .tooltip").remove();
+		this.removeChart();
 
-		var w = 960;
-		var h = 500;
-		var padding = 30;
+		// get width, heigth and padding
+		const {w, h, padding} = this.state;
 
 		//create data points
 		var dataset = this.createChartdata();
@@ -105,14 +122,6 @@ class LinearRegression extends Component {
 				})
 			]) //y range is reversed because svg
 			.range([h-padding, padding]);
-
-		// Define Axis
-		var xAxis = d3.axisBottom()
-			.scale(xScale);
-
-		var yAxis = d3.axisLeft()
-			.scale(yScale)
-			.ticks(5);
 
 		// Add a tooltip div. Here we define the general feature of the tooltip: stuff that do not depend on the data point.
      	// Its opacity is set to 0: we don't see it by default.
@@ -165,9 +174,6 @@ class LinearRegression extends Component {
 			.append("td")
 			.attr("id", "popupYVariable");
 
-
-
-
      	// function that changes  tooltip when the user hovers over a point.
      	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
     	var mouseover = function(d) {
@@ -203,7 +209,7 @@ class LinearRegression extends Component {
 			d3.select("#popupYVariable")
 				.text(d.y);
 
-			// prevent, that the click event closes the popup
+			// prevent that the click event closes the popup
 			d3.event.stopPropagation();
 			document.addEventListener("click", func);
     	}
@@ -216,11 +222,7 @@ class LinearRegression extends Component {
     	}
 
 		// create svg
-		var svg = d3.select("#linearregression")
-			.append("svg")
-			.attr("id","linearregressionsvg")
-			.attr("width",w)
-			.attr("height", h);
+		var svg = this.createSvg();
 
 		// cut off datapoints that are outside the axis
 		svg.append("clipPath")
@@ -259,21 +261,17 @@ class LinearRegression extends Component {
 			.attr("class", "line")
 			.attr("d", newline);
 
-		// append Axes
-		svg.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate(0," + (h-padding) + ")")
-			.call(xAxis);
-
-		svg.append("g")
-			.attr("class", "y axis")
-			.attr("transform", "translate(" + padding + ",0)")
-			.call(yAxis);
+		// define and append axes
+		this.appendAxes(svg, xScale, yScale);
 
 		// call this to set back and prepare for reupdate
 		this.props.tableDataGenerated();
 	}
 
+	/**
+	* creates the dataset from arrays of data for x and y values
+	* @return {Object} dataset that will be visualized
+	*/
 	createChartdata = () => {
 		let dataArrays = this.makeDataArrays();
 		var x = dataArrays.x;
@@ -329,6 +327,66 @@ class LinearRegression extends Component {
 	}
 
 	/**
+	 * Draws an empty scatterplot (only axes without any text)
+	 */
+	drawEmptyChart = () => {
+		this.removeChart();
+		const {w, h, padding} = this.state;
+		// Define Scales
+		var xScale = d3.scaleLinear()
+			.domain([undefined, undefined])
+			.range([padding,w - padding*2]);
+		var yScale = d3.scaleLinear()
+			.domain([undefined, undefined])
+			.range([h-padding, padding]);
+
+		var svg = this.createSvg();
+		this.appendAxes(svg, xScale, yScale);
+	}
+
+	/**
+	* create svg
+	* @return {svg}
+	*/
+	createSvg = () =>{
+		const {w, h, padding} = this.state;
+		var svg = d3.select("#linearregression")
+			.append("svg")
+			.attr("id","linearregressionsvg")
+			.attr("width",w)
+			.attr("height", h);
+		return svg;
+	}
+
+	/**
+	* append axes to a svg
+	* @param {svg}
+	* @param {xScale} xScale to append to svg
+	* @param {xScale} yScale to append to svg
+	*/
+	appendAxes = (svg, xScale, yScale) => {
+		const {w, h, padding} = this.state;
+		//define axes
+		var xAxis = d3.axisBottom()
+			.scale(xScale);
+
+		var yAxis = d3.axisLeft()
+			.scale(yScale)
+			.ticks(5);
+
+		//append axes
+		svg.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + (h-padding) + ")")
+			.call(xAxis);
+
+		svg.append("g")
+			.attr("class", "y axis")
+			.attr("transform", "translate(" + padding + ",0)")
+			.call(yAxis);
+	}
+
+	/**
     * defining behaviour on dropdown click
 	* write the selected variable to state and update chart on X axis
     */
@@ -356,21 +414,18 @@ class LinearRegression extends Component {
 	* check if both x and y variable have been selected
 	* update selected variables in state if so
 	*/
-	updateChart() {
+	updateChart = () => {
 		if(this.state.xVariable && this.state.yVariable)
 			this.props.requestData([this.state.xVariable,this.state.yVariable]);
 	}
 
-	componentWillUpdate(){
-		// if the language is changed,set back variables and remove chart
-		if (this.props.i18n.language !== this.state.language){
-			this.setState({
-				language : this.props.i18n.language,
-				xVariable: undefined,
-				yVariable: undefined,
-			});
-			d3.select("#linearregressionsvg").remove();
-		}
+	/**
+	* remove drawn chart
+	*/
+	removeChart = () => {
+		d3.select("#linearregressionsvg").remove();
+		d3.select("#popup").remove();
+		d3.select("#linearregression .tooltip").remove();
 	}
 
 	/**
@@ -394,7 +449,6 @@ class LinearRegression extends Component {
                     defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
 			</div>
-
         )
 	}
 }
