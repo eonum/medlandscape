@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import CheckboxList from '../../CheckboxList/CheckboxList.js';
+import CheckboxList from '../CheckboxList/CheckboxList.js';
 
 class HospitalTypeFilter extends Component {
 
     state = {
-        mappingObject : {},
         selectedValues : []
     }
 
@@ -60,6 +59,7 @@ class HospitalTypeFilter extends Component {
                     apiValues.push("K235");
                     break;
             }
+
         }
 
         this.setState({
@@ -73,7 +73,6 @@ class HospitalTypeFilter extends Component {
 
 
     render() {
-        const {values, values_text} = this.props.item;
         let categorizedHospitalTypes = ["Universitätsspital", "Allgemeinspital, Zentrumversorgung", "Allgemeinspital, Grundversorgung", "Psychiatrische Klinik", "Rehabilitationsklinik", "Spezialklinik"];
 
         return (

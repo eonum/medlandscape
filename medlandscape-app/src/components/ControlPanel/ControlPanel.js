@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import FilterEditor from '../FilterEditor/FilterEditor.js';
+import HospitalTypeFilter from '../HospitalTypeFilter/HospitalTypeFilter.js';
 import { withTranslation } from 'react-i18next';
 import './ControlPanel.css'
+
+
 
 class ControlPanel extends Component {
 
@@ -88,10 +91,8 @@ class ControlPanel extends Component {
     }
 
     render() {
-        let cantonVars = [], hospitalVars = [], years = [], enums = [];
         let selectedCanton = {}, selectedHospital = {};
-
-        // filtering variables
+        let cantonVars = [], hospitalVars = [], enums = [];
         this.props.variables.filter(variable => {
             if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
                 hospitalVars.push(variable);
@@ -102,30 +103,41 @@ class ControlPanel extends Component {
             }
         });
 
+        const {t, hasLoaded, hospitals, updateHospitals, year, selectedVariable} = this.props;
+
         // setting selectedItem for Dropdowns
         if (this.props.selectedVariable.variable_model === "Hospital") {
-            selectedHospital = this.props.selectedVariable;
+            selectedHospital = selectedVariable;
             selectedCanton = undefined;
         } else {
-            selectedCanton = this.props.selectedVariable;
+            selectedCanton = selectedVariable;
             selectedHospital = undefined;
         }
 
-        const { t } = this.props;
+        console.log(this.state.hospitalVars);
+
 
         let mapViewHospitals = (
             <div className="mapViewHospitals">
+                <HospitalTypeFilter />
                 <p>{t('mapView.variables')}</p>
                 <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}/>
                 <p>{t('mapView.filter')}</p>
-                <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} setEnum={this.setEnum}/>
+                <FilterEditor
+                        hospitals={hospitals}
+                        updateHospitals={updateHospitals}
+                        hasLoaded={hasLoaded}
+                        selectedYear={year}
+                        variables={enums}
+                        setEnum={this.setEnum}
+                />
             </div>
         )
 
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText={(t('dropDowns.variablesFallback'))}/>
             </div>
         )
 

@@ -8,6 +8,7 @@
         "checkbox": "Options"
     },
     "dropDowns": {
+        "fallback" : "Choisir",
         "hospitalFallback": "Choisir Hôpital",
         "cantonFallback": "Choisir Canton",
         "variablesFallback": "Choisir Variable",

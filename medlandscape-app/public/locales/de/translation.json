@@ -8,6 +8,7 @@
         "checkbox": "Werte"
     },
     "dropDowns": {
+        "fallback": "Wählen",
         "hospitalFallback": "Spital wählen",
         "cantonFallback": "Kanton wählen",
         "variablesFallback": "Kennzahl wählen",

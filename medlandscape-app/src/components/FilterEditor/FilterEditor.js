@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
-import HospitalTypeFilter from './HospitalTypeFilter/HospitalTypeFilter.js';
 import { withTranslation } from 'react-i18next';
 import './FilterEditor.css'
 
-/**
- * Example component to show how to work with react-i18next localization
- */
 class FilterEditor extends Component {
 	state = {
         selectedEnum : undefined,
@@ -31,6 +27,11 @@ class FilterEditor extends Component {
         this.props.setEnum(item);
 	}
 
+    /**
+     *
+     * @param  {[type]} item [description]
+     * @return {[type]}      [description]
+     */
     checkboxSelectItem = (item) => {
         // removes item if in selectedValues
         let values = this.state.selectedValues.filter((value) => {
@@ -49,6 +50,11 @@ class FilterEditor extends Component {
 		this.filter(values);
     }
 
+    /**
+     * [filter description]
+     * @param  {[type]} selectedValues [description]
+     * @return {[type]}                [description]
+     */
 	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.state.selectedEnum;
@@ -90,10 +96,6 @@ class FilterEditor extends Component {
         const { t } = this.props;
         return (
 			<div className="filter-editor">
-				<p>Spitaltyp</p>
-				{
-					(!!this.props.variables[7]) ? <HospitalTypeFilter item={this.props.variables[7]} /> : null
-				}
 				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} defaultText={t('dropDowns.filterFallback')}/>
                 {
 					(this.state.selectedEnum !== undefined)

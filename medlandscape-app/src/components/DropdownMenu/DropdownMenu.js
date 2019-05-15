@@ -80,8 +80,9 @@ class DropdownMenu extends Component {
             } else { // if contains cantons / variables
                 varText = this.props.selectedItem.name;
             }
-        } else { // fallback if no item was passed as selectedItem
-            varText = t('dropDowns.variablesFallback');
+        } else { // fallback if no item was passed as selectedItem OR no defaultText
+            // !! is to check for undefined, known hack
+            varText = (!!this.props.defaultText) ? this.props.defaultText : t('dropDowns.fallback');
         }
 
         return (
