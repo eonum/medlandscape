@@ -34,3 +34,15 @@
 .btnSubtractVariable:hover {
     cursor: pointer;
 }
+
+.btnSortAsc, .btnSortDesc {
+    width: 70px;
+    height: 20px;
+    margin: 3px;
+    color: white;
+    text-align: center;
+    background-color: #1996f6;
+    border: none;
+    border-radius: 15px;
+    outline: none;
+}

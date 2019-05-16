@@ -160,10 +160,10 @@ class ControlPanel extends Component {
                 <div className="header">
                     <h1>{t('graphView.title')}</h1>
                 </div>
-                    <div className="graphView">
+                    {/**<div className="graphView">
                         <p>{t('mapView.variables')}</p>
                         <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}  defaultText={t('dropDowns.variablesFallback')}/>
-                    </div>
+                    </div>**/}
             </div>
         );
 

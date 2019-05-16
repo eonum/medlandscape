@@ -634,6 +634,10 @@ class InteractiveTable extends Component {
         const { t } = this.props;
         return (
             <div className="interactiveTable">
+                <button className="btnCreateCSV"
+                onClick={() => this.csvLink.link.click()}>
+                {t('tableView.btnCreateCSV')}
+                </button>
                 <VariableSelector
                     className="variableSelector"
                     variables={this.props.variables}
@@ -666,10 +670,6 @@ class InteractiveTable extends Component {
 					ref={(r) => this.csvLink = r}
 					target="_blank"
 				/>
-				<button className="btnCreateCSV"
-				onClick={() => this.csvLink.link.click()}>
-				{t('tableView.btnCreateCSV')}
-				</button>
                 <button
                     className="btnGenerateTable"
                     onClick={() => this.props.requestData(this.state.selectedVariables, this.dataFetched)}>{t('tableView.btnCreateTable')}

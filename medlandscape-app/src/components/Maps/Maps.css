@@ -28,13 +28,14 @@
 .resetView {
 	background-image: url('switzerland.png');
 	background-color: white;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 	border-radius: 25px;
     box-sizing: border-box;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 45px auto;
+    background-size: 35px auto;
+    margin-right: -5px;
 }
 
 .resetView:hover {
