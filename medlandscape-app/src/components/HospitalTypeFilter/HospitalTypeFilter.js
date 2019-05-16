@@ -65,11 +65,16 @@ class HospitalTypeFilter extends Component {
             selectedValues : values
         })
 
-        this.props.setSelectedHospitalTypes(apiValues);
-        if (values.length === 0) {
+        this.props.setTypes(apiValues);
 
-        }
         this.filter(apiValues);
+    }
+
+    componentWillRecieveProps(nextProps) {
+        if (nextProps.hospitals[0].attributes.length !== this.props.hospitals[0].attributes.length) {
+            console.log("new props for HospitalTypeFilter");
+            this.filter(this.state.selectedValues);
+        }
     }
 
     filter = (selectedValues) => {
@@ -94,8 +99,13 @@ class HospitalTypeFilter extends Component {
                 }
                 return true;
             });
+            if (filteredHospitals.length === 0) {
+                filteredHospitals[0] = 0; // signaling it did not match anything (example spezialausrüstung: litho)
+            }
+        } else {
+            filteredHospitals = hospitals;
         }
-        
+
         this.props.filter(filteredHospitals);
     }
 

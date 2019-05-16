@@ -8,7 +8,7 @@ class FilterEditor extends Component {
 	state = {
         selectedEnum : undefined,
         selectedValues : [],
-		titles : []
+		titles : [],
 	};
 
 	/**
@@ -17,16 +17,15 @@ class FilterEditor extends Component {
     dropdownSelectItem = (item) => {
 		let titles = [];
 		for (let i = 0; i < item.values.length; i++)
-			titles.push(item.values[i] + ": " + item.values_text[i]);
+		titles.push(item.values[i] + ": " + item.values_text[i]);
 
-		this.props.setEnum(item);
-
-        this.setState({
-            selectedEnum : item,
-            selectedValues : [],
-            titles : titles,
-        });
-
+		this.props.setEnum(item).then(() => {
+			this.setState({
+				selectedEnum : item,
+				selectedValues : [],
+				titles : titles,
+			});
+		});
 	}
 
     /**
@@ -67,11 +66,13 @@ class FilterEditor extends Component {
 
 		let filteredHospitals =  [];
 
-		if (selectedValues.length > 0) {
+		// type of filtering (inclusive:true = OR)
+		let inclusive = (name === "KT" || name === "LA" || name === "RForm" || name === "Typ");
 
+		if (selectedValues.length > 0) {
 			filteredHospitals = hospitals.filter((hospital) => {
 				// Enum variables to be filtered with "OR"
-				if (name === "KT" || name === "LA" || name === "RForm" || name === "Typ") {
+				if (inclusive) {
 					let counter = 0;
 					if (selectedYear in hospital.attributes[name]) {
 						const values = hospital.attributes[name][selectedYear];
@@ -98,6 +99,12 @@ class FilterEditor extends Component {
 				}
 				return true;
 			});
+			if (filteredHospitals.length === 0) {
+				console.log("no hits");
+				filteredHospitals[0] = 0;
+			}
+		} else {
+			filteredHospitals = hospitals;
 		}
 
 		this.props.filter(filteredHospitals);

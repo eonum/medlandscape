@@ -114,32 +114,31 @@ class App extends Component {
      * helper method to determine which Hospitals to display on the map.
      * @return {Array} The array of hospitals to display.
      */
-    filteredHospitals = () => {
+    filterHospitals = () => {
         const {hospitalsByEnums, hospitalsByType, hospitals} = this.state;
 
-        console.log("enum filter: " + hospitalsByEnums.length);
-        console.log(hospitalsByEnums);
-        console.log("type filter: " + hospitalsByType.length);
-        console.log(hospitalsByType);
+        console.log("enum filter: " + hospitalsByEnums.length + ", type filter: " + hospitalsByType.length);
 
         let filteredHospitals = [];
-        if (hospitalsByEnums.length > 0 && hospitalsByType.length > 0) {
-
-            // we have to compare names because the attribute of each hospital has a different length
-            for (let i = 0; i < hospitalsByType.length; i++) {
-                for (let j = 0; j < hospitalsByEnums.length; j++) {
-                    if (hospitalsByEnums[j].name === hospitalsByType[i].name) {
-                        filteredHospitals.push(hospitalsByEnums[j]);
+        if (!(hospitalsByEnums[0] === 0 || hospitalsByType[0] === 0)) {
+            // in case of no matches, there would be no need to do intersection
+            if (hospitalsByEnums.length > 0 && hospitalsByType.length > 0) {
+                // we have to compare names because the attribute of each hospital has a different length
+                for (let i = 0; i < hospitalsByType.length; i++) {
+                    for (let j = 0; j < hospitalsByEnums.length; j++) {
+                        if (hospitalsByEnums[j].name === hospitalsByType[i].name) {
+                            filteredHospitals.push(hospitalsByEnums[j]);
+                        }
                     }
                 }
+                console.log("both filters active, intersect: " + filteredHospitals.length);
+            } else if (hospitalsByEnums.length > 0 || hospitalsByType.length > 0) {
+                filteredHospitals = (hospitalsByType > hospitalsByEnums) ? hospitalsByType : hospitalsByEnums;
+            } else {
+                filteredHospitals = hospitals;
             }
-            console.log("both filters active, intersect: " + filteredHospitals.length);
-        } else if (hospitalsByEnums.length > 0 || hospitalsByType.length > 0){
-            filteredHospitals = (hospitalsByType > hospitalsByEnums) ? hospitalsByType : hospitalsByEnums;
-        } else {
-            filteredHospitals = hospitals;
         }
-
+        console.log(filteredHospitals);
         return filteredHospitals;
     }
 
@@ -235,10 +234,12 @@ class App extends Component {
             : null
         ;
 
+        let filteredHospitals = this.filterHospitals();
+
         return (
 			<div className="App">
                 <Maps
-                    objects={(selectedVariable.variable_model === "Hospital") ? this.filteredHospitals() : cantons}
+                    objects={(selectedVariable.variable_model === "Hospital") ? filteredHospitals : cantons}
                     variableInfo={selectedVariable}
                     year={selectedYear}
                     hasLoaded={hasLoaded}

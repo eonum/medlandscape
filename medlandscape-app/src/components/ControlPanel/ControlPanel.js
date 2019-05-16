@@ -60,10 +60,11 @@ class ControlPanel extends Component {
      * Called when filtering Hospital variables.
      * Prepares correct query to ask App.js
      * Adds current selectedEnum to query.
-     * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
+     * @param  {Variable Object} variable The selected Variable to apply to Hospitals.
+     * @param  {Variable Object} enum The selected Enum Variable to apply to Hospitals.
      */
-    fetchEnumData = (variable) => {
-        const {name} = this.state.selectedEnum;
+    fetchEnumData = (variable, enumVar) => {
+        const {name} = enumVar;
         let query ="hospitals?variables=";
         query += encodeURIComponent(variable.name + "$" + name + "$" + this.state.enums[7].name);
         return this.props.fetchData("hospitals", query);
@@ -77,9 +78,8 @@ class ControlPanel extends Component {
     setEnum = (variable) => {
         this.setState({
             selectedEnum : variable
-        }, () => {
-            this.fetchEnumData(this.props.selectedVariable);
-        })
+        });
+        return this.fetchEnumData(this.props.selectedVariable, variable);
     }
 
     /**
@@ -89,10 +89,10 @@ class ControlPanel extends Component {
      */
     selectVariable = (item) => {
         this.props.selectVariable(item);
-        if (!this.state.selectedEnum) {
+        if (this.state.selectedEnum === undefined) {
             return this.fetchMapData(item);
         } else {
-            return this.fetchEnumData(item);
+            return this.fetchEnumData(item, this.state.selectedEnum);
         }
     }
 
@@ -121,7 +121,7 @@ class ControlPanel extends Component {
 
     render() {
 
-        const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable} = this.props;
+        const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable, setSelectedHospitalTypes} = this.props;
         const {hospitalVars, cantonVars, enums} = this.state;
 
         let selectedCanton = {}, selectedHospital = {};
@@ -138,21 +138,26 @@ class ControlPanel extends Component {
         let mapViewHospitals = (
             <div className="mapViewHospitals">
                 <HospitalTypeFilter
-                    setSelectedHospitalTypes={this.props.setSelectedHospitalTypes}
-                    filter={filterByType}
                     hospitals={hospitals}
+                    filter={filterByType}
                     selectedYear={year}
+                    setTypes={setSelectedHospitalTypes}
                 />
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars"
+                    listItems={hospitalVars}
+                    selectItem={this.selectVariable}
+                    selectedItem={selectedHospital}
+                    defaultText={t('dropDowns.variablesFallback')}
+                />
                 <p>{t('mapView.filter')}</p>
                 <FilterEditor
-                        hospitals={hospitals}
-                        filter={filterByEnum}
-                        hasLoaded={hasLoaded}
-                        selectedYear={year}
-                        variables={enums}
-                        setEnum={this.setEnum}
+                    hospitals={hospitals}
+                    filter={filterByEnum}
+                    hasLoaded={hasLoaded}
+                    selectedYear={year}
+                    variables={enums}
+                    setEnum={this.setEnum}
                 />
             </div>
         )
