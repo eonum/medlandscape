@@ -166,6 +166,27 @@ class CantonMap extends Component {
 	}
 
 	/**
+	* Set a new style to a canton on the map
+	* @param {Object} e the event
+	*/
+	setNewStyle = (e) =>{
+		e.target.setStyle({
+			color: "#000",
+			opacity: 1
+		});
+		e.target.bringToFront();
+	}
+
+	/**
+	* Define behaviour of click on hospital
+	* @param {Object} e the event
+	*/
+	onClick = (e) => {
+		this.setNewStyle(e);
+		e.target.closeTooltip();
+	}
+
+	/**
 	 * Draws cantons on the map
 	 * Adds popup an tooltip with canton information to each geoJSON
 	 * @return {JSX}
@@ -181,9 +202,11 @@ class CantonMap extends Component {
 								style = {this.getCantonStyle(item)}
 								onMouseOver = {this.onMouseOver.bind(this)}
 								onMouseOut = {this.onMouseOut.bind(this, item)}
+								onClick = {this.onClick.bind(this)}
 								onPopupClose = {this.resetStyle.bind(this, item)}
 								>
-								<Tooltip>
+								<Tooltip
+									sticky = {true}>
 									{item.text + " (" + item.name + ")"}
 								</Tooltip>
 								<Popup

@@ -64,6 +64,15 @@ class HospitalMap extends Component {
 		e.target.setStyle({color: oldColor});
 	}
 
+	/**
+	* Define behaviour of click on hospital
+	* @param {Object} e the event
+	*/
+	onClick = (e) => {
+		this.setNewStyle(e);
+		e.target.closeTooltip();
+	}
+
     /**
      * Creates circles to represent hospitals on a Map
 	 * Adds popup an tooltip with hospital information to each circle
@@ -83,10 +92,11 @@ class HospitalMap extends Component {
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}
 							onMouseOut = {this.onMouseOut.bind(this)}
-							onClick = {this.setNewStyle.bind(this)}
+							onClick = {this.onClick.bind(this)}
 							onPopupClose = {this.resetStyle.bind(this)}
         				>
-        					<Tooltip>
+        					<Tooltip
+								sticky = {true}>
         						{item.name}
         					</Tooltip>
 							<Popup

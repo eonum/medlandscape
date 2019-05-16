@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Map, TileLayer } from 'react-leaflet'
+import { Map, TileLayer, ZoomControl } from 'react-leaflet'
 import './Maps.css';
-
+import Control from 'react-leaflet-control';
 import MapInfo from '../MapInfo/MapInfo.js';
 import TestComponent from './TestComponent.js';
 import HospitalMap from './HospitalMap.js';
@@ -119,7 +119,23 @@ class Maps extends Component {
         		zoom={this.state.zoom}
         		minZoom={8} // set minimum zoom level
         		maxZoom={16} // set maximum zoom level
-        		>
+				zoomControl={false}
+        	>
+				<ZoomControl
+					position="topright"
+				/>
+
+				<Control position="topright">
+					<button onClick={ () => this.setState({
+							lat: 46.798473,
+							lng: 8.231726,
+							zoom: 8,
+							})
+						}
+					>
+			          	<div id="rV" className="resetView"></div>
+					</button>
+		      	</Control>
         		<TileLayer // add background layer
         			attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         			url="https://api.mapbox.com/styles/v1/nathi/cjf8cggx93p3u2qrqrgwoh5nh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF0aGkiLCJhIjoiY2pmOGJ4ZXJmMXMyZDJ4bzRoYWRxbzhteCJ9.x2dbGjsVZTA9HLw6VWaQow"

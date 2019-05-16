@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import './InteractiveTable.css';
 import HospitalSelector from './HospitalSelector/HospitalSelector.js';
 import VariableSelector from './VariableSelector/VariableSelector.js';
-import YearSelector from './YearSelector/YearSelector.js';
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import ResultTable from './ResultTable/ResultTable.js';
 import update from 'immutability-helper';
 import { withTranslation } from 'react-i18next';
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 /**
  * Represents the Table view which can be used to create and display a 2d-table
@@ -33,6 +32,9 @@ class InteractiveTable extends Component {
 			variableDropdowns : [],
             selectedVariables : [],
 
+            nextYearId : 'yea-' + 0,
+            selectedYears : [],
+
             nextHospitalId : 'hos-' + 0,
             hospitalDropdowns : [],
             selectedHospitals : [],
@@ -40,7 +42,8 @@ class InteractiveTable extends Component {
             dropdownsNeedUpdate : true,
 			csvData : [],
 
-            previousLanguage : props.i18n.language
+            previousLanguage : props.i18n.language,
+            selectionChanged: false
         }
     }
 
@@ -135,20 +138,21 @@ class InteractiveTable extends Component {
      */
     addHospital = () => {
         let nextHospId = this.state.nextHospitalId + "";
-        let hosp = this.createNewHospital({}, nextHospId);
+        let hosp = this.createNewHospital(undefined, nextHospId);
 
         // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
         let hosp_id_parts = nextHospId.split("-");
         nextHospId = hosp_id_parts[0] + "-" + (Number(hosp_id_parts[1]) + 1);
 
         let newSelectedHospitals = [...this.state.selectedHospitals, hosp[0]];
-        let newDropdowns = newDropdowns = [...this.state.hospitalDropdowns, hosp[1]];
+        let newDropdowns = [...this.state.hospitalDropdowns, hosp[1]];
 
         this.setState({
             hospitalDropdowns : newDropdowns,
             selectedHospitals : newSelectedHospitals,
             nextHospitalId : nextHospId
         });
+        this.selectionChanged();
     }
 
     /**
@@ -177,6 +181,7 @@ class InteractiveTable extends Component {
             selectedHospitals : selectedHosps,
             nextHospitalId : nextHospId
         });
+        this.selectionChanged();
     }
 
     /**
@@ -190,7 +195,7 @@ class InteractiveTable extends Component {
      *  and the new dropdown at index 1
      */
     createNewHospital = (selectedHosp, id) => {
-        let newSelectedHospital = {};
+        let newSelectedHospital = undefined;
         if (selectedHosp) {
             newSelectedHospital = selectedHosp;
         }
@@ -200,8 +205,9 @@ class InteractiveTable extends Component {
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
                     selectedItem={newSelectedHospital}
+                    defaultText={this.props.t('dropDowns.hospitalFallback')}
                 />
-            <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>X</button>
+                <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>X</button>
             </div>
         );
         return [newSelectedHospital, newDropdown];
@@ -235,6 +241,7 @@ class InteractiveTable extends Component {
 			selectedHospitals: updSelHos,
 			hospitalDropdowns: updHosDrp
 		});
+        this.selectionChanged();
     }
 
     /**
@@ -262,6 +269,7 @@ class InteractiveTable extends Component {
             selectedHospitals: update(this.state.selectedHospitals, {[index]: {$set: item}}),
             hospitalDropdowns: update(this.state.hospitalDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
         });
+        this.selectionChanged();
     }
 
     /**
@@ -271,33 +279,79 @@ class InteractiveTable extends Component {
 	addVariable = () => {
         let newVariables = [];
         let newSelectedVariables = [];
+        let newSelectedYears = [];
 
         let nextVariableId = this.state.nextVariableId + "";
 
-        let newSelectedVariable = {};
         let newDrp = (
             <div className="variableDropdown" key={this.state.nextVariableId}>
                 <DropdownMenu id={this.state.nextVariableId}
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
-                    selectedItem={newSelectedVariable}
+                    defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
                 <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>X</button>
                 <button className="btnSortAsc" onClick={() => this.sortHospitals(nextVariableId, 'asc')}>{this.props.t('tableView.sortAsc')}</button>
                 <button className="btnSortDesc" onClick={() => this.sortHospitals(nextVariableId, 'desc')}>{this.props.t('tableView.sortDesc')}</button>
+                <div className="yearDropdown">
+                    <DropdownMenu id={this.state.nextYearId}
+                            listItems={[]}
+                            selectItem={this.selectYear}
+                        />
+                </div>
             </div>
         );
 
-        // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
+        // splits the next id ('var-x') into 'var' and 'x' and increments 'x' for vars and years
         let id_parts = this.state.nextVariableId.split("-");
-        let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);;
+        let nextVariableIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);
+
+        id_parts = this.state.nextYearId.split("-");
+        let nextYearIdInc = id_parts[0] + "-" + (Number(id_parts[1]) + 1);
+
         newVariables = [...this.state.variableDropdowns, newDrp];
-        newSelectedVariables = [...this.state.selectedVariables, newSelectedVariable];
+        newSelectedVariables = [...this.state.selectedVariables, {}];
+        newSelectedYears = [...this.state.selectedYears, {}];
 
         this.setState({
             nextVariableId: nextVariableIdInc,
+            nextYearId: nextYearIdInc,
+            selectedYears: newSelectedYears,
             variableDropdowns : newVariables,
             selectedVariables : newSelectedVariables
+        });
+        this.selectionChanged();
+    }
+
+    selectionChanged = () => {
+        this.setState({
+            selectionChanged: true
+        });
+        let yearDropdowns = document.getElementsByClassName('yearDropdown');
+        for(let d of yearDropdowns) {
+            d.classList.remove('showYearDropdown');
+        }
+    }
+
+    /**
+     * selectYear - description
+     */
+    selectYear = (item, senderId) => {
+        let index;
+        for (let yD of this.state.variableDropdowns) {
+            if (yD.props.children[4].props.children.props.id === senderId) {
+                index = this.state.variableDropdowns.indexOf(yD);
+                break;
+            }
+        }
+        let selectedYear = Number(item.name);
+        let updatedYears = update(this.state.selectedYears, {[index]: {$set: selectedYear}});
+        let updatedDropdowns = update(this.state.variableDropdowns, { [index]: {props: {children: {4: {props: {children: {props: {selectedItem: {$set: item}}}}}}}}});
+        this.setState({
+            selectedYears: updatedYears,
+            variableDropdowns: updatedDropdowns
+        }, () => {
+            this.props.retriggerTableGeneration();
         });
     }
 
@@ -329,6 +383,7 @@ class InteractiveTable extends Component {
 			selectedVariables: updSelVar,
 			variableDropdowns: updVarDrp
 		});
+        this.selectionChanged();
     }
 
     /**
@@ -343,7 +398,7 @@ class InteractiveTable extends Component {
 
         // check if in each hospital dropdown something was selected
         for (let hosp of this.state.selectedHospitals) {
-            if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+            if (!hosp || (Object.keys(hosp).length === 0 && hosp.constructor === Object)) {
                 shouldGenerate = false;
                 break;
             }
@@ -351,7 +406,7 @@ class InteractiveTable extends Component {
         // check the same for variables
         if (shouldGenerate) {
             for (let variable of this.state.selectedVariables) {
-                if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+                if (!variable || (Object.keys(variable).length === 0 && variable.constructor === Object)) {
                     shouldGenerate = false;
                     break;
                 }
@@ -404,10 +459,15 @@ class InteractiveTable extends Component {
                         break;
                     }
                 }
-                const latestYear = Object.keys(currentHosp.attributes[variable.name])
-                    .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
-                let attributes = currentHosp.attributes[variable.name];
-                referenceArr.push([i, attributes[latestYear]]);
+                // const latestYear = Object.keys(currentHosp.attributes[variable.name])
+                //     .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
+                const year = this.state.selectedYears[senderIndex];
+                const attributes = currentHosp.attributes[variable.name];
+                let value = '';
+                if (typeof attributes[year] !== 'undefined') {
+                    value = attributes[year];
+                }
+                referenceArr.push([i, value]);
             }
 
             // then sort this array according to the value on the variable
@@ -471,7 +531,8 @@ class InteractiveTable extends Component {
 		this.setState({
 			selectedVariables: update(this.state.selectedVariables, {[index]: {$set: item}}),
 			variableDropdowns: update(this.state.variableDropdowns, {[index]: {props: {children: {0: {props: {selectedItem: {$set: item}}}}}}})
-		});
+        });
+        this.selectionChanged();
 	}
 
     /**
@@ -481,16 +542,23 @@ class InteractiveTable extends Component {
      * @param {Object} data the generated 2D array
      */
     submitTableData = (data) => {
-        const {selectedVariables, selectedHospitals} = this.state;
+        const {selectedVariables, selectedHospitals, selectedYears} = this.state;
 
         let namedData = [];
 
         let headers = [];
-        headers.push("-");
+        headers.push("Variable");
         for (let v of selectedVariables) {
             headers.push(v.text);
         }
         namedData.push(headers);
+
+        let years = [];
+        years.push("Year");
+        for (let y of selectedYears) {
+            years.push(y);
+        }
+        namedData.push(years);
 
         for (let i = 0; i < data.length; i++) {
             let row = [selectedHospitals[i].name].concat(data[i]);
@@ -503,12 +571,59 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * dataFetched - Called when the API-Request is completed
+     * dataFetched - Called when the API-Request is completed (description)
      */
     dataFetched = () => {
-        console.log('whoeeh');
+        let updatedDropdowns = this.state.variableDropdowns;
+        let updatedYears = this.state.selectedYears;
+        for (let i = 0; i < this.state.variableDropdowns.length; i++) {
+            // let dropdown = this.state.variableDropdowns[i];
+            let selectedVariable = this.state.selectedVariables[i];
+            let years = new Set();
+            for (let selectedHospital of this.state.selectedHospitals) {
+                let hospital = {};
+                for (let hosp of this.props.hospitals) {
+                    if (selectedHospital.name === hosp.name) {
+                        hospital = hosp;
+                    }
+                }
+                for (let year of Object.keys(hospital.attributes[selectedVariable.name])){
+                    years.add(year);
+                }
+                // years.push(Object.keys(hospital.attributes[selectedVariable.name])); // // TODO: no duplicates
+            }
+            years = Array.from(years);
+            const selectedYear = years.sort()[years.length - 1];
+            const selectedItem = { name: selectedYear };
+            let yearsForDropdown = [];
+            for (let year of years) {
+                yearsForDropdown.push({ name: year});
+            }
+            yearsForDropdown.reverse();
+            updatedYears = update(updatedYears, {[i]: {$set: selectedYear}});
+            updatedDropdowns = update(updatedDropdowns, {[i]: {props: {children: {4: {props: {children: {props: {listItems: {$set: yearsForDropdown}}}}}}}}});
+            updatedDropdowns = update(updatedDropdowns, {[i]: {props: {children: {4: {props: {children: {props: {selectedItem: {$set: selectedItem}}}}}}}}});
+        }
+        this.setState({
+            variableDropdowns: updatedDropdowns,
+            selectedYears: updatedYears
+        }, () => {
+            this.props.retriggerTableGeneration();
+            let yearDropdowns = document.getElementsByClassName('yearDropdown');
+            for (let d of yearDropdowns) {
+                d.classList.toggle('showYearDropdown');
+            }
+        });
     }
 
+    /**
+     * resultTableAcknowledgedChange - description
+     */
+    resultTableAcknowledgedChange = () => {
+        this.setState({
+            selectionChanged: false
+        });
+    }
 
     /**
      * render - renders the component to the screen
@@ -536,23 +651,21 @@ class InteractiveTable extends Component {
                     className="resultTable"
                     selectedHospitals={this.state.selectedHospitals}
                     selectedVariables={this.state.selectedVariables}
+                    selectedYears={this.state.selectedYears}
                     hospitalData={this.props.hospitals}
                     dataLoaded={this.props.tableDataLoaded}
                     dataGenerated={this.props.tableDataGenerated}
                     submitTableData={this.submitTableData}
+                    selectionChanged={this.state.selectionChanged}
+                    changeAcknowledged={this.resultTableAcknowledgedChange}
                 />
-				{/*<CSVLink
+				<CSVLink
 					data={this.state.csvData}
 					filename="medlandscapeCSV.csv"
 					className="CSVButton"
 					ref={(r) => this.csvLink = r}
 					target="_blank"
 				/>
-                <YearSelector
-                    className='yearSelector'
-                    yearDropdowns={this.state.yearDropdowns}
-                />*/}
-
 				<button className="btnCreateCSV"
 				onClick={() => this.csvLink.link.click()}>
 				{t('tableView.btnCreateCSV')}
