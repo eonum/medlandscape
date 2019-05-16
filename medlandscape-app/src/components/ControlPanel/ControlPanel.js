@@ -10,8 +10,37 @@ import './ControlPanel.css'
 class ControlPanel extends Component {
 
     state = {
+        cantonVars : [],
+        hospitalVars : [],
+        enums : [],
         mapView : 1,
-        selectedEnum : undefined
+        selectedEnum : undefined,
+        filtered : false
+    }
+
+    componentDidUpdate() {
+        if (!this.state.filtered) {
+            let cantonVars = [], hospitalVars = [], enums = [];
+
+            // filtering the different variables
+            this.props.variables.filter((variable) => {
+                if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
+                    hospitalVars.push(variable);
+                } else if (variable.variable_model === "Canton") {
+                    cantonVars.push(variable);
+                } else {
+                    enums.push(variable);
+                }
+            });
+
+            this.setState({
+                cantonVars : cantonVars,
+                hospitalVars : hospitalVars,
+                enums : enums,
+                filtered : true
+            });
+        }
+
     }
 
     /**
@@ -23,7 +52,7 @@ class ControlPanel extends Component {
         const {name, variable_model} = variable;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
-        query += encodeURIComponent(variable.name);
+        query += encodeURIComponent(variable.name + "$" + this.state.enums[7].name);
         return this.props.fetchData(key, query);
     }
 
@@ -36,7 +65,7 @@ class ControlPanel extends Component {
     fetchEnumData = (variable) => {
         const {name} = this.state.selectedEnum;
         let query ="hospitals?variables=";
-        query += encodeURIComponent(variable.name + "$" + name);
+        query += encodeURIComponent(variable.name + "$" + name + "$" + this.state.enums[7].name);
         return this.props.fetchData("hospitals", query);
     }
 
@@ -91,19 +120,11 @@ class ControlPanel extends Component {
     }
 
     render() {
-        let selectedCanton = {}, selectedHospital = {};
-        let cantonVars = [], hospitalVars = [], enums = [];
-        this.props.variables.filter(variable => {
-            if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
-                hospitalVars.push(variable);
-            } else if (variable.variable_model === "Canton") {
-                cantonVars.push(variable);
-            } else {
-                enums.push(variable);
-            }
-        });
 
-        const {t, hasLoaded, hospitals, updateHospitals, year, selectedVariable} = this.props;
+        const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable} = this.props;
+        const {hospitalVars, cantonVars, enums} = this.state;
+
+        let selectedCanton = {}, selectedHospital = {};
 
         // setting selectedItem for Dropdowns
         if (this.props.selectedVariable.variable_model === "Hospital") {
@@ -114,18 +135,20 @@ class ControlPanel extends Component {
             selectedHospital = undefined;
         }
 
-        console.log(this.state.hospitalVars);
-
-
         let mapViewHospitals = (
             <div className="mapViewHospitals">
-                <HospitalTypeFilter />
+                <HospitalTypeFilter
+                    setSelectedHospitalTypes={this.props.setSelectedHospitalTypes}
+                    filter={filterByType}
+                    hospitals={hospitals}
+                    selectedYear={year}
+                />
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}/>
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital} defaultText={t('dropDowns.variablesFallback')}/>
                 <p>{t('mapView.filter')}</p>
                 <FilterEditor
                         hospitals={hospitals}
-                        updateHospitals={updateHospitals}
+                        filter={filterByEnum}
                         hasLoaded={hasLoaded}
                         selectedYear={year}
                         variables={enums}
@@ -137,7 +160,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText={(t('dropDowns.variablesFallback'))}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         )
 

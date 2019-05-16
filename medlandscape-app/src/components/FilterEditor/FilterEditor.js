@@ -8,7 +8,7 @@ class FilterEditor extends Component {
 	state = {
         selectedEnum : undefined,
         selectedValues : [],
-		titles : [],
+		titles : []
 	};
 
 	/**
@@ -19,12 +19,14 @@ class FilterEditor extends Component {
 		for (let i = 0; i < item.values.length; i++)
 			titles.push(item.values[i] + ": " + item.values_text[i]);
 
+		this.props.setEnum(item);
+
         this.setState({
             selectedEnum : item,
             selectedValues : [],
             titles : titles,
         });
-        this.props.setEnum(item);
+
 	}
 
     /**
@@ -33,21 +35,25 @@ class FilterEditor extends Component {
      * @return {[type]}      [description]
      */
     checkboxSelectItem = (item) => {
-        // removes item if in selectedValues
-        let values = this.state.selectedValues.filter((value) => {
-            return (value !== item)
-        });
 
-        // adds item if not in selectedValues
-        if (values.length === this.state.selectedValues.length) {
-            values.push(item);
-        }
+		if (!!this.state.selectedEnum) {
+			// removes item if in selectedValues
+			let values = this.state.selectedValues.filter((value) => {
+				return (value !== item)
+			});
 
-        this.setState({
-            selectedValues : values
-        })
+			// adds item if not in selectedValues
+			if (values.length === this.state.selectedValues.length) {
+				values.push(item);
+			}
 
-		this.filter(values);
+			this.setState({
+				selectedValues : values
+			}, () => {
+				this.filter(values);
+			});
+		}
+
     }
 
     /**
@@ -59,37 +65,42 @@ class FilterEditor extends Component {
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.state.selectedEnum;
 
-		let filteredHospitals = hospitals.filter((hospital) => {
-            // Enum variables to be filtered with "OR"
-            if (name === "KT" || name === "LA" || name === "RForm" || name === "Typ") {
-                let counter = 0;
-                if (selectedYear in hospital.attributes[name]) {
-                    const values = hospital.attributes[name][selectedYear];
-                    for (let i = 0; i < selectedValues.length; i++) {
-                        if (values.includes(selectedValues[i])) {
-                            counter++;
-                        }
-                    }
-                }
-                if (counter === 0) {
-                    return false;
-                }
-            } else { // Enum variables to be filtered with "AND"
-                if (selectedYear in hospital.attributes[name]) {
-                    const values = hospital.attributes[name][selectedYear];
-                    for (let i = 0; i < selectedValues.length; i++) {
-                        if (!values.includes(selectedValues[i])) {
-                            return false;
-                        }
-                    }
-                } else {
-                    return false;
-                }
-            }
-			return true;
-		});
+		let filteredHospitals =  [];
 
-		this.props.updateHospitals(filteredHospitals);
+		if (selectedValues.length > 0) {
+
+			filteredHospitals = hospitals.filter((hospital) => {
+				// Enum variables to be filtered with "OR"
+				if (name === "KT" || name === "LA" || name === "RForm" || name === "Typ") {
+					let counter = 0;
+					if (selectedYear in hospital.attributes[name]) {
+						const values = hospital.attributes[name][selectedYear];
+						for (let i = 0; i < selectedValues.length; i++) {
+							if (values.includes(selectedValues[i])) {
+								counter++;
+							}
+						}
+					}
+					if (counter === 0) {
+						return false;
+					}
+				} else { // Enum variables to be filtered with "AND"
+					if (selectedYear in hospital.attributes[name]) {
+						const values = hospital.attributes[name][selectedYear];
+						for (let i = 0; i < selectedValues.length; i++) {
+							if (!values.includes(selectedValues[i])) {
+								return false;
+							}
+						}
+					} else {
+						return false;
+					}
+				}
+				return true;
+			});
+		}
+
+		this.props.filter(filteredHospitals);
 	}
 
     render () {

@@ -32,7 +32,7 @@ class HospitalTypeFilter extends Component {
         let apiValues = [];
 
         for (let i = 0; i < values.length; i++) {
-            switch (values) {
+            switch (values[i]) {
                 case ("Universitätsspital"):
                     apiValues.push("K111");
                     break;
@@ -59,18 +59,45 @@ class HospitalTypeFilter extends Component {
                     apiValues.push("K235");
                     break;
             }
-
         }
 
         this.setState({
             selectedValues : values
         })
 
-        // call prop function here
+        this.props.setSelectedHospitalTypes(apiValues);
+        if (values.length === 0) {
+
+        }
+        this.filter(apiValues);
     }
 
+    filter = (selectedValues) => {
+		const {selectedYear, hospitals} = this.props;
+        const name = "Typ"
 
+        let filteredHospitals = [];
 
+        if (selectedValues.length > 0) {
+            filteredHospitals = hospitals.filter((hospital) => {
+                let counter = 0;
+                if (selectedYear in hospital.attributes[name]) {
+                    const values = hospital.attributes[name][selectedYear];
+                    for (let i = 0; i < selectedValues.length; i++) {
+                        if (values.includes(selectedValues[i])) {
+                            counter++;
+                        }
+                    }
+                }
+                if (counter === 0) {
+                    return false;
+                }
+                return true;
+            });
+        }
+        
+        this.props.filter(filteredHospitals);
+    }
 
     render() {
         let categorizedHospitalTypes = ["Universitätsspital", "Allgemeinspital, Zentrumversorgung", "Allgemeinspital, Grundversorgung", "Psychiatrische Klinik", "Rehabilitationsklinik", "Spezialklinik"];
