@@ -89,11 +89,13 @@ class DropdownMenu extends Component {
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
                     <input type="text" placeholder={t('dropDowns.search')} className="searchbar" onKeyUp={this.filterFunction.bind(this)} />
+                    <div className="dropdown-options">
                     {
                         this.props.listItems.map((item) => (
                             <div className="dropdownElem" key={this.props.listItems.indexOf(item)} onClick={this.selectItem.bind(this, item)}>{item.text ? item.text : item.name}</div>
                         ))
                     }
+                    </div>
                 </div>
             </div>
         );

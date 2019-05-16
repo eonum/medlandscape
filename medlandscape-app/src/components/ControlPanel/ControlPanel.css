@@ -84,10 +84,16 @@
     font-size: 11pt;
 }
 
+.label {
+    padding: 3px 5px;
+    border-radius: 10px;
+}
+
 .label:hover, .selectedLabel {
+    background-color: #1996f6;
     cursor: pointer;
-    color: #1996f6;
-    text-decoration: underline;
+    text-decoration: none;
+    color: white;
 }
 
 .separator {

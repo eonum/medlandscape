@@ -24,13 +24,20 @@
 
 /* The search field */
 .searchbar {
-    font-size: 16px;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 220px;
     border: none;
-    box-sizing: border-box;
+    border-radius: 20px;
+    background-color: #1996f6;
+    color: white;
+    font-size: 16px;
+    outline: none;
 }
 
-.searchbar:hover {
-    background-color: white;
+.searchbar::placeholder {
+    color: white;
 }
 
 /* The search field when it gets focus/clicked on */
@@ -54,14 +61,16 @@
     display: none;
 }
 
+.dropdown-options {
+    margin-top: 55px;
+}
+
 /* Links inside the dropdown */
 .dropdownElem, .searchbar {
     box-sizing: border-box;
     border: none;
-    border-bottom: 1px solid #ddd;
-    color: black;
+    border-top: 1px solid #ddd;
     padding: 12px;
-    width: 250px;
 }
 
 /* Change color of dropdown links on hover */
