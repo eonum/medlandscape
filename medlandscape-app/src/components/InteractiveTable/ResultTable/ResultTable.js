@@ -27,7 +27,7 @@ class ResultTable extends Component {
 
         // check if in each hospital dropdown something was selected
         for (let hosp of this.props.selectedHospitals) {
-            if (Object.keys(hosp).length === 0 && hosp.constructor === Object) {
+            if (!hosp || (Object.keys(hosp).length === 0 && hosp.constructor === Object)) {
                 shouldGenerate = false;
                 break;
             }
@@ -35,7 +35,7 @@ class ResultTable extends Component {
         // check the same for variables
         if (shouldGenerate) {
             for (let variable of this.props.selectedVariables) {
-                if (Object.keys(variable).length === 0 && variable.constructor === Object) {
+                if (!variable || (Object.keys(variable).length === 0 && variable.constructor === Object)) {
                     shouldGenerate = false;
                     break;
                 }
