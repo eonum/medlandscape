@@ -21,6 +21,10 @@
     align-self: center;
 }
 
+.btnGenerateTable:focus {
+    outline: none;
+}
+
 .btnGenerateTable:hover, .addButton:hover {
     cursor: pointer;
 }

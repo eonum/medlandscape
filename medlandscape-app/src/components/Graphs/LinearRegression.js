@@ -18,7 +18,7 @@ class LinearRegression extends Component {
 		language: this.props.i18n.language,
 		w : 800,
 		h : 400,
-		padding : 20,
+		padding : 30,
 	};
 
 	componentDidMount(){
