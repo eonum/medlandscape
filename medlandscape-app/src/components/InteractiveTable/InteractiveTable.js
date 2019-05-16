@@ -393,7 +393,7 @@ class InteractiveTable extends Component {
      * @return {bool} true, if everything is selected and the data is loaded,
      *  false otherwise
      */
-    canTableBeSorted = () => {
+    canTableBeSorted = (shouldCheckForLoadedData) => {
         let shouldGenerate = true;
 
         // check if in each hospital dropdown something was selected
@@ -410,10 +410,12 @@ class InteractiveTable extends Component {
                     shouldGenerate = false;
                     break;
                 }
-                // also check if for the selected variables the data was fetched
-                if (!this.props.hospitals[0].attributes[variable.name]) {
-                    shouldGenerate = false;
-                    break;
+                if (shouldCheckForLoadedData) {
+                    // also check if for the selected variables the data was fetched
+                    if (!this.props.hospitals[0].attributes[variable.name]) {
+                        shouldGenerate = false;
+                        break;
+                    }
                 }
             }
         }
@@ -450,7 +452,7 @@ class InteractiveTable extends Component {
         let selectedHospitals = this.state.selectedHospitals;
         let referenceArr = [];
 
-        if (this.canTableBeSorted()) {
+        if (this.canTableBeSorted(true)) {
             for (let i = 0; i < selectedHospitals.length; i++) {
                 let currentHosp;
                 for (let hosp of this.props.hospitals) {
@@ -574,46 +576,48 @@ class InteractiveTable extends Component {
      * dataFetched - Called when the API-Request is completed (description)
      */
     dataFetched = () => {
-        let updatedDropdowns = this.state.variableDropdowns;
-        let updatedYears = this.state.selectedYears;
-        for (let i = 0; i < this.state.variableDropdowns.length; i++) {
-            // let dropdown = this.state.variableDropdowns[i];
-            let selectedVariable = this.state.selectedVariables[i];
-            let years = new Set();
-            for (let selectedHospital of this.state.selectedHospitals) {
-                let hospital = {};
-                for (let hosp of this.props.hospitals) {
-                    if (selectedHospital.name === hosp.name) {
-                        hospital = hosp;
+        if (true) {
+            let updatedDropdowns = this.state.variableDropdowns;
+            let updatedYears = this.state.selectedYears;
+            for (let i = 0; i < this.state.variableDropdowns.length; i++) {
+                // let dropdown = this.state.variableDropdowns[i];
+                let selectedVariable = this.state.selectedVariables[i];
+                let years = new Set();
+                for (let selectedHospital of this.state.selectedHospitals) {
+                    let hospital = {};
+                    for (let hosp of this.props.hospitals) {
+                        if (selectedHospital.name === hosp.name) {
+                            hospital = hosp;
+                        }
                     }
+                    for (let year of Object.keys(hospital.attributes[selectedVariable.name])){
+                        years.add(year);
+                    }
+                    // years.push(Object.keys(hospital.attributes[selectedVariable.name])); // // TODO: no duplicates
                 }
-                for (let year of Object.keys(hospital.attributes[selectedVariable.name])){
-                    years.add(year);
+                years = Array.from(years);
+                const selectedYear = years.sort()[years.length - 1];
+                const selectedItem = { name: selectedYear };
+                let yearsForDropdown = [];
+                for (let year of years) {
+                    yearsForDropdown.push({ name: year});
                 }
-                // years.push(Object.keys(hospital.attributes[selectedVariable.name])); // // TODO: no duplicates
+                yearsForDropdown.reverse();
+                updatedYears = update(updatedYears, {[i]: {$set: selectedYear}});
+                updatedDropdowns = update(updatedDropdowns, {[i]: {props: {children: {4: {props: {children: {props: {listItems: {$set: yearsForDropdown}}}}}}}}});
+                updatedDropdowns = update(updatedDropdowns, {[i]: {props: {children: {4: {props: {children: {props: {selectedItem: {$set: selectedItem}}}}}}}}});
             }
-            years = Array.from(years);
-            const selectedYear = years.sort()[years.length - 1];
-            const selectedItem = { name: selectedYear };
-            let yearsForDropdown = [];
-            for (let year of years) {
-                yearsForDropdown.push({ name: year});
-            }
-            yearsForDropdown.reverse();
-            updatedYears = update(updatedYears, {[i]: {$set: selectedYear}});
-            updatedDropdowns = update(updatedDropdowns, {[i]: {props: {children: {4: {props: {children: {props: {listItems: {$set: yearsForDropdown}}}}}}}}});
-            updatedDropdowns = update(updatedDropdowns, {[i]: {props: {children: {4: {props: {children: {props: {selectedItem: {$set: selectedItem}}}}}}}}});
+            this.setState({
+                variableDropdowns: updatedDropdowns,
+                selectedYears: updatedYears
+            }, () => {
+                this.props.retriggerTableGeneration();
+                let yearDropdowns = document.getElementsByClassName('yearDropdown');
+                for (let d of yearDropdowns) {
+                    d.classList.toggle('showYearDropdown');
+                }
+            });
         }
-        this.setState({
-            variableDropdowns: updatedDropdowns,
-            selectedYears: updatedYears
-        }, () => {
-            this.props.retriggerTableGeneration();
-            let yearDropdowns = document.getElementsByClassName('yearDropdown');
-            for (let d of yearDropdowns) {
-                d.classList.toggle('showYearDropdown');
-            }
-        });
     }
 
     /**
@@ -672,7 +676,11 @@ class InteractiveTable extends Component {
 				/>
                 <button
                     className="btnGenerateTable"
-                    onClick={() => this.props.requestData(this.state.selectedVariables, this.dataFetched)}>{t('tableView.btnCreateTable')}
+                    onClick={() => {
+                        if(this.canTableBeSorted(false)) {
+                            this.props.requestData(this.state.selectedVariables, this.dataFetched);
+                        }
+                    }}>{t('tableView.btnCreateTable')}
                 </button>
                 <button
                     className="btnAddAllHospitals"
