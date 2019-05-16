@@ -439,19 +439,25 @@ class LinearRegression extends Component {
 		});
 		return (
         	<div>
+				<div className="yAxisBtn">
+					<p>Y-Achse:</p>
+					<DropdownMenu id="yAxis"
+		                listItems={variables}
+		                selectItem={this.selectYAxis}
+		                selectedItem={this.state.yVariable}
+		                defaultText={this.props.t('dropDowns.variablesFallback')}
+		            />
+				</div>
 				<div id="linearregression"></div>
-				<DropdownMenu id="xAxis"
-                    listItems={variables}
-                    selectItem={this.selectXAxis}
-                    selectedItem={this.state.xVariable}
-                    defaultText={this.props.t('dropDowns.variablesFallback')}
-                />
-				<DropdownMenu id="yAxis"
-                    listItems={variables}
-                    selectItem={this.selectYAxis}
-                    selectedItem={this.state.yVariable}
-                    defaultText={this.props.t('dropDowns.variablesFallback')}
-                />
+				<div className="xAxisBtn">
+					<p>X-Achse:</p>
+					<DropdownMenu id="xAxis"
+						listItems={variables}
+						selectItem={this.selectXAxis}
+						selectedItem={this.state.xVariable}
+						defaultText={this.props.t('dropDowns.variablesFallback')}
+					/>
+				</div>
 			</div>
         )
 	}

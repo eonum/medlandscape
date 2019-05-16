@@ -1,25 +1,16 @@
 .languagePicker {
     background-color: white;
     border-radius: 15px;
-    padding: 10px;
-    text-align: center;
-    font-size: 11pt;
+    margin-top: 140px;
+    margin-left: 5px;
 }
 
-.btnContainer {
-    display: flex;
-    justify-content: space-evenly;
-    height: 30px;
-    margin-top: 10px;
-}
 
 .langBtn {
-    width: 80px;
-    height: 30px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 40px;
+    height: 40px;
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     background-color: #1996fa;
     color: white;
     font-size: 12pt;

@@ -70,3 +70,7 @@ div.tooltip {
 #popup td:nth-child(2) {
   width: 150px;
 }
+
+.xAxisBtn{
+    float: right;
+}

@@ -1,3 +1,7 @@
 .central-panel {
     overflow: auto;
 }
+
+#boxplot {
+    display: none;
+}

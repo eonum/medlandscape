@@ -122,19 +122,22 @@ class Maps extends Component {
 				zoomControl={false}
         	>
 				<ZoomControl
+					style="borderRadius=25px;"
 					position="topright"
 				/>
 
 				<Control position="topright">
-					<button onClick={ () => this.setState({
-							lat: 46.798473,
-							lng: 8.231726,
-							zoom: 8,
-							})
-						}
-					>
-			          	<div id="rV" className="resetView"></div>
-					</button>
+			          	<div
+							id="rV"
+							className="resetView"
+							onClick={ () => this.setState({
+									lat: 46.798473,
+									lng: 8.231726,
+									zoom: 8,
+								})
+							}
+						>
+						</div>
 		      	</Control>
         		<TileLayer // add background layer
         			attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

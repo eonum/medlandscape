@@ -7,14 +7,22 @@ import './LanguagePicker.css'
 */
 class LanguagePicker extends Component {
 
+    state = {
+        lang : 'de'
+    }
+
     /**
     * onLanguageChange - Changes the language, and after that resends the
     * initApiCall to retrieve the correct variable names.
     */
-    onLanguageChange = (code) => {
+    onLanguageChange = () => {
+        let code = (this.state.lang === 'de') ? 'fr' : 'de';
         this.props.i18n.changeLanguage(code).then(() => {
             this.props.resendInitApiCall();
         });
+        this.setState({
+            lang : code
+        })
     }
 
 
@@ -26,11 +34,7 @@ class LanguagePicker extends Component {
     render () {
         return (
             <div className="languagePicker">
-                <p>{this.props.t('language_picker.info')}:</p>
-                <div className="btnContainer">
-                    <button className="langBtn" onClick={() => this.onLanguageChange('de')}>DE</button>
-                    <button className="langBtn" onClick={() => this.onLanguageChange('fr')}>FR</button>
-                </div>
+                <button className="langBtn" onClick={() => this.onLanguageChange()}>{this.state.lang.toUpperCase()}</button>
             </div>
         );
     }
