@@ -28,7 +28,7 @@ class CentralPanel extends Component {
         this.props.fetchData("hospitals", query).then(() => {
             this.setState({
                 tableDataLoaded : true
-            }, () => { callback(); });
+            }, () => { if (callback) { callback(); }});
         })
     }
 
