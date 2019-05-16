@@ -159,6 +159,10 @@ class ControlPanel extends Component {
             <div className="view3">
                 <div className="header">
                     <h1>{t('graphView.title')}</h1>
+                    <div className="graphView">
+                        <p>{t('mapView.variables')}</p>
+                        <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}/>
+                    </div>
                 </div>
             </div>
         );
