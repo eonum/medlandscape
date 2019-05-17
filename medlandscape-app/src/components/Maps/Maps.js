@@ -7,12 +7,17 @@ import TestComponent from './TestComponent.js';
 import HospitalMap from './HospitalMap.js';
 import CantonMap from './CantonMap.js';
 
+/**
+* Maps is the entity we use to draw a map.
+* The rendered JSX also consists of the buttons and mapInfo that should be rendered.
+* The current position of the map center and zoom are stored in the state.
+*/
 class Maps extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			lat: 46.87,
-			lng: 8.24,
+			lat: 46.798473,
+			lng: 8.231726,
 			zoom: 8,
 		};
 	}
@@ -71,15 +76,27 @@ class Maps extends Component {
         }
 	}
 
-  /**
-   * Checks if the selected Variable passed through this.props.varInfo
-   * is normable (a number or similar).
-   * @return {Boolean}
-  */
-  isNormable = () => {
-    let type = this.props.variableInfo.variable_type;
-    return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
-  }
+	/**
+	* Checks if the selected Variable passed through this.props.varInfo
+	* is normable (a number or similar).
+	* @return {Boolean}
+	*/
+	isNormable = () => {
+		let type = this.props.variableInfo.variable_type;
+		return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
+	}
+
+	/**
+	* Resets view to original position.
+	* Math.random is needed so react does detect a state change and re-renders.
+	*/
+ 	resetView = () => {
+		this.setState({
+				lat: 46.798473 + 0.1 * Math.random(),
+				lng: 8.231726 + 0.1 * Math.random(),
+				zoom: 8,
+		})
+	}
 
 	render() {
         let ready = (this.props.hasLoaded && this.isNormable());
@@ -130,12 +147,7 @@ class Maps extends Component {
 			          	<div
 							id="rV"
 							className="resetView"
-							onClick={ () => this.setState({
-									lat: 46.798473,
-									lng: 8.231726,
-									zoom: 8,
-								})
-							}
+							onClick={() => this.resetView()}
 						>
 						</div>
 		      	</Control>
