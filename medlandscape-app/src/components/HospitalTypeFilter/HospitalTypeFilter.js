@@ -7,7 +7,17 @@ class HospitalTypeFilter extends Component {
         selectedValues : []
     }
 
+    // filters again when a new selectedVariable has been selected, with the same selectedValues as before the change.
+    componentDidUpdate(prevProps) {
+        if (this.props.hospitals !== prevProps.hospitals) {
+            this.setAPIValues(this.state.selectedValues);
+        }
+    }
 
+    /**
+     * Adds the value of the selected hospital category to selectedValues.
+     * @param {String} item The selected hospital category to be added.
+     */
     checkboxSelectItem = (item) => {
 
         // removes item if in selectedValues
@@ -20,6 +30,20 @@ class HospitalTypeFilter extends Component {
             values.push(item);
         }
 
+        this.setState({
+            selectedValues : values
+        });
+
+        this.setAPIValues(values);
+    }
+
+    /**
+     * Helper method.
+     * Converts the values into API specific hospital categories.
+     * Calls filter after converting the values.
+     * @param {Array} values the selected hospital categories.
+     */
+    setAPIValues = (values) => {
         // categories for different hospitals
         // University: K111
         // Allgemeinspital, Zentrumversorgung: K112
@@ -27,7 +51,6 @@ class HospitalTypeFilter extends Component {
         // Psychiatrische Klinik: K211, K212
         // Rehabilitationsklinik: K221
         // Spezialklinik: K231, K232, K233, K234, K235
-
 
         let apiValues = [];
 
@@ -61,20 +84,9 @@ class HospitalTypeFilter extends Component {
             }
         }
 
-        this.setState({
-            selectedValues : values
-        })
-
         this.props.setTypes(apiValues);
 
         this.filter(apiValues);
-    }
-
-    componentWillRecieveProps(nextProps) {
-        if (nextProps.hospitals[0].attributes.length !== this.props.hospitals[0].attributes.length) {
-            console.log("new props for HospitalTypeFilter");
-            this.filter(this.state.selectedValues);
-        }
     }
 
     filter = (selectedValues) => {
@@ -100,7 +112,8 @@ class HospitalTypeFilter extends Component {
                 return true;
             });
             if (filteredHospitals.length === 0) {
-                filteredHospitals[0] = 0; // signaling it did not match anything (example spezialausrüstung: litho)
+                // no hits, did not match anything (example spezialausrüstung: litho)
+                filteredHospitals[0] = 0;
             }
         } else {
             filteredHospitals = hospitals;

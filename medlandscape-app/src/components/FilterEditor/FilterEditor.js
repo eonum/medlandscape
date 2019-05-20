@@ -6,10 +6,16 @@ import './FilterEditor.css'
 
 class FilterEditor extends Component {
 	state = {
-        selectedEnum : undefined,
         selectedValues : [],
 		titles : [],
 	};
+
+	// filters again when a new selectedVariable has been selected, with the same selected Enum as before the change.
+	componentDidUpdate(prevProps) {
+		if (this.props.hospitals !== prevProps.hospitals && this.props.selectedEnum === prevProps.selectedEnum && this.props.selectedEnum !== undefined) {
+			this.filter(this.state.selectedValues);
+		}
+	}
 
 	/**
     *
@@ -19,12 +25,11 @@ class FilterEditor extends Component {
 		for (let i = 0; i < item.values.length; i++)
 		titles.push(item.values[i] + ": " + item.values_text[i]);
 
-		this.props.setEnum(item).then(() => {
-			this.setState({
-				selectedEnum : item,
-				selectedValues : [],
-				titles : titles,
-			});
+		this.props.setEnum(item);
+
+		this.setState({
+			selectedValues : [],
+			titles : titles,
 		});
 	}
 
@@ -35,7 +40,7 @@ class FilterEditor extends Component {
      */
     checkboxSelectItem = (item) => {
 
-		if (!!this.state.selectedEnum) {
+		if (this.props.selectedEnum !== undefined) {
 			// removes item if in selectedValues
 			let values = this.state.selectedValues.filter((value) => {
 				return (value !== item)
@@ -48,9 +53,9 @@ class FilterEditor extends Component {
 
 			this.setState({
 				selectedValues : values
-			}, () => {
-				this.filter(values);
 			});
+
+			this.filter(values);
 		}
 
     }
@@ -62,7 +67,10 @@ class FilterEditor extends Component {
      */
 	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;
-        const {name} = this.state.selectedEnum;
+        const {name} = this.props.selectedEnum;
+
+		console.log("name of selected Enum: " + name);
+		console.log(hospitals);
 
 		let filteredHospitals =  [];
 
@@ -100,10 +108,11 @@ class FilterEditor extends Component {
 				return true;
 			});
 			if (filteredHospitals.length === 0) {
-				console.log("no hits");
+				// no hits
 				filteredHospitals[0] = 0;
 			}
 		} else {
+			// if nothing is selected, return all of the hospitals
 			filteredHospitals = hospitals;
 		}
 
@@ -114,13 +123,22 @@ class FilterEditor extends Component {
         const { t } = this.props;
         return (
 			<div className="filter-editor">
-				<DropdownMenu id="filterDropDown" listItems={this.props.variables} selectItem={this.dropdownSelectItem} selectedItem={this.state.selectedEnum} defaultText={t('dropDowns.filterFallback')}/>
+				<DropdownMenu
+					id="filterDropDown"
+					listItems={this.props.variables}
+					selectItem={this.dropdownSelectItem}
+					selectedItem={this.props.selectedEnum}
+					defaultText={t('dropDowns.filterFallback')}
+				/>
                 {
-					(this.state.selectedEnum !== undefined)
+					(this.props.selectedEnum !== undefined)
 					?
 					<div className="filterCheckbox">
-						<p>{t('mapView.checkbox')}</p>
-						<CheckboxList items={this.state.selectedEnum.values} checkboxSelectItem={this.checkboxSelectItem} titles={this.state.titles} />
+						<CheckboxList
+							items={this.props.selectedEnum.values}
+							checkboxSelectItem={this.checkboxSelectItem}
+							titles={this.state.titles}
+						/>
 					</div>
 					: null
 				}

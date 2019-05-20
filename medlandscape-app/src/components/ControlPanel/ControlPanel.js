@@ -15,11 +15,10 @@ class ControlPanel extends Component {
         enums : [],
         mapView : 1,
         selectedEnum : undefined,
-        filtered : false
     }
 
-    componentDidUpdate() {
-        if (!this.state.filtered) {
+    componentDidUpdate(prevProps) {
+        if (this.props.variables !== prevProps.variables) {
             let cantonVars = [], hospitalVars = [], enums = [];
 
             // filtering the different variables
@@ -37,10 +36,13 @@ class ControlPanel extends Component {
                 cantonVars : cantonVars,
                 hospitalVars : hospitalVars,
                 enums : enums,
-                filtered : true
             });
         }
 
+        if (this.props.selectedVariable !== prevProps.selectedVariable) {
+            console.log("new selectedVariable!!!");
+            this.fetchMapData(this.props.selectedVariable);
+        }
     }
 
     /**
@@ -53,21 +55,10 @@ class ControlPanel extends Component {
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
         query += encodeURIComponent(variable.name + "$" + this.state.enums[7].name);
+        if (this.state.selectedEnum !== undefined) {
+            query += encodeURIComponent("$" + this.state.selectedEnum.name);
+        }
         return this.props.fetchData(key, query);
-    }
-
-    /**
-     * Called when filtering Hospital variables.
-     * Prepares correct query to ask App.js
-     * Adds current selectedEnum to query.
-     * @param  {Variable Object} variable The selected Variable to apply to Hospitals.
-     * @param  {Variable Object} enum The selected Enum Variable to apply to Hospitals.
-     */
-    fetchEnumData = (variable, enumVar) => {
-        const {name} = enumVar;
-        let query ="hospitals?variables=";
-        query += encodeURIComponent(variable.name + "$" + name + "$" + this.state.enums[7].name);
-        return this.props.fetchData("hospitals", query);
     }
 
     /**
@@ -78,8 +69,9 @@ class ControlPanel extends Component {
     setEnum = (variable) => {
         this.setState({
             selectedEnum : variable
+        }, () => {
+            this.fetchMapData(this.props.selectedVariable);
         });
-        return this.fetchEnumData(this.props.selectedVariable, variable);
     }
 
     /**
@@ -89,11 +81,6 @@ class ControlPanel extends Component {
      */
     selectVariable = (item) => {
         this.props.selectVariable(item);
-        if (this.state.selectedEnum === undefined) {
-            return this.fetchMapData(item);
-        } else {
-            return this.fetchEnumData(item, this.state.selectedEnum);
-        }
     }
 
     /**
@@ -122,7 +109,7 @@ class ControlPanel extends Component {
     render() {
 
         const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable, setSelectedHospitalTypes} = this.props;
-        const {hospitalVars, cantonVars, enums} = this.state;
+        const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
         let selectedCanton = {}, selectedHospital = {};
 
@@ -156,6 +143,7 @@ class ControlPanel extends Component {
                     filter={filterByEnum}
                     hasLoaded={hasLoaded}
                     selectedYear={year}
+                    selectedEnum={selectedEnum}
                     variables={enums}
                     setEnum={this.setEnum}
                 />

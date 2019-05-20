@@ -8,13 +8,10 @@ import HospitalMap from './HospitalMap.js';
 import CantonMap from './CantonMap.js';
 
 class Maps extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
+	state = {
 			lat: 46.87,
 			lng: 8.24,
 			zoom: 8,
-		};
 	}
 
 	/**
@@ -71,20 +68,24 @@ class Maps extends Component {
         }
 	}
 
-  /**
-   * Checks if the selected Variable passed through this.props.varInfo
-   * is normable (a number or similar).
-   * @return {Boolean}
-  */
-  isNormable = () => {
-    let type = this.props.variableInfo.variable_type;
-    return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
-  }
+	/**
+	* Checks if the selected Variable passed through this.props.varInfo
+	* is normable (a number or similar).
+	* @return {Boolean}
+	*/
+	isNormable = () => {
+		let type = this.props.variableInfo.variable_type;
+		return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
+	}
 
 	render() {
         let ready = (this.props.hasLoaded && this.isNormable());
         let componentToRender = null;
         let mapInfo = null;
+
+		// console.log("recieved variable : " + this.props.variableInfo.name);
+		// console.log("recieved objects :");
+		// console.log(this.props.objects);
 
         if (ready && this.props.view === 1) {
             mapInfo = (

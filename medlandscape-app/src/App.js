@@ -21,6 +21,7 @@ class App extends Component {
         selectedVariable : {},
         hospitalsByEnums : [],
         hospitalsByType : [],
+        filteredHospitals : [],
         years : [],
         selectedYear : "",
         view : 1,
@@ -41,15 +42,18 @@ class App extends Component {
             });
         }).then(() => {
             if (this.state.view !== 1) {
+                // other views
                 this.setState({
                     hasLoaded : true
-                })
+                });
             } else {
+                // map view specific
                 let years = this.getYears(this.state[key]);
                 this.setState({
                     years : years,
                     selectedYear : years[0],
-                    hasLoaded : true
+                }, () => {
+                    this.filterHospitals();
                 })
             }
         });
@@ -91,7 +95,6 @@ class App extends Component {
 
     /**
     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-    * then calls applyVariables to fetch data from the API.
     * @param  {Variable object} item The selected variable.
     */
     selectVariable = (item) => {
@@ -111,14 +114,11 @@ class App extends Component {
     }
 
     /**
-     * helper method to determine which Hospitals to display on the map.
+     * Determines which Hospitals to display on the map according to fitlers.
      * @return {Array} The array of hospitals to display.
      */
     filterHospitals = () => {
         const {hospitalsByEnums, hospitalsByType, hospitals} = this.state;
-
-        console.log("enum filter: " + hospitalsByEnums.length + ", type filter: " + hospitalsByType.length);
-
         let filteredHospitals = [];
         if (!(hospitalsByEnums[0] === 0 || hospitalsByType[0] === 0)) {
             // in case of no matches, there would be no need to do intersection
@@ -131,15 +131,17 @@ class App extends Component {
                         }
                     }
                 }
-                console.log("both filters active, intersect: " + filteredHospitals.length);
             } else if (hospitalsByEnums.length > 0 || hospitalsByType.length > 0) {
                 filteredHospitals = (hospitalsByType > hospitalsByEnums) ? hospitalsByType : hospitalsByEnums;
             } else {
                 filteredHospitals = hospitals;
             }
         }
-        console.log(filteredHospitals);
-        return filteredHospitals;
+
+        this.setState({
+            filteredHospitals : filteredHospitals,
+            hasLoaded : true
+        });
     }
 
     /**
@@ -182,7 +184,10 @@ class App extends Component {
      */
     sethospitalsByEnums = (selectedHospitals) => {
         this.setState({
-            hospitalsByEnums : selectedHospitals
+            hospitalsByEnums : selectedHospitals,
+            hasLoaded : false
+        }, () => {
+            this.filterHospitals();
         })
     }
 
@@ -192,7 +197,10 @@ class App extends Component {
      */
     sethospitalsByType = (selectedHospitals) => {
         this.setState({
-            hospitalsByType : selectedHospitals
+            hospitalsByType : selectedHospitals,
+            hasLoaded : false
+        }, () => {
+            this.filterHospitals();
         })
     }
 
@@ -208,7 +216,7 @@ class App extends Component {
 
     render() {
 
-        const {selectedVariable, selectedHospitals, selectedYear, hasLoaded, view, hospitals, cantons, variables, years} = this.state;
+        const {selectedVariable, selectedHospitals, selectedYear, hasLoaded, view, hospitals, filteredHospitals, cantons, variables, years} = this.state;
 
 
         let centralPanel = (view !== 1)
@@ -234,14 +242,13 @@ class App extends Component {
             : null
         ;
 
-        let filteredHospitals = this.filterHospitals();
-
         return (
 			<div className="App">
                 <Maps
                     objects={(selectedVariable.variable_model === "Hospital") ? filteredHospitals : cantons}
                     variableInfo={selectedVariable}
                     year={selectedYear}
+
                     hasLoaded={hasLoaded}
                     view={view}
                 />
