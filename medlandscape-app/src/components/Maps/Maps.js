@@ -83,10 +83,6 @@ class Maps extends Component {
         let componentToRender = null;
         let mapInfo = null;
 
-		// console.log("recieved variable : " + this.props.variableInfo.name);
-		// console.log("recieved objects :");
-		// console.log(this.props.objects);
-
         if (ready && this.props.view === 1) {
             mapInfo = (
                 <MapInfo
@@ -105,10 +101,12 @@ class Maps extends Component {
                 />
             )
             : (
-                <HospitalMap data={this.props.objects}
+                <HospitalMap
+					data={this.props.objects}
                     returnData={this.returnData}
                     maxAndMin={this.setMaxAndMin()}
                     variableInfo={this.props.variableInfo}
+					year={this.props.year}
                 />
             );
         }

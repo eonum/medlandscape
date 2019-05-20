@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
+import './hospitalTypeFilter.css';
 
 class HospitalTypeFilter extends Component {
 
@@ -126,7 +127,9 @@ class HospitalTypeFilter extends Component {
         let categorizedHospitalTypes = ["Universitätsspital", "Allgemeinspital, Zentrumversorgung", "Allgemeinspital, Grundversorgung", "Psychiatrische Klinik", "Rehabilitationsklinik", "Spezialklinik"];
 
         return (
-            <CheckboxList items={categorizedHospitalTypes} checkboxSelectItem={this.checkboxSelectItem} titles={categorizedHospitalTypes}/>
+            <div className="hospitalTypeFilter">
+                <CheckboxList items={categorizedHospitalTypes} checkboxSelectItem={this.checkboxSelectItem} titles={categorizedHospitalTypes}/>
+            </div>
         )
     }
 }
