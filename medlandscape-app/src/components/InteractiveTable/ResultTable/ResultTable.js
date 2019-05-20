@@ -53,7 +53,7 @@ class ResultTable extends Component {
     }
 
     /**
-     * componentDidUpdate - generates a 2D-array from selectedVariables and
+     * componentDidUpdate - generates a 2D-array of values taken from selectedVariables and
      *  selectedHospitals and sets the state.
      *
      * @return {type}  description

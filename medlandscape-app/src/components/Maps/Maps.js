@@ -13,13 +13,10 @@ import CantonMap from './CantonMap.js';
 * The current position of the map center and zoom are stored in the state.
 */
 class Maps extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			lat: 46.798473,
-			lng: 8.231726,
-			zoom: 8,
-		};
+	state = {
+		lat: 46.798473,
+		lng: 8.231726,
+		zoom: 8,
 	}
 
 	/**
@@ -125,6 +122,7 @@ class Maps extends Component {
                     returnData={this.returnData}
                     maxAndMin={this.setMaxAndMin()}
                     variableInfo={this.props.variableInfo}
+					year={this.props.year}
                 />
             );
         }

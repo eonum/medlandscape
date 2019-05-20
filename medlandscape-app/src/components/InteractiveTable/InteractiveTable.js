@@ -539,7 +539,7 @@ class InteractiveTable extends Component {
 
     /**
      * submitTableData - Called when the ResultTable finished generating.
-     *  Adds row and column names to the array.
+     * Adds row and column names to the array for CSV export.
      *
      * @param {Object} data the generated 2D array
      */

@@ -1,14 +1,48 @@
 import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import FilterEditor from '../FilterEditor/FilterEditor.js';
+import HospitalTypeFilter from '../HospitalTypeFilter/HospitalTypeFilter.js';
 import { withTranslation } from 'react-i18next';
 import './ControlPanel.css'
+
+
 
 class ControlPanel extends Component {
 
     state = {
+        cantonVars : [],
+        hospitalVars : [],
+        enums : [],
         mapView : 1,
-        selectedEnum : undefined
+        selectedEnum : undefined,
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.variables !== prevProps.variables) {
+            let cantonVars = [], hospitalVars = [], enums = [];
+
+            // filtering the different variables
+            this.props.variables.filter((variable) => {
+                if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
+                    hospitalVars.push(variable);
+                } else if (variable.variable_model === "Canton") {
+                    cantonVars.push(variable);
+                } else {
+                    enums.push(variable);
+                }
+            });
+
+            this.setState({
+                cantonVars : cantonVars,
+                hospitalVars : hospitalVars,
+                enums : enums,
+            });
+        }
+
+        if (this.props.selectedVariable !== prevProps.selectedVariable) {
+            console.log("new selectedVariable!!!");
+            this.fetchMapData(this.props.selectedVariable);
+        }
     }
 
     /**
@@ -20,21 +54,11 @@ class ControlPanel extends Component {
         const {name, variable_model} = variable;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
-        query += encodeURIComponent(variable.name);
+        query += encodeURIComponent(variable.name + "$" + this.state.enums[7].name);
+        if (this.state.selectedEnum !== undefined) {
+            query += encodeURIComponent("$" + this.state.selectedEnum.name);
+        }
         return this.props.fetchData(key, query);
-    }
-
-    /**
-     * Called when filtering Hospital variables.
-     * Prepares correct query to ask App.js
-     * Adds current selectedEnum to query.
-     * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
-     */
-    fetchEnumData = (variable) => {
-        const {name} = this.state.selectedEnum;
-        let query ="hospitals?variables=";
-        query += encodeURIComponent(variable.name + "$" + name);
-        return this.props.fetchData("hospitals", query);
     }
 
     /**
@@ -46,8 +70,8 @@ class ControlPanel extends Component {
         this.setState({
             selectedEnum : variable
         }, () => {
-            this.fetchEnumData(this.props.selectedVariable);
-        })
+            this.fetchMapData(this.props.selectedVariable);
+        });
     }
 
     /**
@@ -57,11 +81,6 @@ class ControlPanel extends Component {
      */
     selectVariable = (item) => {
         this.props.selectVariable(item);
-        if (!this.state.selectedEnum) {
-            return this.fetchMapData(item);
-        } else {
-            return this.fetchEnumData(item);
-        }
     }
 
     /**
@@ -88,37 +107,46 @@ class ControlPanel extends Component {
     }
 
     render() {
-        let cantonVars = [], hospitalVars = [], years = [], enums = [];
-        let selectedCanton = {}, selectedHospital = {};
 
-        // filtering variables
-        this.props.variables.filter(variable => {
-            if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
-                hospitalVars.push(variable);
-            } else if (variable.variable_model === "Canton") {
-                cantonVars.push(variable);
-            } else {
-                enums.push(variable);
-            }
-        });
+        const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable, setSelectedHospitalTypes} = this.props;
+        const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
+
+        let selectedCanton = {}, selectedHospital = {};
 
         // setting selectedItem for Dropdowns
         if (this.props.selectedVariable.variable_model === "Hospital") {
-            selectedHospital = this.props.selectedVariable;
+            selectedHospital = selectedVariable;
             selectedCanton = undefined;
         } else {
-            selectedCanton = this.props.selectedVariable;
+            selectedCanton = selectedVariable;
             selectedHospital = undefined;
         }
 
-        const { t } = this.props;
-
         let mapViewHospitals = (
             <div className="mapViewHospitals">
+                <HospitalTypeFilter
+                    hospitals={hospitals}
+                    filter={filterByType}
+                    selectedYear={year}
+                    setTypes={setSelectedHospitalTypes}
+                />
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}  defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars"
+                    listItems={hospitalVars}
+                    selectItem={this.selectVariable}
+                    selectedItem={selectedHospital}
+                    defaultText={t('dropDowns.variablesFallback')}
+                />
                 <p>{t('mapView.filter')}</p>
-                <FilterEditor hospitals={this.props.hospitals} updateHospitals={this.props.updateHospitals} hasLoaded={this.props.hasLoaded} selectedYear={this.props.year} variables={enums} setEnum={this.setEnum}/>
+                <FilterEditor
+                    hospitals={hospitals}
+                    filter={filterByEnum}
+                    hasLoaded={hasLoaded}
+                    selectedYear={year}
+                    selectedEnum={selectedEnum}
+                    variables={enums}
+                    setEnum={this.setEnum}
+                />
             </div>
         )
 

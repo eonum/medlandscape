@@ -8,8 +8,39 @@ class HospitalMap extends Component {
      * Calculates and returns a rgb color
      * @return {String} The rgb color as a string.
      */
-	calculateCircleColor = () =>{
-		return "rgb(255, 5, 0)";
+	calculateCircleColor = (item) => {
+		let color;
+		switch (item.attributes["Typ"][this.props.year]) {
+			case ("K111"):
+				color = "aqua";
+				break;
+			case ("K112"):
+				color = "fuchsia";
+				break;
+			case ("K121"):
+				color = "red";
+				break;
+			case ("K122"):
+				color = "red";
+				break;
+			case ("K123"):
+				color = "red";
+				break;
+			case ("K211"):
+				color = "LimeGreen";
+				break;
+			case ("K212"):
+				color = "LimeGreen";
+				break;
+			case ("K221"):
+				color = "SaddleBrown";
+				break;
+			// other 5 cases, too lazy to switch them out
+			default :
+				color = "navy";
+				break;
+		}
+		return color;
 	}
 
     /**
@@ -40,10 +71,7 @@ class HospitalMap extends Component {
 	* @param {Object} e the event
 	*/
 	setNewStyle = (e) => {
-		e.target.setStyle({
-			color: '#1996fa',
-			opacity: 1
-		});
+		e.target.setStyle({weight: 2});
 	}
 
 	/**
@@ -60,8 +88,7 @@ class HospitalMap extends Component {
 	* @param {Object} e the event
 	*/
 	resetStyle = (e) => {
-		const oldColor = this.calculateCircleColor();
-		e.target.setStyle({color: oldColor});
+		e.target.setStyle({weight: 0});
 	}
 
 	/**
@@ -86,9 +113,9 @@ class HospitalMap extends Component {
           				<CircleMarker
           					key = {this.props.data.indexOf(item)}
         					center={{lon: item.longitude, lat: item.latitude}}
-        					color = {this.calculateCircleColor()}
-        					opacity = "0.8"
-        					weight = "1" // defining how big the outer line of circle is
+        					color = {this.calculateCircleColor(item)}
+        					opacity = "0.9"
+        					weight = "0" // defining how big the outline of circle is
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}
 							onMouseOut = {this.onMouseOut.bind(this)}

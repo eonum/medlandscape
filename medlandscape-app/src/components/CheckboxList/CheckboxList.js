@@ -5,13 +5,13 @@ import './CheckboxList.css'
 class CheckboxList extends Component {
 
     render() {
+        let listItems = [];
+        for (var i = 0; i < this.props.items.length; i++) {
+            listItems.push((<CheckboxListItem key={i} item={this.props.items[i]} checkboxSelectItem={this.props.checkboxSelectItem} title={this.props.titles[i]}/>));
+        }
         return (
             <div className="checkbox-list">
-            {
-                this.props.items.map((item) => (
-                    <CheckboxListItem key={this.props.items.indexOf(item)} item={item} checkboxSelectItem={this.props.checkboxSelectItem} mappingObject={this.props.mappingObject}/>
-                ))
-            }
+                {listItems}
             </div>
         );
     }
