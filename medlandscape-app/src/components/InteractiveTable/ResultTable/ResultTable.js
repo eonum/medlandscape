@@ -40,7 +40,7 @@ class ResultTable extends Component {
                     break;
                 }
                 // also check if for the selected variables the data was fetched
-                if (!this.props.hospitalData[0].attributes[variable.name]) {
+                if (typeof(this.props.hospitalData[0].attributes[variable.name]) === 'undefined') {
                     shouldGenerate = false;
                     break;
                 }

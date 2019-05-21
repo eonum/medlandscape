@@ -22,7 +22,8 @@
         "sortDesc": "Absteigend",
         "btnCreateTable": "Tabelle generieren",
         "btnAddAllHospitals": "Alle Spitäler hinzufügen",
-		"btnCreateCSV": "CSV-Datei erstellen"
+		"btnCreateCSV": "CSV-Datei erstellen",
+        "noTimeData": "Kein Zeitverlauf vorhanden"
 
     },
     "graphView": {
