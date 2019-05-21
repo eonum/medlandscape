@@ -25,7 +25,7 @@ class CantonMap extends Component {
     		"weight": 3,  // defining how big the outline of canton is
     		"opacity": 0.6, // outline opacity
     		"fillOpacity": 0.8
-			};
+		};
 		return cantonStyle;
 	}
 
@@ -57,12 +57,12 @@ class CantonMap extends Component {
  	*/
 	returnRoundFactor = (boundary, classSize) => {
 		let maxRoundingFactor = 1, y = 100000000000000000;
-		while (y > 1){ // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
-			if (classSize > y){
-				maxRoundingFactor = y/10;
+		while (y > 1) { // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
+			if (classSize > y) {
+				maxRoundingFactor = y / 10;
 				break;
 			}
-			y/=10
+			y /= 10
 		}
 		return maxRoundingFactor;
 	}
@@ -201,7 +201,7 @@ class CantonMap extends Component {
 								onMouseOut = {this.onMouseOut.bind(this, item)}
 								onClick = {this.onClick.bind(this)}
 								onPopupClose = {this.resetStyle.bind(this, item)}
-								>
+							>
 								<Tooltip
 									sticky = {true}>
 									{item.text + " (" + item.name + ")"}
@@ -210,16 +210,18 @@ class CantonMap extends Component {
 									maxWidth = "250"
 									closeButton = {false}
 								>
-									<table>
-										<tr>
-											<td>{this.props.t("popup.canton")}</td>
-											<td>{item.text} ({item.name})</td>
-										</tr>
-										<tr>
-											<td>{this.props.selectedVariable.text}:</td>
-											<td>{this.props.returnData(item)}</td>
-										</tr>
-									</table>
+									<tbody>
+										<table>
+											<tr>
+												<td>{this.props.t("popup.canton")}</td>
+												<td>{item.text} ({item.name})</td>
+											</tr>
+											<tr>
+												<td>{this.props.selectedVariable.text}:</td>
+												<td>{this.props.returnData(item)}</td>
+											</tr>
+										</table>
+									</tbody>
 								</Popup>
 							</GeoJSON>
 						))

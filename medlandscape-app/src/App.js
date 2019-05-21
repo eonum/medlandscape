@@ -43,6 +43,7 @@ class App extends Component {
         return this.apiCall(query).then((results) => {
             this.setState({
                 [key] : results,
+                hasLoaded : false
             });
         }).then(() => {
             if (this.state.view !== 1) {
@@ -53,11 +54,15 @@ class App extends Component {
             } else {
                 // map view specific
                 let years = this.getYears(this.state[key]);
+
                 this.setState({
                     years : years,
                     selectedYear : years[0],
+                    hasLoaded : (this.state.mapView !== 1)
                 }, () => {
-                    this.filterHospitals();
+                    if (this.state.mapView === 1) {
+                        this.filterHospitals();
+                    }
                 })
             }
         });
@@ -90,7 +95,7 @@ class App extends Component {
             })
 
             // the default variable chosen when loading the app
-            this.selectVariable(result[1]);
+            this.setVariable(result[1]);
             let query = "hospitals?variables=";
             query += encodeURIComponent(result[1].name + "$" + typeVar[0].name);
             this.applyVariables("hospitals", query);
@@ -101,7 +106,7 @@ class App extends Component {
     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
     * @param  {Variable object} item The selected variable.
     */
-    selectVariable = (item) => {
+    setVariable = (item) => {
         this.setState({
             selectedVariable : item,
             hasLoaded : false
@@ -192,7 +197,7 @@ class App extends Component {
      * Set hospitalsByEnums to the selected Hospital Variable
      * @param {Array} selectedHospitals The selected hospitals.
      */
-    sethospitalsByEnums = (selectedHospitals) => {
+    setHospitalsByEnums = (selectedHospitals) => {
         this.setState({
             hospitalsByEnums : selectedHospitals,
             hasLoaded : false
@@ -205,7 +210,7 @@ class App extends Component {
      * Set hospitalsByType to selected Hospital Type
      * @param {Array} selectedHospitals The selected hospitals.
      */
-    sethospitalsByType = (selectedHospitals) => {
+    setHospitalsByType = (selectedHospitals) => {
         this.setState({
             hospitalsByType : selectedHospitals,
             hasLoaded : false
@@ -268,12 +273,12 @@ class App extends Component {
                         view={view}
                         setView={this.setView}
                         hospitals={hospitals}
-                        selectVariable={this.selectVariable}
+                        setVariable={this.setVariable}
                         selectedVariable={selectedVariable}
                         variables={variables}
                         fetchData={this.applyVariables}
-                        filterByEnum={this.sethospitalsByEnums}
-                        filterByType={this.sethospitalsByType}
+                        filterByEnum={this.setHospitalsByEnums}
+                        filterByType={this.setHospitalsByType}
                         year={selectedYear}
                         hasLoaded={hasLoaded}
                         mapView={mapView}

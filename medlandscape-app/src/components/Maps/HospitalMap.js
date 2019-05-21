@@ -51,20 +51,20 @@ class HospitalMap extends Component {
 	getNormedRadius = (item) => {
 		if (this.props.maxAndMin === 0) {
 			return 7;
+		} else {
+			const max = this.props.maxAndMin.max;
+			const min = this.props.maxAndMin.min;
+			const mean = this.props.maxAndMin.mean;
+			const std = this.props.maxAndMin.std;
+			//const standardVal = ((this.props.returnData(item)-mean)/std);
+			const data = this.props.returnData(item);
+			const biggestRadius = 60;
+
+			const a = ((data + Math.abs(min)) / (max + Math.abs(min))) * Math.pow(biggestRadius, 2) * Math.PI;
+			let radius = Math.round(Math.sqrt(a / Math.PI));
+
+			return (radius <= 7) ? 7 : radius;
 		}
-
-		const max = this.props.maxAndMin.max;
-		const min = this.props.maxAndMin.min;
-		const mean = this.props.maxAndMin.mean;
-		const std = this.props.maxAndMin.std;
-		//const standardVal = ((this.props.returnData(item)-mean)/std);
-        const data = this.props.returnData(item);
-        const biggestRadius = 60;
-
-		const a = ((data + Math.abs(min)) / (max + Math.abs(min))) * Math.pow(biggestRadius, 2) * Math.PI;
-        let radius = Math.sqrt(a / Math.PI);
-
-		return (radius <= 7) ? 7 : radius;
 	}
 
 	/**

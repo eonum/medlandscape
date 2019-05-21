@@ -15,13 +15,18 @@ import CantonMap from './CantonMap.js';
 class Maps extends Component {
 	state = {
 		filteredObjects : [],
+		filtered : false,
 		lat : 46.798473,
 		lng : 8.231726,
 		zoom : 8,
 	}
 
 	componentDidUpdate(prevProps) {
-
+		if (this.state.filtered && !prevProps.hasLoaded) {
+			this.setState({
+				filtered : false
+			})
+		}
 		if (this.props.hasLoaded && !prevProps.hasLoaded) {
 			let filteredObjects = this.props.objects.filter((object) => {
 				let value = this.returnData(object)
@@ -33,6 +38,7 @@ class Maps extends Component {
 			});
 			this.setState({
 				filteredObjects : filteredObjects,
+				filtered : true
 			});
 		}
 	}
@@ -118,18 +124,15 @@ class Maps extends Component {
 
 	render() {
 		const {selectedVariable, view, mapView, year, objects, hasLoaded} = this.props;
-		const {filteredObjects, hasFiltered, lat, lng, zoom} = this.state;
+		const {filteredObjects, filtered, lat, lng, zoom} = this.state;
 		let variableIsTypeHospital = (selectedVariable.variable_model === "Hospital");
 
 		let componentToRender = null;
 		let mapInfo = null;
 
-        let ready = (hasLoaded);
-
-		let hospitalObjects = (variableIsTypeHospital) ? filteredObjects : [];
-		let cantonObjects = (!variableIsTypeHospital) ? filteredObjects : [];
-
-        if (ready && view === 1) {
+        if (hasLoaded && filtered && view === 1) {
+			let hospitalObjects = (variableIsTypeHospital) ? filteredObjects : [];
+			let cantonObjects = (!variableIsTypeHospital) ? filteredObjects : [];
 			let maxAndMin = (this.isNormable()) ? this.setMaxAndMin() : 0;
 
             mapInfo = (

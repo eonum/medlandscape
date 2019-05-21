@@ -41,7 +41,7 @@ class ControlPanel extends Component {
         }
 
         if (this.props.selectedVariable !== prevProps.selectedVariable) {
-            this.fetchMapData(this.props.selectedVariable);
+            this.fetchData(this.props.selectedVariable);
         }
     }
 
@@ -50,12 +50,12 @@ class ControlPanel extends Component {
      * Prepares correct query to ask App.js
      * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
      */
-    fetchMapData = (variable) => {
+    fetchData = (variable) => {
         const {name, variable_model} = variable;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
         query += encodeURIComponent(variable.name + "$" + this.state.enums[7].name);
-        if (this.state.selectedEnum !== undefined) {
+        if (this.state.selectedEnum !== undefined && key === "hospitals") {
             query += encodeURIComponent("$" + this.state.selectedEnum.name);
         }
         return this.props.fetchData(key, query);
@@ -70,17 +70,17 @@ class ControlPanel extends Component {
         this.setState({
             selectedEnum : variable
         }, () => {
-            this.fetchMapData(this.props.selectedVariable);
+            this.fetchData(this.props.selectedVariable);
         });
     }
 
     /**
      * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
-     * then calls fetchMapData to fetch data from the API.
+     * then calls fetchData to fetch data from the API.
      * @param  {Variable object} item The selected variable.
      */
-    selectVariable = (item) => {
-        this.props.selectVariable(item);
+    setVariable = (item) => {
+        this.props.setVariable(item);
     }
 
     /**
@@ -128,7 +128,7 @@ class ControlPanel extends Component {
                 <p>{t('mapView.variables')}</p>
                 <DropdownMenu id="hospitalVars"
                     listItems={hospitalVars}
-                    selectItem={this.selectVariable}
+                    selectItem={this.setVariable}
                     selectedItem={selectedHospital}
                     defaultText={t('dropDowns.variablesFallback')}
                 />
@@ -148,7 +148,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.selectVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         )
 
@@ -185,7 +185,7 @@ class ControlPanel extends Component {
                 </div>
                     {/**<div className="graphView">
                         <p>{t('mapView.variables')}</p>
-                        <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.selectVariable} selectedItem={selectedHospital}  defaultText={t('dropDowns.variablesFallback')}/>
+                        <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.setVariable} selectedItem={selectedHospital}  defaultText={t('dropDowns.variablesFallback')}/>
                     </div>**/}
             </div>
         );
