@@ -49,21 +49,22 @@ class HospitalMap extends Component {
      * @return {int} size of the radius
      */
 	getNormedRadius = (item) => {
+		if (this.props.maxAndMin === 0) {
+			return 7;
+		}
+
 		const max = this.props.maxAndMin.max;
 		const min = this.props.maxAndMin.min;
 		const mean = this.props.maxAndMin.mean;
 		const std = this.props.maxAndMin.std;
 		//const standardVal = ((this.props.returnData(item)-mean)/std);
         const data = this.props.returnData(item);
-        const biggestRadius = 50;
+        const biggestRadius = 60;
 
 		const a = ((data + Math.abs(min)) / (max + Math.abs(min))) * Math.pow(biggestRadius, 2) * Math.PI;
         let radius = Math.sqrt(a / Math.PI);
-        if (data === max) {
-            console.log(item.name + ", max: " + max + ", min: " + min + ", radius: " + radius);
-        }
 
-		return radius;
+		return (radius <= 7) ? 7 : radius;
 	}
 
 	/**
@@ -130,20 +131,22 @@ class HospitalMap extends Component {
 								maxWidth = "250"
 								closeButton = {false}
 							>
-								<table>
-									<tr>
-										<td>{this.props.t("popup.hospital")}</td>
-										<td>{item.name}</td>
-									</tr>
-									<tr>
-										<td>{this.props.t("popup.address")}</td>
-										<td><dd>{item.street},</dd>{item.city}</td>
-									</tr>
-									<tr>
-										<td>{this.props.variableInfo.text}:</td>
-										<td>{this.props.returnData(item)}</td>
-									</tr>
-								</table>
+								<tbody>
+									<table>
+										<tr>
+											<td>{this.props.t("popup.hospital")}</td>
+											<td>{item.name}</td>
+										</tr>
+										<tr>
+											<td>{this.props.t("popup.address")}</td>
+											<td><dd>{item.street},</dd>{item.city}</td>
+										</tr>
+										<tr>
+											<td>{this.props.selectedVariable.text}:</td>
+											<td>{this.props.returnData(item)}</td>
+										</tr>
+									</table>
+								</tbody>
 							</Popup>
         				</CircleMarker>
       	             ))

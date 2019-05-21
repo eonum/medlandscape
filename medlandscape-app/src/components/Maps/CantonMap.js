@@ -6,11 +6,8 @@ import { withTranslation } from 'react-i18next';
 
 class CantonMap extends Component {
 
-	constructor(props){
-		super(props);
-		this.state = {
-			colorScheme: ''
-		};
+	state = {
+		colorScheme: ''
 	}
 
   /**
@@ -59,15 +56,15 @@ class CantonMap extends Component {
 	 * @return {Number} maxRoundingFactor biggest rounding factor that can be used for the given boundary.
  	*/
 	returnRoundFactor = (boundary, classSize) => {
-	let maxRoundingFactor = 1, y = 100000000000000000;
-	while (y > 1){ // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
-		if (classSize > y){
-			maxRoundingFactor = y/10;
-			break;
+		let maxRoundingFactor = 1, y = 100000000000000000;
+		while (y > 1){ // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
+			if (classSize > y){
+				maxRoundingFactor = y/10;
+				break;
+			}
+			y/=10
 		}
-		y/=10
-	}
-	return maxRoundingFactor;
+		return maxRoundingFactor;
 	}
 
 	/**
@@ -192,7 +189,6 @@ class CantonMap extends Component {
 	 * @return {JSX}
 	 */
     render() {
-		console.log(this.props.data.length);
 		return (
 				<LayerGroup>
 					{
@@ -220,7 +216,7 @@ class CantonMap extends Component {
 											<td>{item.text} ({item.name})</td>
 										</tr>
 										<tr>
-											<td>{this.props.variableInfo.text}:</td>
+											<td>{this.props.selectedVariable.text}:</td>
 											<td>{this.props.returnData(item)}</td>
 										</tr>
 									</table>

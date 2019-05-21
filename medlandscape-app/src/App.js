@@ -19,13 +19,17 @@ class App extends Component {
         hospitals : [],
 
         selectedVariable : {},
+
         hospitalsByEnums : [],
         hospitalsByType : [],
         filteredHospitals : [],
+
         years : [],
         selectedYear : "",
+
         view : 1,
         mapView : 1,
+
         hasLoaded : false,
         tableDataLoaded : false
     }
@@ -248,18 +252,11 @@ class App extends Component {
             }
         }
 
-        // let slider = (years.length > 1)
-        //     ? (
-        //         slider
-        //     )
-        //     : null
-        // ;
-
         return (
 			<div className="App">
                 <Maps
                     objects={(variableIsTypeHospital) ? filteredHospitals : cantons}
-                    variableInfo={selectedVariable}
+                    selectedVariable={selectedVariable}
                     year={selectedYear}
                     hasLoaded={hasLoaded}
                     view={view}

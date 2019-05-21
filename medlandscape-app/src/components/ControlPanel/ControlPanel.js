@@ -23,7 +23,9 @@ class ControlPanel extends Component {
             // filtering the different variables
             this.props.variables.filter((variable) => {
                 if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
-                    hospitalVars.push(variable);
+                    if (variable.name !== "Ort" && variable.name !== "Adr") { // because those don't make much sense as they are attached to any hospital either way
+                        hospitalVars.push(variable);
+                    }
                 } else if (variable.variable_model === "Canton") {
                     cantonVars.push(variable);
                 } else {

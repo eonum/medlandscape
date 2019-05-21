@@ -14,20 +14,43 @@ import CantonMap from './CantonMap.js';
 */
 class Maps extends Component {
 	state = {
-		lat: 46.798473,
-		lng: 8.231726,
-		zoom: 8,
+		filteredObjects : [],
+		lat : 46.798473,
+		lng : 8.231726,
+		zoom : 8,
+	}
+
+	componentDidUpdate(prevProps) {
+
+		if (this.props.hasLoaded && !prevProps.hasLoaded) {
+			let filteredObjects = this.props.objects.filter((object) => {
+				let value = this.returnData(object)
+				if (value === "noVariable") {
+					console.log("object does not contain variable " + this.props.selectedVariable.name);
+					console.log(object);
+				}
+				return (value !== "noValue");
+			});
+			this.setState({
+				filteredObjects : filteredObjects,
+			});
+		}
 	}
 
 	/**
      * Returns the values stored in a this.props.objects canton/hospital
      * @param  {Canton || Hospital Object} item The object to extract the values from
-     * @return {int || float} The selected entry in the item.values object
+     * @return {int || float || string} The selected entry in the item.values object
      */
 	returnData = (item) => {
-        let varName = this.props.variableInfo.name;
+        let varName = this.props.selectedVariable.name;
 		let values = item.attributes[varName];
-        let data = (values[this.props.year]);
+		let data;
+		if (values !== undefined) {
+			data = (values[this.props.year]) ? values[this.props.year] : "noValue";
+		} else {
+			data = "noVariable"
+		}
 		return data;
 	}
 
@@ -38,11 +61,9 @@ class Maps extends Component {
 	setMaxAndMin = () => {
         let min = 1000000000000, max = 0, sum = 0, counter = 0;
 
-        this.props.objects.map((obj) => {
+        this.state.filteredObjects.map((obj) => {
             let val = this.returnData(obj);
-            if (val === 0) {
-                //console.log(obj.name + " has value of 0.");
-            }
+
             if (obj.name !== "Ganze Schweiz") {
                 max = (max < val) ? val : max;
                 min = (min > val) ? val : min;
@@ -54,7 +75,7 @@ class Maps extends Component {
         const mean = sum/counter;
         sum = 0;
 
-        this.props.objects.map((obj) => {
+        this.state.filteredObjects.map((obj) => {
             let val = this.returnData(obj);
             if (obj.name !== "Ganze Schweiz") {
                 const squareDif = Math.pow(val - mean, 2);
@@ -79,7 +100,7 @@ class Maps extends Component {
 	* @return {Boolean}
 	*/
 	isNormable = () => {
-		let type = this.props.variableInfo.variable_type;
+		let type = this.props.selectedVariable.variable_type;
 		return (type === "float" || type === "number" || type === "percentage" || type === "relevance");
 	}
 
@@ -89,36 +110,43 @@ class Maps extends Component {
 	*/
  	resetView = () => {
 		this.setState({
-				lat: 46.798473 + 0.1 * Math.random(),
-				lng: 8.231726 + 0.1 * Math.random(),
-				zoom: 8,
+			lat : 46.798473 + 0.1 * Math.random(),
+			lng : 8.231726 + 0.1 * Math.random(),
+			zoom : 8,
 		})
 	}
 
 	render() {
-        let ready = (this.props.hasLoaded && this.isNormable());
-        let componentToRender = null;
-        let mapInfo = null;
+		const {selectedVariable, view, mapView, year, objects, hasLoaded} = this.props;
+		const {filteredObjects, hasFiltered, lat, lng, zoom} = this.state;
+		let variableIsTypeHospital = (selectedVariable.variable_model === "Hospital");
 
-		let hospitalObjects = (this.props.variableInfo.variable_model === "Hospital") ? this.props.objects : [];
-		let cantonObjects = (this.props.variableInfo.variable_model === "Canton") ? this.props.objects : [];
+		let componentToRender = null;
+		let mapInfo = null;
 
-        if (ready && this.props.view === 1) {
+        let ready = (hasLoaded);
+
+		let hospitalObjects = (variableIsTypeHospital) ? filteredObjects : [];
+		let cantonObjects = (!variableIsTypeHospital) ? filteredObjects : [];
+
+        if (ready && view === 1) {
+			let maxAndMin = (this.isNormable()) ? this.setMaxAndMin() : 0;
+
             mapInfo = (
                 <MapInfo
-					mapView={this.props.mapView}
-                    year={this.props.year}
-                    selectedVariable={this.props.variableInfo}
-                    nrOfObjects={this.props.objects.length}
+					mapView={mapView}
+                    year={year}
+                    selectedVariable={selectedVariable}
+                    nrOfObjects={filteredObjects.length}
                 />
             )
-            componentToRender = (this.props.mapView === 1)
+            componentToRender = (mapView === 1)
             ? (
 				<HospitalMap data={hospitalObjects}
 					returnData={this.returnData}
-					maxAndMin={this.setMaxAndMin()}
-					variableInfo={this.props.variableInfo}
-					year={this.props.year}
+					maxAndMin={maxAndMin}
+					selectedVariable={selectedVariable}
+					year={year}
 				/>
             )
             : (
@@ -126,7 +154,7 @@ class Maps extends Component {
 					data={cantonObjects}
 					returnData={this.returnData}
 					maxAndMin={this.setMaxAndMin()}
-					variableInfo={this.props.variableInfo}
+					selectedVariable={selectedVariable}
 				/>
             );
         }
@@ -134,7 +162,7 @@ class Maps extends Component {
         return (
         	<Map // set up map
                 className="map"
-        		center={[this.state.lat, this.state.lng]}
+        		center={[lat, lng]}
         		zoom={this.state.zoom}
         		minZoom={8} // set minimum zoom level
         		maxZoom={16} // set maximum zoom level
