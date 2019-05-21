@@ -344,7 +344,13 @@ class InteractiveTable extends Component {
                 break;
             }
         }
-        let selectedYear = Number(item.name);
+        let selectedYear;
+        if (this.state.selectedVariables[index].is_time_series) {
+            selectedYear = Number(item.name);
+        } else {
+            selectedYear = item.name;
+        }
+        console.log(selectedYear);
         let updatedYears = update(this.state.selectedYears, {[index]: {$set: selectedYear}});
         let updatedDropdowns = update(this.state.variableDropdowns, { [index]: {props: {children: {4: {props: {children: {props: {selectedItem: {$set: item}}}}}}}}});
         this.setState({
@@ -412,7 +418,7 @@ class InteractiveTable extends Component {
                 }
                 if (shouldCheckForLoadedData) {
                     // also check if for the selected variables the data was fetched
-                    if (!this.props.hospitals[0].attributes[variable.name]) {
+                    if (typeof(this.props.hospitals[0].attributes[variable.name]) === 'undefined') {
                         shouldGenerate = false;
                         break;
                     }
@@ -590,10 +596,13 @@ class InteractiveTable extends Component {
                             hospital = hosp;
                         }
                     }
-                    for (let year of Object.keys(hospital.attributes[selectedVariable.name])){
-                        years.add(year);
+                    if (selectedVariable.is_time_series) {
+                        for (let year of Object.keys(hospital.attributes[selectedVariable.name])){
+                            years.add(year);
+                        }
+                    } else {
+                        years.add(this.props.t('tableView.noTimeData'))
                     }
-                    // years.push(Object.keys(hospital.attributes[selectedVariable.name])); // // TODO: no duplicates
                 }
                 years = Array.from(years);
                 const selectedYear = years.sort()[years.length - 1];

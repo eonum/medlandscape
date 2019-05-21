@@ -22,7 +22,8 @@
         "sortDesc": "Descendant",
         "btnCreateTable": "Créer tableau",
         "btnAddAllHospitals": "Ajouter tous les hôpitaux",
-		"btnCreateCSV": "Créer CSV"
+		"btnCreateCSV": "Créer CSV",
+        "noTimeData": "Pas de cours à temps disponible"
     },
     "graphView": {
         "title": "Graph"
