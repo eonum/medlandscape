@@ -85,8 +85,6 @@ class HospitalTypeFilter extends Component {
             }
         }
 
-        this.props.setTypes(apiValues);
-
         this.filter(apiValues);
     }
 

@@ -7,21 +7,27 @@ import './mapInfo.css';
 class MapInfo extends Component {
 
     render() {
-        const {year, selectedVariable, nrOfObjects, t} = this.props;
+        const {mapView, year, selectedVariable, nrOfObjects, t} = this.props;
 
-        let isCanton = (selectedVariable.variable_model === "Canton");
-        let selectedMap = isCanton ? t('mapInfo.cantons') : t('mapInfo.hospitals');
-        let selectedVar = t('mapInfo.variable') +  ": " + selectedVariable.text;
-        let mapInfo = t('mapInfo.map') + ": " + selectedMap;
-        let yearInfo = t('mapInfo.year') + ": " + year;
-        let filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
+        let variableIsTypeHospital = (selectedVariable.variable_model === "Hospital");
+        let selectedMap, selectedVar, mapInfo, yearInfo, filterInfo;
+        selectedMap = (mapView === 1) ? t('mapInfo.hospitals') : t('mapInfo.cantons');
+        mapInfo = t('mapInfo.map') + ": " + selectedMap;
+
+        if ((mapView === 1 && variableIsTypeHospital) || (mapView === 2 && !variableIsTypeHospital)) {
+            selectedVar = t('mapInfo.variable') +  ": " + selectedVariable.text;
+            yearInfo = t('mapInfo.year') + ": " + year;
+            filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
+        } else {
+            selectedVar = t('mapInfo.noVariable');
+        }
 
         return (
             <Control position="topleft">
         		<div className="mapInfo">
                     <h1>{mapInfo}</h1>
                     <h2>{selectedVar}</h2>
-                    <h2>{(!isCanton) ? filterInfo : ""}</h2>
+                    <h2>{(variableIsTypeHospital) ? filterInfo : ""}</h2>
                     <h2>{yearInfo}</h2>
         		</div>
             </Control>

@@ -40,11 +40,12 @@
         "canton": "Kanton"
     },
     "mapInfo": {
-        "map": "Angezeigte Karte",
+        "map": "Karte",
         "hospitals": "Spitäler",
         "cantons": "Kantone",
-        "variable": "Variable",
+        "variable": "Kennzahl",
         "year": "Jahr",
-        "filter": "Angezeigte"
+        "filter": "Angezeigte",
+        "noVariable": "Keine Kennzahl ausgewählt"
     }
 }

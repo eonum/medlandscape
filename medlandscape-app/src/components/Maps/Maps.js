@@ -100,30 +100,34 @@ class Maps extends Component {
         let componentToRender = null;
         let mapInfo = null;
 
+		let hospitalObjects = (this.props.variableInfo.variable_model === "Hospital") ? this.props.objects : [];
+		let cantonObjects = (this.props.variableInfo.variable_model === "Canton") ? this.props.objects : [];
+
         if (ready && this.props.view === 1) {
             mapInfo = (
                 <MapInfo
+					mapView={this.props.mapView}
                     year={this.props.year}
                     selectedVariable={this.props.variableInfo}
                     nrOfObjects={this.props.objects.length}
                 />
             )
-            componentToRender = (this.props.variableInfo.variable_model === "Canton")
+            componentToRender = (this.props.mapView === 1)
             ? (
-                <CantonMap
-                    data={this.props.objects}
-                    returnData={this.returnData}
-                    maxAndMin={this.setMaxAndMin()}
-                    variableInfo={this.props.variableInfo}
-                />
+				<HospitalMap data={hospitalObjects}
+					returnData={this.returnData}
+					maxAndMin={this.setMaxAndMin()}
+					variableInfo={this.props.variableInfo}
+					year={this.props.year}
+				/>
             )
             : (
-                <HospitalMap data={this.props.objects}
-                    returnData={this.returnData}
-                    maxAndMin={this.setMaxAndMin()}
-                    variableInfo={this.props.variableInfo}
-					year={this.props.year}
-                />
+				<CantonMap
+					data={cantonObjects}
+					returnData={this.returnData}
+					maxAndMin={this.setMaxAndMin()}
+					variableInfo={this.props.variableInfo}
+				/>
             );
         }
 

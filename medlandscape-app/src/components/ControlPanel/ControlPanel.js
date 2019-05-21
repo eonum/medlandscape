@@ -13,7 +13,6 @@ class ControlPanel extends Component {
         cantonVars : [],
         hospitalVars : [],
         enums : [],
-        mapView : 1,
         selectedEnum : undefined,
     }
 
@@ -40,7 +39,6 @@ class ControlPanel extends Component {
         }
 
         if (this.props.selectedVariable !== prevProps.selectedVariable) {
-            console.log("new selectedVariable!!!");
             this.fetchMapData(this.props.selectedVariable);
         }
     }
@@ -99,16 +97,12 @@ class ControlPanel extends Component {
      * Sets the view to be displayed on the 'Maps' tab of the ControlPanel.
      */
     setMapView = (view) => {
-        if (this.state.view !== view) {
-            this.setState({
-                mapView : view
-            });
-        }
+        this.props.setMapView(view);
     }
 
     render() {
 
-        const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable, setSelectedHospitalTypes} = this.props;
+        const {t, hasLoaded, hospitals, filterByEnum, filterByType, year, selectedVariable, setSelectedHospitalTypes, mapView} = this.props;
         const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
         let selectedCanton = {}, selectedHospital = {};
@@ -128,7 +122,6 @@ class ControlPanel extends Component {
                     hospitals={hospitals}
                     filter={filterByType}
                     selectedYear={year}
-                    setTypes={setSelectedHospitalTypes}
                 />
                 <p>{t('mapView.variables')}</p>
                 <DropdownMenu id="hospitalVars"
@@ -157,18 +150,18 @@ class ControlPanel extends Component {
             </div>
         )
 
-        let mapView = (
+        let mapViews = (
             <div className="view1">
                 <div className="header">
                     <h1>{t('mapView.title')}</h1>
                     <div className="viewSwitcher">
-                        <p id="l1" className={(this.state.mapView === 1) ? "label selectedLabel" : "label"} onClick={this.setMapView.bind(this, 1)}>{t('mapView.hospitals')}</p>
+                        <p id="l1" className={(mapView === 1) ? "label selectedLabel" : "label"} onClick={this.setMapView.bind(this, 1)}>{t('mapView.hospitals')}</p>
                         <p className="separator">|</p>
-                        <p id="l2" className={(this.state.mapView === 2) ? "label selectedLabel" : "label"} onClick={this.setMapView.bind(this, 2)}>{t('mapView.cantons')}</p>
+                        <p id="l2" className={(mapView === 2) ? "label selectedLabel" : "label"} onClick={this.setMapView.bind(this, 2)}>{t('mapView.cantons')}</p>
                     </div>
                 </div>
                 {
-                    (this.state.mapView === 1)
+                    (this.props.mapView === 1)
                     ? mapViewHospitals
                     : mapViewCantons
                 }
@@ -198,7 +191,7 @@ class ControlPanel extends Component {
         let controlPanelView;
         switch(this.props.view) {
             case 1:
-                controlPanelView = mapView;
+                controlPanelView = mapViews;
                 break;
             case 2:
                 controlPanelView = tableView;
@@ -207,7 +200,7 @@ class ControlPanel extends Component {
                 controlPanelView = graphView;
                 break;
             default:
-                controlPanelView = mapView;
+                controlPanelView = mapViews;
         }
 
         return (

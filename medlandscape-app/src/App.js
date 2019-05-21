@@ -25,9 +25,9 @@ class App extends Component {
         years : [],
         selectedYear : "",
         view : 1,
+        mapView : 1,
         hasLoaded : false,
-        tableDataLoaded : false,
-        selectedHospitalTypes : []
+        tableDataLoaded : false
     }
 
     /**
@@ -178,6 +178,12 @@ class App extends Component {
         })
     }
 
+    setMapView = (view) => {
+        this.setState({
+            mapView : view
+        })
+    }
+
     /**
      * Set hospitalsByEnums to the selected Hospital Variable
      * @param {Array} selectedHospitals The selected hospitals.
@@ -204,20 +210,15 @@ class App extends Component {
         })
     }
 
-    setSelectedHospitalTypes = (selectedHospitalTypes) => {
-        this.setState({
-            selectedHospitalTypes : selectedHospitalTypes
-        })
-    }
-
     componentDidMount() {
         this.initApiCall();
     }
 
     render() {
 
-        const {selectedVariable, selectedHospitals, selectedYear, hasLoaded, view, hospitals, filteredHospitals, cantons, variables, years} = this.state;
+        const {selectedVariable, selectedHospitals, selectedYear, hasLoaded, view, mapView, hospitals, filteredHospitals, cantons, variables, years} = this.state;
 
+        let variableIsTypeHospital = (selectedVariable.variable_model === "Hospital");
 
         let centralPanel = (view !== 1)
             ? (
@@ -227,7 +228,7 @@ class App extends Component {
                     hospitals={hospitals}
                     hasLoaded={hasLoaded}
                     fetchData={this.applyVariables}
-					objects={(selectedVariable.variable_model === "Hospital") ? this.state.selectedHospitals : this.state.cantons}
+					objects={variableIsTypeHospital ? hospitals : cantons}
                     variableInfo={selectedVariable}
                     year={selectedYear}
                 />
@@ -235,22 +236,35 @@ class App extends Component {
             : null
         ;
 
-        let slider = (years.length > 1 && view === 1)
-            ? (
-                <Slider years={years} selectedYear={selectedYear} setYear={this.setYear}/>
-            )
-            : null
-        ;
+        let slider;
+
+        if (years.length > 1 && view === 1) {
+             if (variableIsTypeHospital && mapView === 2) {
+                slider = null;
+            } else if (!variableIsTypeHospital && mapView === 1){
+                slider = null;
+            } else {
+                slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
+            }
+        }
+
+        // let slider = (years.length > 1)
+        //     ? (
+        //         slider
+        //     )
+        //     : null
+        // ;
 
         return (
 			<div className="App">
                 <Maps
-                    objects={(selectedVariable.variable_model === "Hospital") ? filteredHospitals : cantons}
+                    objects={(variableIsTypeHospital) ? filteredHospitals : cantons}
                     variableInfo={selectedVariable}
                     year={selectedYear}
-
                     hasLoaded={hasLoaded}
                     view={view}
+                    mapView={mapView}
+                    setMapView={this.setMapView}
                 />
 				<div className="grid-container">
                     <ControlPanel
@@ -265,7 +279,8 @@ class App extends Component {
                         filterByType={this.sethospitalsByType}
                         year={selectedYear}
                         hasLoaded={hasLoaded}
-                        setSelectedHospitalTypes={this.setSelectedHospitalTypes}
+                        mapView={mapView}
+                        setMapView={this.setMapView}
                     />
                     {centralPanel}
                     <LanguagePicker resendInitApiCall={this.initApiCall} />

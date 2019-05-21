@@ -192,6 +192,7 @@ class CantonMap extends Component {
 	 * @return {JSX}
 	 */
     render() {
+		console.log(this.props.data.length);
 		return (
 				<LayerGroup>
 					{
@@ -227,7 +228,16 @@ class CantonMap extends Component {
 							</GeoJSON>
 						))
 					}
-					<Legend maxAndMin={this.props.maxAndMin} classColors={this.returnColorClasses()[this.state.colorScheme]} boundaries={this.returnBoundaries()}/>
+					{
+						(this.props.data.length !== 0)
+						?
+						<Legend
+							maxAndMin={this.props.maxAndMin}
+							classColors={this.returnColorClasses()[this.state.colorScheme]}
+							boundaries={this.returnBoundaries()}
+						/>
+						: null
+					}
 				</LayerGroup>
 		)
 	}

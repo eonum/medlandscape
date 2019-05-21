@@ -39,11 +39,12 @@
         "canton": "Canton"
     },
     "mapInfo": {
-        "map": "Carte affichée",
+        "map": "Carte",
         "hospitals": "Hôpitaux",
         "cantons": "Cantons",
         "variable": "Variable",
         "year": "Année",
-        "filter": ""
+        "filter": "",
+        "noVariable" : "Aucune variable selectionnée"
     }
 }
