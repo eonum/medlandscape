@@ -41,10 +41,10 @@ class DropdownMenu extends Component {
     }
 
     /**
-    * filterFunction - filters the displayed listitems using input from the
+    * searchFunction - filters the displayed listitems using input from the
     * textfield
     */
-    filterFunction = () => {
+    searchFunction = () => {
         let input, filter, a, i, div, txtValue;
         input = document.getElementById(this.props.id).querySelector('.searchbar');
         filter = input.value.toUpperCase();
@@ -69,27 +69,27 @@ class DropdownMenu extends Component {
     * @return {JSX}  JSX-Code of components
     */
     render() {
-        let varText;
         const {t, selectedItem, defaultText} = this.props;
+        let varText = (defaultText) ? defaultText : t('dropDowns.fallback');
 
-        // if an item was passed as selectedItem
-        if (selectedItem) {
-            // if dropdown contains hospitals
-            if (selectedItem.text) {
+        // if someone could check for undefined here pls thanks
+        if (!!selectedItem) {
+            if (!!selectedItem.text) {
                 varText = selectedItem.text;
-            } else { // if contains cantons / variables
+            } else if (!!selectedItem.name){ // if contains cantons / variables
                 varText = selectedItem.name;
             }
-        } else { // fallback if no item was passed as selectedItem OR no defaultText
-            // !! is to check for undefined, known hack
-            varText = (!!defaultText) ? defaultText : t('dropDowns.fallback');
+        }
+
+        if (varText.length > 25) {
+            varText = varText.substring(0, 25) + "...";
         }
 
         return (
             <div className="dropdown">
                 <button onClick={this.toggleDropdown.bind(this)} className="dropbtn">{varText} ▼</button>
                 <div id={this.props.id} className="dropdown-content">
-                    <input type="text" placeholder={t('dropDowns.search')} className="searchbar" onKeyUp={this.filterFunction.bind(this)} />
+                    <input type="text" placeholder={t('dropDowns.search')} className="searchbar" onKeyUp={this.searchFunction.bind(this)} />
                     <div className="dropdown-options">
                     {
                         this.props.listItems.map((item) => (

@@ -21,7 +21,9 @@ class Maps extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (this.props.objects !== prevProps.objects && this.props.view === 1 && this.props.hasLoaded) {
+
+		if (this.props.hasLoaded && !prevProps.hasLoaded) {
+			console.log("FILTERING on Maps componentDidUpdate");
 			let filteredObjects = this.props.objects.filter((object) => {
 				let value = this.returnData(object)
 				if (value === "noVariable") {
@@ -35,6 +37,13 @@ class Maps extends Component {
 				filtered : true
 			});
 		}
+
+		if (this.state.filtered && !prevProps.hasLoaded) {
+			this.setState({
+				filtered : false
+			})
+		}
+
 	}
 
 	/**
@@ -61,9 +70,8 @@ class Maps extends Component {
 	setMaxAndMin = () => {
         let min = 1000000000000, max = 0, sum = 0, counter = 0;
 
-        this.state.filteredObjects.forEach((obj) => {
+        this.state.filteredObjects.map((obj) => {
             let val = this.returnData(obj);
-
             if (obj.name !== "Ganze Schweiz") {
                 max = (max < val) ? val : max;
                 min = (min > val) ? val : min;
@@ -72,23 +80,23 @@ class Maps extends Component {
             }
         })
 
-        const mean = sum/counter;
-        sum = 0;
-
-        this.state.filteredObjects.forEach((obj) => {
-            let val = this.returnData(obj);
-            if (obj.name !== "Ganze Schweiz") {
-                const squareDif = Math.pow(val - mean, 2);
-                sum += squareDif;
-            }
-        })
-
-        const meanSquareDif = sum/counter;
-        const std = Math.sqrt(meanSquareDif);
+        // const mean = sum/counter;
+        // sum = 0;
+		//
+        // this.state.filteredObjects.map((obj) => {
+        //     let val = this.returnData(obj);
+        //     if (obj.name !== "Ganze Schweiz") {
+        //         const squareDif = Math.pow(val - mean, 2);
+        //         sum += squareDif;
+        //     }
+        // })
+		//
+        // const meanSquareDif = sum/counter;
+        // const std = Math.sqrt(meanSquareDif);
 
         return {
-            mean: mean,
-            std: std,
+            // mean: mean,
+            // std: std,
             max: max,
             min: min
         }
@@ -120,19 +128,39 @@ class Maps extends Component {
 		const {objects, selectedVariable, view, mapView, year, hasLoaded} = this.props;
 		const {filteredObjects, filtered, lat, lng, zoom} = this.state;
 
-		let componentToRender = null;
 		let mapInfo = null;
+		let cantonMap = null;
+		let hospitalMap = null;
 
-        if (hasLoaded && filtered && view === 1) {
-			// console.log("MAPS RECIEVED:");
-			// console.log("YEAR: " + year);
-			// console.log("VAR: " + selectedVariable.name);
-			// console.log("OBJ:");
-			// console.log(this.props.objects[0]);
+        if (filtered && view === 1) {
+			console.log("MAPS RECIEVED:");
+			console.log("YEAR: " + year);
+			console.log("VAR: " + selectedVariable.name);
+			console.log("OBJ:");
+			console.log(this.props.objects[0]);
 
 			let hospitalObjects = (mapView === 1) ? filteredObjects : [];
 			let cantonObjects = (mapView === 2) ? objects : [];
-			let maxAndMin = (this.isNormable()) ? this.setMaxAndMin() : 0;
+
+			cantonMap = (
+				<CantonMap
+					data={cantonObjects}
+					returnData={this.returnData}
+					maxAndMin={this.setMaxAndMin(cantonObjects)}
+					selectedVariable={selectedVariable}
+				/>
+			)
+
+			let hospitalMaxAndMin = (this.isNormable()) ? this.setMaxAndMin(hospitalObjects) : 0;
+
+			hospitalMap = (
+				<HospitalMap data={hospitalObjects}
+					returnData={this.returnData}
+					maxAndMin={hospitalMaxAndMin}
+					selectedVariable={selectedVariable}
+					year={year}
+				/>
+			)
 
             mapInfo = (
                 <MapInfo
@@ -142,23 +170,6 @@ class Maps extends Component {
                     nrOfObjects={filteredObjects.length}
                 />
             )
-            componentToRender = (mapView === 1)
-            ? (
-				<HospitalMap data={hospitalObjects}
-					returnData={this.returnData}
-					maxAndMin={maxAndMin}
-					selectedVariable={selectedVariable}
-					year={year}
-				/>
-            )
-            : (
-				<CantonMap
-					data={cantonObjects}
-					returnData={this.returnData}
-					maxAndMin={maxAndMin}
-					selectedVariable={selectedVariable}
-				/>
-            );
         }
 
         return (
@@ -187,7 +198,11 @@ class Maps extends Component {
         			url="https://api.mapbox.com/styles/v1/nathi/cjf8cggx93p3u2qrqrgwoh5nh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibmF0aGkiLCJhIjoiY2pmOGJ4ZXJmMXMyZDJ4bzRoYWRxbzhteCJ9.x2dbGjsVZTA9HLw6VWaQow"
         		/>
                 {mapInfo}
-        		{componentToRender}
+        		{
+					(mapView === 1)
+					? hospitalMap
+					: cantonMap
+				}
         	</Map>
         )
 	}

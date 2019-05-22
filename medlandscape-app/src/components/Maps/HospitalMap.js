@@ -72,7 +72,7 @@ class HospitalMap extends Component {
 	* @param {Object} e the event
 	*/
 	setNewStyle = (e) => {
-		e.target.setStyle({weight: 2});
+		e.target.setStyle({weight: 4});
 	}
 
 	/**
@@ -119,9 +119,11 @@ class HospitalMap extends Component {
           				<CircleMarker
           					key = {this.props.data.indexOf(item)}
         					center={{lon: item.longitude, lat: item.latitude}}
-        					color = {this.calculateCircleColor(item)}
-        					opacity = "0.9"
-        					weight = "0" // defining how big the outline of circle is
+							color= "#1996f6"
+							weight = "0" // defining how big the outline of circle is
+							opacity = "1"
+        					fillColor = {this.calculateCircleColor(item)}
+							fillOpacity = "0.7"
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}
 							onMouseOut = {this.onMouseOut.bind(this)}

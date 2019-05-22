@@ -189,12 +189,19 @@ class CantonMap extends Component {
 	 * @return {JSX}
 	 */
     render() {
+		const {t, data, selectedVariable, maxAndMin} = this.props;
+		console.log("CANTONMAP RECIEVED:");
+		console.log("DATA: " + data.length + ", sample:");
+		console.log(data[0]);
+		console.log("VAR: " + selectedVariable.name);
+		console.log("maxAndMin:");
+		console.log(maxAndMin);
 		return (
 				<LayerGroup>
 					{
 						this.props.data.map((item) => (
 							<GeoJSON
-								key = {this.props.data.indexOf(item)}
+								key = {data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
 								onMouseOver = {this.onMouseOver.bind(this)}
@@ -213,11 +220,11 @@ class CantonMap extends Component {
 									<table>
 										<tbody>
 											<tr>
-												<td>{this.props.t("popup.canton")}</td>
+												<td>{t("popup.canton")}</td>
 												<td>{item.text} ({item.name})</td>
 											</tr>
 											<tr>
-												<td>{this.props.selectedVariable.text}:</td>
+												<td>{selectedVariable.text}:</td>
 												<td>{this.props.returnData(item)}</td>
 											</tr>
 										</tbody>
@@ -227,10 +234,10 @@ class CantonMap extends Component {
 						))
 					}
 					{
-						(this.props.data.length !== 0)
+						(data.length !== 0)
 						?
 						<Legend
-							maxAndMin={this.props.maxAndMin}
+							maxAndMin={maxAndMin}
 							classColors={this.returnColorClasses()[this.state.colorScheme]}
 							boundaries={this.returnBoundaries()}
 						/>

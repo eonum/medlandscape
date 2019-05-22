@@ -117,15 +117,13 @@ class ControlPanel extends Component {
         const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, year, selectedVariable, mapView, graphView} = this.props;
         const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
-        let selectedCanton = {}, selectedHospital = {};
+        let selectedCantonVar, selectedHospitalVar;
 
         // setting selectedItem for Dropdowns
         if (mapView === 1) {
-            selectedHospital = selectedVariable;
-            selectedCanton = undefined;
+            selectedHospitalVar = selectedVariable;
         } else {
-            selectedCanton = selectedVariable;
-            selectedHospital = undefined;
+            selectedCantonVar = selectedVariable;
         }
 
         let mapViewHospitals = (
@@ -140,7 +138,7 @@ class ControlPanel extends Component {
                 <DropdownMenu id="hospitalVars"
                     listItems={hospitalVars}
                     selectItem={this.setVariable}
-                    selectedItem={selectedHospital}
+                    selectedItem={selectedHospitalVar}
                     defaultText={t('dropDowns.variablesFallback')}
                 />
                 <p>{t('mapView.filter')}</p>
@@ -159,7 +157,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedCantonVar} defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         )
 
@@ -192,7 +190,7 @@ class ControlPanel extends Component {
         let boxPlotView = (
             <div className="graphView">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.setVariable} selectedItem={selectedHospital}  defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.setVariable} selectedItem={selectedHospitalVar}  defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         );
 
