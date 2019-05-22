@@ -70,19 +70,21 @@ class DropdownMenu extends Component {
     */
     render() {
         let varText;
-        const {t} = this.props;
+        const {t, selectedItem, defaultText} = this.props;
+
+        console.log(selectedItem);
 
         // if an item was passed as selectedItem
-        if (this.props.selectedItem) {
+        if (selectedItem) {
             // if dropdown contains hospitals
-            if (this.props.selectedItem.text) {
-                varText = this.props.selectedItem.text;
+            if (selectedItem.text) {
+                varText = selectedItem.text;
             } else { // if contains cantons / variables
-                varText = this.props.selectedItem.name;
+                varText = selectedItem.name;
             }
         } else { // fallback if no item was passed as selectedItem OR no defaultText
             // !! is to check for undefined, known hack
-            varText = (!!this.props.defaultText) ? this.props.defaultText : t('dropDowns.fallback');
+            varText = (!!defaultText) ? defaultText : t('dropDowns.fallback');
         }
 
         return (

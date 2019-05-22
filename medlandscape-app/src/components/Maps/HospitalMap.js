@@ -54,8 +54,8 @@ class HospitalMap extends Component {
 		} else {
 			const max = this.props.maxAndMin.max;
 			const min = this.props.maxAndMin.min;
-			const mean = this.props.maxAndMin.mean;
-			const std = this.props.maxAndMin.std;
+			//const mean = this.props.maxAndMin.mean;
+			//const std = this.props.maxAndMin.std;
 			//const standardVal = ((this.props.returnData(item)-mean)/std);
 			const data = this.props.returnData(item);
 			const biggestRadius = 60;
@@ -107,6 +107,11 @@ class HospitalMap extends Component {
 	 * @return {JSX}
      */
 	render() {
+		// console.log("HOSPITALMAP RECIEVED:");
+		// console.log("YEAR: " + this.props.year);
+		// console.log("VAR: " + this.props.selectedVariable.name)
+		// console.log("OBJ:");
+		// console.log(this.props.data[0]);
 		return (
 			<LayerGroup>
 				{
@@ -131,8 +136,8 @@ class HospitalMap extends Component {
 								maxWidth = "250"
 								closeButton = {false}
 							>
-								<tbody>
-									<table>
+								<table>
+									<tbody>
 										<tr>
 											<td>{this.props.t("popup.hospital")}</td>
 											<td>{item.name}</td>
@@ -145,8 +150,8 @@ class HospitalMap extends Component {
 											<td>{this.props.selectedVariable.text}:</td>
 											<td>{this.props.returnData(item)}</td>
 										</tr>
-									</table>
-								</tbody>
+									</tbody>
+								</table>
 							</Popup>
         				</CircleMarker>
       	             ))

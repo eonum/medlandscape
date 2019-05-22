@@ -30,14 +30,10 @@ class BoxPlot extends Component {
 	 * @return {array} dataArray
 	 */
 	makeDataArray = () => {
-		let dataArray = [];
-		this.props.objects.map((obj) => {
-			let data = this.returnData(obj);
-			if (data) // sort out undefined values for given year
-				dataArray.push(data);
+		// sort out undefined values for given year
+		return this.props.objects.filter((obj) => {
+			return (this.returnData(obj) !== undefined);
 		})
-
-		return dataArray;
 	}
 
 	/**
@@ -69,7 +65,7 @@ class BoxPlot extends Component {
 		var q1 = d3.quantile(data_sorted, .25)
 		var median = d3.quantile(data_sorted, .5)
 		var q3 = d3.quantile(data_sorted, .75)
-		var interQuantileRange = q3 - q1
+		//var interQuantileRange = q3 - q1
 		var min = minVal //q1 - 1.5 * interQuantileRange
 		var max = maxVal //q1 + 1.5 * interQuantileRange
 
@@ -82,7 +78,7 @@ class BoxPlot extends Component {
 
 		// a few features for the box
 		var center = 200
-		var width = 100
+		var width2 = 100
 
 		// Show the main vertical line
 		svg.append("line")
@@ -94,10 +90,10 @@ class BoxPlot extends Component {
 
 		// Show the box
 		svg.append("rect")
-			.attr("x", center - width/2)
+			.attr("x", center - width2/2)
 			.attr("y", y(q3) )
 			.attr("height", (y(q1)-y(q3)) )
-			.attr("width", width )
+			.attr("width", width2 )
 			.attr("stroke", "black")
 			.style("fill", "#69b3a2")
 
@@ -106,8 +102,8 @@ class BoxPlot extends Component {
 			.data([min, median, max])
 			.enter()
 			.append("line")
-			.attr("x1", center-width/2)
-			.attr("x2", center+width/2)
+			.attr("x1", center-width2/2)
+			.attr("x2", center+width2/2)
 			.attr("y1", function(d){ return(y(d))} )
 			.attr("y2", function(d){ return(y(d))} )
 			.attr("stroke", "black")

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { MapControl, Marker, LayerGroup } from "react-leaflet";
+import { Marker, LayerGroup } from "react-leaflet";
 
 class TestComponent extends Component {
 	render() {
-		return ( 
+		return (
 				<LayerGroup>
 					<Marker position={[47, 8]}></Marker>
 					<Marker position={[47.005, 8.005]}></Marker>

@@ -24,10 +24,11 @@
         "btnAddAllHospitals": "Alle Spitäler hinzufügen",
 		"btnCreateCSV": "CSV-Datei erstellen",
         "noTimeData": "Kein Zeitverlauf vorhanden"
-
     },
     "graphView": {
-        "title": "Graph"
+        "title": "Graph",
+        "boxPlot": "Boxplot",
+        "regression": "L. Reg."
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"

@@ -3,7 +3,6 @@ import { Map, TileLayer, ZoomControl } from 'react-leaflet'
 import './Maps.css';
 import Control from 'react-leaflet-control';
 import MapInfo from '../MapInfo/MapInfo.js';
-import TestComponent from './TestComponent.js';
 import HospitalMap from './HospitalMap.js';
 import CantonMap from './CantonMap.js';
 
@@ -22,17 +21,12 @@ class Maps extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (this.state.filtered && !prevProps.hasLoaded) {
-			this.setState({
-				filtered : false
-			})
-		}
-		if (this.props.hasLoaded && !prevProps.hasLoaded) {
+		if (this.props.objects !== prevProps.objects && this.props.view === 1 && this.props.hasLoaded) {
 			let filteredObjects = this.props.objects.filter((object) => {
 				let value = this.returnData(object)
 				if (value === "noVariable") {
-					console.log("object does not contain variable " + this.props.selectedVariable.name);
-					console.log(object);
+					//console.log("object does not contain variable " + this.props.selectedVariable.name);
+					//console.log(object);
 				}
 				return (value !== "noValue");
 			});
@@ -67,7 +61,7 @@ class Maps extends Component {
 	setMaxAndMin = () => {
         let min = 1000000000000, max = 0, sum = 0, counter = 0;
 
-        this.state.filteredObjects.map((obj) => {
+        this.state.filteredObjects.forEach((obj) => {
             let val = this.returnData(obj);
 
             if (obj.name !== "Ganze Schweiz") {
@@ -81,7 +75,7 @@ class Maps extends Component {
         const mean = sum/counter;
         sum = 0;
 
-        this.state.filteredObjects.map((obj) => {
+        this.state.filteredObjects.forEach((obj) => {
             let val = this.returnData(obj);
             if (obj.name !== "Ganze Schweiz") {
                 const squareDif = Math.pow(val - mean, 2);
@@ -123,16 +117,21 @@ class Maps extends Component {
 	}
 
 	render() {
-		const {selectedVariable, view, mapView, year, objects, hasLoaded} = this.props;
+		const {objects, selectedVariable, view, mapView, year, hasLoaded} = this.props;
 		const {filteredObjects, filtered, lat, lng, zoom} = this.state;
-		let variableIsTypeHospital = (selectedVariable.variable_model === "Hospital");
 
 		let componentToRender = null;
 		let mapInfo = null;
 
         if (hasLoaded && filtered && view === 1) {
-			let hospitalObjects = (variableIsTypeHospital) ? filteredObjects : [];
-			let cantonObjects = (!variableIsTypeHospital) ? filteredObjects : [];
+			// console.log("MAPS RECIEVED:");
+			// console.log("YEAR: " + year);
+			// console.log("VAR: " + selectedVariable.name);
+			// console.log("OBJ:");
+			// console.log(this.props.objects[0]);
+
+			let hospitalObjects = (mapView === 1) ? filteredObjects : [];
+			let cantonObjects = (mapView === 2) ? objects : [];
 			let maxAndMin = (this.isNormable()) ? this.setMaxAndMin() : 0;
 
             mapInfo = (
@@ -156,7 +155,7 @@ class Maps extends Component {
 				<CantonMap
 					data={cantonObjects}
 					returnData={this.returnData}
-					maxAndMin={this.setMaxAndMin()}
+					maxAndMin={maxAndMin}
 					selectedVariable={selectedVariable}
 				/>
             );
@@ -166,7 +165,7 @@ class Maps extends Component {
         	<Map // set up map
                 className="map"
         		center={[lat, lng]}
-        		zoom={this.state.zoom}
+        		zoom={zoom}
         		minZoom={8} // set minimum zoom level
         		maxZoom={16} // set maximum zoom level
 				zoomControl={false}
@@ -175,7 +174,6 @@ class Maps extends Component {
 					style="borderRadius=25px;"
 					position="topright"
 				/>
-
 				<Control position="topright">
 			          	<div
 							id="rV"

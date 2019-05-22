@@ -69,8 +69,7 @@ class FilterEditor extends Component {
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.props.selectedEnum;
 
-		console.log("name of selected Enum: " + name);
-		console.log(hospitals);
+		console.log("SELECTED Enum: " + name);
 
 		let filteredHospitals =  [];
 

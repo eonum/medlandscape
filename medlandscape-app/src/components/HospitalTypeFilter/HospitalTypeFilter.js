@@ -8,13 +8,6 @@ class HospitalTypeFilter extends Component {
         selectedValues : []
     }
 
-    // filters again when a new selectedVariable has been selected, with the same selectedValues as before the change.
-    componentDidUpdate(prevProps) {
-        if (this.props.hospitals !== prevProps.hospitals) {
-            this.setAPIValues(this.state.selectedValues);
-        }
-    }
-
     /**
      * Adds the value of the selected hospital category to selectedValues.
      * @param {String} item The selected hospital category to be added.
@@ -82,6 +75,8 @@ class HospitalTypeFilter extends Component {
                     apiValues.push("K234");
                     apiValues.push("K235");
                     break;
+                default:
+                    apiValues.push("K111");
             }
         }
 

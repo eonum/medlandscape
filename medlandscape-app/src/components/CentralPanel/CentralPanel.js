@@ -5,8 +5,6 @@ import BoxPlot from '../Graphs/BoxPlot.js';
 import LinearRegression from '../Graphs/LinearRegression.js';
 import './centralPanel.css'
 
-const apiURL = "https://qm1.ch/";
-let apiRequest = "/api/medical_landscape/";
 
 class CentralPanel extends Component {
 
@@ -25,7 +23,8 @@ class CentralPanel extends Component {
 
         let query = "hospitals?variables=" + requestedVars;
 
-        this.props.fetchData("hospitals", query).then(() => {
+        console.log("FETCHING from CentralPanel");
+        this.props.fetchData(query).then(() => {
             this.setState({
                 tableDataLoaded : true
             }, () => { if (callback) { callback(); }});
@@ -61,23 +60,34 @@ class CentralPanel extends Component {
             />
         );
 
+        let boxPlot = (
+            <BoxPlot
+                objects={this.props.objects}
+                variableInfo={this.props.variableInfo}
+                year={this.props.year}
+                hasLoaded={this.props.hasLoaded}
+            />
+        )
+
+        let linReg = (
+            <LinearRegression
+                hospitals={this.props.hospitals}
+                requestData={this.requestTableData}
+                tableDataLoaded={this.state.tableDataLoaded}
+                tableDataGenerated={this.tableDataGenerated}
+                variables={hospitalVars}
+                year={this.props.year}
+                hasLoaded={this.props.hasLoaded}
+            />
+        )
+
 		let graphView = (
 			<div>
-				<BoxPlot
-					objects={this.props.objects}
-					variableInfo={this.props.variableInfo}
-					year={this.props.year}
-					hasLoaded={this.props.hasLoaded}
-				/>
-				<LinearRegression
-					hospitals={this.props.hospitals}
-					requestData={this.requestTableData}
-					tableDataLoaded={this.state.tableDataLoaded}
-					tableDataGenerated={this.tableDataGenerated}
-					variables={hospitalVars}
-					year={this.props.year}
-					hasLoaded={this.props.hasLoaded}
-				/>
+                {
+                    (this.props.graphView === 1)
+                    ? boxPlot
+                    : linReg
+                }
 			</div>
 		);
 

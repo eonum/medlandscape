@@ -8,13 +8,12 @@ class MapInfo extends Component {
 
     render() {
         const {mapView, year, selectedVariable, nrOfObjects, t} = this.props;
-
-        let variableIsTypeHospital = (selectedVariable.variable_model === "Hospital");
         let selectedMap, selectedVar, mapInfo, yearInfo, filterInfo;
+
         selectedMap = (mapView === 1) ? t('mapInfo.hospitals') : t('mapInfo.cantons');
         mapInfo = t('mapInfo.map') + ": " + selectedMap;
 
-        if ((mapView === 1 && variableIsTypeHospital) || (mapView === 2 && !variableIsTypeHospital)) {
+        if (Object.keys(selectedVariable).length !== 0) {
             selectedVar = t('mapInfo.variable') +  ": " + selectedVariable.text;
             yearInfo = t('mapInfo.year') + ": " + year;
             filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
@@ -27,7 +26,7 @@ class MapInfo extends Component {
         		<div className="mapInfo">
                     <h1>{mapInfo}</h1>
                     <h2>{selectedVar}</h2>
-                    <h2>{(variableIsTypeHospital) ? filterInfo : ""}</h2>
+                    <h2>{filterInfo}</h2>
                     <h2>{yearInfo}</h2>
         		</div>
             </Control>

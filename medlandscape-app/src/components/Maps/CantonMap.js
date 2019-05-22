@@ -125,7 +125,7 @@ class CantonMap extends Component {
 		//const redToGreen8Classes = greenToRed8Classes.slice().reverse();
 		const blue8Classes = ["235, 240, 255", "186, 210, 235", "142, 190, 218", "90, 158, 204", "53, 126, 185", "28, 91, 166", "11, 50, 129", "51, 50, 120"];
 		const red8Classes = ["253, 238, 186", "249, 227, 151", "248 ,  199 ,  122", "244,  174,  90", "246,  133,  82" , "235 ,  93,  80", "204,  73,  80",  "165,  50,  50"]
-		const red5Classes = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "140, 0, 0"];
+		//const red5Classes = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "140, 0, 0"];
 		const colorClassesArray = [blue8Classes, red8Classes];
 		return colorClassesArray;
 	}
@@ -210,8 +210,8 @@ class CantonMap extends Component {
 									maxWidth = "250"
 									closeButton = {false}
 								>
-									<tbody>
-										<table>
+									<table>
+										<tbody>
 											<tr>
 												<td>{this.props.t("popup.canton")}</td>
 												<td>{item.text} ({item.name})</td>
@@ -220,8 +220,8 @@ class CantonMap extends Component {
 												<td>{this.props.selectedVariable.text}:</td>
 												<td>{this.props.returnData(item)}</td>
 											</tr>
-										</table>
-									</tbody>
+										</tbody>
+									</table>
 								</Popup>
 							</GeoJSON>
 						))
