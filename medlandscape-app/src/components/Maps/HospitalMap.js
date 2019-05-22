@@ -12,32 +12,32 @@ class HospitalMap extends Component {
 		let color;
 		switch (item.attributes["Typ"][this.props.year]) {
 			case ("K111"):
-				color = "aqua";
+				color = "#fdfd96";
 				break;
 			case ("K112"):
-				color = "fuchsia";
+				color = "#cafd96";
 				break;
 			case ("K121"):
-				color = "red";
+				color = "#96fdfd";
 				break;
 			case ("K122"):
-				color = "red";
+				color = "#96fdfd";
 				break;
 			case ("K123"):
-				color = "red";
+				color = "#96fdfd";
 				break;
 			case ("K211"):
-				color = "LimeGreen";
+				color = "#9696fd";
 				break;
 			case ("K212"):
-				color = "LimeGreen";
+				color = "#9696fd";
 				break;
 			case ("K221"):
-				color = "SaddleBrown";
+				color = "#ca96fd";
 				break;
 			// other 5 cases, too lazy to switch them out
 			default :
-				color = "navy";
+				color = "#fd9696";
 				break;
 		}
 		return color;

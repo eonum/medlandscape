@@ -325,7 +325,7 @@ class App extends Component {
                 viewSpecificVariable = (mapView === 1) ? hospitalMapSelectedVariable : cantonMapSelectedVariable;
                 break;
             case 2:
-                viewSpecificObjects = tableHospitals;
+                viewSpecificObjects = (tableHospitals.length > 0) ? tableHospitals : hospitals;
                 break;
             case 3:
                 viewSpecificObjects = (graphView === 1) ? regressionHospitals : boxPlotHospitals;
@@ -351,7 +351,6 @@ class App extends Component {
                     view={view}
                     graphView={graphView}
                     variables={variables}
-                    hospitals={hospitals}
                     hasLoaded={hasLoaded}
                     fetchData={this.applyVariables}
 					objects={viewSpecificObjects}

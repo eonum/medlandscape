@@ -72,8 +72,6 @@ class DropdownMenu extends Component {
         let varText;
         const {t, selectedItem, defaultText} = this.props;
 
-        console.log(selectedItem);
-
         // if an item was passed as selectedItem
         if (selectedItem) {
             // if dropdown contains hospitals

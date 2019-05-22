@@ -51,7 +51,7 @@ class CentralPanel extends Component {
         let tableView = (
             <InteractiveTable
                 variables={hospitalVars}
-                hospitals={this.props.hospitals}
+                hospitals={this.props.objects}
                 requestData={this.requestTableData}
                 tableDataLoaded={this.state.tableDataLoaded}
                 tableDataGenerated={this.tableDataGenerated}
