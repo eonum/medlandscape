@@ -4,6 +4,12 @@ import CheckboxList from '../CheckboxList/CheckboxList.js';
 import { withTranslation } from 'react-i18next';
 import './FilterEditor.css'
 
+
+/*
+* A component to filter different Variables and Filters, defined through
+* Dropdowns or CheckboxLists
+*/
+
 class FilterEditor extends Component {
 	state = {
         selectedValues : [],
@@ -18,7 +24,8 @@ class FilterEditor extends Component {
 	}
 
 	/**
-    *
+	*Called when a variable is selected in a dropdown
+    *Gets the titles of the items, that have been selected in the dropdowns
     */
     dropdownSelectItem = (item) => {
 		let titles = [];
@@ -34,9 +41,9 @@ class FilterEditor extends Component {
 	}
 
     /**
+     *Called when a variable is selected in a Checkboxlist
+     * @param  {Filter Object} item the selected filter object to apply to Hospitals
      *
-     * @param  {[type]} item [description]
-     * @return {[type]}      [description]
      */
     checkboxSelectItem = (item) => {
 
@@ -61,9 +68,8 @@ class FilterEditor extends Component {
     }
 
     /**
-     * [filter description]
-     * @param  {[type]} selectedValues [description]
-     * @return {[type]}                [description]
+     * Called when different values have been selected in the filter
+     * @param  {Variable Object} selectedValues the selected filter object to apply to Hospitals
      */
 	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;

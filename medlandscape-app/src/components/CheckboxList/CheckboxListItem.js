@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-
+/*
+*The item that is selected in the CheckboxList is bound as a CheckboxListItem here
+*/
 class CheckboxListItem extends Component {
 
     render() {

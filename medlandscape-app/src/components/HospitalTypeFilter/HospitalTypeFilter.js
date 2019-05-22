@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
 import './hospitalTypeFilter.css';
 
+/*
+*A component that helps with selcting and separating different types of hospitals
+*/
+
 class HospitalTypeFilter extends Component {
 
     state = {
@@ -83,6 +87,8 @@ class HospitalTypeFilter extends Component {
         this.filter(apiValues);
     }
 
+
+	/*filters through the selected values similar to our FIlterEditor */
     filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;
         const name = "Typ"

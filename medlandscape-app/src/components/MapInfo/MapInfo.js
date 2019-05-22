@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import Control from 'react-leaflet-control';
 import { withTranslation } from 'react-i18next';
-
 import './mapInfo.css';
+
+/*
+* Displays the Information to the map that is displayed at the moment.
+* Included are infos to the selected Variable, selected Year and the map itself
+*/
 
 class MapInfo extends Component {
 

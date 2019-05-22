@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import CheckboxListItem from './CheckboxListItem.js'
 import './CheckboxList.css'
 
+/*Creates a CheckboxList-Component which is used in the selection of different Variables,
+* such hospital-type and different filters.
+*/
 class CheckboxList extends Component {
 
     render() {
