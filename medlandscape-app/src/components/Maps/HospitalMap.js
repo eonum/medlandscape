@@ -19,33 +19,39 @@ class HospitalMap extends Component {
 	calculateCircleColor = (item) => {
 		let color;
 		switch (item.attributes["Typ"][this.props.year]) {
+			// unispital
 			case ("K111"):
-				color = "#fdfd96";
+				color = "#a72a2a";
 				break;
+			// allgemeinspital zentrumsversorgung
 			case ("K112"):
-				color = "#cafd96";
+				color = "#a79f2a";
 				break;
+			// allgemeinspital grundversorgung
 			case ("K121"):
-				color = "#96fdfd";
+				color = "#2da72a";
 				break;
 			case ("K122"):
-				color = "#96fdfd";
+				color = "#2da72a";
 				break;
 			case ("K123"):
-				color = "#96fdfd";
+				color = "#2da72a";
 				break;
+			// psychiatrische klinik
 			case ("K211"):
-				color = "#9696fd";
+				color = "#2a8ea7";
 				break;
 			case ("K212"):
-				color = "#9696fd";
+				color = "#2a8ea7";
 				break;
+			// rehaklinik
 			case ("K221"):
-				color = "#ca96fd";
+				color = "#2d2aa7";
 				break;
+			// spezialklinik
 			// other 5 cases, too lazy to switch them out
 			default :
-				color = "#fd9696";
+				color = "#762aa7";
 				break;
 		}
 		return color;
@@ -66,7 +72,7 @@ class HospitalMap extends Component {
 			//const std = this.props.maxAndMin.std;
 			//const standardVal = ((this.props.returnData(item)-mean)/std);
 			const data = this.props.returnData(item);
-			const biggestRadius = 60;
+			const biggestRadius = 50;
 
 			const a = ((data + Math.abs(min)) / (max + Math.abs(min))) * Math.pow(biggestRadius, 2) * Math.PI;
 			let radius = Math.round(Math.sqrt(a / Math.PI));
@@ -81,7 +87,7 @@ class HospitalMap extends Component {
 	*/
 	setNewStyle = (e) => {
 		e.target.setStyle({
-			weight: 4,
+			weight: 3,
 			fillColor: "#1996fa",
 			color: "#1996fa"
 		});
@@ -103,7 +109,7 @@ class HospitalMap extends Component {
 	resetStyle = (item, e) => {
 		let oldColor = this.calculateCircleColor(item);
 		e.target.setStyle({
-			weight: 3,
+			weight: 2,
 			color: oldColor,
 			fillColor: oldColor,
 		});
