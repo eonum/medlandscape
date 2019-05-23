@@ -42,18 +42,16 @@ class ControlPanel extends Component {
 
 
         if (!this.props.hasLoaded && prevProps.hasLoaded) {
-            if (this.props.selectedVariable !== prevProps.selectedVariable) {
-                console.log("FETCHING on CP didUpdate, variable: " + this.props.selectedVariable.name);
-                this.fetchData(this.props.selectedVariable).then(() => {
-                    this.setState({
-                        hasLoaded : true
-                    })
-                });
-            } else {
-                console.log("NOTHING on CP didUpdate");
-                this.setState({
-                    hasLoaded : true
-                })
+            if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.mapView === prevProps.mapView && this.props.view === 1) {
+                console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
+                this.fetchData(this.props.selectedVariable);
+            }
+
+            if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.graphView === prevProps.graphView && this.props.view === 3) {
+                if (this.props.selectedVariable !== undefined) {
+                    console.log("FETCHING on CP didUpdate, GRAPHVIEW variable: " + this.props.selectedVariable.name);
+                    this.fetchData(this.props.selectedVariable);
+                }
             }
         }
     }
@@ -67,9 +65,12 @@ class ControlPanel extends Component {
         const {name, variable_model} = variable;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
-        query += encodeURIComponent(name + "$" + this.state.enums[7].name);
-        if (this.state.selectedEnum !== undefined && key === "hospitals") {
-            query += encodeURIComponent("$" + this.state.selectedEnum.name);
+        query += encodeURIComponent(name)
+        if (key === "hospitals") {
+            query += encodeURIComponent("$" + this.state.enums[7].name);
+            if (this.state.selectedEnum !== undefined && key === "hospitals") {
+                query += encodeURIComponent("$" + this.state.selectedEnum.name);
+            }
         }
         return this.props.fetchData(query);
     }
@@ -93,11 +94,7 @@ class ControlPanel extends Component {
      * @param  {Variable object} item The selected variable.
      */
     setVariable = (item) => {
-        this.setState({
-            hasLoaded : false
-        }, () => {
-            this.props.setVariable(item);
-        })
+        this.props.setVariable(item);
     }
 
     /**
@@ -110,6 +107,7 @@ class ControlPanel extends Component {
             document.getElementById('t' + oldView).classList.toggle('selectedTab');
             document.getElementById('t' + view).classList.toggle('selectedTab');
         }
+
     }
 
     render() {

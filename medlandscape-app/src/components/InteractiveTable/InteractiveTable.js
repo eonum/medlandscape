@@ -645,8 +645,6 @@ class InteractiveTable extends Component {
      */
     render() {
         const { t, objects } = this.props;
-        console.log("INTERACTIVETABLE objects: ");
-        console.log(objects);
         return (
             <div className="interactiveTable">
                 <button className="btnCreateCSV"

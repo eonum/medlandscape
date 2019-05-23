@@ -30,7 +30,7 @@ class HospitalTypeFilter extends Component {
 
         this.setAPIValues(values);
     }
-
+    
     /**
      * Helper method.
      * Converts the values into API specific hospital categories.

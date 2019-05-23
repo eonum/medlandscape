@@ -40,6 +40,7 @@ class App extends Component {
         view : 1,
         mapView : 1,
         graphView : 1,
+        lastQuery : "",
 
         hasLoaded : false,
         tableDataLoaded : false
@@ -54,10 +55,8 @@ class App extends Component {
         let key;
         return this.apiCall(query).then((results) => {
             console.log("DATA FETCHED");
-            let years;
             if (this.state.view === 1) {
                 key = (this.state.mapView === 1) ? "mapHospitals" : "cantons";
-                years = this.getYears(results);
             } else if (this.state.view === 2) {
                 key = "tableHospitals";
             } else {
@@ -66,10 +65,16 @@ class App extends Component {
 
             this.setState({
                 [key] : results,
-                hasLoaded : (this.state.view !== 1 || this.state.mapView !== 1)
+                lastQuery : query,
+                hasLoaded : (this.state.view !== 1)
             }, () => {
-                if (this.state.mapView === 1 && this.state.view === 1) {
-                    this.filterHospitals(); // only needed for hospitals while on the map View
+                if (this.state.view === 1) {
+                    if (this.state.mapView === 1) {
+                        // only needed for hospitals while on the map View
+                        this.filterHospitals();
+                    } else {
+                        this.getYears()
+                    }
                 }
             })
         });
@@ -82,6 +87,15 @@ class App extends Component {
     */
     apiCall = (query) => {
         return fetch(apiURL + this.props.i18n.language + apiRequest + query).then(res => res.json());
+    }
+
+    changeLanguage = () => {
+        this.initApiCall();
+        // implement resendLastCall to avoid resetting when changing the language
+    }
+
+    resendLastCall = () => {
+        this.applyVariables(this.state.lastQuery);
     }
 
     /**
@@ -183,13 +197,11 @@ class App extends Component {
         }
         console.log("DATA FILTERED");
         let unfiltered = mapHospitals;
-        let years = this.getYears(this.state.mapHospitals);
         this.setState({
             filteredHospitals : filteredHospitals,
             unfilteredHospitals : unfiltered,
-            years : years,
-            selectedYear : years[0],
-            hasLoaded : true
+        }, () => {
+            this.getYears();
         });
     }
 
@@ -197,19 +209,36 @@ class App extends Component {
      * Returns list of available years for selected Variable.
      * @return {Array} The available years.
      */
-    getYears = (objects) => {
-        console.log("GETTING YEARS");
+    getYears = () => {
         const {name} = this.state[this.getViewSpecificVariable()];
-        // console.log("VAR: " + name);
-        // console.log("OBJECTS: ");
-        // console.log(objects[0]);
-        let maxYears = [], years;
-        for (var i = 0; i < objects.length; i++) {
-            years = Object.keys(objects[i].attributes[name]);
-            maxYears = (years.length > maxYears.length) ? years : maxYears;
+
+        let objects;
+
+        switch (this.state.view) {
+            case 1:
+                objects = (this.state.mapView === 1) ? this.state.mapHospitals : this.state.cantons;
+                break;
+            case 3:
+                objects = (this.state.graphView === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
+                break;
+            default:
+                objects = [];
         }
-        // console.log("END OF GET YEARS");
-        return maxYears;
+
+        let maxYears = [0], years;
+
+        if (objects.length > 0) {
+            for (let i = 0; i < objects.length; i++) {
+                years = Object.keys(objects[i].attributes[name]);
+                maxYears = (years.length > maxYears.length) ? years : maxYears;
+            }
+        }
+
+        this.setState({
+            years : maxYears,
+            selectedYear : maxYears[0],
+            hasLoaded : true
+        })
     }
 
     getViewSpecificVariable = () => {
@@ -243,23 +272,33 @@ class App extends Component {
      */
     setView = (view) => {
         console.log("SWITCHING TABVIEW");
+
         this.setState({
             view : view,
-        })
+            hasLoaded : false
+        }, () => {
+            this.getYears();
+        });
     }
 
     setMapView = (view) => {
         console.log("SWITCHING MAPVIEW");
+
         this.setState({
-            mapView : view
-        })
+            mapView : view,
+            hasLoaded : false
+        }, () => {
+            this.getYears();
+        });
     }
 
     setGraphView = (view) => {
         console.log("SWITCHING GRAPHVIEW");
+
         this.setState({
-            graphView : view
-        })
+            graphView : view,
+            hasLoaded : false
+        });
     }
 
     /**
@@ -325,6 +364,7 @@ class App extends Component {
                 viewSpecificVariable = (mapView === 1) ? hospitalMapSelectedVariable : cantonMapSelectedVariable;
                 break;
             case 2:
+                // use hospitals if tableHospitals not yet set
                 viewSpecificObjects = (tableHospitals.length > 0) ? tableHospitals : hospitals;
                 break;
             case 3:
@@ -335,14 +375,6 @@ class App extends Component {
                 viewSpecificObjects = mapHospitals;
                 viewSpecificVariable = hospitalMapSelectedVariable;
                 break;
-        }
-
-        if (hasLoaded) {
-            console.log("DATA READY");
-            //console.log("PASSING VAR: " + viewSpecificVariable.name);
-            console.log("PASSING OBJ: " + viewSpecificObjects.length);
-            console.log("OBJ SAMPLE: ");
-            console.log(viewSpecificObjects[0]);
         }
 
         let centralPanel = (view !== 1)
@@ -363,10 +395,12 @@ class App extends Component {
 
         let slider;
 
-        if (years.length > 1 && view === 1 && Object.keys(viewSpecificVariable).length !== 0) {
-            slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
+        if (hasLoaded) {
+            console.log("DATA READY");
+            if (years.length > 1 && view === 1 && viewSpecificObjects.length > 0) {
+                slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
+            }
         }
-
 
         return (
 			<div className="App">
@@ -397,7 +431,7 @@ class App extends Component {
                         setGraphView={this.setGraphView}
                     />
                     {centralPanel}
-                    <LanguagePicker resendInitApiCall={this.initApiCall} />
+                    <LanguagePicker changeAPILang={this.changeLanguage} />
                     {slider}
                 </div>
 

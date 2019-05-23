@@ -190,12 +190,12 @@ class CantonMap extends Component {
 	 */
     render() {
 		const {t, data, selectedVariable, maxAndMin} = this.props;
-		console.log("CANTONMAP RECIEVED:");
-		console.log("DATA: " + data.length + ", sample:");
-		console.log(data[0]);
-		console.log("VAR: " + selectedVariable.name);
-		console.log("maxAndMin:");
-		console.log(maxAndMin);
+		// console.log("CANTONMAP RECIEVED:");
+		// console.log("DATA: " + data.length + ", sample:");
+		// console.log(data[0]);
+		// console.log("VAR: " + selectedVariable.name);
+		// console.log("maxAndMin:");
+		// console.log(maxAndMin);
 		return (
 				<LayerGroup>
 					{
@@ -234,7 +234,7 @@ class CantonMap extends Component {
 						))
 					}
 					{
-						(data.length !== 0)
+						(data.length > 0)
 						?
 						<Legend
 							maxAndMin={maxAndMin}

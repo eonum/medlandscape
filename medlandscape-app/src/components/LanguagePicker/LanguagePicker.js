@@ -18,7 +18,7 @@ class LanguagePicker extends Component {
     onLanguageChange = () => {
         let code = (this.state.lang === 'de') ? 'fr' : 'de';
         this.props.i18n.changeLanguage(code).then(() => {
-            this.props.resendInitApiCall();
+            this.props.changeAPILang();
         });
         this.setState({
             lang : code
