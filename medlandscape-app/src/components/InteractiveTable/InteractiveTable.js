@@ -323,6 +323,11 @@ class InteractiveTable extends Component {
         this.selectionChanged();
     }
 
+    /**
+     * selectionChanged - called when the selected variables or hospitals change.
+     *  This will notify the ResultTable to wipe itself (via props) and wait
+     *  for regeneration.   
+     */
     selectionChanged = () => {
         this.setState({
             selectionChanged: true
@@ -334,7 +339,8 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * selectYear - description
+     * selectYear - called when something is selected in a yearDropdown. updates
+     *  the state and retriggers table generation.
      */
     selectYear = (item, senderId) => {
         let index;
@@ -350,7 +356,6 @@ class InteractiveTable extends Component {
         } else {
             selectedYear = item.name;
         }
-        console.log(selectedYear);
         let updatedYears = update(this.state.selectedYears, {[index]: {$set: selectedYear}});
         let updatedDropdowns = update(this.state.variableDropdowns, { [index]: {props: {children: {4: {props: {children: {props: {selectedItem: {$set: item}}}}}}}}});
         this.setState({
@@ -579,7 +584,9 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * dataFetched - Called when the API-Request is completed (description)
+     * dataFetched - Called when the API-Request is completed. Collects all the
+     *  years for that data exist for all selected hospitals and updates the
+     *  according yearDropdowns
      */
     dataFetched = () => {
         if (true) {
@@ -630,7 +637,9 @@ class InteractiveTable extends Component {
     }
 
     /**
-     * resultTableAcknowledgedChange - description
+     * resultTableAcknowledgedChange - Used by ResultTable to tell the
+     *  InteractiveTable that it wiped the table when the user changed the
+     *  selection of vars or hosps
      */
     resultTableAcknowledgedChange = () => {
         this.setState({
@@ -709,6 +718,11 @@ class InteractiveTable extends Component {
  * hasLoaded: bool that will be true if the data is loaded
  * retriggerTableGeneration: will cause resultTable to regenerate its table
  *  without resending a request
+ * tableDataGenerated: will notify parent that ResultTable has finished
+ *  generating the table (called from ResultTable)
+ * tableDataLoaded: boolean that is true when the parent finished the request
+ *  and false when not (will be set to false again by ResultTable after it
+ *  finished table generation)
  */
 InteractiveTable.propTypes = {
     variables: PropTypes.array.isRequired,
@@ -716,7 +730,8 @@ InteractiveTable.propTypes = {
     requestData: PropTypes.func.isRequired,
     hasLoaded: PropTypes.bool.isRequired,
     retriggerTableGeneration: PropTypes.func.isRequired,
-
+    tableDataGenerated: PropTypes.func.isRequired,
+    tableDataLoaded: PropTypes.bool.isRequired
 }
 
 const LocalizedInteractiveTable = withTranslation()(InteractiveTable);
