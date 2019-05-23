@@ -17,10 +17,10 @@ class ControlPanel extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        // filtering the different variables after the first initialisation of variables
         if (this.props.variables !== prevProps.variables) {
             let cantonVars = [], hospitalVars = [], enums = [];
 
-            // filtering the different variables
             this.props.variables.forEach((variable) => {
                 if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
                     if (variable.name !== "Ort" && variable.name !== "Adr") { // because those don't make much sense as they are attached to any hospital either way
@@ -40,9 +40,10 @@ class ControlPanel extends Component {
             });
         }
 
-
         if (!this.props.hasLoaded && prevProps.hasLoaded) {
+            // if a dropdown has been selected that needs to fetch data
             if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.view !== 2) {
+                // specific views in which this can happen
                 if (this.props.mapView === prevProps.mapView && this.props.view === 1 && prevProps.view === 1) {
                     console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
                     this.fetchData(this.props.selectedVariable);

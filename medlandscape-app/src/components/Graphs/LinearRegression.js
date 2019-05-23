@@ -25,6 +25,7 @@ class LinearRegression extends Component {
 		this.drawEmptyChart();
 	}
 
+	// WARNING: DEPRECATED
 	componentWillUpdate(){
 		// if the language is changed,set back variables and remove chart
 		if (this.props.i18n.language !== this.state.language){
@@ -38,9 +39,11 @@ class LinearRegression extends Component {
 	}
 
 	componentDidUpdate(){
-		// check if response is there and draw chart if so
+		// check if response is there and draw chart if so, else display empty chart
 		if(this.props.tableDataLoaded) {
 			this.drawChart();
+		} else {
+			this.drawEmptyChart()
 		}
 	}
 

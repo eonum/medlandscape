@@ -113,7 +113,7 @@ class Maps extends Component {
 
         if (view === 1) {
 			let filteredObjects = this.filterObjects();
-			if (Object.keys(selectedVariable).length > 0 && hasLoaded) {
+			if (filteredObjects.length > 0 && hasLoaded) {
 				let maxAndMin;
 
 				if (mapView === 1) {
