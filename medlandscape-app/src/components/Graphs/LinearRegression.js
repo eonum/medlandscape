@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import { withTranslation } from 'react-i18next';
+import { numberFormat } from './../../utils.mjs';
 
 /**
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
@@ -171,9 +172,9 @@ class LinearRegression extends Component {
 			d3.select("#popupAddress")
 				.html("<dd>" + d.obj.street + ",</dd>" + d.obj.city);
 			d3.select("#popupXVariable")
-				.text(d.x);
+				.text(numberFormat(d.x));
 			d3.select("#popupYVariable")
-				.text(d.y);
+				.text(numberFormat(d.y));
 
 			// prevent that the click event closes the popup
 			d3.event.stopPropagation();

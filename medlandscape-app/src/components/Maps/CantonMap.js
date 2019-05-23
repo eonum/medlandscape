@@ -3,6 +3,7 @@ import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
 import { withTranslation } from 'react-i18next';
+import { numberFormat } from './../../utils.mjs';
 
 /*
 * Component to display the different cantons on our map. Also displays the selected
@@ -195,12 +196,6 @@ class CantonMap extends Component {
 	 */
     render() {
 		const {t, data, selectedVariable, maxAndMin} = this.props;
-		// console.log("CANTONMAP RECIEVED:");
-		// console.log("DATA: " + data.length + ", sample:");
-		// console.log(data[0]);
-		// console.log("VAR: " + selectedVariable.name);
-		// console.log("maxAndMin:");
-		// console.log(maxAndMin);
 		return (
 				<LayerGroup>
 					{
@@ -230,7 +225,7 @@ class CantonMap extends Component {
 											</tr>
 											<tr>
 												<td>{selectedVariable.text}:</td>
-												<td>{this.props.returnData(item)}</td>
+												<td>{numberFormat(this.props.returnData(item))}</td>
 											</tr>
 										</tbody>
 									</table>
