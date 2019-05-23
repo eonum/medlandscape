@@ -84,7 +84,6 @@ class App extends Component {
         return fetch(apiURL + this.props.i18n.language + apiRequest + query).then(res => res.json());
     }
 
-<<<<<<< HEAD
     changeLanguage = () => {
         this.initApiCall();
 
@@ -139,8 +138,6 @@ class App extends Component {
 
     }
 
-=======
->>>>>>> 8d99861454b142bf05ba8e08544ad8532974a5b2
     /**
     * Initialises the state variables with a call to the API.
     */
