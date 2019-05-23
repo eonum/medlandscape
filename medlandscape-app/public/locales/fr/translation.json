@@ -50,5 +50,13 @@
         "year": "Année",
         "filter": "",
         "noVariable" : "Aucune variable selectionnée"
+    },
+    "hospitalTypes": {
+        "university": "Hôpital universitaire",
+        "generic-center": "Hôpital de soins généraux, prise en charge centralisée",
+        "generic-basic": "Hôpital de soins généraux, soins de base",
+        "psychiatry": "Clinique psychiatrique",
+        "rehabilitation": "Clinique de réadaptation",
+        "special": "Clinique spécialisée"
     }
 }

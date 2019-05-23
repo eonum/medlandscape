@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
 import './hospitalTypeFilter.css';
+import { withTranslation } from "react-i18next";
 
 /*
 *A component that helps with selcting and separating different types of hospitals
@@ -34,7 +35,7 @@ class HospitalTypeFilter extends Component {
 
         this.setAPIValues(values);
     }
-    
+
     /**
      * Helper method.
      * Converts the values into API specific hospital categories.
@@ -52,27 +53,29 @@ class HospitalTypeFilter extends Component {
 
         let apiValues = [];
 
+        const {t} = this.props;
+
         for (let i = 0; i < values.length; i++) {
             switch (values[i]) {
-                case ("Universitätsspital"):
+                case (t('hospitalTypes.university')):
                     apiValues.push("K111");
                     break;
-                case ("Allgemeinspital, Zentrumversorgung"):
+                case (t('hospitalTypes.generic-center')):
                     apiValues.push("K112");
                     break;
-                case ("Allgemeinspital, Grundversorgung"):
+                case (t('hospitalTypes.generic-basic')):
                     apiValues.push("K121");
                     apiValues.push("K122");
                     apiValues.push("K123");
                     break;
-                case ("Psychiatrische Klinik"):
+                case (t('hospitalTypes.psychiatry')):
                     apiValues.push("K211");
                     apiValues.push("K212");
                     break;
-                case ("Rehabilitationsklinik"):
+                case (t('hospitalTypes.rehabilitation')):
                     apiValues.push("K221");
                     break;
-                case ("Spezialklinik"):
+                case (t('hospitalTypes.special')):
                     apiValues.push("K231");
                     apiValues.push("K232");
                     apiValues.push("K233");
@@ -123,7 +126,10 @@ class HospitalTypeFilter extends Component {
     }
 
     render() {
-        let categorizedHospitalTypes = ["Universitätsspital", "Allgemeinspital, Zentrumversorgung", "Allgemeinspital, Grundversorgung", "Psychiatrische Klinik", "Rehabilitationsklinik", "Spezialklinik"];
+        const {t} = this.props;
+        let categorizedHospitalTypes = [t('hospitalTypes.university'), t('hospitalTypes.generic-center'),
+            t('hospitalTypes.generic-basic'), t('hospitalTypes.psychiatry') , t('hospitalTypes.rehabilitation'),
+            t('hospitalTypes.special')];
 
         return (
             <div className="hospitalTypeFilter">
@@ -133,4 +139,5 @@ class HospitalTypeFilter extends Component {
     }
 }
 
-export default HospitalTypeFilter;
+const localizedHospitalTypeFilter = withTranslation()(HospitalTypeFilter);
+export default localizedHospitalTypeFilter;

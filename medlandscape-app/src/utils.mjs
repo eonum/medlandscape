@@ -11,7 +11,6 @@
 export function numberFormat(number){
     let nmbr = Math.round(number*100)/100;
     let str = nmbr.toString();
-    console.log(str);
     let index;
     index = str.indexOf(".");
     if (index = str.indexOf(".") === -1){
