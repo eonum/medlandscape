@@ -150,8 +150,8 @@ class LinearRegression extends Component {
 
     	var mousemove = function(d) {
        		d3.select("#linearregression .tooltip")
-				.style("left", (d3.event.pageX - 365) + "px")
-				.style("top", (d3.event.pageY - 136) + "px");
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px");
     	}
 
 		// close popup if you click outside
@@ -164,8 +164,8 @@ class LinearRegression extends Component {
 		var mouseclick = function(d) {
        		d3.select("#popup")
 				.style("display", "block")
-				.style("left", (d3.event.pageX - 475) + "px")
-				.style("top", (d3.event.pageY - 150) + "px")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px")
 			d3.select("#popupName")
 				.text(d.obj.name);
 			d3.select("#popupAddress")
@@ -356,7 +356,7 @@ class LinearRegression extends Component {
 		const {w, h, padding} = this.state;
 		// define legend
 		let l_offset_h = 310;
-		let l_offset_w = 280;
+		let l_offset_w = 220;
 		var legend = svg.selectAll(".legend")
 			.data(["A"]) //one hard coded datepoint added
 			.enter().append("g")

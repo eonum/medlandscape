@@ -32,7 +32,7 @@ class BoxPlot extends Component {
 	makeDataArray = () => {
 		// sort out undefined values for given year
 		return this.props.objects.filter((obj) => {
-			return (this.returnData(obj) !== undefined);
+			return (this.returnData(obj) !== undefined && obj.name !== "Ganze Schweiz");
 		})
 	}
 
@@ -40,6 +40,7 @@ class BoxPlot extends Component {
 	 * Draws a BoxPlot
 	 */
 	drawChart() {
+		d3.select("#boxplotsvg").remove();
 		// set the dimensions and margins of the graph
 		var margin = {top: 10, right: 30, bottom: 30, left: 40},
 			width = 400 - margin.left - margin.right,
@@ -55,7 +56,7 @@ class BoxPlot extends Component {
 
 		// create dummy data
 		let data = this.makeDataArray();
-		//var data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9];
+		data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9];
 		let minVal = Math.min(...data);
 		let maxVal = Math.max(...data);
 
@@ -80,6 +81,30 @@ class BoxPlot extends Component {
 		var center = 200
 		var width2 = 100
 
+
+		var tooltip = d3.select("#boxplot")
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+
+		var mouseover = function(d) {
+			d3.select("#boxplot .tooltip").style("opacity", 1)
+			.text("Median: " + median);
+		}
+
+		var mousemove = function(d) {
+			d3.select("#boxplot .tooltip")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px");
+		}
+
+		var mouseleave = function(d) {
+			d3.select("#boxplot .tooltip").transition()
+				.duration(200)
+				.style("opacity", 0)
+		}
+
+
 		// Show the main vertical line
 		svg.append("line")
 			.attr("x1", center)
@@ -87,6 +112,9 @@ class BoxPlot extends Component {
 			.attr("y1", y(min) )
 			.attr("y2", y(max) )
 			.attr("stroke", "black")
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave)
 
 		// Show the box
 		svg.append("rect")
@@ -96,6 +124,9 @@ class BoxPlot extends Component {
 			.attr("width", width2 )
 			.attr("stroke", "black")
 			.style("fill", "#69b3a2")
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave)
 
 		// show median, min and max horizontal lines
 		svg.selectAll("toto")
@@ -107,6 +138,9 @@ class BoxPlot extends Component {
 			.attr("y1", function(d){ return(y(d))} )
 			.attr("y2", function(d){ return(y(d))} )
 			.attr("stroke", "black")
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave)
 	}
 
 	render() {
