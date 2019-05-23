@@ -78,7 +78,7 @@ class CentralPanel extends Component {
 
         let linReg = (
             <LinearRegression
-                hospitals={this.props.hospitals}
+                hospitals={this.props.objects}
                 requestData={this.requestTableData}
                 tableDataLoaded={this.state.tableDataLoaded}
                 tableDataGenerated={this.tableDataGenerated}

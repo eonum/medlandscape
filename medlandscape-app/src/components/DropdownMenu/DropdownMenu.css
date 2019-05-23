@@ -11,7 +11,8 @@
     background-color: #1996f6;
     color: white;
 	min-height: 50px;
-    padding: 14px 20px;
+    text-align: center;
+    padding: 10px;
     border: none;
     cursor: pointer;
     width: 250px;

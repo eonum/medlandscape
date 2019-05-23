@@ -13,28 +13,15 @@ import CantonMap from './CantonMap.js';
 */
 class Maps extends Component {
 	state = {
-		filteredObjects : [],
-		filtered : false,
 		lat : 46.798473,
 		lng : 8.231726,
 		zoom : 8,
 	}
 
-	componentDidUpdate(prevProps) {
-		if (this.props.objects !== prevProps.objects && this.props.view === 1 && this.props.hasLoaded) {
-			let filteredObjects = this.props.objects.filter((object) => {
-				let value = this.returnData(object)
-				if (value === "noVariable") {
-					//console.log("object does not contain variable " + this.props.selectedVariable.name);
-					//console.log(object);
-				}
-				return (value !== "noValue");
-			});
-			this.setState({
-				filteredObjects : filteredObjects,
-				filtered : true
-			});
-		}
+	filterObjects = () => {
+		return this.props.objects.filter((object) => {
+			return (this.returnData(object) !== "noValue");
+		});
 	}
 
 	/**
@@ -58,40 +45,40 @@ class Maps extends Component {
    * Iterates through this.props.objects and finds mean, standard deviation, max and min values.
    * @return {Object} Object.min minimum, Object.max maximum, Object.mean mean, Object.std standard deviation,
  	*/
-	setMaxAndMin = () => {
-        let min = 1000000000000, max = 0, sum = 0, counter = 0;
+	setMaxAndMin = (objects) => {
+        let min = 1000000000000, max = 0; //sum = 0, counter = 0;
 
-        this.state.filteredObjects.forEach((obj) => {
-            let val = this.returnData(obj);
+		objects.map((obj) => {
+			let val = this.returnData(obj);
+			if (obj.name !== "Ganze Schweiz") {
+				max = (max < val) ? val : max;
+				min = (min > val) ? val : min;
+				// sum += val;
+				// counter++;
+			}
+		})
 
-            if (obj.name !== "Ganze Schweiz") {
-                max = (max < val) ? val : max;
-                min = (min > val) ? val : min;
-                sum += val;
-                counter++;
-            }
-        })
-
-        const mean = sum/counter;
-        sum = 0;
-
-        this.state.filteredObjects.forEach((obj) => {
-            let val = this.returnData(obj);
-            if (obj.name !== "Ganze Schweiz") {
-                const squareDif = Math.pow(val - mean, 2);
-                sum += squareDif;
-            }
-        })
-
-        const meanSquareDif = sum/counter;
-        const std = Math.sqrt(meanSquareDif);
-
-        return {
-            mean: mean,
-            std: std,
+		return {
+            // mean: mean,
+            // std: std,
             max: max,
             min: min
         }
+
+        // const mean = sum/counter;
+        // sum = 0;
+		//
+        // objects.map((obj) => {
+        //     let val = this.returnData(obj);
+        //     if (obj.name !== "Ganze Schweiz") {
+        //         const squareDif = Math.pow(val - mean, 2);
+        //         sum += squareDif;
+        //     }
+        // })
+		//
+        // const meanSquareDif = sum/counter;
+        // const std = Math.sqrt(meanSquareDif);
+
 	}
 
 	/**
@@ -118,48 +105,53 @@ class Maps extends Component {
 
 	render() {
 		const {objects, selectedVariable, view, mapView, year, hasLoaded} = this.props;
-		const {filteredObjects, filtered, lat, lng, zoom} = this.state;
+		const {lat, lng, zoom} = this.state;
 
-		let componentToRender = null;
 		let mapInfo = null;
+		let componentToRender = null;
 
-        if (hasLoaded && filtered && view === 1) {
-			// console.log("MAPS RECIEVED:");
-			// console.log("YEAR: " + year);
-			// console.log("VAR: " + selectedVariable.name);
-			// console.log("OBJ:");
-			// console.log(this.props.objects[0]);
 
-			let hospitalObjects = (mapView === 1) ? filteredObjects : [];
-			let cantonObjects = (mapView === 2) ? objects : [];
-			let maxAndMin = (this.isNormable()) ? this.setMaxAndMin() : 0;
+        if (view === 1) {
+			let filteredObjects = this.filterObjects();
+			if (Object.keys(selectedVariable).length > 0 && hasLoaded) {
+				let maxAndMin;
 
-            mapInfo = (
-                <MapInfo
-					mapView={mapView}
-                    year={year}
-                    selectedVariable={selectedVariable}
-                    nrOfObjects={filteredObjects.length}
-                />
-            )
-            componentToRender = (mapView === 1)
-            ? (
-				<HospitalMap data={hospitalObjects}
-					returnData={this.returnData}
-					maxAndMin={maxAndMin}
-					selectedVariable={selectedVariable}
-					year={year}
+				if (mapView === 1) {
+					maxAndMin = (this.isNormable()) ? this.setMaxAndMin(filteredObjects) : 0;
+				} else {
+					maxAndMin = this.setMaxAndMin(filteredObjects);
+				}
+
+				componentToRender = (mapView === 1)
+				? (
+					<HospitalMap
+						data={filteredObjects}
+						returnData={this.returnData}
+						maxAndMin={maxAndMin}
+						selectedVariable={selectedVariable}
+						year={year}
+					/>
+				)
+				: (
+					<CantonMap
+						data={filteredObjects}
+						returnData={this.returnData}
+						maxAndMin={maxAndMin}
+						selectedVariable={selectedVariable}
+					/>
+				);
+			}
+
+			mapInfo = (
+				<MapInfo
+				mapView={mapView}
+				year={year}
+				selectedVariable={selectedVariable}
+				nrOfObjects={filteredObjects.length}
 				/>
-            )
-            : (
-				<CantonMap
-					data={cantonObjects}
-					returnData={this.returnData}
-					maxAndMin={maxAndMin}
-					selectedVariable={selectedVariable}
-				/>
-            );
+			)
         }
+
 
         return (
         	<Map // set up map

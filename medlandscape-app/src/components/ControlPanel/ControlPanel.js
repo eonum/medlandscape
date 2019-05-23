@@ -46,18 +46,14 @@ class ControlPanel extends Component {
 
 
         if (!this.props.hasLoaded && prevProps.hasLoaded) {
-            if (this.props.selectedVariable !== prevProps.selectedVariable) {
-                console.log("FETCHING on CP didUpdate, variable: " + this.props.selectedVariable.name);
-                this.fetchData(this.props.selectedVariable).then(() => {
-                    this.setState({
-                        hasLoaded : true
-                    })
-                });
-            } else {
-                console.log("NOTHING on CP didUpdate");
-                this.setState({
-                    hasLoaded : true
-                })
+            if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.view !== 2) {
+                if (this.props.mapView === prevProps.mapView && this.props.view === 1 && prevProps.view === 1) {
+                    console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
+                    this.fetchData(this.props.selectedVariable);
+                } else if (this.props.graphView === prevProps.graphView && this.props.view === 3 && prevProps.view === 3) {
+                    console.log("FETCHING on CP didUpdate, GRAPHVIEW variable: " + this.props.selectedVariable.name);
+                    this.fetchData(this.props.selectedVariable);
+                }
             }
         }
     }
@@ -71,9 +67,12 @@ class ControlPanel extends Component {
         const {name, variable_model} = variable;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
-        query += encodeURIComponent(name + "$" + this.state.enums[7].name);
-        if (this.state.selectedEnum !== undefined && key === "hospitals") {
-            query += encodeURIComponent("$" + this.state.selectedEnum.name);
+        query += encodeURIComponent(name)
+        if (key === "hospitals") {
+            query += encodeURIComponent("$" + this.state.enums[7].name);
+            if (this.state.selectedEnum !== undefined && key === "hospitals") {
+                query += encodeURIComponent("$" + this.state.selectedEnum.name);
+            }
         }
         return this.props.fetchData(query);
     }
@@ -97,11 +96,7 @@ class ControlPanel extends Component {
      * @param  {Variable object} item The selected variable.
      */
     setVariable = (item) => {
-        this.setState({
-            hasLoaded : false
-        }, () => {
-            this.props.setVariable(item);
-        })
+        this.props.setVariable(item);
     }
 
     /**
@@ -114,6 +109,7 @@ class ControlPanel extends Component {
             document.getElementById('t' + oldView).classList.toggle('selectedTab');
             document.getElementById('t' + view).classList.toggle('selectedTab');
         }
+
     }
 
     render() {
@@ -121,15 +117,13 @@ class ControlPanel extends Component {
         const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, year, selectedVariable, mapView, graphView} = this.props;
         const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
-        let selectedCanton = {}, selectedHospital = {};
+        let selectedCantonVar, selectedHospitalVar;
 
         // setting selectedItem for Dropdowns
         if (mapView === 1) {
-            selectedHospital = selectedVariable;
-            selectedCanton = undefined;
+            selectedHospitalVar = selectedVariable;
         } else {
-            selectedCanton = selectedVariable;
-            selectedHospital = undefined;
+            selectedCantonVar = selectedVariable;
         }
 
         let mapViewHospitals = (
@@ -144,7 +138,7 @@ class ControlPanel extends Component {
                 <DropdownMenu id="hospitalVars"
                     listItems={hospitalVars}
                     selectItem={this.setVariable}
-                    selectedItem={selectedHospital}
+                    selectedItem={selectedHospitalVar}
                     defaultText={t('dropDowns.variablesFallback')}
                 />
                 <p>{t('mapView.filter')}</p>
@@ -163,7 +157,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedCanton} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedCantonVar} defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         )
 
@@ -196,7 +190,7 @@ class ControlPanel extends Component {
         let boxPlotView = (
             <div className="graphView">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.setVariable} selectedItem={selectedHospital}  defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.setVariable} selectedItem={selectedHospitalVar}  defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         );
 
