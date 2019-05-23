@@ -238,11 +238,12 @@ class App extends Component {
         console.log("DATA FILTERED");
         let unfiltered = mapHospitals;
         let years = this.getYears(this.state.mapHospitals);
+        let index = years.length - 1;
         this.setState({
             filteredHospitals : filteredHospitals,
             unfilteredHospitals : unfiltered,
             years : years,
-            selectedYear : years[0],
+            selectedYear : years[index],
             hasLoaded : true
         });
     }
