@@ -5,6 +5,11 @@ import BoxPlot from '../Graphs/BoxPlot.js';
 import LinearRegression from '../Graphs/LinearRegression.js';
 import './centralPanel.css'
 
+/**
+* CentralPanel-Component that contains a field which is used to displayed
+* the InteractiveTable, BoxPlot and LinearRegression
+*
+*/
 
 class CentralPanel extends Component {
 
@@ -12,6 +17,7 @@ class CentralPanel extends Component {
         tableDataLoaded : false
     }
 
+	/* requests the Data tha is going to be used in the table component, depending on the selected Variable */
     requestTableData = (vars, callback) => {
         let requestedVars = "";
 
@@ -31,12 +37,13 @@ class CentralPanel extends Component {
         })
     }
 
+	/*sets the state of the generated to "not loaded"*/
     tableDataGenerated = () => {
         this.setState({
             tableDataLoaded : false
         });
     }
-
+	/*sets the state of the generated to "loaded"*/
     retriggerTableGeneration = () => {
         this.setState({
             tableDataLoaded : true

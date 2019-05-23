@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import Control from 'react-leaflet-control';
 import './Legend.css'
 
+/*
+*A simple component that displays a legend to better discern the shown values on
+*the map
+*/
+
 class Legend extends Component {
 
 	returnBoxStyle = (color) => {

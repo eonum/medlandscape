@@ -4,6 +4,11 @@ import cantons from './cantons/cantons.json';
 import Legend from './Legend.js'
 import { withTranslation } from 'react-i18next';
 
+/*
+* Component to display the different cantons on our map. Also displays the selected
+* CantonVariable on to our map
+*/
+
 class CantonMap extends Component {
 
 	state = {

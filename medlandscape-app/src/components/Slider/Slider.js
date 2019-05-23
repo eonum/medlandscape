@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import './Slider.css'
 
+/*
+*A simple component to change and set the year of the selected Variable in style of a slider
+*/
+
 class Slider extends Component {
 
     selectYear = (year) => {

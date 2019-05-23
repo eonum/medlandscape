@@ -2,6 +2,13 @@ import React, { Component } from "react";
 import { CircleMarker, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import { withTranslation } from 'react-i18next';
 
+/*
+* Component to display the different hosptials on our map. Also displays the selected
+* HosptialVariable in context with our selected Hospitals on to our map
+*/
+
+
+
 class HospitalMap extends Component {
 
     /**
