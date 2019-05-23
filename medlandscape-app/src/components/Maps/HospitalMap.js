@@ -19,33 +19,39 @@ class HospitalMap extends Component {
 	calculateCircleColor = (item) => {
 		let color;
 		switch (item.attributes["Typ"][this.props.year]) {
+			// unispital
 			case ("K111"):
-				color = "#fdfd96";
+				color = "#a72a2a";
 				break;
+			// allgemeinspital zentrumsversorgung
 			case ("K112"):
-				color = "#cafd96";
+				color = "#a79f2a";
 				break;
+			// allgemeinspital grundversorgung
 			case ("K121"):
-				color = "#96fdfd";
+				color = "#2da72a";
 				break;
 			case ("K122"):
-				color = "#96fdfd";
+				color = "#2da72a";
 				break;
 			case ("K123"):
-				color = "#96fdfd";
+				color = "#2da72a";
 				break;
+			// psychiatrische klinik
 			case ("K211"):
-				color = "#9696fd";
+				color = "#2a8ea7";
 				break;
 			case ("K212"):
-				color = "#9696fd";
+				color = "#2a8ea7";
 				break;
+			// rehaklinik
 			case ("K221"):
-				color = "#ca96fd";
+				color = "#2d2aa7";
 				break;
+			// spezialklinik
 			// other 5 cases, too lazy to switch them out
 			default :
-				color = "#fd9696";
+				color = "#762aa7";
 				break;
 		}
 		return color;
@@ -66,7 +72,7 @@ class HospitalMap extends Component {
 			//const std = this.props.maxAndMin.std;
 			//const standardVal = ((this.props.returnData(item)-mean)/std);
 			const data = this.props.returnData(item);
-			const biggestRadius = 60;
+			const biggestRadius = 50;
 
 			const a = ((data + Math.abs(min)) / (max + Math.abs(min))) * Math.pow(biggestRadius, 2) * Math.PI;
 			let radius = Math.round(Math.sqrt(a / Math.PI));
@@ -80,24 +86,33 @@ class HospitalMap extends Component {
 	* @param {Object} e the event
 	*/
 	setNewStyle = (e) => {
-		e.target.setStyle({weight: 4});
+		e.target.setStyle({
+			weight: 3,
+			fillColor: "#1996fa",
+			color: "#1996fa"
+		});
 	}
 
 	/**
 	* Set back hospital style if you hover off a hospital with your mouse
 	* @param {Object} e the event
 	*/
-	onMouseOut = (e) => {
+	onMouseOut = (item, e) => {
 		if (!e.target.isPopupOpen())
-			this.resetStyle(e);
+			this.resetStyle(item, e);
 	}
 
 	/**
 	* Set back hospital style
 	* @param {Object} e the event
 	*/
-	resetStyle = (e) => {
-		e.target.setStyle({weight: 0});
+	resetStyle = (item, e) => {
+		let oldColor = this.calculateCircleColor(item);
+		e.target.setStyle({
+			weight: 2,
+			color: oldColor,
+			fillColor: oldColor,
+		});
 	}
 
 	/**
@@ -115,11 +130,6 @@ class HospitalMap extends Component {
 	 * @return {JSX}
      */
 	render() {
-		// console.log("HOSPITALMAP RECIEVED:");
-		// console.log("YEAR: " + this.props.year);
-		// console.log("VAR: " + this.props.selectedVariable.name)
-		// console.log("OBJ:");
-		// console.log(this.props.data[0]);
 		return (
 			<LayerGroup>
 				{
@@ -127,16 +137,16 @@ class HospitalMap extends Component {
           				<CircleMarker
           					key = {this.props.data.indexOf(item)}
         					center={{lon: item.longitude, lat: item.latitude}}
-							color= "#1996f6"
-							weight = "0" // defining how big the outline of circle is
+							color= {this.calculateCircleColor(item)}
+							weight = "2" // defining how big the outline of circle is
 							opacity = "1"
         					fillColor = {this.calculateCircleColor(item)}
 							fillOpacity = "0.7"
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}
-							onMouseOut = {this.onMouseOut.bind(this)}
+							onMouseOut = {this.onMouseOut.bind(this, item)}
 							onClick = {this.onClick.bind(this)}
-							onPopupClose = {this.resetStyle.bind(this)}
+							onPopupClose = {this.resetStyle.bind(this, item)}
         				>
         					<Tooltip
 								sticky = {true}>
