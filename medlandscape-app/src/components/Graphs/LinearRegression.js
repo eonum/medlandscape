@@ -18,7 +18,7 @@ class LinearRegression extends Component {
 		language: this.props.i18n.language,
 		w : 700,
 		h : 400,
-		padding : 80,
+		padding : 30,
 	};
 
 	componentDidMount(){
@@ -33,14 +33,15 @@ class LinearRegression extends Component {
 				xVariable: undefined,
 				yVariable: undefined,
 			});
-		this.drawEmptyChart();
+			this.drawEmptyChart();
 		}
 	}
 
 	componentDidUpdate(){
 		// check if response is there and draw chart if so
-		if(this.props.tableDataLoaded)
+		if(this.props.tableDataLoaded){
 			this.drawChart();
+		}
 	}
 
 	/**
@@ -313,11 +314,8 @@ class LinearRegression extends Component {
 		var svg = d3.select("#linearregression")
 			.append("svg")
 			.attr("id","linearregressionsvg")
-			// .attr("width",w)
-			// .attr("height", h);
-			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr("viewBox", "0 0 1000 1000")
-			.classed("svg-content", true);
+			.attr("width",w)
+			.attr("height", h);
 		return svg;
 	}
 
@@ -492,9 +490,7 @@ class LinearRegression extends Component {
 		                defaultText={this.props.t('dropDowns.variablesFallback')}
 		            />
 				</div>
-				<div id="linearregression" className="svg-container">
-					<svg preserveAspectRatio="xMinYMid meet"  x="0"  y="0"  viewBox="0 0 1000 1000" width="0"  height="0"></svg>
-				</div>
+				<div id="linearregression"></div>
 				<div className="xAxisBtn">
 					<p>X-Achse:</p>
 					<DropdownMenu id="xAxis"

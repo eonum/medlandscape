@@ -14,7 +14,7 @@ import CantonMap from './CantonMap.js';
 class Maps extends Component {
 	state = {
 		lat : 46.798473,
-		lng : 8.231726,
+		lng : 7.7,
 		zoom : 8,
 	}
 
@@ -97,8 +97,8 @@ class Maps extends Component {
 	*/
  	resetView = () => {
 		this.setState({
-			lat : 46.798473 + 0.1 * Math.random(),
-			lng : 8.231726 + 0.1 * Math.random(),
+			lat : 46.798473 + 0.001 * Math.random(),
+			lng : 7.7,
 			zoom : 8,
 		})
 	}
