@@ -382,7 +382,7 @@ class App extends Component {
                 viewSpecificObjects = (tableHospitals.length > 0) ? tableHospitals : hospitals;
                 break;
             case 3:
-                viewSpecificObjects = (graphView === 1) ? regressionHospitals : boxPlotHospitals;
+                viewSpecificObjects = (graphView === 1) ? boxPlotHospitals : regressionHospitals;
                 viewSpecificVariable = boxPlotSelectedVariable;
                 break;
             default:
