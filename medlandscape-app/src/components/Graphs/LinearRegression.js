@@ -33,14 +33,15 @@ class LinearRegression extends Component {
 				xVariable: undefined,
 				yVariable: undefined,
 			});
-		this.drawEmptyChart();
+			this.drawEmptyChart();
 		}
 	}
 
 	componentDidUpdate(){
 		// check if response is there and draw chart if so
-		if(this.props.tableDataLoaded)
+		if(this.props.tableDataLoaded) {
 			this.drawChart();
+		}
 	}
 
 	/**

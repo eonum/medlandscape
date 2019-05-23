@@ -42,13 +42,11 @@ class ControlPanel extends Component {
 
 
         if (!this.props.hasLoaded && prevProps.hasLoaded) {
-            if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.mapView === prevProps.mapView && this.props.view === 1) {
-                console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
-                this.fetchData(this.props.selectedVariable);
-            }
-
-            if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.graphView === prevProps.graphView && this.props.view === 3) {
-                if (this.props.selectedVariable !== undefined) {
+            if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.view !== 2) {
+                if (this.props.mapView === prevProps.mapView && this.props.view === 1 && prevProps.view === 1) {
+                    console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
+                    this.fetchData(this.props.selectedVariable);
+                } else if (this.props.graphView === prevProps.graphView && this.props.view === 3 && prevProps.view === 3) {
                     console.log("FETCHING on CP didUpdate, GRAPHVIEW variable: " + this.props.selectedVariable.name);
                     this.fetchData(this.props.selectedVariable);
                 }

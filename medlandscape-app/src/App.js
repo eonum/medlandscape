@@ -368,7 +368,7 @@ class App extends Component {
                 viewSpecificObjects = (tableHospitals.length > 0) ? tableHospitals : hospitals;
                 break;
             case 3:
-                viewSpecificObjects = (graphView === 1) ? regressionHospitals : boxPlotHospitals;
+                viewSpecificObjects = (graphView === 1) ? boxPlotHospitals : regressionHospitals;
                 viewSpecificVariable = boxPlotSelectedVariable;
                 break;
             default:
@@ -397,6 +397,8 @@ class App extends Component {
 
         if (hasLoaded) {
             console.log("DATA READY");
+            console.log("SAMPLE:");
+            console.log(viewSpecificObjects[0]);
             if (years.length > 1 && view === 1 && viewSpecificObjects.length > 0) {
                 slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
             }
