@@ -80,24 +80,33 @@ class HospitalMap extends Component {
 	* @param {Object} e the event
 	*/
 	setNewStyle = (e) => {
-		e.target.setStyle({weight: 4});
+		e.target.setStyle({
+			weight: 4,
+			fillColor: "#1996fa",
+			color: "#1996fa"
+		});
 	}
 
 	/**
 	* Set back hospital style if you hover off a hospital with your mouse
 	* @param {Object} e the event
 	*/
-	onMouseOut = (e) => {
+	onMouseOut = (item, e) => {
 		if (!e.target.isPopupOpen())
-			this.resetStyle(e);
+			this.resetStyle(item, e);
 	}
 
 	/**
 	* Set back hospital style
 	* @param {Object} e the event
 	*/
-	resetStyle = (e) => {
-		e.target.setStyle({weight: 0});
+	resetStyle = (item, e) => {
+		let oldColor = this.calculateCircleColor(item);
+		e.target.setStyle({
+			weight: 3,
+			color: oldColor,
+			fillColor: oldColor,
+		});
 	}
 
 	/**
@@ -115,11 +124,6 @@ class HospitalMap extends Component {
 	 * @return {JSX}
      */
 	render() {
-		// console.log("HOSPITALMAP RECIEVED:");
-		// console.log("YEAR: " + this.props.year);
-		// console.log("VAR: " + this.props.selectedVariable.name)
-		// console.log("OBJ:");
-		// console.log(this.props.data[0]);
 		return (
 			<LayerGroup>
 				{
@@ -127,16 +131,16 @@ class HospitalMap extends Component {
           				<CircleMarker
           					key = {this.props.data.indexOf(item)}
         					center={{lon: item.longitude, lat: item.latitude}}
-							color= "#1996f6"
-							weight = "0" // defining how big the outline of circle is
+							color= {this.calculateCircleColor(item)}
+							weight = "2" // defining how big the outline of circle is
 							opacity = "1"
         					fillColor = {this.calculateCircleColor(item)}
 							fillOpacity = "0.7"
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}
-							onMouseOut = {this.onMouseOut.bind(this)}
+							onMouseOut = {this.onMouseOut.bind(this, item)}
 							onClick = {this.onClick.bind(this)}
-							onPopupClose = {this.resetStyle.bind(this)}
+							onPopupClose = {this.resetStyle.bind(this, item)}
         				>
         					<Tooltip
 								sticky = {true}>
