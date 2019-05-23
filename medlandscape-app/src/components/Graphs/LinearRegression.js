@@ -18,14 +18,13 @@ class LinearRegression extends Component {
 		language: this.props.i18n.language,
 		w : 700,
 		h : 400,
-		padding : 30,
+		padding : 80,
 	};
 
 	componentDidMount(){
 		this.drawEmptyChart();
 	}
 
-	// WARNING: DEPRECATED
 	componentWillUpdate(){
 		// if the language is changed,set back variables and remove chart
 		if (this.props.i18n.language !== this.state.language){
@@ -34,17 +33,14 @@ class LinearRegression extends Component {
 				xVariable: undefined,
 				yVariable: undefined,
 			});
-			this.drawEmptyChart();
+		this.drawEmptyChart();
 		}
 	}
 
 	componentDidUpdate(){
-		// check if response is there and draw chart if so, else display empty chart
-		if(this.props.tableDataLoaded) {
+		// check if response is there and draw chart if so
+		if(this.props.tableDataLoaded)
 			this.drawChart();
-		} else {
-			this.drawEmptyChart()
-		}
 	}
 
 	/**
@@ -73,9 +69,9 @@ class LinearRegression extends Component {
 	   let xArray = [];
 	   let yArray = [];
 	   let objArray = [];
-	   this.props.hospitals.forEach((obj) => {
+	   this.props.hospitals.map((obj) => {
 		   let data = this.returnData(obj);
-		   if (data.x && data.y){ // sort out undefined values for given year
+		   if (data.x && data.y && obj.name !== "Ganze Schweiz"){ // sort out undefined values for given year & "ganze schweiz"
 				xArray.push(data.x);
 				yArray.push(data.y);
 				objArray.push(obj);
@@ -112,9 +108,14 @@ class LinearRegression extends Component {
 
 		// Define Scales
 		var xScale = d3.scaleLinear()
-			.domain([0,d3.max(dataset, function(d){
-				return d.x;
-			})])
+			.domain([
+				d3.min(dataset, function(d){
+					return(d.x);
+				}),
+				d3.max(dataset, function(d){
+					return d.x;
+				})
+			])
 			.range([padding,w - padding*2]);
 		var yScale = d3.scaleLinear()
 			.domain([
@@ -126,57 +127,18 @@ class LinearRegression extends Component {
 				})
 			]) //y range is reversed because svg
 			.range([h-padding, padding]);
-
+		console.log(d3.min(dataset, function(d){
+			return(d.x);
+		}));
 		// Add a tooltip div. Here we define the general feature of the tooltip: stuff that do not depend on the data point.
      	// Its opacity is set to 0: we don't see it by default.
-     	// var tooltip = d3.select("#linearregression")
-		//     .append("div")
-		//     .style("opacity", 0)
-		//     .attr("class", "tooltip")
+     	var tooltip = d3.select("#linearregression")
+		    .append("div")
+		    .style("opacity", 0)
+		    .attr("class", "tooltip")
 
-		var popup = d3.select("#linearregression")
-			.append("div")
-			.style("display", "none")
-			.attr("id", "popup");
-
-		var table = popup
-			.append("table");
-
-		var firstRow = table
-			.append("tr");
-		firstRow
-			.append("td")
-			.text(this.props.t("popup.hospital"));
-		firstRow
-			.append("td")
-			.attr("id", "popupName");
-
-		var secondRow = table
-			.append("tr");
-		secondRow
-			.append("td")
-			.text(this.props.t("popup.address"));
-		secondRow
-			.append("td")
-			.attr("id", "popupAddress");
-
-		var thirdRow = table
-			.append("tr");
-		thirdRow
-			.append("td")
-			.text(this.state.xVariable.text);
-		thirdRow
-			.append("td")
-			.attr("id", "popupXVariable");
-
-		var fourthRow = table
-			.append("tr");
-		fourthRow
-			.append("td")
-			.text(this.state.yVariable.text);
-		fourthRow
-			.append("td")
-			.attr("id", "popupYVariable");
+		// add popup
+		this.addPopup();
 
      	// function that changes  tooltip when the user hovers over a point.
      	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
@@ -187,10 +149,9 @@ class LinearRegression extends Component {
 
     	var mousemove = function(d) {
        		d3.select("#linearregression .tooltip")
-				.style("left", (d3.event.pageX) + "px")
-				.style("top", (d3.event.pageY - 28) + "px");
+				.style("left", (d3.event.pageX - 365) + "px")
+				.style("top", (d3.event.pageY - 136) + "px");
     	}
-
 
 		// close popup if you click outside
 		var func = function(e) {
@@ -202,8 +163,8 @@ class LinearRegression extends Component {
 		var mouseclick = function(d) {
        		d3.select("#popup")
 				.style("display", "block")
-				.style("left", (d3.event.pageX) + "px")
-				.style("top", (d3.event.pageY - 28) + "px")
+				.style("left", (d3.event.pageX - 475) + "px")
+				.style("top", (d3.event.pageY - 150) + "px")
 			d3.select("#popupName")
 				.text(d.obj.name);
 			d3.select("#popupAddress")
@@ -228,14 +189,15 @@ class LinearRegression extends Component {
 		// create svg
 		var svg = this.createSvg();
 
-		// cut off datapoints that are outside the axis
-		svg.append("clipPath")
-			.attr("id", "chart-area")
-			.append("rect")
-			.attr("x", padding)
-			.attr("y", padding)
-			.attr("width", w-padding * 3)
-			.attr("height", h-padding *2);
+		// append regression line
+		svg.append("path")
+			.datum(dataset)
+			.attr("clip-path", "url(#chart-area)")
+			.attr("class", "line")
+			.attr("d", newline);
+
+		// add legend
+		this.addLegend(svg);
 
 		// append data points
 		svg.append("g")
@@ -258,13 +220,6 @@ class LinearRegression extends Component {
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave)
 			.on("click", mouseclick);
-
-		// append regression line
-		svg.append("path")
-			.datum(dataset)
-			.attr("clip-path", "url(#chart-area)")
-			.attr("class", "line")
-			.attr("d", newline);
 
 		// define and append axes
 		this.appendAxes(svg, xScale, yScale);
@@ -354,12 +309,15 @@ class LinearRegression extends Component {
 	* @return {svg}
 	*/
 	createSvg = () =>{
-		const {w, h} = this.state;
+		const {w, h, padding} = this.state;
 		var svg = d3.select("#linearregression")
 			.append("svg")
 			.attr("id","linearregressionsvg")
-			.attr("width",w)
-			.attr("height", h);
+			// .attr("width",w)
+			// .attr("height", h);
+			.attr("preserveAspectRatio", "xMinYMin meet")
+			.attr("viewBox", "0 0 1000 1000")
+			.classed("svg-content", true);
 		return svg;
 	}
 
@@ -370,14 +328,15 @@ class LinearRegression extends Component {
 	* @param {xScale} yScale to append to svg
 	*/
 	appendAxes = (svg, xScale, yScale) => {
-		const {h, padding} = this.state;
+		const {w, h, padding} = this.state;
 		//define axes
 		var xAxis = d3.axisBottom()
-			.scale(xScale);
+			.scale(xScale)
+			.ticks(7, "s");
 
 		var yAxis = d3.axisLeft()
 			.scale(yScale)
-			.ticks(5);
+			.ticks(7, "s");
 
 		//append axes
 		svg.append("g")
@@ -389,6 +348,87 @@ class LinearRegression extends Component {
 			.attr("class", "y axis")
 			.attr("transform", "translate(" + padding + ",0)")
 			.call(yAxis);
+	}
+
+	/**
+	* adding Legend
+	* @param {svg}
+	*/
+	addLegend = (svg) => {
+		const {w, h, padding} = this.state;
+		// define legend
+		let l_offset_h = 310;
+		let l_offset_w = 280;
+		var legend = svg.selectAll(".legend")
+			.data(["A"]) //one hard coded datepoint added
+			.enter().append("g")
+			.attr("class", "legend")
+			.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+		// draw legend colored rectangles
+		legend.append("rect")
+			 .attr("x", w - l_offset_w)
+			 .attr("y", h - l_offset_h)
+			 .attr("width", 12)
+			 .attr("height", 12)
+
+		// draw legend text
+		let text = this.props.t('graphView.regressionLine');
+		legend.append("text")
+			 .attr("x", w - l_offset_w + text.length*6.3) // consider text length for better fit
+			 .attr("y", h - l_offset_h + 7)
+			 .attr("dy", ".35em")
+			 .style("text-anchor", "end")
+			 .text(text);
+	}
+
+	/**
+	* adding Popup
+	*/
+	addPopup = () =>{
+		var popup = d3.select("#linearregression")
+			.append("div")
+			.style("display", "none")
+			.attr("id", "popup");
+
+		var table = popup
+			.append("table");
+
+		var firstRow = table
+			.append("tr");
+		firstRow
+			.append("td")
+			.text(this.props.t("popup.hospital"));
+		firstRow
+			.append("td")
+			.attr("id", "popupName");
+
+		var secondRow = table
+			.append("tr");
+		secondRow
+			.append("td")
+			.text(this.props.t("popup.address"));
+		secondRow
+			.append("td")
+			.attr("id", "popupAddress");
+
+		var thirdRow = table
+			.append("tr");
+		thirdRow
+			.append("td")
+			.text(this.state.xVariable.text);
+		thirdRow
+			.append("td")
+			.attr("id", "popupXVariable");
+
+		var fourthRow = table
+			.append("tr");
+		fourthRow
+			.append("td")
+			.text(this.state.yVariable.text);
+		fourthRow
+			.append("td")
+			.attr("id", "popupYVariable");
 	}
 
 	/**
@@ -452,7 +492,9 @@ class LinearRegression extends Component {
 		                defaultText={this.props.t('dropDowns.variablesFallback')}
 		            />
 				</div>
-				<div id="linearregression"></div>
+				<div id="linearregression" className="svg-container">
+					<svg preserveAspectRatio="xMinYMid meet"  x="0"  y="0"  viewBox="0 0 1000 1000" width="0"  height="0"></svg>
+				</div>
 				<div className="xAxisBtn">
 					<p>X-Achse:</p>
 					<DropdownMenu id="xAxis"

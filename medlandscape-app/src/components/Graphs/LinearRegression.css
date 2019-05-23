@@ -1,11 +1,16 @@
-#linearregression {
-    margin-left: 60px;
-    padding-left: 30px;
-}
+
 .line {
     stroke: #E4002B;
     fill: none;
     stroke-width: 3;
+}
+
+.legend {
+  font-size: 12px;
+}
+rect {
+  stroke-width: 2;
+  fill: #E4002B;
 }
 
 .axis path,
@@ -40,6 +45,7 @@ div.tooltip {
     border: 0px;
     border-radius: 3px;
     pointer-events: auto;
+    z-index: 10000;
 }
 
 #popup{
@@ -50,6 +56,7 @@ div.tooltip {
     background-color: #1996fa;
     color: white;
     opacity: 0.9;
+    z-index: 10000;
 }
 
 
@@ -76,4 +83,17 @@ div.tooltip {
 
 .xAxisBtn{
     float: right;
+}
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+}
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
 }

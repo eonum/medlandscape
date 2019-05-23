@@ -27,6 +27,7 @@
     },
     "graphView": {
         "title": "Graph",
+        "regressionLine": "Ligne de régression",
         "boxPlot": "Boxplot",
         "regression": "Reg. lin."
     },
