@@ -14,6 +14,8 @@ Before you can do anything with our app you will have to download
 
 The newest Version is ready to be downloaded at: https://nodejs.org/en/download/
 
+For the installation follow the instructions on the site or from the installer.
+
 After installing node.js  and before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory, where you have saved the application. Move into the *"medlandscape-app"* folder and enter:
 
 ### `npm -g install`
@@ -202,7 +204,7 @@ Once the graph has been generated you can safely click the different circles in 
 
 This application has been made by CS students of the university Bern in collaboration with the **eonum-AG** in Bern. 
 
-Code written by:
+Created by:
 
 Luca Bulletti
 
@@ -222,26 +224,4 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
