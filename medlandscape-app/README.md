@@ -195,6 +195,7 @@ The linear regression shows a simple graph with dropdown menus on the y- and x-a
 Once the graph has been generated you can safely click the different circles in the graph to show you the corresponding hospitals and their values.
 
 ![1558718602459](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558718602459.png)
+<<<<<<< HEAD
 
 ## Authors
 
