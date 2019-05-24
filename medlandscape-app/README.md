@@ -8,7 +8,13 @@ The application allows you to view, search and compare different figures of hosp
 
 ## Installation
 
-Before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory, where you have saved the application. Move into the *"medlandscape-app"* folder and enter:
+Before you can do anything with our app you will have to download 
+
+### `node.js`
+
+The newest Version is ready to be downloaded at: https://nodejs.org/en/download/
+
+After installing node.js  and before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory, where you have saved the application. Move into the *"medlandscape-app"* folder and enter:
 
 ### `npm -g install`
 
@@ -62,27 +68,25 @@ Once you have installed the different modules and have managed to start the appl
 
 ##### Initial Site
 
-![1558711354060](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558711354060.png)
+![1558711354060](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558711354060.png)
 
 The initial site will look like this. In the centre there is a map displaying the swiss country boundary and the several canton boundaries. Already showing are the different dots in different colours, which represent the hospitals on their respective position on the map.  In the upper left corner you have a Control-Panel, which gives you various options to chose from. Directly to the right you have an informational text field, depicting the chosen Variable and the chosen year, as well as the number of hospitals that are shown on the map. In the upper right corner there are tools to zoom in and out of the map, a reset button for the map-view and a button to change the language between German and French. On the bottom there is a time bar which let's you switch between the years, to compare the displayed values over the years.
 
 ##### Changing the language
 
-To change the language on any view, simply click the small button in the upper right corner displaying either DE (for German) or FR (for French).
+To change the language on any view, simply click the small button in the upper right corner displaying either DE (for German) or FR (for French).![Language-Button](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\Language-Button.jpg)
 
-![Language-Button](C:\Users\linoh\Desktop\UniBe\10.Sem\Info\PSE\eonum\Language-Button.jpg)
+
 
 ##### Changing the different types of Hospitals
 
 If you want to change what kind of hospitals are display, simply click on the checkbox to your desired hospital type and the map will adjust accordingly, even changing the sizes of the different circles such as to show the size in relation only to the selected types of hospitals.
 
-![1558711473453](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558711473453.png)
-
-#####  Changing the displayed Variable
+##### ![1558711473453](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558711473453.png)
 
 In the Control-Panel in the upper left corner, there are two dropdown menus, which let you select your desired variable as well as any special filters you want to apply to the map.
 
-![DropdownMenus](C:\Users\linoh\Desktop\UniBe\10.Sem\Info\PSE\eonum\DropdownMenus.jpg)
+![DropdownMenus](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\DropdownMenus.jpg)
 
 ##### Changing the displayed Year
 
@@ -92,23 +96,21 @@ Simply click on your desired year on the time bar and see how the circles adjust
 
 Simply click on your desired hospital. A small pop-up will appear and show you the information to the selected variable, as well as some basic information about your selected hospital.
 
-![1558714633283](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558714633283.png)
-
-
+![1558714633283](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558714633283.png)
 
 ##### Changing to the Canton-View
 
 If you want to change to the Canton-View simply press the button labelled "Kanton" or "Canton" in the Control-Panel.
 
+![Kanton-Change](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\Kanton-Change.jpg)
 
 
-![Kanton-Change](C:\Users\linoh\Desktop\UniBe\10.Sem\Info\PSE\eonum\Kanton-Change.jpg)
 
 #### Canton-View
 
 ##### Initial Site
 
-![1558714323384](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558714323384.png)
+![1558714323384](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558714323384.png)
 
 The Canton-View looks very similar to the Hospital-View. It includes the same tools in the right upper corner as the Hospital-View, as well as the text field in the middle on top, to display the adjusting information.
 
@@ -120,7 +122,7 @@ Upon selecting a variable the map will update and show a distribution of your se
 
 New on this page, there is a legend in the bottom right corner, showing you the distribution of the different values and colours used in the map.
 
-![1558714897999](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558714897999.png)
+![1558714897999](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558714897999.png)
 
 
 
@@ -128,7 +130,7 @@ New on this page, there is a legend in the bottom right corner, showing you the 
 
 Switching between the different panels functions the same as, switching between the different map-views. Simply click on the desired icon and you will be transferred to the new panel.
 
-![PanelChange](C:\Users\linoh\Desktop\UniBe\10.Sem\Info\PSE\eonum\PanelChange.jpg)
+![PanelChange](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\PanelChange.jpg)
 
 ### Table
 
@@ -136,7 +138,7 @@ The Table view let's you create different tables with hospitals and variables th
 
 ##### Initial Site
 
-![1558715263599](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558715263599.png)
+![TableView](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\TableView.JPG)
 
 The table-panel contains many already known buttons in the upper right and left corner which function the same through out the whole application.
 
@@ -150,7 +152,7 @@ You can also use the "Alle Spitäler hinzufügen" button to add all hospitals at
 
 If you wish to remove a hospital or variable from your table, simply hover over the dropdown menu and you will see a small cross appear in the top right corner of the dropdown menu. Once you click this the variable or Hospital will disappear.
 
- ![TableEntf](C:\Users\linoh\Desktop\UniBe\10.Sem\Info\PSE\eonum\TableEntf.JPG)
+![TableEntf](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\TableEntf.JPG)
 
 ##### Creating the table
 
@@ -162,7 +164,7 @@ Once you have selected your hospitals and your variables simply click the "Tabel
 
 Once you create your table there appears a new dropdown beneath your variables, depicting the available different years, so you can compare the same variable for the same hospital over different years. 
 
-![1558717461161](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558717461161.png)
+![1558717462396](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558717462396.png)
 
 ##### Sorting your values
 
@@ -180,7 +182,7 @@ The statistics-panel let's you create a boxplot to one specific variable or a li
 
 In the Boxplot you can choose a variable in the Control-Panel to then be display as a boxplot-graph with the corresponding values.
 
-![1558718276304](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558718276304.png)
+![1558718276304](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558718276304.png)
 
 ##### Changing to the linear regression
 
@@ -192,9 +194,25 @@ The linear regression shows a simple graph with dropdown menus on the y- and x-a
 
 Once the graph has been generated you can safely click the different circles in the graph to show you the corresponding hospitals and their values.
 
-![1558718602459](C:\Users\linoh\AppData\Roaming\Typora\typora-user-images\1558718602459.png)
+![1558718602459](C:\Users\linoh\GitHub\medlandscape\medlandscape-app\ReadMeGallery\1558718602459.png)
 
+## Authors
 
+This application has been made by CS students of the university Bern in collaboration with the **eonum-AG** in Bern. 
+
+Code written by:
+
+Luca Bulletti
+
+Robin Bürkli
+
+Elio Fritschi
+
+Lino Hess
+
+Roland Widmer
+
+Special thanks to Tim Peter and Tess Hoppler of the eonum-AG for giving us the opportunity to work on this application.
 
 ## Learn More
 
