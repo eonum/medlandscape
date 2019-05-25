@@ -91,56 +91,70 @@ class App extends Component {
 
         // TODO: implement to avoid resetting when changing the language
 
-        //const {view, mapView, hospitalMapSelectedVariable, cantonMapSelectedVariable, boxPlotSelectedVariable, mapHospitals, tableHospitals, boxPlotHospitals, regressionHospitals, cantons} = this.state;
-        this.apiCall("variables").then((result) => {
+        const {view, mapView, hospitalMapSelectedVariable, cantonMapSelectedVariable, boxPlotSelectedVariable} = this.state;
+
+        this.apiCall("variables").then((results) => {
+            let currentVariableKey = this.getViewSpecificVariable();
+            let currentVariable = this.state[currentVariableKey];
+            let translatedCurrentVariable = currentVariable; // as fallback, this makes sure nothing changes
+
+            if (Object.keys(currentVariable).length > 0) { // making sure that currentVariable.name exists
+                for (var i = 0; i < results.length; i++) {
+                    if (results[i].name === currentVariable.name) {
+                        translatedCurrentVariable = results[i];
+                    }
+                }
+            }
+
             this.setState({
-                variables : result,
+                variables : results,
+                [currentVariableKey] : translatedCurrentVariable
             });
         });
-            // let typeVar = result.filter((variable) => {
-            //     return (variable.name === "Typ");
-            // })
+        // let typeVar = result.filter((variable) => {
+        //     return (variable.name === "Typ");
+        // })
 
-            // // different variables applied to the different views
-            // cantonMapSelectedVariable : {},
-            // boxPlotSelectedVariable : {},
-            //
-            // // different hospital results stored per view
-            // mapHospitals : [],
-            // tableHospitals : [],
-            // boxPlotHospitals : [],
-            // regressionHospitals : [],
-            // let hMSV = {}, cMSV = {}, bPSV = {}, mH, tH, bH, rH, can;
-            //
-            // for (var i = 0; i < result.length; i++) {
-            //     if (result[i].name === hospitalMapSelectedVariable.name) {
-            //         hMSV = result[i];
-            //     } else if (result[i].name === cantonMapSelectedVariable.name) {
-            //         cMSV = result[i];
-            //         let query = "cantons?variables=";
-            //         query += encodeURIComponent(cMSV.name);
-            //         can = this.apiCall(query);
-            //     } else if (result[i].name === boxPlotSelectedVariable) {
-            //         bPSV = result[i];
-            //         let query = "hospitals?variables=";
-            //         query += encodeURIComponent(bPSV.name);
-            //         can = this.apiCall(query);
-            //     }
-            // }
-            //
-            // if (Objects.keys(hMSV).length > 0) {
-            //     let query = "hospitals?variables=";
-            //     query += encodeURIComponent(hMSV.name + "$" + typeVar[0].name);
-            //     mH = this.apiCall(query).then((results) => {
-            //         mH = mH.filter((hospital) => {
-            //             for (let i = 0; i < this.state.mapHospitals.length; i++) {
-            //                 if (this.state.mapHospitals[i].name === hospital.name) {
-            //                     return true;
-            //                 }
-            //             }
-            //         })
-            //     });
-            // }
+        // // different variables applied to the different views
+        // cantonMapSelectedVariable : {},
+        // boxPlotSelectedVariable : {},
+        //
+        // // different hospital results stored per view
+        // mapHospitals : [],
+        // tableHospitals : [],
+        // boxPlotHospitals : [],
+        // regressionHospitals : [],
+        // let hMSV = {}, cMSV = {}, bPSV = {}, mH, tH, bH, rH, can;
+        //
+        // for (var i = 0; i < result.length; i++) {
+        //     if (result[i].name === hospitalMapSelectedVariable.name) {
+        //         hMSV = result[i];
+        //     } else if (result[i].name === cantonMapSelectedVariable.name) {
+        //         cMSV = result[i];
+        //         let query = "cantons?variables=";
+        //         query += encodeURIComponent(cMSV.name);
+        //         can = this.apiCall(query);
+        //     } else if (result[i].name === boxPlotSelectedVariable) {
+        //         bPSV = result[i];
+        //         let query = "hospitals?variables=";
+        //         query += encodeURIComponent(bPSV.name);
+        //         can = this.apiCall(query);
+        //     }
+        // }
+        //
+        // if (Objects.keys(hMSV).length > 0) {
+        //     let query = "hospitals?variables=";
+        //     query += encodeURIComponent(hMSV.name + "$" + typeVar[0].name);
+        //     mH = this.apiCall(query).then((results) => {
+        //         mH = mH.filter((hospital) => {
+        //             for (let i = 0; i < this.state.mapHospitals.length; i++) {
+        //                 if (this.state.mapHospitals[i].name === hospital.name) {
+        //                     return true;
+        //                 }
+        //             }
+        //         })
+        //     });
+        // }
 
     }
 
@@ -470,7 +484,7 @@ class App extends Component {
                         setGraphView={this.setGraphView}
                     />
                     {centralPanel}
-                    <LanguagePicker resendInitApiCall={this.initApiCall} />
+                    <LanguagePicker resendInitApiCall={this.changeLanguage} />
                     {slider}
                 </div>
 
