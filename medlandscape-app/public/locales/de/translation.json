@@ -1,4 +1,4 @@
-{
+﻿{
     "mapView": {
         "title": "Karte",
         "variables" : "Ausgewählte Kennzahl",
@@ -29,7 +29,8 @@
         "title": "Graph",
         "regressionLine": "Regressionslinie",
         "boxPlot": "Boxplot",
-        "regression": "L. Reg."
+        "regression": "L. Reg.",
+	    "correlation": "Korrelation"
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"

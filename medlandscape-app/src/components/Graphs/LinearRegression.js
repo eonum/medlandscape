@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import { withTranslation } from 'react-i18next';
-import { numberFormat } from './../../utils.mjs';
+import { numberFormat, pearsonCorrelation } from './../../utils.mjs';
 
 /**
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
@@ -20,6 +20,7 @@ class LinearRegression extends Component {
 		w : 700,
 		h : 400,
 		padding : 30,
+		correlation: '',
 	};
 
 	componentDidMount(){
@@ -129,9 +130,6 @@ class LinearRegression extends Component {
 				})
 			]) //y range is reversed because svg
 			.range([h-padding, padding]);
-		console.log(d3.min(dataset, function(d){
-			return(d.x);
-		}));
 		// Add a tooltip div. Here we define the general feature of the tooltip: stuff that do not depend on the data point.
      	// Its opacity is set to 0: we don't see it by default.
      	var tooltip = d3.select("#linearregression")
@@ -366,19 +364,29 @@ class LinearRegression extends Component {
 
 		// draw legend colored rectangles
 		legend.append("rect")
-			 .attr("x", w - l_offset_w)
-			 .attr("y", h - l_offset_h)
-			 .attr("width", 12)
-			 .attr("height", 12)
+			.attr("x", w - l_offset_w)
+			.attr("y", h - l_offset_h)
+			.attr("width", 12)
+			.attr("height", 12)
 
 		// draw legend text
 		let text = this.props.t('graphView.regressionLine');
+		let textOffset = 16;
 		legend.append("text")
-			 .attr("x", w - l_offset_w + text.length*6.3) // consider text length for better fit
-			 .attr("y", h - l_offset_h + 7)
-			 .attr("dy", ".35em")
-			 .style("text-anchor", "end")
-			 .text(text);
+			.attr("x", w - l_offset_w + textOffset)
+			.attr("y", h - l_offset_h + 7)
+			.attr("dy", ".35em")
+			.style("text-anchor", "start")
+			.text(text);
+
+		let arrs = this.makeDataArrays();
+		let r = pearsonCorrelation(arrs.x, arrs.y);
+		legend.append("text")
+			.attr("x", w - l_offset_w + textOffset)
+			.attr("y", h - l_offset_h + 23)
+			.attr("dy", ".35em")
+			.style("text-anchor", "start")
+			.text(this.props.t('graphView.correlation') + ": " + r);
 	}
 
 	/**
