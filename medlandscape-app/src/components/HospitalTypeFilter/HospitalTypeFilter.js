@@ -57,25 +57,25 @@ class HospitalTypeFilter extends Component {
 
         for (let i = 0; i < values.length; i++) {
             switch (values[i]) {
-                case (t('hospitalTypes.university')):
+                case (0):
                     apiValues.push("K111");
                     break;
-                case (t('hospitalTypes.generic-center')):
+                case (1):
                     apiValues.push("K112");
                     break;
-                case (t('hospitalTypes.generic-basic')):
+                case (2):
                     apiValues.push("K121");
                     apiValues.push("K122");
                     apiValues.push("K123");
                     break;
-                case (t('hospitalTypes.psychiatry')):
+                case (3):
                     apiValues.push("K211");
                     apiValues.push("K212");
                     break;
-                case (t('hospitalTypes.rehabilitation')):
+                case (4):
                     apiValues.push("K221");
                     break;
-                case (t('hospitalTypes.special')):
+                case (5):
                     apiValues.push("K231");
                     apiValues.push("K232");
                     apiValues.push("K233");
@@ -127,13 +127,14 @@ class HospitalTypeFilter extends Component {
 
     render() {
         const {t} = this.props;
-        let categorizedHospitalTypes = [t('hospitalTypes.university'), t('hospitalTypes.generic-center'),
+        let categorizedHospitalTypes = [0, 1, 2, 3, 4, 5];
+        let translatedCategorizedHospitalTypes = [t('hospitalTypes.university'), t('hospitalTypes.generic-center'),
             t('hospitalTypes.generic-basic'), t('hospitalTypes.psychiatry') , t('hospitalTypes.rehabilitation'),
             t('hospitalTypes.special')];
 
         return (
             <div className="hospitalTypeFilter">
-                <CheckboxList items={categorizedHospitalTypes} checkboxSelectItem={this.checkboxSelectItem} titles={categorizedHospitalTypes}/>
+                <CheckboxList items={categorizedHospitalTypes} checkboxSelectItem={this.checkboxSelectItem} titles={translatedCategorizedHospitalTypes}/>
             </div>
         )
     }

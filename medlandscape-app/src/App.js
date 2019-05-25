@@ -87,56 +87,60 @@ class App extends Component {
     }
 
     changeLanguage = () => {
-        this.initApiCall();
+        // this.initApiCall();
 
         // TODO: implement to avoid resetting when changing the language
 
-        // const {view, mapView, hospitalMapSelectedVariable, cantonMapSelectedVariable, boxPlotSelectedVariable, mapHospitals, tableHospitals, boxPlotHospitals, regressionHospitals, cantons} = this.state;
-        // this.apiCall("variables").then((result) => {
-        //     this.setState({
-        //         variables : result,
-        //     });
-        //
-        //     let typeVar = result.filter((variable) => {
-        //         return (variable.name === "Typ");
-        //     })
-        //
-        //     // // different variables applied to the different views
-        //     // cantonMapSelectedVariable : {},
-        //     // boxPlotSelectedVariable : {},
-        //     //
-        //     // // different hospital results stored per view
-        //     // mapHospitals : [],
-        //     // tableHospitals : [],
-        //     // boxPlotHospitals : [],
-        //     // regressionHospitals : [],
-        //     let hMSV, cMSV, bPSV, mH, tH, bH, rH, can;
-        //
-        //     for (var i = 0; i < result.length; i++) {
-        //         if (result[i].name === hospitalMapSelectedVariable) {
-        //             hMSV = result[i];
-        //             let query = "hospitals?variables=";
-        //             query += encodeURIComponent(hMSV.name + "$" + typeVar[0].name);
-        //             mH = this.apiCall(query);
-        //         } else if (result[i].name === cantonMapSelectedVariable) {
-        //             cMSV = result[i];
-        //             let query = "cantons?variables=";
-        //             query += encodeURIComponent(cMSV.name);
-        //             can = this.apiCall(query);
-        //         } else if (result[i].name === boxPlotSelectedVariable) {
-        //             bPSV = result[i];
-        //             let query = "hospitals?variables=";
-        //             query += encodeURIComponent(bPSV.name);
-        //             can = this.apiCall(query);
-        //         }
-        //     }
-        //
-        //     this.setState({})
-        //
-        //     if (mapView === 1 && view === 1) {
-        //
-        //     }
-        // });
+        //const {view, mapView, hospitalMapSelectedVariable, cantonMapSelectedVariable, boxPlotSelectedVariable, mapHospitals, tableHospitals, boxPlotHospitals, regressionHospitals, cantons} = this.state;
+        this.apiCall("variables").then((result) => {
+            this.setState({
+                variables : result,
+            });
+        });
+            // let typeVar = result.filter((variable) => {
+            //     return (variable.name === "Typ");
+            // })
+
+            // // different variables applied to the different views
+            // cantonMapSelectedVariable : {},
+            // boxPlotSelectedVariable : {},
+            //
+            // // different hospital results stored per view
+            // mapHospitals : [],
+            // tableHospitals : [],
+            // boxPlotHospitals : [],
+            // regressionHospitals : [],
+            // let hMSV = {}, cMSV = {}, bPSV = {}, mH, tH, bH, rH, can;
+            //
+            // for (var i = 0; i < result.length; i++) {
+            //     if (result[i].name === hospitalMapSelectedVariable.name) {
+            //         hMSV = result[i];
+            //     } else if (result[i].name === cantonMapSelectedVariable.name) {
+            //         cMSV = result[i];
+            //         let query = "cantons?variables=";
+            //         query += encodeURIComponent(cMSV.name);
+            //         can = this.apiCall(query);
+            //     } else if (result[i].name === boxPlotSelectedVariable) {
+            //         bPSV = result[i];
+            //         let query = "hospitals?variables=";
+            //         query += encodeURIComponent(bPSV.name);
+            //         can = this.apiCall(query);
+            //     }
+            // }
+            //
+            // if (Objects.keys(hMSV).length > 0) {
+            //     let query = "hospitals?variables=";
+            //     query += encodeURIComponent(hMSV.name + "$" + typeVar[0].name);
+            //     mH = this.apiCall(query).then((results) => {
+            //         mH = mH.filter((hospital) => {
+            //             for (let i = 0; i < this.state.mapHospitals.length; i++) {
+            //                 if (this.state.mapHospitals[i].name === hospital.name) {
+            //                     return true;
+            //                 }
+            //             }
+            //         })
+            //     });
+            // }
 
     }
 
