@@ -1,4 +1,4 @@
-{
+﻿{
     "mapView": {
         "title": "Carte",
         "variables" : "Variable seléctionnée",
@@ -22,14 +22,15 @@
         "sortDesc": "Descendant",
         "btnCreateTable": "Créer tableau",
         "btnAddAllHospitals": "Ajouter tous les hôpitaux",
-		"btnCreateCSV": "Créer CSV",
+	"btnCreateCSV": "Créer CSV",
         "noTimeData": "Pas de cours à temps disponible"
     },
     "graphView": {
         "title": "Graph",
         "regressionLine": "Ligne de régression",
         "boxPlot": "Boxplot",
-        "regression": "Reg. lin."
+        "regression": "Reg. lin.",
+	"correlation": "Corrélation"
     },
     "language_picker": {
         "info": "Choisissez votre langue"
