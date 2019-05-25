@@ -30,7 +30,7 @@
         "regressionLine": "Regressionslinie",
         "boxPlot": "Boxplot",
         "regression": "L. Reg.",
-	"correlation": "Korrelation"
+	    "correlation": "Korrelation"
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"
