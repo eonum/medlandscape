@@ -54,10 +54,8 @@ class App extends Component {
         let key;
         return this.apiCall(query).then((results) => {
             console.log("DATA FETCHED");
-            let years;
             if (this.state.view === 1) {
                 key = (this.state.mapView === 1) ? "mapHospitals" : "cantons";
-                years = this.getYears(results);
             } else if (this.state.view === 2) {
                 key = "tableHospitals";
             } else {
@@ -68,8 +66,12 @@ class App extends Component {
                 [key] : results,
                 hasLoaded : (this.state.view !== 1 || this.state.mapView !== 1)
             }, () => {
-                if (this.state.mapView === 1 && this.state.view === 1) {
-                    this.filterHospitals(); // only needed for hospitals while on the map View
+                if (this.state.view === 1) {
+                    if (this.state.mapView === 1) {
+                        this.filterHospitals(); // only needed for hospitals while on the map View
+                    } else {
+                        this.setYears(results);
+                    }
                 }
             })
         });
@@ -197,14 +199,11 @@ class App extends Component {
     }
 
     /**
-     * Determines which Hospitals to display on the map according to fitlers.
-     * @return {Array} The array of hospitals to display.
+     * Determines which Hospitals to pass to MAPS.js according to type & enum filters,
+     * saves the list into filteredHospitals in the state.
      */
     filterHospitals = () => {
-        // console.log("FILTERING has started");
         const {hospitalsByEnums, hospitalsByType, mapHospitals} = this.state;
-        // console.log("hospitals by enums: " + hospitalsByEnums.length);
-        // console.log("hospital by type: " + hospitalsByType.length);
         let filteredHospitals = [], intersectingHospitals = [];
         // [0] === 0 is specified as "no match" in FilterEditor | HospitalTypeFilter => filteredHospitals stays empty
         if (!(hospitalsByEnums[0] === 0 || hospitalsByType[0] === 0)) {
@@ -237,14 +236,11 @@ class App extends Component {
         }
         console.log("DATA FILTERED");
         let unfiltered = mapHospitals;
-        let years = this.getYears(this.state.mapHospitals);
-        let index = years.length - 1;
         this.setState({
             filteredHospitals : filteredHospitals,
             unfilteredHospitals : unfiltered,
-            years : years,
-            selectedYear : years[index],
-            hasLoaded : true
+        }, () => {
+            this.setYears(this.state.mapHospitals);
         });
     }
 
@@ -252,21 +248,26 @@ class App extends Component {
      * Returns list of available years for selected Variable.
      * @return {Array} The available years.
      */
-    getYears = (objects) => {
+    setYears = (objects) => {
         console.log("GETTING YEARS");
         const {name} = this.state[this.getViewSpecificVariable()];
-        // console.log("VAR: " + name);
-        // console.log("OBJECTS: ");
-        // console.log(objects[0]);
-        let maxYears = [], years;
+        let maxYears = [], years, recent;
         for (var i = 0; i < objects.length; i++) {
             years = Object.keys(objects[i].attributes[name]);
             maxYears = (years.length > maxYears.length) ? years : maxYears;
         }
-        // console.log("END OF GET YEARS");
-        return maxYears;
+        recent = maxYears.length - 1;
+        this.setState({
+            years : maxYears,
+            selectedYear : maxYears[recent],
+            hasLoaded : true
+        })
     }
 
+    /**
+     * Determines which selectedVariable of the state to use, depending on the currently selected view.
+     * @return {String} The current relevant variable.
+     */
     getViewSpecificVariable = () => {
         let v;
         switch (this.state.view) {
@@ -303,13 +304,26 @@ class App extends Component {
         })
     }
 
+    /**
+     * Setter for the mapView state variable.
+     * @param {int} view The selected view.
+     */
     setMapView = (view) => {
         console.log("SWITCHING MAPVIEW");
+
         this.setState({
-            mapView : view
+            mapView : view,
+            hasLoaded : false
+        }, () => {
+            let objects = (view === 1) ? this.state.mapHospitals : this.state.cantons
+            this.setYears(objects);
         })
     }
 
+    /**
+     * Setter for the graphView state variable.
+     * @param {int} view The selected view.
+     */
     setGraphView = (view) => {
         console.log("SWITCHING GRAPHVIEW");
         this.setState({

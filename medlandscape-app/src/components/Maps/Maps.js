@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Map, TileLayer, ZoomControl } from 'react-leaflet'
 import './Maps.css';
 import Control from 'react-leaflet-control';
-import MapInfo from '../MapInfo/MapInfo.js';
-import HospitalMap from './HospitalMap.js';
-import CantonMap from './CantonMap.js';
+import MapInfo from './MapInfo/MapInfo.js';
+import HospitalMap from './HospitalMap/HospitalMap.js';
+import CantonMap from './CantonMap/CantonMap.js';
 
 /**
 * Maps is the entity we use to draw a map.
@@ -48,7 +48,7 @@ class Maps extends Component {
 	setMaxAndMin = (objects) => {
         let min = 1000000000000, max = 0; //sum = 0, counter = 0;
 
-		objects.map((obj) => {
+		objects.forEach((obj) => {
 			let val = this.returnData(obj);
 			if (obj.name !== "Ganze Schweiz") {
 				max = (max < val) ? val : max;
@@ -104,7 +104,7 @@ class Maps extends Component {
 	}
 
 	render() {
-		const {objects, selectedVariable, view, mapView, year, hasLoaded} = this.props;
+		const {selectedVariable, view, mapView, year, hasLoaded} = this.props;
 		const {lat, lng, zoom} = this.state;
 
 		let mapInfo = null;
@@ -113,7 +113,7 @@ class Maps extends Component {
 
         if (view === 1) {
 			let filteredObjects = this.filterObjects();
-			if (filteredObjects.length > 0 && hasLoaded) {
+			if (hasLoaded) {
 				let maxAndMin;
 
 				if (mapView === 1) {

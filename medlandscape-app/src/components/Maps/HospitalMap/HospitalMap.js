@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { CircleMarker, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import { withTranslation } from 'react-i18next';
-import { numberFormat } from './../../utils.mjs';
+import { numberFormat } from './../../../utils.mjs';
 
 /*
 * Component to display the different hosptials on our map. Also displays the selected

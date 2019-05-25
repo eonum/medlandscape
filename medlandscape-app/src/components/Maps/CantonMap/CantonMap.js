@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
-import cantons from './cantons/cantons.json';
-import Legend from './Legend.js'
+import cantons from '../cantons/cantons.json';
+import Legend from '../Legend/Legend.js'
 import { withTranslation } from 'react-i18next';
-import { numberFormat } from './../../utils.mjs';
+import { numberFormat } from './../../../utils.mjs';
 
 /*
 * Component to display the different cantons on our map. Also displays the selected
@@ -114,7 +114,7 @@ class CantonMap extends Component {
 	* color schemes can be mapped to variables in future (with componentWillReceiveProps())
 	*/
 	componentWillMount(){
-		const colorClassesArray = this.returnColorClasses();
+		// const colorClassesArray = this.returnColorClasses();
 		// const random = Math.floor((Math.random() * colorClassesArray.length));
 		this.setState({
 			colorScheme: 0,
