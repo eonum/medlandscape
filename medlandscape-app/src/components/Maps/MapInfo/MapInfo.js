@@ -11,7 +11,7 @@ import './mapInfo.css';
 class MapInfo extends Component {
 
     render() {
-        const {mapView, year, selectedVariable, nrOfObjects, t} = this.props;
+        const {mapView, hasLoaded, year, selectedVariable, nrOfObjects, t} = this.props;
         let selectedMap, selectedVar, mapInfo, yearInfo, filterInfo;
 
         selectedMap = (mapView === 1) ? t('mapInfo.hospitals') : t('mapInfo.cantons');
@@ -19,8 +19,10 @@ class MapInfo extends Component {
 
         if (Object.keys(selectedVariable).length !== 0) {
             selectedVar = t('mapInfo.variable') +  ": " + selectedVariable.text;
-            yearInfo = t('mapInfo.year') + ": " + year;
-            filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
+            if (hasLoaded) {
+                yearInfo = t('mapInfo.year') + ": " + year;
+                filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
+            }
         } else {
             selectedVar = t('mapInfo.noVariable');
         }

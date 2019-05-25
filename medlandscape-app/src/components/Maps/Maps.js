@@ -144,10 +144,11 @@ class Maps extends Component {
 
 			mapInfo = (
 				<MapInfo
-				mapView={mapView}
-				year={year}
-				selectedVariable={selectedVariable}
-				nrOfObjects={filteredObjects.length}
+					mapView={mapView}
+					hasLoaded={hasLoaded}
+					year={year}
+					selectedVariable={selectedVariable}
+					nrOfObjects={filteredObjects.length}
 				/>
 			)
         }

@@ -87,12 +87,7 @@ class App extends Component {
     }
 
     changeLanguage = () => {
-        // this.initApiCall();
-
-        // TODO: implement to avoid resetting when changing the language
-
-        const {view, mapView, hospitalMapSelectedVariable, cantonMapSelectedVariable, boxPlotSelectedVariable} = this.state;
-
+        console.log("TRANSLATING");
         this.apiCall("variables").then((results) => {
             let currentVariableKey = this.getViewSpecificVariable();
             let currentVariable = this.state[currentVariableKey];
@@ -111,51 +106,6 @@ class App extends Component {
                 [currentVariableKey] : translatedCurrentVariable
             });
         });
-        // let typeVar = result.filter((variable) => {
-        //     return (variable.name === "Typ");
-        // })
-
-        // // different variables applied to the different views
-        // cantonMapSelectedVariable : {},
-        // boxPlotSelectedVariable : {},
-        //
-        // // different hospital results stored per view
-        // mapHospitals : [],
-        // tableHospitals : [],
-        // boxPlotHospitals : [],
-        // regressionHospitals : [],
-        // let hMSV = {}, cMSV = {}, bPSV = {}, mH, tH, bH, rH, can;
-        //
-        // for (var i = 0; i < result.length; i++) {
-        //     if (result[i].name === hospitalMapSelectedVariable.name) {
-        //         hMSV = result[i];
-        //     } else if (result[i].name === cantonMapSelectedVariable.name) {
-        //         cMSV = result[i];
-        //         let query = "cantons?variables=";
-        //         query += encodeURIComponent(cMSV.name);
-        //         can = this.apiCall(query);
-        //     } else if (result[i].name === boxPlotSelectedVariable) {
-        //         bPSV = result[i];
-        //         let query = "hospitals?variables=";
-        //         query += encodeURIComponent(bPSV.name);
-        //         can = this.apiCall(query);
-        //     }
-        // }
-        //
-        // if (Objects.keys(hMSV).length > 0) {
-        //     let query = "hospitals?variables=";
-        //     query += encodeURIComponent(hMSV.name + "$" + typeVar[0].name);
-        //     mH = this.apiCall(query).then((results) => {
-        //         mH = mH.filter((hospital) => {
-        //             for (let i = 0; i < this.state.mapHospitals.length; i++) {
-        //                 if (this.state.mapHospitals[i].name === hospital.name) {
-        //                     return true;
-        //                 }
-        //             }
-        //         })
-        //     });
-        // }
-
     }
 
     /**
@@ -484,7 +434,7 @@ class App extends Component {
                         setGraphView={this.setGraphView}
                     />
                     {centralPanel}
-                    <LanguagePicker resendInitApiCall={this.changeLanguage} />
+                    <LanguagePicker changeLanguage={this.changeLanguage} />
                     {slider}
                 </div>
 
