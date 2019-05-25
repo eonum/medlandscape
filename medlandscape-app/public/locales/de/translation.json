@@ -51,5 +51,13 @@
         "year": "Jahr",
         "filter": "Angezeigte",
         "noVariable": "Keine Kennzahl ausgewählt"
+    },
+    "hospitalTypes": {
+        "university": "Universitätsspital",
+        "generic-center": "Allgemeinspital, Zentrumversorgung",
+        "generic-basic": "Allgemeinspital, Grundversorgung",
+        "psychiatry": "Psychiatrische Klinik",
+        "rehabilitation": "Rehabilitationsklinik",
+        "special": "Spezialklinik"
     }
 }
