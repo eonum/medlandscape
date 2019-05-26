@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "d3": "^5.9.2",
+    "d3_exploding_boxplot": "^0.2.1",
     "i18next": "^15.0.9",
     "i18next-xhr-backend": "^2.0.1",
     "immutability-helper": "^3.0.0",

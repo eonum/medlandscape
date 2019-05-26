@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import exploding_boxplot from 'd3_exploding_boxplot'
+import './BoxPlot.css'
 import * as d3 from "d3";
 
 /**
@@ -6,10 +8,12 @@ import * as d3 from "d3";
 */
 class BoxPlot extends Component {
 
-	componentDidMount(){
+	componentDidUpdate(){
 		// draw a chart if the variable information has been loaded via api-call
 		if (this.props.hasLoaded)
-			this.drawChart();
+			{
+				this.drawChart();
+			}
 	}
 
 	/**
@@ -18,10 +22,11 @@ class BoxPlot extends Component {
 	 * @return {int || float} The selected entry in the item.values object
 	 */
 	returnData = (item) => {
-		let varName = this.props.variableInfo.name;
+		let varName = this.props.selectedVariable.name;
 		let values = item.attributes[varName];
 		let data = (values[this.props.year]);
-		return data;
+		
+		return {v: data, g: "box1", t: item.name};
 	}
 
 	/**
@@ -31,116 +36,35 @@ class BoxPlot extends Component {
 	 */
 	makeDataArray = () => {
 		// sort out undefined values for given year
-		return this.props.objects.filter((obj) => {
+		let filteredArr = this.props.objects.filter((obj) => {
 			return (this.returnData(obj) !== undefined && obj.name !== "Ganze Schweiz");
-		})
+		});
+		
+		console.log(filteredArr);
+		
+		return filteredArr.map((item) => this.returnData(item));
 	}
 
 	/**
 	 * Draws a BoxPlot
 	 */
 	drawChart() {
-		d3.select("#boxplotsvg").remove();
-		// set the dimensions and margins of the graph
-		var margin = {top: 10, right: 30, bottom: 30, left: 40},
-			width = 400 - margin.left - margin.right,
-			height = 400 - margin.top - margin.bottom;
-
-		// append the svg object to the body of the page
-		var svg = d3.select("#boxplot")
-			.append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-			.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-		// create dummy data
+		d3.select("#boxplot svg").remove();
+		
 		let data = this.makeDataArray();
-		data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9];
-		let minVal = Math.min(...data);
-		let maxVal = Math.max(...data);
+		
+		let chart = exploding_boxplot(data,
+            {y: "v", group: "g", color: "g", label: "t"});
 
-
-		// Compute summary statistics used for the box:
-		var data_sorted = data.sort(d3.ascending)
-		var q1 = d3.quantile(data_sorted, .25)
-		var median = d3.quantile(data_sorted, .5)
-		var q3 = d3.quantile(data_sorted, .75)
-		//var interQuantileRange = q3 - q1
-		var min = minVal //q1 - 1.5 * interQuantileRange
-		var max = maxVal //q1 + 1.5 * interQuantileRange
-
-
-		// Show the Y scale
-		var y = d3.scaleLinear()
-			.domain([minVal - 0.5 * median,maxVal +0.5 * median ])
-			.range([height, 0])
-		svg.call(d3.axisLeft(y).ticks(20, "s"))
-
-		// a few features for the box
-		var center = 200
-		var width2 = 100
-
-
-		var tooltip = d3.select("#boxplot")
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-
-		var mouseover = function(d) {
-			d3.select("#boxplot .tooltip").style("opacity", 1)
-			.text("Median: " + median);
-		}
-
-		var mousemove = function(d) {
-			d3.select("#boxplot .tooltip")
-				.style("left", (d3.event.pageX) + "px")
-				.style("top", (d3.event.pageY - 28) + "px");
-		}
-
-		var mouseleave = function(d) {
-			d3.select("#boxplot .tooltip").transition()
-				.duration(200)
-				.style("opacity", 0)
-		}
-
-
-		// Show the main vertical line
-		svg.append("line")
-			.attr("x1", center)
-			.attr("x2", center)
-			.attr("y1", y(min) )
-			.attr("y2", y(max) )
-			.attr("stroke", "black")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave)
-
-		// Show the box
-		svg.append("rect")
-			.attr("x", center - width2/2)
-			.attr("y", y(q3) )
-			.attr("height", (y(q1)-y(q3)) )
-			.attr("width", width2 )
-			.attr("stroke", "black")
-			.style("fill", "#69b3a2")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave)
-
-		// show median, min and max horizontal lines
-		svg.selectAll("toto")
-			.data([min, median, max])
-			.enter()
-			.append("line")
-			.attr("x1", center-width2/2)
-			.attr("x2", center+width2/2)
-			.attr("y1", function(d){ return(y(d))} )
-			.attr("y2", function(d){ return(y(d))} )
-			.attr("stroke", "black")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave)
+		//call chart on a div
+		chart("#boxplot");
+		
+		//move the boxplot a bit, such that the scale is visible even for big numbers
+		d3.selectAll("#boxplot svg > g")
+			.attr("transform", "translate(100,40)");
+		//make the svg a bit bigger
+		d3.selectAll("#boxplot svg")
+			.attr("height", "570");
 	}
 
 	render() {
