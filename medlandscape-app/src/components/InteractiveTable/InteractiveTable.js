@@ -326,7 +326,7 @@ class InteractiveTable extends Component {
     /**
      * selectionChanged - called when the selected variables or hospitals change.
      *  This will notify the ResultTable to wipe itself (via props) and wait
-     *  for regeneration.   
+     *  for regeneration.
      */
     selectionChanged = () => {
         this.setState({
@@ -656,10 +656,15 @@ class InteractiveTable extends Component {
         const { t, objects } = this.props;
         return (
             <div className="interactiveTable">
-                <button className="btnCreateCSV"
-                onClick={() => this.csvLink.link.click()}>
-                {t('tableView.btnCreateCSV')}
-                </button>
+                <CSVLink
+					data={this.state.csvData}
+					filename="medlandscapeCSV.csv"
+					className="btnCreateCSV"
+					ref={(r) => this.csvLink = r}
+					target="_blank"
+				>
+                    {t('tableView.btnCreateCSV')}
+                </CSVLink>
                 <VariableSelector
                     className="variableSelector"
                     variables={this.props.variables}
@@ -685,13 +690,6 @@ class InteractiveTable extends Component {
                     selectionChanged={this.state.selectionChanged}
                     changeAcknowledged={this.resultTableAcknowledgedChange}
                 />
-				<CSVLink
-					data={this.state.csvData}
-					filename="medlandscapeCSV.csv"
-					className="CSVButton"
-					ref={(r) => this.csvLink = r}
-					target="_blank"
-				/>
                 <button
                     className="btnGenerateTable"
                     onClick={() => {
