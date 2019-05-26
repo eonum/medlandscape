@@ -8,7 +8,7 @@ import * as d3 from "d3";
 */
 class BoxPlot extends Component {
 
-	componentDidUpdate(){
+	componentDidUpdate(prevProps){
 		// draw a chart if the variable information has been loaded via api-call
 		if (this.props.hasLoaded)
 			{
@@ -25,7 +25,7 @@ class BoxPlot extends Component {
 		let varName = this.props.selectedVariable.name;
 		let values = item.attributes[varName];
 		let data = (values[this.props.year]);
-		
+
 		return {v: data, g: "box1", t: item.name};
 	}
 
@@ -39,9 +39,9 @@ class BoxPlot extends Component {
 		let filteredArr = this.props.objects.filter((obj) => {
 			return (this.returnData(obj) !== undefined && obj.name !== "Ganze Schweiz");
 		});
-		
+
 		console.log(filteredArr);
-		
+
 		return filteredArr.map((item) => this.returnData(item));
 	}
 
@@ -50,15 +50,15 @@ class BoxPlot extends Component {
 	 */
 	drawChart() {
 		d3.select("#boxplot svg").remove();
-		
+
 		let data = this.makeDataArray();
-		
+
 		let chart = exploding_boxplot(data,
             {y: "v", group: "g", color: "g", label: "t"});
 
 		//call chart on a div
 		chart("#boxplot");
-		
+
 		//move the boxplot a bit, such that the scale is visible even for big numbers
 		d3.selectAll("#boxplot svg > g")
 			.attr("transform", "translate(100,40)");
