@@ -25,7 +25,13 @@ class CentralPanel extends Component {
             requestedVars += variable.name + '$';
         }
 
-        requestedVars = requestedVars.substring(0, requestedVars.length - 1);
+        if (this.props.view === 3) {
+            requestedVars += "Typ";
+        } else {
+            requestedVars = requestedVars.substring(0, requestedVars.length - 1);
+        }
+
+        requestedVars = encodeURIComponent(requestedVars);
 
         let query = "hospitals?variables=" + requestedVars;
 

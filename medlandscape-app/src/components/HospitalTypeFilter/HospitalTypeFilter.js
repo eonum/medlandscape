@@ -58,8 +58,6 @@ class HospitalTypeFilter extends Component {
 
         let apiValues = [];
 
-        const {t} = this.props;
-
         for (let i = 0; i < values.length; i++) {
             switch (values[i]) {
                 case (0):
@@ -98,7 +96,7 @@ class HospitalTypeFilter extends Component {
 
 	/*filters through the selected values similar to our FIlterEditor */
     filter = (selectedValues) => {
-		const {selectedYear, hospitals} = this.props;
+		const {hospitals} = this.props;
         const name = "Typ"
 
         let filteredHospitals = [];
@@ -106,18 +104,13 @@ class HospitalTypeFilter extends Component {
         if (selectedValues.length > 0) {
             filteredHospitals = hospitals.filter((hospital) => {
                 let counter = 0;
-                if (selectedYear in hospital.attributes[name]) {
-                    const values = hospital.attributes[name][selectedYear];
-                    for (let i = 0; i < selectedValues.length; i++) {
-                        if (values.includes(selectedValues[i])) {
-                            counter++;
-                        }
+                const values = hospital.attributes[name][(Object.keys(hospital.attributes[name])[0])]; // wtf hahaha, looks at "Typ" in first year because why would it change? (apparently it does -> ask Tim)
+                for (let i = 0; i < selectedValues.length; i++) {
+                    if (values.includes(selectedValues[i])) {
+                        counter++;
                     }
                 }
-                if (counter === 0) {
-                    return false;
-                }
-                return true;
+                return (counter !== 0);
             });
             if (filteredHospitals.length === 0) {
                 // no hits, did not match anything (example spezialausrüstung: litho)
@@ -126,6 +119,9 @@ class HospitalTypeFilter extends Component {
         } else {
             filteredHospitals = hospitals;
         }
+
+        console.log("filteredHospitals in HospitalTypeFilter: ");
+        console.log(filteredHospitals);
 
         this.props.filter(filteredHospitals);
     }

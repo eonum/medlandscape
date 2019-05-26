@@ -32,6 +32,7 @@ class App extends Component {
         // results of the different filters
         hospitalsByEnums : [],
         hospitalsByType : [],
+        linRegHospitalsByType : [],
         unfilteredHospitals : [],
         filteredHospitals : [],
 
@@ -55,6 +56,8 @@ class App extends Component {
         let key;
         return this.apiCall(query).then((results) => {
             console.log("DATA FETCHED");
+
+            // determining which state variable to store the results in
             if (this.state.view === 1) {
                 key = (this.state.mapView === 1) ? "mapHospitals" : "cantons";
             } else if (this.state.view === 2) {
@@ -65,12 +68,21 @@ class App extends Component {
 
             this.setState({
                 [key] : results,
-                hasLoaded : (this.state.view !== 1)
+                hasLoaded : (this.state.view === 2)
             }, () => {
+                // On the map, years and which hospitals to pass to Maps need to be redetermined
                 if (this.state.view === 1) {
                     if (this.state.mapView === 1) {
-                        this.filterHospitals(); // only needed for hospitals while on the map View
+                        this.filterHospitals(true); // only needed for hospitals
                     } else {
+                        console.log("setYears for cantons (on fetch)");
+                        this.setYears(results);
+                    }
+                } else if (this.state.view === 3) {
+                    if (this.state.graphView === 2) {
+                        this.filterHospitals(true); // only needed for hospitals
+                    } else {
+                        console.log("setYears for boxplot (on fetch)");
                         this.setYears(results);
                     }
                 }
@@ -87,6 +99,11 @@ class App extends Component {
         return fetch(apiURL + this.props.i18n.language + apiRequest + query).then(res => res.json());
     }
 
+    /**
+     * Handles the change of language:
+     * Replaces state.variables
+     * Replaces viewSpecificVariable with translated equivalent
+     */
     changeLanguage = () => {
         console.log("TRANSLATING");
         this.apiCall("variables").then((results) => {
@@ -126,15 +143,10 @@ class App extends Component {
                 variables : result
             });
 
-            // the "type" variable which is loaded with every request
-            let typeVar = result.filter((variable) => {
-                return (variable.name === "Typ");
-            })
-
             // the default variable chosen when loading the app
             this.setVariable(result[1]);
             let query = "hospitals?variables=";
-            query += encodeURIComponent(result[1].name + "$" + typeVar[0].name);
+            query += encodeURIComponent(result[1].name + "$Typ");
             this.applyVariables(query);
         });
     }
@@ -171,45 +183,66 @@ class App extends Component {
      * Determines which Hospitals to pass to MAPS.js according to type & enum filters,
      * saves the list into filteredHospitals in the state.
      */
-    filterHospitals = () => {
-        const {hospitalsByEnums, hospitalsByType, mapHospitals} = this.state;
+    filterHospitals = (updateYears) => {
+        const {hospitalsByEnums, hospitalsByType, linRegHospitalsByType, mapHospitals, regressionHospitals} = this.state;
+
         let filteredHospitals = [], intersectingHospitals = [];
-        // [0] === 0 is specified as "no match" in FilterEditor | HospitalTypeFilter => filteredHospitals stays empty
-        if (!(hospitalsByEnums[0] === 0 || hospitalsByType[0] === 0)) {
 
-            // in case of no matches, there would be no need to do intersection
-            if (hospitalsByEnums.length > 0 && hospitalsByType.length > 0) {
-                // we have to compare names because the attribute of each hospital has a different length
-                for (let i = 0; i < hospitalsByType.length; i++) {
-                    for (let j = 0; j < hospitalsByEnums.length; j++) {
-                        if (hospitalsByEnums[j].name === hospitalsByType[i].name) {
-                            intersectingHospitals.push(hospitalsByEnums[j]);
+        // filtering for maps
+        if (this.state.view === 1) {
+            // [0] === 0 is specified as "no match" in FilterEditor | HospitalTypeFilter => filteredHospitals stays empty
+            if (!(hospitalsByEnums[0] === 0 || hospitalsByType[0] === 0)) {
+
+                // in case of no matches, there would be no need to do intersection
+                if (hospitalsByEnums.length > 0 && hospitalsByType.length > 0) {
+                    // we have to compare names because the attribute of each hospital has a different length
+                    for (let i = 0; i < hospitalsByType.length; i++) {
+                        for (let j = 0; j < hospitalsByEnums.length; j++) {
+                            if (hospitalsByEnums[j].name === hospitalsByType[i].name) {
+                                intersectingHospitals.push(hospitalsByEnums[j]);
+                            }
+                        }
+                    }
+                } else if (hospitalsByEnums.length > 0 || hospitalsByType.length > 0) {
+                    intersectingHospitals = (hospitalsByType > hospitalsByEnums) ? hospitalsByType : hospitalsByEnums;
+                } else {
+                    filteredHospitals = mapHospitals;
+                }
+
+                if (intersectingHospitals.length > 0) {
+                    for (let i = 0; i < intersectingHospitals.length; i++) {
+                        for (let j = 0; j < mapHospitals.length; j++) {
+                            if (intersectingHospitals[i].name === mapHospitals[j].name) {
+                                filteredHospitals.push(mapHospitals[j]);
+                            }
                         }
                     }
                 }
-            } else if (hospitalsByEnums.length > 0 || hospitalsByType.length > 0) {
-                intersectingHospitals = (hospitalsByType > hospitalsByEnums) ? hospitalsByType : hospitalsByEnums;
-            } else {
-                filteredHospitals = mapHospitals;
             }
-
-            if (intersectingHospitals.length > 0) {
-                for (let i = 0; i < intersectingHospitals.length; i++) {
-                    for (let j = 0; j < mapHospitals.length; j++) {
-                        if (intersectingHospitals[i].name === mapHospitals[j].name) {
-                            filteredHospitals.push(mapHospitals[j]);
+        } else if (this.state.view === 3) { // filtering for lin. regression
+            if (linRegHospitalsByType.length > 0 && regressionHospitals.length > 0) {
+                for (let i = 0; i < linRegHospitalsByType.length; i++) {
+                    for (let j = 0; j < regressionHospitals.length; j++) {
+                        if (linRegHospitalsByType[i].name === regressionHospitals[j].name) {
+                            filteredHospitals.push(regressionHospitals[j]);
                         }
                     }
                 }
+            } else {
+                filteredHospitals = regressionHospitals;
             }
         }
         console.log("DATA FILTERED");
+        console.log(filteredHospitals);
         let unfiltered = mapHospitals;
+        let toDeriveYearsFrom = (this.state.view === 1) ? mapHospitals : regressionHospitals;
         this.setState({
             filteredHospitals : filteredHospitals,
-            unfilteredHospitals : unfiltered,
+            unfilteredHospitals : unfiltered
         }, () => {
-            this.setYears(this.state.mapHospitals);
+            if (updateYears) {
+                this.setYears(toDeriveYearsFrom);
+            }
         });
     }
 
@@ -267,9 +300,29 @@ class App extends Component {
      * @param {int} view The selected view.
      */
     setView = (view) => {
+        console.log("============================");
         console.log("SWITCHING TABVIEW");
         this.setState({
             view : view,
+            hasLoaded : (view === 2)
+        }, () => {
+            if (view === 1) {
+                let objects = (this.state.mapView === 1) ? this.state.mapHospitals : this.state.cantons
+                if (this.state.mapView === 1) {
+                    this.filterHospitals(true);
+                } else {
+                    console.log("setYears for cantons (on tabview)");
+                    this.setYears(objects);
+                }
+            } else if (view === 3) {
+                let objects = (this.state.graphView === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
+                if (this.state.graphView === 2) {
+                    this.filterHospitals(true);
+                } else {
+                    console.log("setYears for boxPlot (on tabview)");
+                    this.setYears(objects);
+                }
+            }
         })
     }
 
@@ -278,16 +331,18 @@ class App extends Component {
      * @param {int} view The selected view.
      */
     setMapView = (view) => {
+        console.log("============================");
         console.log("SWITCHING MAPVIEW");
 
         this.setState({
             mapView : view,
             hasLoaded : false
         }, () => {
-            let objects = (view === 1) ? this.state.mapHospitals : this.state.cantons
-            if (view == 1) {
-                this.filterHospitals();
+            let objects = (view === 1) ? this.state.mapHospitals : this.state.cantons;
+            if (view === 1) {
+                this.filterHospitals(true);
             } else {
+                console.log("setYears for cantons (on mapview)");
                 this.setYears(objects);
             }
         })
@@ -298,10 +353,20 @@ class App extends Component {
      * @param {int} view The selected view.
      */
     setGraphView = (view) => {
+        console.log("============================");
         console.log("SWITCHING GRAPHVIEW");
         this.setState({
-            graphView : view
-        })
+            graphView : view,
+            hasLoaded : false
+        }, () => {
+            let objects = (view === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
+            if (view === 2) {
+                this.filterHospitals(true);
+            } else {
+                console.log("setYears for boxPlot (on graphview)");
+                this.setYears(objects);
+            }
+        });
     }
 
     /**
@@ -312,11 +377,10 @@ class App extends Component {
         let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             hospitalsByEnums : selectedHospitals,
-            hasLoaded : isEmpty
         }, () => {
             if (!isEmpty) {
                 console.log("UPDATING filterhospitals from setHospitalsByEnums");
-                this.filterHospitals();
+                this.filterHospitals(false);
             }
         })
     }
@@ -327,14 +391,24 @@ class App extends Component {
      */
     setHospitalsByType = (selectedHospitals) => {
         let isEmpty = !(selectedHospitals.length > 0);
-        console.log("isEmpty?: " + isEmpty);
         this.setState({
             hospitalsByType : selectedHospitals,
-            hasLoaded : isEmpty
         }, () => {
             if (!isEmpty) {
                 console.log("UPDATING filterhospitals from setHospitalsByType");
-                this.filterHospitals();
+                this.filterHospitals(false);
+            }
+        })
+    }
+
+    setLinRegHospitalsByType = (selectedHospitals) => {
+        let isEmpty = !(selectedHospitals.length > 0);
+        this.setState({
+            linRegHospitalsByType : selectedHospitals,
+        }, () => {
+            if (!isEmpty) {
+                console.log("UPDATING filterhospitals from setHospitalsByType");
+                this.filterHospitals(false);
             }
         })
     }
@@ -354,7 +428,6 @@ class App extends Component {
             mapHospitals,
             tableHospitals,
             boxPlotHospitals,
-            regressionHospitals,
             unfilteredHospitals,
             filteredHospitals,
             years,
@@ -368,6 +441,7 @@ class App extends Component {
         let viewSpecificObjects;
         let viewSpecificVariable;
 
+        // determines which objects to pass to children components depending on the view
         switch (view) {
             case 1:
                 viewSpecificObjects = (mapView === 1) ? filteredHospitals : cantons;
@@ -377,7 +451,7 @@ class App extends Component {
                 viewSpecificObjects = (tableHospitals.length > 0) ? tableHospitals : hospitals;
                 break;
             case 3:
-                viewSpecificObjects = (graphView === 1) ? boxPlotHospitals : regressionHospitals;
+                viewSpecificObjects = (graphView === 1) ? boxPlotHospitals : filteredHospitals;
                 viewSpecificVariable = boxPlotSelectedVariable;
                 break;
             default:
@@ -413,6 +487,7 @@ class App extends Component {
 
         let slider;
 
+        // display the slider only on Maps or Graphs and only if more than one year is available
         if (years.length > 1 && view !== 2 && Object.keys(viewSpecificVariable).length !== 0) {
             slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
         }
@@ -437,6 +512,7 @@ class App extends Component {
                         unfilteredHospitals={unfilteredHospitals}
                         filterByEnum={this.setHospitalsByEnums}
                         filterByType={this.setHospitalsByType}
+                        filterLinRegByType={this.setLinRegHospitalsByType}
                         year={selectedYear}
                         hasLoaded={hasLoaded}
                         view={view}

@@ -18,8 +18,11 @@ class FilterEditor extends Component {
 
 	// filters again when a new selectedVariable has been selected, with the same selected Enum as before the change.
 	componentDidUpdate(prevProps) {
-		if (this.props.hospitals !== prevProps.hospitals && this.props.selectedEnum === prevProps.selectedEnum && this.props.selectedEnum !== undefined) {
-			this.filter(this.state.selectedValues);
+		if (this.props.hasLoaded && this.props.hospitals !== prevProps.hospitals) { //
+		 	if (this.props.selectedEnum === prevProps.selectedEnum && Object.keys(prevProps.selectedEnum).length > 0) {
+				console.log("FILTEREDITOR didUpdate");
+				this.filter(this.state.selectedValues);
+			}
 		}
 	}
 
@@ -36,8 +39,10 @@ class FilterEditor extends Component {
     dropdownSelectItem = (item) => {
 		let titles = [];
 		for (let i = 0; i < item.values.length; i++)
-		titles.push(item.values[i] + ": " + item.values_text[i]);
+			titles.push(item.values[i] + ": " + item.values_text[i]);
 
+		console.log("============================");
+		console.log("CHOOSING FILTER VAR");
 		this.props.setEnum(item);
 
 		this.setState({
@@ -53,7 +58,7 @@ class FilterEditor extends Component {
      */
     checkboxSelectItem = (item) => {
 
-		if (this.props.selectedEnum !== undefined) {
+		if (Object.keys(this.props.selectedEnum).length > 0 && this.props.hasLoaded) {
 			// removes item if in selectedValues
 			let values = this.state.selectedValues.filter((value) => {
 				return (value !== item)
@@ -63,6 +68,9 @@ class FilterEditor extends Component {
 			if (values.length === this.state.selectedValues.length) {
 				values.push(item);
 			}
+
+			console.log("============================");
+			console.log("CHOOSING FILTER CB");
 
 			this.setState({
 				selectedValues : values
@@ -80,8 +88,6 @@ class FilterEditor extends Component {
 	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.props.selectedEnum;
-
-		console.log("SELECTED Enum: " + name);
 
 		let filteredHospitals =  [];
 
@@ -131,7 +137,7 @@ class FilterEditor extends Component {
 	}
 
     render () {
-        const { t } = this.props;
+        const { t, hasLoaded } = this.props;
         return (
 			<div className="filter-editor">
 				<DropdownMenu
@@ -142,7 +148,7 @@ class FilterEditor extends Component {
 					defaultText={t('dropDowns.filterFallback')}
 				/>
                 {
-					(Object.keys(this.props.selectedEnum).length > 0)
+					(Object.keys(this.props.selectedEnum).length > 0 && hasLoaded)
 					?
 					<div className="filterCheckbox">
 						<CheckboxList

@@ -41,7 +41,16 @@ class LinearRegression extends Component {
 
 	componentDidUpdate(prevProps){
 		// check if response is there and draw chart if so
-		if(this.props.tableDataLoaded && !prevProps.tableDataLoaded || this.props.year !== prevProps.year){
+		if (this.props.tableDataLoaded && !prevProps.tableDataLoaded) {
+			console.log("vars have been selected");
+			this.drawChart();
+		}
+		if (this.props.year !== prevProps.year) {
+			console.log("years have changed");
+			this.drawChart();
+		}
+		if (this.props.hospitals !== prevProps.hospitals && this.props.hasLoaded) {
+			console.log("hospitals have been filtered");
 			this.drawChart();
 		}
 	}

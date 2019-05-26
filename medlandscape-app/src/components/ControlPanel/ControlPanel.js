@@ -117,7 +117,7 @@ class ControlPanel extends Component {
 
     render() {
 
-        const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, year, selectedVariable, mapView, graphView} = this.props;
+        const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView} = this.props;
         const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
         let selectedCantonVar, selectedHospitalVar;
@@ -197,7 +197,16 @@ class ControlPanel extends Component {
             </div>
         );
 
-        let linRegView = null;
+        let linRegView = (
+            <div className="graphView">
+                <HospitalTypeFilter
+                    hospitals={unfilteredHospitals}
+                    filter={filterLinRegByType}
+                    selectedYear={year}
+                    hasLoaded={hasLoaded}
+                />
+            </div>
+        );
 
         let graphViews = (
             <div className="view3">
