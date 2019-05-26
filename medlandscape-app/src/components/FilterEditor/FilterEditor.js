@@ -23,6 +23,10 @@ class FilterEditor extends Component {
 		}
 	}
 
+	componentWillUnmount() {
+		this.props.filter([]);
+	}
+
 	/**
 	*Called when a variable is selected in a dropdown
     *Gets the titles of the items, that have been selected in the dropdowns

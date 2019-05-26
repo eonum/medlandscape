@@ -21,6 +21,7 @@ class App extends Component {
         hospitalMapSelectedVariable : {},
         cantonMapSelectedVariable : {},
         boxPlotSelectedVariable : {},
+        regressionSelectedVariable : {},
 
         // different hospital results stored per view
         mapHospitals : [],
@@ -64,7 +65,7 @@ class App extends Component {
 
             this.setState({
                 [key] : results,
-                hasLoaded : (this.state.view !== 1 || this.state.mapView !== 1)
+                hasLoaded : (this.state.view !== 1)
             }, () => {
                 if (this.state.view === 1) {
                     if (this.state.mapView === 1) {
@@ -304,12 +305,15 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setHospitalsByEnums = (selectedHospitals) => {
+        let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             hospitalsByEnums : selectedHospitals,
-            hasLoaded : false
+            hasLoaded : isEmpty
         }, () => {
-            console.log("UPDATING filterhospitals from setHospitalsByEnums");
-            this.filterHospitals();
+            if (!isEmpty) {
+                console.log("UPDATING filterhospitals from setHospitalsByEnums");
+                this.filterHospitals();
+            }
         })
     }
 
@@ -318,12 +322,15 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setHospitalsByType = (selectedHospitals) => {
+        let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             hospitalsByType : selectedHospitals,
-            hasLoaded : false
+            hasLoaded : isEmpty
         }, () => {
-            console.log("UPDATING filterhospitals from setHospitalsByType");
-            this.filterHospitals();
+            if (!isEmpty) {
+                console.log("UPDATING filterhospitals from setHospitalsByType");
+                this.filterHospitals();
+            }
         })
     }
 
@@ -391,7 +398,8 @@ class App extends Component {
                     hasLoaded={hasLoaded}
                     fetchData={this.applyVariables}
 					objects={viewSpecificObjects}
-                    variableInfo={viewSpecificVariable}
+                    setVariable={this.setVariable}
+                    selectedVariable={viewSpecificVariable}
                     year={selectedYear}
                 />
             )
@@ -400,7 +408,7 @@ class App extends Component {
 
         let slider;
 
-        if (years.length > 1 && view === 1 && Object.keys(viewSpecificVariable).length !== 0) {
+        if (years.length > 1 && view !== 2 && Object.keys(viewSpecificVariable).length !== 0) {
             slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
         }
 

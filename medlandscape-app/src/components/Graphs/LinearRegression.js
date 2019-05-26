@@ -39,9 +39,9 @@ class LinearRegression extends Component {
 		}
 	}
 
-	componentDidUpdate(){
+	componentDidUpdate(prevProps){
 		// check if response is there and draw chart if so
-		if(this.props.tableDataLoaded){
+		if(this.props.tableDataLoaded && !prevProps.tableDataLoaded || this.props.year !== prevProps.year){
 			this.drawChart();
 		}
 	}
@@ -467,8 +467,10 @@ class LinearRegression extends Component {
 	* update selected variables in state if so
 	*/
 	updateChart = () => {
-		if(this.state.xVariable && this.state.yVariable)
+		if(this.state.xVariable && this.state.yVariable) {
+			this.props.setVariable(this.state.xVariable);
 			this.props.requestData([this.state.xVariable,this.state.yVariable]);
+		}
 	}
 
 	/**

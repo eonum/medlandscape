@@ -51,40 +51,42 @@ class CentralPanel extends Component {
     }
 
     render() {
-
+        const { objects, hasLoaded, selectedVariable, year, setVariable } = this.props;
+        const { tableDataLoaded, } = this.state;
         let hospitalVars = this.props.variables.filter(variable => {
             return (variable.variable_model === "Hospital")
         });
         let tableView = (
             <InteractiveTable
                 variables={hospitalVars}
-                hospitals={this.props.objects}
+                hospitals={objects}
                 requestData={this.requestTableData}
-                tableDataLoaded={this.state.tableDataLoaded}
+                tableDataLoaded={tableDataLoaded}
                 tableDataGenerated={this.tableDataGenerated}
                 retriggerTableGeneration={this.retriggerTableGeneration}
-                hasLoaded={this.props.hasLoaded}
+                hasLoaded={hasLoaded}
             />
         );
 
         let boxPlot = (
             <BoxPlot
-                objects={this.props.objects}
-                variableInfo={this.props.variableInfo}
-                year={this.props.year}
-                hasLoaded={this.props.hasLoaded}
+                objects={objects}
+                selectedVariable={selectedVariable}
+                year={year}
+                hasLoaded={hasLoaded}
             />
         )
 
         let linReg = (
             <LinearRegression
-                hospitals={this.props.objects}
+                hospitals={objects}
+                setVariable={setVariable}
                 requestData={this.requestTableData}
-                tableDataLoaded={this.state.tableDataLoaded}
+                tableDataLoaded={tableDataLoaded}
                 tableDataGenerated={this.tableDataGenerated}
                 variables={hospitalVars}
-                year={this.props.year}
-                hasLoaded={this.props.hasLoaded}
+                year={year}
+                hasLoaded={hasLoaded}
             />
         )
 
