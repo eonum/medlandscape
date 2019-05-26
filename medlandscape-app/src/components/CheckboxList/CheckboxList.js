@@ -8,13 +8,13 @@ import './CheckboxList.css'
 class CheckboxList extends Component {
 
     render() {
-        let listItems = [];
-        for (var i = 0; i < this.props.items.length; i++) {
-            listItems.push((<CheckboxListItem key={i} item={this.props.items[i]} checkboxSelectItem={this.props.checkboxSelectItem} title={this.props.titles[i]}/>));
-        }
         return (
             <div className="checkbox-list">
-                {listItems}
+                {
+                    this.props.items.map((object) => {
+                        return <CheckboxListItem key={object} item={object} checkboxSelectItem={this.props.checkboxSelectItem} title={this.props.titles[this.props.items.indexOf(object)]}/>
+                    })
+                }
             </div>
         );
     }

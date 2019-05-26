@@ -285,7 +285,11 @@ class App extends Component {
             hasLoaded : false
         }, () => {
             let objects = (view === 1) ? this.state.mapHospitals : this.state.cantons
-            this.setYears(objects);
+            if (view == 1) {
+                this.filterHospitals();
+            } else {
+                this.setYears(objects);
+            }
         })
     }
 
@@ -323,6 +327,7 @@ class App extends Component {
      */
     setHospitalsByType = (selectedHospitals) => {
         let isEmpty = !(selectedHospitals.length > 0);
+        console.log("isEmpty?: " + isEmpty);
         this.setState({
             hospitalsByType : selectedHospitals,
             hasLoaded : isEmpty

@@ -17,7 +17,7 @@ class ControlPanel extends Component {
         cantonVars : [],
         hospitalVars : [],
         enums : [],
-        selectedEnum : undefined,
+        selectedEnum : {},
     }
 
     componentDidUpdate(prevProps) {
@@ -87,7 +87,9 @@ class ControlPanel extends Component {
         this.setState({
             selectedEnum : variable
         }, () => {
-            this.fetchData(this.props.selectedVariable);
+            if (Object.keys(variable).length > 0) {
+                this.fetchData(this.props.selectedVariable);
+            }
         });
     }
 

@@ -24,6 +24,8 @@ class FilterEditor extends Component {
 	}
 
 	componentWillUnmount() {
+		// this doesn't work because it triggers filterhospitals from setHospitalsByEnums
+		this.props.setEnum({});
 		this.props.filter([]);
 	}
 
@@ -140,7 +142,7 @@ class FilterEditor extends Component {
 					defaultText={t('dropDowns.filterFallback')}
 				/>
                 {
-					(this.props.selectedEnum !== undefined)
+					(Object.keys(this.props.selectedEnum).length > 0)
 					?
 					<div className="filterCheckbox">
 						<CheckboxList

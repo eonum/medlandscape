@@ -13,6 +13,11 @@ class HospitalTypeFilter extends Component {
         selectedValues : []
     }
 
+    componentWillUnmount() {
+        console.log("unmounting filterByType");
+        this.props.filter([]);
+    }
+
     /**
      * Adds the value of the selected hospital category to selectedValues.
      * @param {String} item The selected hospital category to be added.
