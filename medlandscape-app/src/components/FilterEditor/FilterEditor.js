@@ -28,14 +28,14 @@ class FilterEditor extends Component {
 
 	componentWillUnmount() {
 		// this doesn't work because it triggers filterhospitals from setHospitalsByEnums
-		this.props.setEnum({});
+		this.props.resetEnum();
 		this.props.filter([]);
 	}
 
 	/**
-	*Called when a variable is selected in a dropdown
-    *Gets the titles of the items, that have been selected in the dropdowns
-    */
+	 * Called when a variable is selected in a dropdown
+     * Gets the titles of the items, that have been selected in the dropdowns
+     */
     dropdownSelectItem = (item) => {
 		let titles = [];
 		for (let i = 0; i < item.values.length; i++)
@@ -43,12 +43,13 @@ class FilterEditor extends Component {
 
 		console.log("============================");
 		console.log("CHOOSING FILTER VAR");
-		this.props.setEnum(item);
+		this.props.setEnum(item).then(() => {
+            this.setState({
+                selectedValues : [],
+                titles : titles,
+            });
+        });
 
-		this.setState({
-			selectedValues : [],
-			titles : titles,
-		});
 	}
 
     /**
@@ -71,6 +72,7 @@ class FilterEditor extends Component {
 
 			console.log("============================");
 			console.log("CHOOSING FILTER CB");
+            console.log("selected Enum: " + this.props.selectedEnum);
 
 			this.setState({
 				selectedValues : values

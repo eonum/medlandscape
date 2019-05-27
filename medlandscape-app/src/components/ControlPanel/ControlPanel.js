@@ -52,7 +52,7 @@ class ControlPanel extends Component {
                 // specific views in which this can happen
                 if (this.props.mapView === prevProps.mapView && this.props.view === 1 && prevProps.view === 1) {
                     console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
-                    this.fetchData(this.props.selectedVariable);
+                    this.fetchData(this.props.selectedVariable, this.state.selectedEnum);
                 } else if (this.props.graphView === prevProps.graphView && this.props.view === 3 && prevProps.view === 3 && this.props.graphView !== 2) {
                     console.log("FETCHING on CP didUpdate, GRAPHVIEW variable: " + this.props.selectedVariable.name);
                     this.fetchData(this.props.selectedVariable);
@@ -66,15 +66,15 @@ class ControlPanel extends Component {
      * Prepares correct query to ask App.js
      * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
      */
-    fetchData = (variable) => {
+    fetchData = (variable, enumVar) => {
         const {name, variable_model} = variable;
         let key = (variable_model === "Hospital") ? "hospitals" : "cantons";
         let query = key + "?variables=";
         query += encodeURIComponent(name)
         if (key === "hospitals") {
             query += encodeURIComponent("$" + this.state.enums[7].name);
-            if (this.state.selectedEnum !== undefined && key === "hospitals") {
-                query += encodeURIComponent("$" + this.state.selectedEnum.name);
+            if (Object.keys(enumVar).length > 0) {
+                query += encodeURIComponent("$" + enumVar.name);
             }
         }
         return this.props.fetchData(query);
@@ -86,13 +86,18 @@ class ControlPanel extends Component {
      * @param {Variable Object} variable The chosen variable.
      */
     setEnum = (variable) => {
-        this.setState({
-            selectedEnum : variable
-        }, () => {
-            if (Object.keys(variable).length > 0) {
-                this.fetchData(this.props.selectedVariable);
-            }
+        console.log("passing enum var");
+        return this.fetchData(this.props.selectedVariable, variable).then(() => {
+            this.setState({
+                selectedEnum : variable
+            });
         });
+    }
+
+    resetEnum = () => {
+        this.setState({
+            selectedEnum : {}
+        })
     }
 
     /**
@@ -155,6 +160,7 @@ class ControlPanel extends Component {
                     selectedEnum={selectedEnum}
                     variables={enums}
                     setEnum={this.setEnum}
+                    resetEnum={this.resetEnum}
                 />
             </div>
         )
