@@ -111,7 +111,7 @@ class ResultTable extends Component {
             table = (<Table tableData={this.state.resultTableData} />);
         }
         return (
-            <div>
+            <div className="resultTableData">
                 {table}
             </div>
         );

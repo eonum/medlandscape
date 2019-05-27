@@ -17,7 +17,7 @@
     display: grid;
     width: 100vw;
     height: 100vh;
-    grid-template-columns: 50px 290px 10px auto 50px;
+    grid-template-columns: 10px 290px 10px auto 50px;
     grid-template-rows: 10px auto 10px 80px 20px;
     pointer-events: none;
 }
@@ -35,9 +35,6 @@
 .central-panel {
     grid-column-start: 4;
     grid-row-start: 2;
-	background-color: white;
-	border-radius: 15px;
-	padding: 20px;
 }
 
 .languagePicker {

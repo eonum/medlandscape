@@ -1,12 +1,13 @@
 .variableSelector {
-	max-height: 100px;
-	height: auto;
+	height: 110px;
 	display: flex;
-	align-items: flex-end;
+    border-right: 1px solid black;
 }
 
 .variableDropdown {
-	margin-right: 10px;
+    width: 250px;
+    border-right: 1px solid black;
+	padding: 10px;
 	position: relative;
 }
 
@@ -38,11 +39,48 @@
 .btnSortAsc, .btnSortDesc {
     width: 70px;
     height: 20px;
-    margin: 3px;
+    margin: 15px 5px 0 0;
     color: white;
     text-align: center;
     background-color: #1996f6;
     border: none;
     border-radius: 15px;
     outline: none;
+}
+
+.addVariableButton {
+    margin: 0 10px;
+    align-self: center;
+}
+
+.yearDropdown > .dropdown {
+    width: 100px;
+    padding: 0;
+    display: inline-block;
+}
+
+.yearDropdown > .dropdown > .dropbtn {
+    width: 100px;
+    height: 30px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+.yearDropdown > .dropdown > .dropdown-content {
+    width: 100px;
+    height: 200px;
+}
+
+.yearDropdown > .dropdown > .dropdown-content > .searchbar{
+    width: 80px;
+    height: 20px;
+    border-radius: 20px;
+    font-size: 9pt;
+}
+
+.yearDropdown > .dropdown > .dropdown-content > .dropdown-options > .dropdownElem {
+    width: 100px;
+    text-align: center;
+    padding: 10px 0;
 }

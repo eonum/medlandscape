@@ -1,16 +1,22 @@
-.table tr {
-    min-height: 50px;
+.table {
+    border-collapse: collapse;
 }
+
+.table tr {
+    height: 70px;
+}
+
 .table tr:nth-child(even) {
     background-color: rgba(180, 180, 180, .2);
 }
+
 .table td {
-    width: 260px;
-    height: 60px;
+    width: 270px;
+    height: 70px;
     box-sizing: border-box;
-    padding: 0 10px 10px 0;
     text-align: center;
 }
+
 .table td:nth-child(even) {
     background-color: rgba(200, 200, 200, .2);
 }

@@ -3,7 +3,11 @@
 }
 
 .hospitalDropdown > .dropdown {
-	padding: 0 0 10px 0;
+    width: 270px;
+    height: 70px;
+    box-sizing: border-box;
+	padding: 10px 0 10px 10px;
+    border-bottom: 1px solid black;
 }
 
 .hospitalDropdown {
@@ -29,4 +33,8 @@
 
 .btnSubtractHospital:hover {
     cursor: pointer;
+}
+
+.addHospitalButton {
+    margin: 10px  0 10px 110px;
 }

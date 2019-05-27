@@ -658,15 +658,6 @@ class InteractiveTable extends Component {
         const { t, objects } = this.props;
         return (
             <div className="interactiveTable">
-                {/**<CSVLink
-					data={this.state.csvData}
-					filename="medlandscapeCSV.csv"
-					className="btnCreateCSV"
-					ref={(r) => this.csvLink = r}
-					target="_blank"
-				>
-                    {t('tableView.btnCreateCSV')}
-                </CSVLink>**/}
                 <VariableSelector
                     className="variableSelector"
                     variables={this.props.variables}
