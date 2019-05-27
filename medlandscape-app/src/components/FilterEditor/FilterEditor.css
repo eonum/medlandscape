@@ -1,9 +1,6 @@
-.filterCheckbox{
-    padding: 0 0 10px 0;
-}
-
-.filterCheckBox > .checkbox-list{
-    margin: 10px 0 10px 0;
+.filterCheckbox > .checkbox-list {
+    margin: 0;
+    max-height: 130px;
 }
 
 .filterCheckbox p {

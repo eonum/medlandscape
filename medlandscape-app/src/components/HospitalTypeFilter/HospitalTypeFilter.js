@@ -104,7 +104,8 @@ class HospitalTypeFilter extends Component {
         if (selectedValues.length > 0) {
             filteredHospitals = hospitals.filter((hospital) => {
                 let counter = 0;
-                const values = hospital.attributes[name][(Object.keys(hospital.attributes[name])[0])]; // wtf hahaha, looks at "Typ" in first year because why would it change? (apparently it does -> ask Tim)
+                let keys = Object.keys(hospital.attributes[name]);
+                const values = hospital.attributes[name][(keys)[keys.length - 1]]; // wtf hahaha, looks at "Typ" in last year because why would it change? (apparently it does -> ask Tim)
                 for (let i = 0; i < selectedValues.length; i++) {
                     if (values.includes(selectedValues[i])) {
                         counter++;

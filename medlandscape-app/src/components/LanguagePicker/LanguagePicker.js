@@ -8,7 +8,8 @@ import './LanguagePicker.css'
 class LanguagePicker extends Component {
 
     state = {
-        lang : 'de'
+        lang : 'de',
+        otherLang : 'fr'
     }
 
     /**
@@ -16,12 +17,20 @@ class LanguagePicker extends Component {
     * initApiCall to retrieve the correct variable names.
     */
     onLanguageChange = () => {
-        let code = (this.state.lang === 'de') ? 'fr' : 'de';
+        let code, other;
+        if (this.state.lang === 'de') {
+            code = 'fr';
+            other = 'de';
+        } else {
+            code = 'de';
+            other = 'fr';
+        }
         this.props.i18n.changeLanguage(code).then(() => {
             this.props.changeLanguage();
         });
         this.setState({
-            lang : code
+            lang : code,
+            otherLang : other
         })
     }
 
@@ -34,7 +43,12 @@ class LanguagePicker extends Component {
     render () {
         return (
             <div className="languagePicker">
-                <button className="langBtn" onClick={() => this.onLanguageChange()}>{this.state.lang.toUpperCase()}</button>
+                <button className="langBtn">
+                    {this.state.lang.toUpperCase()}
+                </button>
+                <button className="hiddenLangBtn" onClick={() => this.onLanguageChange()}>
+                    {this.state.otherLang.toUpperCase()}
+                </button>
             </div>
         );
     }

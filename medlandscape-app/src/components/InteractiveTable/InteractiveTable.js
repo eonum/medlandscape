@@ -200,14 +200,14 @@ class InteractiveTable extends Component {
             newSelectedHospital = selectedHosp;
         }
         let newDropdown = (
-            <div className='hospitalDropdown' key={id}>
+            <div className='hospitalDropdown selectionElement' key={id}>
                 <DropdownMenu id={id}
                     listItems={this.props.hospitals}
                     selectItem={this.selectHospital}
                     selectedItem={newSelectedHospital}
                     defaultText={this.props.t('dropDowns.hospitalFallback')}
                 />
-                <button className="btnSubtractHospital" onClick={() => this.subtractHospital(id)}>X</button>
+                <button className="btnSubtractDropDown" onClick={() => this.subtractHospital(id)}>X</button>
             </div>
         );
         return [newSelectedHospital, newDropdown];
@@ -284,13 +284,13 @@ class InteractiveTable extends Component {
         let nextVariableId = this.state.nextVariableId + "";
 
         let newDrp = (
-            <div className="variableDropdown" key={this.state.nextVariableId}>
+            <div className="variableDropdown selectionElement" key={this.state.nextVariableId}>
                 <DropdownMenu id={this.state.nextVariableId}
                     listItems={this.props.variables}
                     selectItem={this.selectVariable}
                     defaultText={this.props.t('dropDowns.variablesFallback')}
                 />
-                <button className="btnSubtractVariable" onClick={() => this.subtractVariable(nextVariableId)}>X</button>
+                <button className="btnSubtractDropDown" onClick={() => this.subtractVariable(nextVariableId)}>X</button>
                 <button className="btnSortAsc" onClick={() => this.sortHospitals(nextVariableId, 'asc')}>{this.props.t('tableView.sortAsc')}</button>
                 <button className="btnSortDesc" onClick={() => this.sortHospitals(nextVariableId, 'desc')}>{this.props.t('tableView.sortDesc')}</button>
                 <div className="yearDropdown">

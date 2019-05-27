@@ -9,6 +9,7 @@
 	grid-row-start: 2;
 	grid-column-start: 1;
     border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .btnGenerateTable {
@@ -52,11 +53,38 @@
 .addButton {
 	height: 50px;
 	width: 50px;
-	border-radius: 50%;
+    box-sizing: border-box;
+    border-radius: 25px;
+    border: none;
 	color: white;
-	border: none;
 	background-color: #1996f6;
+    padding: 0 0 5px 0;
 	font-size: 20pt;
+}
+
+.addButton:focus {
+    outline: none;
+}
+
+.btnSubtractDropDown {
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    background-color: black;
+    color: white;
+    position: absolute;
+    border: none;
+    top: 1px;
+    right: 1px;
+    display: none;
+}
+
+.btnSubtractDropDown:hover {
+    cursor: pointer;
+}
+
+.selectionElement:hover > .btnSubtractDropDown {
+    display: block;
 }
 
 .btnAddAllHospitals {
@@ -68,6 +96,7 @@
 	border-radius: 25px;
 	font-size: 11pt;
 	background-color: #ccc;
+    margin: 10px;
 	justify-self: center;
 	align-self: center;
 }

@@ -14,6 +14,7 @@
     width: 270px;
     height: 70px;
     box-sizing: border-box;
+    padding: 0 5px;
     text-align: center;
 }
 
