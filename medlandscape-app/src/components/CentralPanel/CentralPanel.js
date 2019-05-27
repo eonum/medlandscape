@@ -57,7 +57,7 @@ class CentralPanel extends Component {
     }
 
     render() {
-        const { objects, hasLoaded, selectedVariable, year, setVariable } = this.props;
+        const { objects, hasLoaded, selectedVariable, year, setVariable, setCSVData} = this.props;
         const { tableDataLoaded, } = this.state;
         let hospitalVars = this.props.variables.filter(variable => {
             return (variable.variable_model === "Hospital")
@@ -70,6 +70,7 @@ class CentralPanel extends Component {
                 tableDataLoaded={tableDataLoaded}
                 tableDataGenerated={this.tableDataGenerated}
                 retriggerTableGeneration={this.retriggerTableGeneration}
+                setCSVData={setCSVData}
                 hasLoaded={hasLoaded}
             />
         );

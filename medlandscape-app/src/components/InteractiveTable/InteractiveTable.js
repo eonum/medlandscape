@@ -578,6 +578,8 @@ class InteractiveTable extends Component {
             namedData.push(row);
         }
 
+        this.props.setCSVData(namedData);
+
         this.setState({
             csvData : namedData
         });
@@ -656,7 +658,7 @@ class InteractiveTable extends Component {
         const { t, objects } = this.props;
         return (
             <div className="interactiveTable">
-                <CSVLink
+                {/**<CSVLink
 					data={this.state.csvData}
 					filename="medlandscapeCSV.csv"
 					className="btnCreateCSV"
@@ -664,7 +666,7 @@ class InteractiveTable extends Component {
 					target="_blank"
 				>
                     {t('tableView.btnCreateCSV')}
-                </CSVLink>
+                </CSVLink>**/}
                 <VariableSelector
                     className="variableSelector"
                     variables={this.props.variables}

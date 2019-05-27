@@ -43,6 +43,8 @@ class App extends Component {
         mapView : 1,
         graphView : 1,
 
+        csvData : [],
+
         hasLoaded : false,
         tableDataLoaded : false
     }
@@ -413,6 +415,12 @@ class App extends Component {
         })
     }
 
+    setCSVData = (data) => {
+        this.setState({
+            csvData : data
+        })
+    }
+
     componentDidMount() {
         this.initApiCall();
     }
@@ -435,6 +443,7 @@ class App extends Component {
             view,
             mapView,
             graphView,
+            csvData,
             hasLoaded
         } = this.state;
 
@@ -479,6 +488,7 @@ class App extends Component {
 					objects={viewSpecificObjects}
                     setVariable={this.setVariable}
                     selectedVariable={viewSpecificVariable}
+                    setCSVData={this.setCSVData}
                     year={selectedYear}
                 />
             )
@@ -521,6 +531,7 @@ class App extends Component {
                         setMapView={this.setMapView}
                         graphView={graphView}
                         setGraphView={this.setGraphView}
+                        csvData={csvData}
                     />
                     {centralPanel}
                     <LanguagePicker changeLanguage={this.changeLanguage} />

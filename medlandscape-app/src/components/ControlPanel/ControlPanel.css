@@ -102,3 +102,18 @@
     pointer-events: none;
     padding: 0 5px;
 }
+
+.btnCreateCSV {
+	width: 250px;
+	height: 50px;
+    display: inline-block;
+    background-color: #1996f6;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    text-decoration: none;
+}
+
+.btnCreateCSV:hover{
+	cursor: pointer;
+}

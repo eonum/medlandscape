@@ -3,6 +3,7 @@ import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import FilterEditor from '../FilterEditor/FilterEditor.js';
 import HospitalTypeFilter from '../HospitalTypeFilter/HospitalTypeFilter.js';
 import { withTranslation } from 'react-i18next';
+import { CSVLink } from "react-csv";
 import './ControlPanel.css'
 
 /**
@@ -18,6 +19,7 @@ class ControlPanel extends Component {
         hospitalVars : [],
         enums : [],
         selectedEnum : {},
+        csvData : []
     }
 
     componentDidUpdate(prevProps) {
@@ -117,7 +119,7 @@ class ControlPanel extends Component {
 
     render() {
 
-        const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView} = this.props;
+        const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
         const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
         let selectedCantonVar, selectedHospitalVar;
@@ -187,6 +189,15 @@ class ControlPanel extends Component {
                 <div className="header">
                     <h1>{t('tableView.title')}</h1>
                 </div>
+                    <CSVLink
+                        data={csvData}
+                        filename="medlandscapeCSV.csv"
+                        className="btnCreateCSV"
+                        ref={(r) => this.csvLink = r}
+                        target="_blank"
+                    >
+                        {t('tableView.btnCreateCSV')}
+                    </CSVLink>
             </div>
         );
 

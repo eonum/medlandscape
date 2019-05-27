@@ -1,6 +1,6 @@
 .hospitalTypeFilter > .checkbox-list > .checkbox-list-item {
     padding-left: 15px;
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 .hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(1){
