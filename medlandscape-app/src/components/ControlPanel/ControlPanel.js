@@ -139,6 +139,7 @@ class ControlPanel extends Component {
         let mapViewHospitals = (
             <div className="mapViewHospitals">
                 <HospitalTypeFilter
+                    id="mapViewHTF"
                     hospitals={unfilteredHospitals}
                     filter={filterByType}
                     selectedYear={year}
@@ -217,6 +218,7 @@ class ControlPanel extends Component {
         let linRegView = (
             <div className="graphView">
                 <HospitalTypeFilter
+                    id="graphViewHTF"
                     hospitals={unfilteredHospitals}
                     filter={filterLinRegByType}
                     selectedYear={year}

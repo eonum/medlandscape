@@ -77,14 +77,12 @@ class App extends Component {
                     if (this.state.mapView === 1) {
                         this.filterHospitals(true); // only needed for hospitals
                     } else {
-                        console.log("setYears for cantons (on fetch)");
                         this.setYears(results);
                     }
                 } else if (this.state.view === 3) {
                     if (this.state.graphView === 2) {
                         this.filterHospitals(true); // only needed for hospitals
                     } else {
-                        console.log("setYears for boxplot (on fetch)");
                         this.setYears(results);
                     }
                 }
@@ -240,7 +238,8 @@ class App extends Component {
         let toDeriveYearsFrom = (this.state.view === 1) ? mapHospitals : regressionHospitals;
         this.setState({
             filteredHospitals : filteredHospitals,
-            unfilteredHospitals : unfiltered
+            unfilteredHospitals : unfiltered,
+            hasLoaded : !updateYears
         }, () => {
             if (updateYears) {
                 this.setYears(toDeriveYearsFrom);
@@ -263,7 +262,7 @@ class App extends Component {
         recent = maxYears.length - 1;
         this.setState({
             years : maxYears,
-            selectedYear : maxYears[recent],
+            selectedYear : (maxYears.length > 0) ? maxYears[recent] : "",
             hasLoaded : true
         })
     }
@@ -292,9 +291,11 @@ class App extends Component {
      * @param {String} year The selected year.
      */
     setYear = (year) => {
+        console.log("============================");
+        console.log("CHANGING YEAR");
         this.setState({
             selectedYear : year
-        })
+        });
     }
 
     /**
@@ -313,7 +314,6 @@ class App extends Component {
                 if (this.state.mapView === 1) {
                     this.filterHospitals(true);
                 } else {
-                    console.log("setYears for cantons (on tabview)");
                     this.setYears(objects);
                 }
             } else if (view === 3) {
@@ -321,7 +321,6 @@ class App extends Component {
                 if (this.state.graphView === 2) {
                     this.filterHospitals(true);
                 } else {
-                    console.log("setYears for boxPlot (on tabview)");
                     this.setYears(objects);
                 }
             }
@@ -344,7 +343,6 @@ class App extends Component {
             if (view === 1) {
                 this.filterHospitals(true);
             } else {
-                console.log("setYears for cantons (on mapview)");
                 this.setYears(objects);
             }
         })
@@ -365,7 +363,6 @@ class App extends Component {
             if (view === 2) {
                 this.filterHospitals(true);
             } else {
-                console.log("setYears for boxPlot (on graphview)");
                 this.setYears(objects);
             }
         });
@@ -379,10 +376,11 @@ class App extends Component {
         let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             hospitalsByEnums : selectedHospitals,
+            hasLoaded : false
         }, () => {
             if (!isEmpty) {
                 console.log("UPDATING filterhospitals from setHospitalsByEnums");
-                this.filterHospitals(false);
+                this.filterHospitals(false);  // years do not need to be updated
             }
         })
     }
@@ -395,10 +393,11 @@ class App extends Component {
         let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             hospitalsByType : selectedHospitals,
+            hasLoaded : false
         }, () => {
             if (!isEmpty) {
                 console.log("UPDATING filterhospitals from setHospitalsByType");
-                this.filterHospitals(false);
+                this.filterHospitals(false); // years do not need to be updated
             }
         })
     }
@@ -407,10 +406,11 @@ class App extends Component {
         let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             linRegHospitalsByType : selectedHospitals,
+            hasLoaded : false
         }, () => {
             if (!isEmpty) {
                 console.log("UPDATING filterhospitals from setHospitalsByType");
-                this.filterHospitals(false);
+                this.filterHospitals(false); // years do not need to be updated
             }
         })
     }

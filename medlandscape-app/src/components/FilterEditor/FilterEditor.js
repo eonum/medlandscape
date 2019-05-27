@@ -16,15 +16,12 @@ class FilterEditor extends Component {
 		titles : [],
 	};
 
-	// filters again when a new selectedVariable has been selected, with the same selected Enum as before the change.
-	componentDidUpdate(prevProps) {
-		if (this.props.hasLoaded && this.props.hospitals !== prevProps.hospitals) { //
-		 	if (this.props.selectedEnum === prevProps.selectedEnum && Object.keys(prevProps.selectedEnum).length > 0) {
-				console.log("FILTEREDITOR didUpdate");
-				this.filter(this.state.selectedValues);
-			}
-		}
-	}
+    componentDidUpdate(prevProps) {
+        if (this.props.selectedYear !== prevProps.selectedYear && prevProps.selectedYear !== "" && Object.keys(this.props.selectedEnum).length > 0) {
+            console.log("filterUpdate because of year");
+            this.filter(this.state.selectedValues);
+        }
+    }
 
 	componentWillUnmount() {
 		// this doesn't work because it triggers filterhospitals from setHospitalsByEnums
@@ -72,7 +69,6 @@ class FilterEditor extends Component {
 
 			console.log("============================");
 			console.log("CHOOSING FILTER CB");
-            console.log("selected Enum: " + this.props.selectedEnum);
 
 			this.setState({
 				selectedValues : values
@@ -88,6 +84,7 @@ class FilterEditor extends Component {
      * @param  {Variable Object} selectedValues the selected filter object to apply to Hospitals
      */
 	filter = (selectedValues) => {
+        console.log("filtering by enum");
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.props.selectedEnum;
 
@@ -150,10 +147,11 @@ class FilterEditor extends Component {
 					defaultText={t('dropDowns.filterFallback')}
 				/>
                 {
-					(Object.keys(this.props.selectedEnum).length > 0 && hasLoaded)
+					(Object.keys(this.props.selectedEnum).length > 0)
 					?
 					<div className="filterCheckbox">
 						<CheckboxList
+                            id="filterCheckboxList"
 							items={this.props.selectedEnum.values}
 							checkboxSelectItem={this.checkboxSelectItem}
 							titles={this.state.titles}

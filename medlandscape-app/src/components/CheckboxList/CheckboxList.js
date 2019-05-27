@@ -12,7 +12,8 @@ class CheckboxList extends Component {
             <div className="checkbox-list">
                 {
                     this.props.items.map((object) => {
-                        return <CheckboxListItem key={object} item={object} checkboxSelectItem={this.props.checkboxSelectItem} title={this.props.titles[this.props.items.indexOf(object)]}/>
+                        let uniqueKey = object + "Of" + this.props.id;
+                        return <CheckboxListItem key={uniqueKey} item={object} checkboxSelectItem={this.props.checkboxSelectItem} title={this.props.titles[this.props.items.indexOf(object)]}/>
                     })
                 }
             </div>

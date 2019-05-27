@@ -13,6 +13,22 @@ class HospitalTypeFilter extends Component {
         selectedValues : []
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.selectedYear !== prevProps.selectedYear && prevProps.selectedYear !== "" && this.state.selectedValues.length > 0) {
+            console.log("hospitaltypefilterUpdate because of year");
+            this.setAPIValues(this.state.selectedValues);
+        }
+        if (this.props.filter !== prevProps.filter) {
+            console.log("resetting because not unmounted");
+            this.setState({
+                selectedValues : []
+            }, () => {
+                console.log("resetted");
+                this.props.filter([]);
+            })
+        }
+    }
+
     componentWillUnmount() {
         console.log("unmounting filterByType");
         this.props.filter([]);
@@ -23,6 +39,9 @@ class HospitalTypeFilter extends Component {
      * @param {String} item The selected hospital category to be added.
      */
     checkboxSelectItem = (item) => {
+
+        console.log("============================");
+        console.log("CHOOSING H-TYPE-FILTER CB");
 
         // removes item if in selectedValues
         let values = this.state.selectedValues.filter((value) => {
@@ -36,9 +55,10 @@ class HospitalTypeFilter extends Component {
 
         this.setState({
             selectedValues : values
+        }, () => {
+            this.setAPIValues(values);
         });
 
-        this.setAPIValues(values);
     }
 
     /**
@@ -96,7 +116,7 @@ class HospitalTypeFilter extends Component {
 
 	/*filters through the selected values similar to our FIlterEditor */
     filter = (selectedValues) => {
-		const {hospitals} = this.props;
+		const {hospitals, selectedYear} = this.props;
         const name = "Typ"
 
         let filteredHospitals = [];
@@ -104,11 +124,22 @@ class HospitalTypeFilter extends Component {
         if (selectedValues.length > 0) {
             filteredHospitals = hospitals.filter((hospital) => {
                 let counter = 0;
-                let keys = Object.keys(hospital.attributes[name]);
-                const values = hospital.attributes[name][(keys)[keys.length - 1]]; // wtf hahaha, looks at "Typ" in last year because why would it change? (apparently it does -> ask Tim)
-                for (let i = 0; i < selectedValues.length; i++) {
-                    if (values.includes(selectedValues[i])) {
-                        counter++;
+                let years = Object.keys(hospital.attributes[name]);
+                if (selectedYear.length > 0) {
+                    if (years.includes(selectedYear)) {
+                        let values = hospital.attributes[name][selectedYear];
+                        for (let i = 0; i < selectedValues.length; i++) {
+                            if (values.includes(selectedValues[i])) {
+                                counter++;
+                            }
+                        }
+                    }
+                } else {
+                    let values = hospital.attributes[name][(years)[years.length - 1]]; // wtf hahaha, looks at "Typ" in last year because why would it change? (apparently it does -> ask Tim)
+                    for (let i = 0; i < selectedValues.length; i++) {
+                        if (values.includes(selectedValues[i])) {
+                            counter++;
+                        }
                     }
                 }
                 return (counter !== 0);
@@ -121,14 +152,11 @@ class HospitalTypeFilter extends Component {
             filteredHospitals = hospitals;
         }
 
-        console.log("filteredHospitals in HospitalTypeFilter: ");
-        console.log(filteredHospitals);
-
         this.props.filter(filteredHospitals);
     }
 
     render() {
-        const {t} = this.props;
+        const {t, id} = this.props;
         let categorizedHospitalTypes = [0, 1, 2, 3, 4, 5];
         let translatedCategorizedHospitalTypes = [t('hospitalTypes.university'), t('hospitalTypes.generic-center'),
             t('hospitalTypes.generic-basic'), t('hospitalTypes.psychiatry') , t('hospitalTypes.rehabilitation'),
@@ -136,7 +164,12 @@ class HospitalTypeFilter extends Component {
 
         return (
             <div className="hospitalTypeFilter">
-                <CheckboxList items={categorizedHospitalTypes} checkboxSelectItem={this.checkboxSelectItem} titles={translatedCategorizedHospitalTypes}/>
+                <CheckboxList
+                    id={id}
+                    items={categorizedHospitalTypes}
+                    checkboxSelectItem={this.checkboxSelectItem}
+                    titles={translatedCategorizedHospitalTypes}
+                />
             </div>
         )
     }
