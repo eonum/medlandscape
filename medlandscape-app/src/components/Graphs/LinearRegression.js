@@ -45,7 +45,7 @@ class LinearRegression extends Component {
 			console.log("vars have been selected");
 			this.drawChart();
 		}
-		if (this.props.year !== prevProps.year) {
+		if (this.props.year !== prevProps.year && this.props.hospitals.length > 0) {
 			console.log("years have changed");
 			this.drawChart();
 		}
