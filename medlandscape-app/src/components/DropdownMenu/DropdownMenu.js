@@ -43,7 +43,6 @@ class DropdownMenu extends Component {
     */
     selectItem = (item) => {
         this.props.selectItem(item, this.props.id);
-        this.toggleDropdown();
     }
 
     /**
