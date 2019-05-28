@@ -3,41 +3,28 @@ import * as d3 from "d3";
 import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import { withTranslation } from 'react-i18next';
-import { numberFormat, pearsonCorrelation } from './../../utils.mjs';
+import { numberFormat, pearsonCorrelation, calculateCircleColor } from './../../utils.mjs';
 
 /**
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
 * The rendered JSX also consists of two dropdowns where variables can be selected to display a scatterplot.
-* The currently selected variables and language are stored in the state.
+* The currently selected variables are stored in the state.
 * Width, heigth and passing of the chart are also stored in the state.
 */
 class LinearRegression extends Component {
 
 	state = {
-		language: this.props.i18n.language,
 		w : 700,
 		h : 400,
 		padding : 30,
 		correlation: '',
 	};
 
-	componentWillUpdate(){
-		// if the language is changed,set back variables and remove chart
-		if (this.props.i18n.language !== this.state.language){
-			this.setState({
-				language : this.props.i18n.language,
-			});
-			this.drawEmptyChart();
-		}
-	}
-
 	componentDidUpdate(prevProps){
 		if (Object.keys(this.props.selectedVariable[0]).length > 0 && Object.keys(this.props.selectedVariable[1]).length > 0) {
 			if (this.props.selectedVariable[0] !== prevProps.selectedVariable[0] || this.props.selectedVariable[1] !== prevProps.selectedVariable[1]) {
-				console.log("fetching lin reg vars");
 				this.props.requestData([this.props.selectedVariable[0], this.props.selectedVariable[1]]);
 			} else if (this.props.hasLoaded){
-				console.log("drawing chart cause fuck you all");
 				this.drawChart();
 			}
 		} else {
@@ -90,7 +77,6 @@ class LinearRegression extends Component {
 	 * Draws a Scatterplot with a regression line
 	 */
 	drawChart = () => {
-		console.log("drawing chart");
 		//remove old svg
 		this.removeChart();
 
@@ -214,8 +200,9 @@ class LinearRegression extends Component {
 			.attr("cy", function(d){
 				return yScale(d.y);
 			})
-			.attr("r", 3.5)
+			.attr("r", 4.5)
 			.style("cursor", "pointer")
+			.style("fill", (d) => calculateCircleColor(d.obj, this.props.year))
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave)
