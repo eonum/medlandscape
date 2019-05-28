@@ -60,7 +60,7 @@ class ControlPanel extends Component {
                     this.fetchData(this.props.selectedVariable, this.state.selectedEnum);
                 } else if (this.props.graphView === prevProps.graphView && this.props.view === 3 && prevProps.view === 3 && this.props.graphView !== 2) {
                     console.log("FETCHING on CP didUpdate, GRAPHVIEW variable: " + this.props.selectedVariable.name);
-                    this.fetchData(this.props.selectedVariable);
+                    this.fetchData(this.props.selectedVariable, {});
                 }
             }
         }
@@ -129,8 +129,8 @@ class ControlPanel extends Component {
 
     render() {
 
-        const {t, hasLoaded, unfilteredHospitals, numberVars, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
-        const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
+        const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
+        const {hospitalVars, cantonVars, numberVars, enums, selectedEnum} = this.state;
 
         let selectedCantonVar, selectedHospitalVar;
 
