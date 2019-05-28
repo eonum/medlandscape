@@ -3,32 +3,46 @@ import * as d3 from "d3";
 import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import { withTranslation } from 'react-i18next';
-import { numberFormat, pearsonCorrelation, calculateCircleColor } from './../../utils.mjs';
+import { numberFormat, pearsonCorrelation } from './../../utils.mjs';
 
 /**
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
 * The rendered JSX also consists of two dropdowns where variables can be selected to display a scatterplot.
-* The currently selected variables are stored in the state.
+* The currently selected variables and language are stored in the state.
 * Width, heigth and passing of the chart are also stored in the state.
 */
 class LinearRegression extends Component {
 
 	state = {
+        xVariable : undefined,
+        yVariable : undefined,
+		language: this.props.i18n.language,
 		w : 700,
 		h : 400,
 		padding : 30,
 		correlation: '',
 	};
 
-	componentDidUpdate(prevProps){
-		if (Object.keys(this.props.selectedVariable[0]).length > 0 && Object.keys(this.props.selectedVariable[1]).length > 0) {
-			if (this.props.selectedVariable[0] !== prevProps.selectedVariable[0] || this.props.selectedVariable[1] !== prevProps.selectedVariable[1]) {
-				this.props.requestData([this.props.selectedVariable[0], this.props.selectedVariable[1]]);
-			} else if (this.props.hasLoaded){
-				this.drawChart();
-			}
-		} else {
+	componentDidMount(){
+		this.drawEmptyChart();
+	}
+
+	componentWillUpdate(){
+		// if the language is changed,set back variables and remove chart
+		if (this.props.i18n.language !== this.state.language){
+			this.setState({
+				language : this.props.i18n.language,
+				xVariable: undefined,
+				yVariable: undefined,
+			});
 			this.drawEmptyChart();
+		}
+	}
+
+	componentDidUpdate(prevProps){
+		// check if response is there and draw chart if so
+		if(this.props.tableDataLoaded && !prevProps.tableDataLoaded || this.props.year !== prevProps.year){
+			this.drawChart();
 		}
 	}
 
@@ -38,8 +52,8 @@ class LinearRegression extends Component {
 	* @return {Object} with x: Data for the xVariable and y: Data for the yVariable
 	*/
    returnData = (item) => {
-	   let xVarName = this.props.selectedVariable[0].name;
-	   let yVarName = this.props.selectedVariable[1].name;
+	   let xVarName = this.state.xVariable.name;
+	   let yVarName = this.state.yVariable.name;
 	   let xValues = item.attributes[xVarName];
 	   let yValues = item.attributes[yVarName];
 	   let xData = xValues[this.props.year];
@@ -200,9 +214,8 @@ class LinearRegression extends Component {
 			.attr("cy", function(d){
 				return yScale(d.y);
 			})
-			.attr("r", 4.5)
+			.attr("r", 3.5)
 			.style("cursor", "pointer")
-			.style("fill", (d) => calculateCircleColor(d.obj, this.props.year))
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave)
@@ -210,6 +223,9 @@ class LinearRegression extends Component {
 
 		// define and append axes
 		this.appendAxes(svg, xScale, yScale);
+
+		// call this to set back and prepare for reupdate
+		this.props.tableDataGenerated();
 	}
 
 	/**
@@ -407,7 +423,7 @@ class LinearRegression extends Component {
 			.append("tr");
 		thirdRow
 			.append("td")
-			.text(this.props.selectedVariable[0].text);
+			.text(this.state.xVariable.text);
 		thirdRow
 			.append("td")
 			.attr("id", "popupXVariable");
@@ -416,7 +432,7 @@ class LinearRegression extends Component {
 			.append("tr");
 		fourthRow
 			.append("td")
-			.text(this.props.selectedVariable[1].text);
+			.text(this.state.yVariable.text);
 		fourthRow
 			.append("td")
 			.attr("id", "popupYVariable");
@@ -427,7 +443,11 @@ class LinearRegression extends Component {
 	* write the selected variable to state and update chart on X axis
     */
     selectXAxis = (item) => {
-		this.props.setVariable([item, this.props.selectedVariable[1]]);
+		this.setState({
+			xVariable : item,
+		}, () => {
+			this.updateChart();
+		});
 	}
 
 	/**
@@ -435,7 +455,22 @@ class LinearRegression extends Component {
 	* write the selected variable to state and update chart on Y axis
     */
     selectYAxis = (item) => {
-		this.props.setVariable([this.props.selectedVariable[0], item]);
+		this.setState({
+			yVariable : item,
+		}, () => {
+			this.updateChart();
+		});
+	}
+
+	/**
+	* check if both x and y variable have been selected
+	* update selected variables in state if so
+	*/
+	updateChart = () => {
+		if(this.state.xVariable && this.state.yVariable) {
+			this.props.setVariable(this.state.xVariable);
+			this.props.requestData([this.state.xVariable,this.state.yVariable]);
+		}
 	}
 
 	/**
@@ -452,8 +487,9 @@ class LinearRegression extends Component {
 	 * @return {JSX}
 	 */
 	render() {
-		let {variables, selectedVariable} = this.props;
-
+		let variables = this.props.variables.filter((variable)=>{
+			return(variable.variable_type !== "enum" && variable.variable_type !== "string")
+		});
 		return (
         	<div>
 				<div className="yAxisBtn">
@@ -461,7 +497,7 @@ class LinearRegression extends Component {
 					<DropdownMenu id="yAxis"
 		                listItems={variables}
 		                selectItem={this.selectYAxis}
-		                selectedItem={selectedVariable[1]}
+		                selectedItem={this.state.yVariable}
 		                defaultText={this.props.t('dropDowns.variablesFallback')}
 		            />
 				</div>
@@ -471,7 +507,7 @@ class LinearRegression extends Component {
 					<DropdownMenu id="xAxis"
 						listItems={variables}
 						selectItem={this.selectXAxis}
-						selectedItem={selectedVariable[0]}
+						selectedItem={this.state.xVariable}
 						defaultText={this.props.t('dropDowns.variablesFallback')}
 					/>
 				</div>

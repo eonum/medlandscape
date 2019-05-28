@@ -133,7 +133,7 @@ class BoxPlot extends Component {
 		var func = function(e) {
 			d3.select("#boxplot .popup")
 				.style("display", "none");
-			document.removeEventListener("click", func);
+			 
 		}
 
 		var mouseclick = function(d) {
