@@ -55,10 +55,8 @@ class App extends Component {
     * @param  {String} query The specific query to use for the API call.
     */
     applyVariables = (query) => {
-        console.log("FETCHING DATA, QUERY: " + query);
         let key;
         return this.apiCall(query).then((results) => {
-            console.log("DATA FETCHED");
 
             // determining which state variable to store the results in
             if (this.state.view === 1) {
@@ -71,7 +69,7 @@ class App extends Component {
 
             this.setState({
                 [key] : results,
-                hasLoaded : (this.state.view === 2)
+                hasLoaded : (this.state.view === 2) // only true if on tableView
             }, () => {
                 // On the map, years and which hospitals to pass to Maps need to be redetermined
                 if (this.state.view === 1) {
@@ -106,10 +104,8 @@ class App extends Component {
      * Replaces viewSpecificVariable with translated equivalent
      */
     changeLanguage = () => {
-        console.log("TRANSLATING");
         this.apiCall("variables").then((results) => {
             let currentVariableKey = this.getViewSpecificVariable();
-
             if (currentVariableKey !== "regressionSelectedVariableX") {
                 let currentVariable = this.state[currentVariableKey];
                 let translatedCurrentVariable = currentVariable; // as fallback, this makes sure nothing changes
@@ -177,10 +173,8 @@ class App extends Component {
     * @param  {Variable object} item The selected variable.
     */
     setVariable = (item) => {
-        console.log("============================");
         if (item.length === 2) {
             if (item[0] !== this.state.regressionSelectedVariableX || item[1] !== this.state.regressionSelectedVariableY) {
-                console.log("SETTING variable to " + item[0].name + ", " + item[1].name);
                 this.setState({
                     regressionSelectedVariableX : item[0],
                     regressionSelectedVariableY : item[1],
@@ -188,32 +182,20 @@ class App extends Component {
                 })
             }
         } else {
-            console.log("SETTING variable to " + item.name);
             let key = this.getViewSpecificVariable();
-
             if (this.state[key] !== item) {
                 this.setState({
                     [key] : item,
                     hasLoaded : false
                 });
-            } else {
-                console.log("Same Variable selected, nothing to change.");
             }
         }
     }
 
     /**
-     * Comment here please
-     */
-    tableDataGenerated = () => {
-        this.setState({
-            tableDataLoaded : false
-        });
-    }
-
-    /**
      * Determines which Hospitals to pass to MAPS.js according to type & enum filters,
      * saves the list into filteredHospitals in the state.
+     * @param {boolean} updateYears true if years need to be updated
      */
     filterHospitals = (updateYears) => {
         const {hospitalsByEnums, hospitalsByType, linRegHospitalsByType, mapHospitals, regressionHospitals} = this.state;
@@ -224,7 +206,6 @@ class App extends Component {
         if (this.state.view === 1) {
             // [0] === 0 is specified as "no match" in FilterEditor | HospitalTypeFilter => filteredHospitals stays empty
             if (!(hospitalsByEnums[0] === 0 || hospitalsByType[0] === 0)) {
-
                 // in case of no matches, there would be no need to do intersection
                 if (hospitalsByEnums.length > 0 && hospitalsByType.length > 0) {
                     // we have to compare names because the attribute of each hospital has a different length
@@ -264,7 +245,6 @@ class App extends Component {
                 filteredHospitals = regressionHospitals;
             }
         }
-        console.log("DATA FILTERED");
         let unfiltered = mapHospitals;
         let toDeriveYearsFrom = (this.state.view === 1) ? mapHospitals : regressionHospitals;
         this.setState({
@@ -279,11 +259,10 @@ class App extends Component {
     }
 
     /**
-     * Returns list of available years for selected Variable.
-     * @return {Array} The available years.
+     * Returns list of available years in given objects for selected Variable.
+     * @param {Object} objects Cantons/Hospitals
      */
     setYears = (objects) => {
-        console.log("GETTING YEARS");
         const {name} = this.state[this.getViewSpecificVariable()];
         let maxYears = [], years, recent;
         for (let i = 0; i < objects.length; i++) {
@@ -300,21 +279,21 @@ class App extends Component {
 
     /**
      * Determines which selectedVariable of the state to use, depending on the currently selected view.
-     * @return {String} The current relevant variable.
+     * @return {String} variable the current relevant variable.
      */
     getViewSpecificVariable = () => {
-        let v;
+        let variable;
         switch (this.state.view) {
             case 1:
-                v = (this.state.mapView === 1) ? "hospitalMapSelectedVariable" : "cantonMapSelectedVariable"
+                variable = (this.state.mapView === 1) ? "hospitalMapSelectedVariable" : "cantonMapSelectedVariable"
                 break;
             case 3:
-                v = (this.state.graphView === 1) ? "boxPlotSelectedVariable" : "regressionSelectedVariableX";
+                variable = (this.state.graphView === 1) ? "boxPlotSelectedVariable" : "regressionSelectedVariableX";
                 break;
             default:
-                v = "hospitalMapSelectedVariable";
+                variable = "hospitalMapSelectedVariable";
         }
-        return v;
+        return variable;
     }
 
     /**
@@ -322,8 +301,6 @@ class App extends Component {
      * @param {String} year The selected year.
      */
     setYear = (year) => {
-        console.log("============================");
-        console.log("CHANGING YEAR");
         this.setState({
             selectedYear : year
         });
@@ -331,11 +308,9 @@ class App extends Component {
 
     /**
      * Setter for the view state variable.
-     * @param {int} view The selected view.
+     * @param {number} view The selected view.
      */
     setView = (view) => {
-        console.log("============================");
-        console.log("SWITCHING TABVIEW");
         this.setState({
             view : view,
             hasLoaded : (view === 2)
@@ -360,12 +335,9 @@ class App extends Component {
 
     /**
      * Setter for the mapView state variable.
-     * @param {int} view The selected view.
+     * @param {number} view The selected view.
      */
     setMapView = (view) => {
-        console.log("============================");
-        console.log("SWITCHING MAPVIEW");
-
         this.setState({
             mapView : view,
             hasLoaded : false
@@ -381,11 +353,9 @@ class App extends Component {
 
     /**
      * Setter for the graphView state variable.
-     * @param {int} view The selected view.
+     * @param {number} view The selected view.
      */
     setGraphView = (view) => {
-        console.log("============================");
-        console.log("SWITCHING GRAPHVIEW");
         this.setState({
             graphView : view,
             hasLoaded : false
@@ -410,7 +380,6 @@ class App extends Component {
             hasLoaded : false
         }, () => {
             if (!isEmpty) {
-                console.log("UPDATING filterhospitals from setHospitalsByEnums");
                 this.filterHospitals(false);  // years do not need to be updated
             }
         })
@@ -427,7 +396,6 @@ class App extends Component {
             hasLoaded : false
         }, () => {
             if (!isEmpty) {
-                console.log("UPDATING filterhospitals from setHospitalsByType");
                 this.filterHospitals(false); // years do not need to be updated
             }
         })
@@ -500,15 +468,6 @@ class App extends Component {
                 viewSpecificObjects = mapHospitals;
                 viewSpecificVariable = hospitalMapSelectedVariable;
                 break;
-        }
-
-        if (hasLoaded) {
-            console.log("DATA READY");
-            console.log("PASSING VAR: ")
-            console.log(viewSpecificVariable);
-            console.log("PASSING OBJ: " + viewSpecificObjects.length);
-            console.log("OBJ SAMPLE: ");
-            console.log(viewSpecificObjects[0]);
         }
 
         let centralPanel = (view !== 1)
