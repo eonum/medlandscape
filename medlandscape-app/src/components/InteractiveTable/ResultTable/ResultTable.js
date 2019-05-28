@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Table from '../../Table/Table.js'
 import './ResultTable.css';
 import { withTranslation } from 'react-i18next';
+import { numberFormat } from './../../../utils.mjs';
 
 /**
  * Represents the part of the table which displays the results
@@ -83,7 +84,7 @@ class ResultTable extends Component {
                             if (typeof obj[year] !== 'undefined') {
                                 value = obj[year];
                             }
-                            newRow.push(value);
+                            newRow.push(numberFormat(value));
                         } else {
                             newRow.push(currentHosp.attributes[variable.name]);
                         }

@@ -9,6 +9,8 @@
 * @return {string} str the formatted string
 **/
 export function numberFormat(number){
+    if(typeof number !== "number")
+        return number;
     let nmbr = Math.round(number*100)/100;
     let str = nmbr.toString();
     let index;
