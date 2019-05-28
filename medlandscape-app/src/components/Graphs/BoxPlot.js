@@ -133,7 +133,7 @@ class BoxPlot extends Component {
 		var func = function(e) {
 			d3.select("#boxplot .popup")
 				.style("display", "none");
-			document.removeEventListener("click", func);
+			 
 		}
 
 		var mouseclick = function(d) {
@@ -361,6 +361,8 @@ class BoxPlot extends Component {
 	* adding Popup
 	*/
 	addPopup = () =>{
+		d3.select("#boxplot .popup").remove();
+		
 		var popup = d3.select("#boxplot")
 			.append("div")
 			.style("display", "none")
