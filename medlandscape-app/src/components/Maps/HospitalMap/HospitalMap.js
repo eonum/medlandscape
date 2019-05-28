@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { CircleMarker, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import { withTranslation } from 'react-i18next';
-import { numberFormat } from './../../../utils.mjs';
+import { numberFormat, calculateCircleColor } from './../../../utils.mjs';
 
 /*
 * Component to display the different hosptials on our map. Also displays the selected
@@ -12,50 +12,7 @@ import { numberFormat } from './../../../utils.mjs';
 
 class HospitalMap extends Component {
 
-    /**
-     * Calculates and returns a rgb color
-     * @return {String} The rgb color as a string.
-     */
-	calculateCircleColor = (item) => {
-		let color;
-		switch (item.attributes["Typ"][this.props.year]) {
-			// unispital
-			case ("K111"):
-				color = "#a72a2a";
-				break;
-			// allgemeinspital zentrumsversorgung
-			case ("K112"):
-				color = "#a79f2a";
-				break;
-			// allgemeinspital grundversorgung
-			case ("K121"):
-				color = "#2da72a";
-				break;
-			case ("K122"):
-				color = "#2da72a";
-				break;
-			case ("K123"):
-				color = "#2da72a";
-				break;
-			// psychiatrische klinik
-			case ("K211"):
-				color = "#2a8ea7";
-				break;
-			case ("K212"):
-				color = "#2a8ea7";
-				break;
-			// rehaklinik
-			case ("K221"):
-				color = "#2d2aa7";
-				break;
-			// spezialklinik
-			// other 5 cases, too lazy to switch them out
-			default :
-				color = "#762aa7";
-				break;
-		}
-		return color;
-	}
+
 
     /**
      * Computes the Radius for a hospital point.
@@ -107,7 +64,7 @@ class HospitalMap extends Component {
 	* @param {Object} e the event
 	*/
 	resetStyle = (item, e) => {
-		let oldColor = this.calculateCircleColor(item);
+		let oldColor = calculateCircleColor(item, this.props.year);
 		e.target.setStyle({
 			weight: 2,
 			color: oldColor,
@@ -137,10 +94,10 @@ class HospitalMap extends Component {
           				<CircleMarker
           					key = {this.props.data.indexOf(item)}
         					center={{lon: item.longitude, lat: item.latitude}}
-							color= {this.calculateCircleColor(item)}
+							color= {calculateCircleColor(item, this.props.year)}
 							weight = "2" // defining how big the outline of circle is
 							opacity = "1"
-        					fillColor = {this.calculateCircleColor(item)}
+        					fillColor = {calculateCircleColor(item, this.props.year)}
 							fillOpacity = "0.7"
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}

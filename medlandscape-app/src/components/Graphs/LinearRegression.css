@@ -35,8 +35,7 @@ rect {
 }
 
 .dot {
-    stroke: #293b47;
-    fill: #7A99AC
+    stroke: none;
 }
 
 div.tooltip {

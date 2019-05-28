@@ -60,3 +60,48 @@ export function pearsonCorrelation(x, y){
 
     return r;
 }
+
+/**
+ * Calculates and returns a rgb color
+ * @return {String} The rgb color as a string.
+ */
+export function calculateCircleColor(item, year){
+    let color;
+    switch (item.attributes["Typ"][year]) {
+        // unispital
+        case ("K111"):
+            color = "#a72a2a";
+            break;
+        // allgemeinspital zentrumsversorgung
+        case ("K112"):
+            color = "#a79f2a";
+            break;
+        // allgemeinspital grundversorgung
+        case ("K121"):
+            color = "#2da72a";
+            break;
+        case ("K122"):
+            color = "#2da72a";
+            break;
+        case ("K123"):
+            color = "#2da72a";
+            break;
+        // psychiatrische klinik
+        case ("K211"):
+            color = "#2a8ea7";
+            break;
+        case ("K212"):
+            color = "#2a8ea7";
+            break;
+        // rehaklinik
+        case ("K221"):
+            color = "#2d2aa7";
+            break;
+        // spezialklinik
+        // other 5 cases, too lazy to switch them out
+        default :
+            color = "#762aa7";
+            break;
+    }
+    return color;
+}

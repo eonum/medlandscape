@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import { withTranslation } from 'react-i18next';
-import { numberFormat, pearsonCorrelation } from './../../utils.mjs';
+import { numberFormat, pearsonCorrelation, calculateCircleColor } from './../../utils.mjs';
 
 /**
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
@@ -214,8 +214,9 @@ class LinearRegression extends Component {
 			.attr("cy", function(d){
 				return yScale(d.y);
 			})
-			.attr("r", 3.5)
+			.attr("r", 4.5)
 			.style("cursor", "pointer")
+			.style("fill", (d) => calculateCircleColor(d.obj, this.props.year))
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave)
