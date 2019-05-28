@@ -105,6 +105,10 @@
 	cursor: pointer;
 }
 
+.btnAddAllHospitals:focus {
+    outline: none;
+}
+
 .yearDropdown {
     display: none;
 }

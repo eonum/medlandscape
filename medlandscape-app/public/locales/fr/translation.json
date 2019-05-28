@@ -18,8 +18,8 @@
     "tableView": {
         "title": "Tableau",
         "missingData": "Veuillez sélectionner quelque chose dans chaque menu déroulant et vous assurer que le tableau a été généré avant de le trier.",
-        "sortAsc": "Ascendant",
-        "sortDesc": "Descendant",
+        "sortAsc": "▲",
+        "sortDesc": "▼",
         "btnCreateTable": "Créer tableau",
         "btnAddAllHospitals": "Ajouter tous les hôpitaux",
 	    "btnCreateCSV": "Créer CSV",
