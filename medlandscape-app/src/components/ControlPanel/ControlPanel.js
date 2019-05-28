@@ -17,6 +17,7 @@ class ControlPanel extends Component {
     state = {
         cantonVars : [],
         hospitalVars : [],
+        numberVars : [],
         enums : [],
         selectedEnum : {},
         csvData : []
@@ -25,12 +26,15 @@ class ControlPanel extends Component {
     componentDidUpdate(prevProps) {
         // filtering the different variables after the first initialisation of variables
         if (this.props.variables !== prevProps.variables) {
-            let cantonVars = [], hospitalVars = [], enums = [];
+            let cantonVars = [], hospitalVars = [], numberVars = [], enums = [];
 
             this.props.variables.forEach((variable) => {
                 if (variable.variable_model === "Hospital" && variable.variable_type !== "enum") {
                     if (variable.name !== "Ort" && variable.name !== "Adr") { // because those don't make much sense as they are attached to any hospital either way
                         hospitalVars.push(variable);
+                    }
+                    if (variable.variable_type === "float" || variable.variable_type === "number" || variable.variable_type === "percentage" || variable.variable_type === "relevance") {
+                        numberVars.push(variable);
                     }
                 } else if (variable.variable_model === "Canton") {
                     cantonVars.push(variable);
@@ -42,6 +46,7 @@ class ControlPanel extends Component {
             this.setState({
                 cantonVars : cantonVars,
                 hospitalVars : hospitalVars,
+                numberVars : numberVars,
                 enums : enums,
             });
         }
@@ -211,7 +216,7 @@ class ControlPanel extends Component {
         let boxPlotView = (
             <div className="graphView">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={hospitalVars} selectItem={this.setVariable} selectedItem={selectedHospitalVar}  defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars" listItems={numberVars} selectItem={this.setVariable} selectedItem={selectedHospitalVar}  defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         );
 

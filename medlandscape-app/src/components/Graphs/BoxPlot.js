@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import './BoxPlot.css'
+import { withTranslation } from 'react-i18next';
+import { numberFormat } from './../../utils.mjs';
 import * as d3 from "d3";
 
 /**
@@ -6,10 +9,12 @@ import * as d3 from "d3";
 */
 class BoxPlot extends Component {
 
-	componentDidMount(){
+	componentDidUpdate(){
 		// draw a chart if the variable information has been loaded via api-call
-		if (this.props.hasLoaded)
-			this.drawChart();
+		if (this.props.hasLoaded && this.props.objects.length != 0)
+			{
+				this.drawChart();
+			}
 	}
 
 	/**
@@ -18,10 +23,12 @@ class BoxPlot extends Component {
 	 * @return {int || float} The selected entry in the item.values object
 	 */
 	returnData = (item) => {
-		let varName = this.props.variableInfo.name;
+		let varName = this.props.selectedVariable.name;
 		let values = item.attributes[varName];
 		let data = (values[this.props.year]);
-		return data;
+
+		return {value: data, hospital: item};
+		//return {v: data, g: "box1", t: item.name};
 	}
 
 	/**
@@ -31,117 +38,365 @@ class BoxPlot extends Component {
 	 */
 	makeDataArray = () => {
 		// sort out undefined values for given year
-		return this.props.objects.filter((obj) => {
+		let filteredArr = this.props.objects.filter((obj) => {
 			return (this.returnData(obj) !== undefined && obj.name !== "Ganze Schweiz");
-		})
+		});
+		return filteredArr.map((item) => this.returnData(item));
 	}
 
 	/**
 	 * Draws a BoxPlot
 	 */
 	drawChart() {
-		d3.select("#boxplotsvg").remove();
-		// set the dimensions and margins of the graph
-		var margin = {top: 10, right: 30, bottom: 30, left: 40},
-			width = 400 - margin.left - margin.right,
-			height = 400 - margin.top - margin.bottom;
+		let radius = 4;
+		let color = "red";
+		let height = 480;
+		let width = 600;
+		let boxpadding = 0.2;
+		let margin = {top:10,bottom:30,left:40,right:10};
+		
+		d3.select("#boxplot svg").remove();
 
-		// append the svg object to the body of the page
-		var svg = d3.select("#boxplot")
-			.append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-			.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-		// create dummy data
 		let data = this.makeDataArray();
-		data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9];
-		let minVal = Math.min(...data);
-		let maxVal = Math.max(...data);
+		
+		// array only with values (selected variable)
+		let valueArr = data.map((d) => d.value).sort(d3.ascending);
+
+		// calculate the quartiles
+		let quartiles = [
+			d3.quantile(valueArr,0.25),
+			d3.quantile(valueArr,0.5),
+			d3.quantile(valueArr,0.75)
+		];
+		let iqr = (quartiles[2]-quartiles[0]) * 1.5;
+	
+		
+		// calculate min and max and mark all outliers
+		let max = Number.MIN_VALUE;
+		let min = Number.MAX_VALUE;
+		
+		let box_data = d3.nest()
+			.key(function(d) {
+				let type = (d.value < quartiles[0] - iqr || d.value > quartiles[2] + iqr) ?
+					"outlier" : "normal";
+				
+				if(type == "normal" && (d.value < min || d.value > max)){
+					max = Math.max(max,d.value);
+					min = Math.min(min,d.value);
+				}
+				return type;
+             })
+			 .map(data);
+		
+		// add empty array if no outliers
+		if(!box_data["$outlier"])
+			box_data["$outlier"] = [];
 
 
-		// Compute summary statistics used for the box:
-		var data_sorted = data.sort(d3.ascending)
-		var q1 = d3.quantile(data_sorted, .25)
-		var median = d3.quantile(data_sorted, .5)
-		var q3 = d3.quantile(data_sorted, .75)
-		//var interQuantileRange = q3 - q1
-		var min = minVal //q1 - 1.5 * interQuantileRange
-		var max = maxVal //q1 + 1.5 * interQuantileRange
+		let yscale = d3.scaleLinear()
+			.domain(d3.extent(data.map((d) => d.value)))
+			.nice()
+			.range([height-margin.top-margin.bottom,0]);
+		
+		
+		let tickFormat = function(n){return n.toLocaleString()};
+		
+	
+		// generate chart
+		let svg = d3.select("#boxplot").append("svg")
+			.attr("width", width)
+            .attr("height", height);
+			
+			
+		// Its opacity is set to 0: we don't see it by default.
+     	var tooltip = d3.select("#boxplot")
+		    .append("div")
+		    .style("opacity", 0)
+		    .attr("class", "tooltip")
+		// add popup
+		this.addPopup();
 
-
-		// Show the Y scale
-		var y = d3.scaleLinear()
-			.domain([minVal - 0.5 * median,maxVal +0.5 * median ])
-			.range([height, 0])
-		svg.call(d3.axisLeft(y).ticks(20, "s"))
-
-		// a few features for the box
-		var center = 200
-		var width2 = 100
-
-
-		var tooltip = d3.select("#boxplot")
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-
-		var mouseover = function(d) {
-			d3.select("#boxplot .tooltip").style("opacity", 1)
-			.text("Median: " + median);
+     	// function that changes  tooltip when the user hovers over a point.
+     	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+    	var mouseover = function(d) {
+       		d3.select("#boxplot .tooltip").style("opacity", 1)
+				.text(d.hospital.name);
 		}
 
-		var mousemove = function(d) {
-			d3.select("#boxplot .tooltip")
+    	var mousemove = function(d) {
+       		d3.select("#boxplot .tooltip")
 				.style("left", (d3.event.pageX) + "px")
 				.style("top", (d3.event.pageY - 28) + "px");
+    	}
+
+		// close popup if you click outside
+		var func = function(e) {
+			d3.select("#boxplot .popup")
+				.style("display", "none");
+			document.removeEventListener("click", func);
 		}
 
-		var mouseleave = function(d) {
-			d3.select("#boxplot .tooltip").transition()
-				.duration(200)
-				.style("opacity", 0)
-		}
+		var mouseclick = function(d) {
+       		d3.select("#boxplot .popup")
+				.style("display", "block")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px")
+			d3.select("#boxplot .popupName")
+				.text(d.hospital.name);
+			d3.select("#boxplot .popupAddress")
+				.html("<dd>" + d.hospital.street + ",</dd>" + d.hospital.city);
+			d3.select("#boxplot .popupVariable")
+				.text(numberFormat(d.value));
+
+			// prevent that the click event closes the popup
+			d3.event.stopPropagation();
+			document.addEventListener("click", func);
+    	}
+
+     	// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+    	var mouseleave = function(d) {
+       		d3.select("#boxplot .tooltip").transition()
+        		.duration(200)
+        		.style("opacity", 0)
+    	}
+
+		svg.append("g").append("rect")
+			.attr("width", width)
+			.attr("height", height)
+			.style("color", "white")
+			.style("opacity", 0)
+			.on('dblclick', () => {this.implode_boxplot(width, yscale, quartiles, min, max);});
 
 
-		// Show the main vertical line
-		svg.append("line")
-			.attr("x1", center)
-			.attr("x2", center)
-			.attr("y1", y(min) )
-			.attr("y2", y(max) )
-			.attr("stroke", "black")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave)
+		let container = svg.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+		let yAxis = d3.axisLeft(yscale).tickFormat(tickFormat);
+		
+		container.append("g")
+			.attr("class", "d3-exploding-boxplot y axis")
+            .call(yAxis)
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -margin.top-d3.mean(yscale.range()))
+            .attr("dy", ".71em")
+            .attr("y",-margin.left+5)
+            .style("text-anchor", "middle")
+            .text("ylab test");
 
-		// Show the box
-		svg.append("rect")
-			.attr("x", center - width2/2)
-			.attr("y", y(q3) )
-			.attr("height", (y(q1)-y(q3)) )
-			.attr("width", width2 )
-			.attr("stroke", "black")
-			.style("fill", "#69b3a2")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave)
+		container = container.insert("g",".axis");
+		
+		let boxContent = container.append("g")
+			.attr('class','d3-exploding-boxplot boxcontent');
+		
+		//create jitter
+		boxContent.append("g")
+				.attr("class", "d3-exploding-boxplot outliers-points")
+				.selectAll(".point")
+				.data(box_data["$outlier"])
+				.enter()
+					.append("circle")
+					.call(function(s) { // init + draw jitter
+						s.attr("class", "d3-exploding-boxplot point")
+							.attr("r", radius)
+							.attr("fill", color)
+							.attr("cx", function(d){
+								return Math.floor(Math.random() * width);
+							})
+							.attr("cy",function(d){
+								return yscale(d.value)
+							})
+							.on("mouseover", mouseover)
+							.on("mousemove", mousemove)
+							.on("mouseleave", mouseleave)
+							.on("click", mouseclick);
+					});
+		let box = boxContent.append("g")
+			.attr("class", "d3-exploding-boxplot normal-points")
+			.append("g")
+				.attr("class", "d3-exploding-boxplot box")
+				.on("click", (d) => {
+					this.explode_boxplot(width, radius, color, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick);
+				});
+		
+		//box
+		box.append("rect").attr("class", "d3-exploding-boxplot box");
+		//median line
+		box.append("line").attr("class", "d3-exploding-boxplot median line");
+		//min line
+		box.append("line").attr("class","d3-exploding-boxplot min line hline");
+		//min vline
+		box.append("line").attr("class","d3-exploding-boxplot line min vline");
+		//max line
+		box.append("line").attr("class","d3-exploding-boxplot max line hline");
+		//max vline
+		box.append("line").attr("class","d3-exploding-boxplot line max vline");
 
-		// show median, min and max horizontal lines
-		svg.selectAll("toto")
-			.data([min, median, max])
-			.enter()
-			.append("line")
-			.attr("x1", center-width2/2)
-			.attr("x2", center+width2/2)
-			.attr("y1", function(d){ return(y(d))} )
-			.attr("y2", function(d){ return(y(d))} )
-			.attr("stroke", "black")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave)
+
+		this.drawBox(width, yscale, quartiles, min, max);
 	}
+	
+	
+	explode_boxplot(width, radius, color, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick){
+		var trans = d3.select("#boxplot").select("g.box").transition()
+				.ease(d3.easeBackIn)
+				.duration(300);
+		trans.select('rect.box')
+					.attr('x',width*0.5)
+					.attr('width',0)
+					.attr('y',yscale(quartiles[1]))
+					.attr('height',0)
+		//median line
+		trans.selectAll('line')
+					.attr('x1',width*0.5)
+					.attr('x2',width*0.5)
+					.attr('y1',yscale(quartiles[1]))
+					.attr('y2',yscale(quartiles[1]))
+				
+		d3.select("#boxplot").selectAll('.normal-points')
+				.selectAll('.point')
+				.data(box_data["$normal"])
+				.enter()
+					.append('circle')
+					.attr('cx',width*0.5)
+					.attr('cy',yscale(quartiles[1]))
+					.call(function(s) {
+						s.attr('class','d3-exploding-boxplot point')
+							.attr('r',radius)
+							.attr('fill', color)
+							.on("mouseover", mouseover)
+							.on("mousemove", mousemove)
+							.on("mouseleave", mouseleave)
+							.on("click", mouseclick);
+					})
+					.transition()
+					.ease(d3.easeBackOut)
+					.delay(function(){
+						return 300+100*Math.random()
+					})
+					.duration(function(){
+						return 300+300*Math.random()
+					})
+					.call(function(s){
+						s.attr('cx',function(d){
+							return Math.floor(Math.random() * width);
+						})
+						.attr('cy',function(d){
+							return yscale(d.value);
+						})
+					});
+	}
+	
+	drawBox(width, yscale, quartiles, min, max) {
+		let box = d3.select("#boxplot").selectAll("g.box");
+		
+		box.select('rect.box')
+			.attr('x',0)
+			.attr('width',width)
+			.attr('y',yscale(quartiles[2]))
+			.attr('height', function(d){
+				return yscale(quartiles[0])-yscale(quartiles[2])
+			});
+		//median line
+		box.select('line.median')
+			.attr('x1',0).attr('x2',width)
+			.attr('y1',yscale(quartiles[1]))
+			.attr('y2',yscale(quartiles[1]));
+		//min line
+		box.select('line.min.hline')
+			.attr('x1',width*0.25)
+			.attr('x2',width*0.75)
+			.attr('y1',yscale(Math.min(min,quartiles[0])))
+			.attr('y2',yscale(Math.min(min,quartiles[0])));
+		//min vline
+		box.select('line.min.vline')
+			.attr('x1',width*0.5)
+			.attr('x2',width*0.5)
+			.attr('y1',yscale(Math.min(min,quartiles[0])))
+			.attr('y2',yscale(quartiles[0]));
+		//max line
+		box.select('line.max.hline')
+			.attr('x1',width*0.25)
+			.attr('x2',width*0.75)
+			.attr('y1',yscale(Math.max(max,quartiles[2])))
+			.attr('y2',yscale(Math.max(max,quartiles[2])));
+		//max vline
+		box.select('line.max.vline')
+			.attr('x1',width*0.5)
+			.attr('x2',width*0.5)
+			.attr('y1',yscale(quartiles[2]))
+			.attr('y2',yscale(Math.max(max,quartiles[2])));
+	}
+	
+	implode_boxplot(width, yscale, quartiles, min, max) {
+		d3.select("#boxplot").selectAll(".normal-points")
+			.selectAll('circle')
+			.transition()
+				.ease(d3.easeBackOut)
+				.duration(function(){
+						return 300+300*Math.random()
+				})
+				.attr(width*0.5)
+				.attr('cy',yscale(quartiles[1]))
+				.remove();
+
+
+		let trans = d3.select("#boxPlot").select('.boxcontent')
+			.transition()
+				.ease(d3.easeBackOut)
+				.duration(300)
+				.delay(200);
+		
+		trans.select('rect.box')
+			.attr('x',0)
+			.attr('width',width)
+			.attr('y',yscale(quartiles[2]))
+			.attr('height', function(d){
+				return yscale(quartiles[0])-yscale(quartiles[2])
+			})
+		this.drawBox(width, yscale, quartiles, min, max);
+	}
+	
+	/**
+	* adding Popup
+	*/
+	addPopup = () =>{
+		var popup = d3.select("#boxplot")
+			.append("div")
+			.style("display", "none")
+			.attr("class", "popup");
+
+		var table = popup
+			.append("table");
+
+		var firstRow = table
+			.append("tr");
+		firstRow
+			.append("td")
+			.text(this.props.t("popup.hospital"));
+		firstRow
+			.append("td")
+			.attr("class", "popupName");
+
+		var secondRow = table
+			.append("tr");
+		secondRow
+			.append("td")
+			.text(this.props.t("popup.address"));
+		secondRow
+			.append("td")
+			.attr("class", "popupAddress");
+
+		var thirdRow = table
+			.append("tr");
+		thirdRow
+			.append("td")
+			.text(this.props.selectedVariable.text);
+		thirdRow
+			.append("td")
+			.attr("class", "popupVariable");
+	}
+	
 
 	render() {
 		return (
@@ -150,4 +405,5 @@ class BoxPlot extends Component {
 	}
 }
 
-export default BoxPlot;
+const LocalizedBoxPlot = withTranslation()(BoxPlot);
+export default LocalizedBoxPlot;
