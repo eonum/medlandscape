@@ -21,7 +21,8 @@ class App extends Component {
         hospitalMapSelectedVariable : {},
         cantonMapSelectedVariable : {},
         boxPlotSelectedVariable : {},
-        regressionSelectedVariable : {},
+        regressionSelectedVariableX : {},
+        regressionSelectedVariableY : {},
 
         // different hospital results stored per view
         mapHospitals : [],
@@ -108,21 +109,41 @@ class App extends Component {
         console.log("TRANSLATING");
         this.apiCall("variables").then((results) => {
             let currentVariableKey = this.getViewSpecificVariable();
-            let currentVariable = this.state[currentVariableKey];
-            let translatedCurrentVariable = currentVariable; // as fallback, this makes sure nothing changes
 
-            if (Object.keys(currentVariable).length > 0) { // making sure that currentVariable.name exists
-                for (var i = 0; i < results.length; i++) {
-                    if (results[i].name === currentVariable.name) {
-                        translatedCurrentVariable = results[i];
+            if (currentVariableKey !== "regressionSelectedVariableX") {
+                let currentVariable = this.state[currentVariableKey];
+                let translatedCurrentVariable = currentVariable; // as fallback, this makes sure nothing changes
+                if (Object.keys(currentVariable).length > 0) { // making sure that currentVariable.name exists
+                    for (var i = 0; i < results.length; i++) {
+                        if (results[i].name === currentVariable.name) {
+                            translatedCurrentVariable = results[i];
+                        }
                     }
                 }
+                this.setState({
+                    variables : results,
+                    [currentVariableKey] : translatedCurrentVariable
+                });
+            } else {
+                let currentVariable = this.state.regressionSelectedVariableX;
+                let currentVariable2 = this.state.regressionSelectedVariableY;
+                let translatedCurrentVariable = currentVariable;
+                let translatedCurrentVariable2 = currentVariable2;
+                if (Object.keys(currentVariable).length > 0 && Object.keys(currentVariable2).length > 0) { // making sure that currentVariable.name exists
+                    for (var i = 0; i < results.length; i++) {
+                        if (results[i].name === currentVariable.name) {
+                            translatedCurrentVariable = results[i];
+                        } else if (results[i].name === currentVariable2.name){
+                            translatedCurrentVariable2 = results[i];
+                        }
+                    }
+                }
+                this.setState({
+                    variables : results,
+                    regressionSelectedVariableX : translatedCurrentVariable,
+                    regressionSelectedVariableY : translatedCurrentVariable2
+                })
             }
-
-            this.setState({
-                variables : results,
-                [currentVariableKey] : translatedCurrentVariable
-            });
         });
     }
 
@@ -152,21 +173,32 @@ class App extends Component {
     }
 
     /**
-    * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
+    * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component (or two if lin. reg.),
     * @param  {Variable object} item The selected variable.
     */
     setVariable = (item) => {
         console.log("============================");
-        console.log("SETTING variable to " + item.name);
-        let key = this.getViewSpecificVariable();
-
-        if (this.state[key] !== item) {
-            this.setState({
-                [key] : item,
-                hasLoaded : false
-            });
+        if (item.length === 2) {
+            if (item[0] !== this.state.regressionSelectedVariableX || item[1] !== this.state.regressionSelectedVariableY) {
+                console.log("SETTING variable to " + item[0].name + ", " + item[1].name);
+                this.setState({
+                    regressionSelectedVariableX : item[0],
+                    regressionSelectedVariableY : item[1],
+                    hasLoaded : false
+                })
+            }
         } else {
-            console.log("Same Variable selected, nothing to change.");
+            console.log("SETTING variable to " + item.name);
+            let key = this.getViewSpecificVariable();
+
+            if (this.state[key] !== item) {
+                this.setState({
+                    [key] : item,
+                    hasLoaded : false
+                });
+            } else {
+                console.log("Same Variable selected, nothing to change.");
+            }
         }
     }
 
@@ -233,7 +265,6 @@ class App extends Component {
             }
         }
         console.log("DATA FILTERED");
-        console.log(filteredHospitals);
         let unfiltered = mapHospitals;
         let toDeriveYearsFrom = (this.state.view === 1) ? mapHospitals : regressionHospitals;
         this.setState({
@@ -255,7 +286,7 @@ class App extends Component {
         console.log("GETTING YEARS");
         const {name} = this.state[this.getViewSpecificVariable()];
         let maxYears = [], years, recent;
-        for (var i = 0; i < objects.length; i++) {
+        for (let i = 0; i < objects.length; i++) {
             years = Object.keys(objects[i].attributes[name]);
             maxYears = (years.length > maxYears.length) ? years : maxYears;
         }
@@ -278,7 +309,7 @@ class App extends Component {
                 v = (this.state.mapView === 1) ? "hospitalMapSelectedVariable" : "cantonMapSelectedVariable"
                 break;
             case 3:
-                v = "boxPlotSelectedVariable";
+                v = (this.state.graphView === 1) ? "boxPlotSelectedVariable" : "regressionSelectedVariableX";
                 break;
             default:
                 v = "hospitalMapSelectedVariable";
@@ -433,6 +464,8 @@ class App extends Component {
             hospitalMapSelectedVariable,
             cantonMapSelectedVariable,
             boxPlotSelectedVariable,
+            regressionSelectedVariableX,
+            regressionSelectedVariableY,
             mapHospitals,
             tableHospitals,
             boxPlotHospitals,
@@ -461,7 +494,7 @@ class App extends Component {
                 break;
             case 3:
                 viewSpecificObjects = (graphView === 1) ? boxPlotHospitals : filteredHospitals;
-                viewSpecificVariable = boxPlotSelectedVariable;
+                viewSpecificVariable = (graphView === 1) ? boxPlotSelectedVariable : [regressionSelectedVariableX, regressionSelectedVariableY];
                 break;
             default:
                 viewSpecificObjects = mapHospitals;
@@ -471,7 +504,8 @@ class App extends Component {
 
         if (hasLoaded) {
             console.log("DATA READY");
-            //console.log("PASSING VAR: " + viewSpecificVariable.name);
+            console.log("PASSING VAR: ")
+            console.log(viewSpecificVariable);
             console.log("PASSING OBJ: " + viewSpecificObjects.length);
             console.log("OBJ SAMPLE: ");
             console.log(viewSpecificObjects[0]);
@@ -498,7 +532,7 @@ class App extends Component {
         let slider;
 
         // display the slider only on Maps or Graphs and only if more than one year is available
-        if (years.length > 1 && view !== 2 && Object.keys(viewSpecificVariable).length !== 0) {
+        if (years.length > 1 && view !== 2 && Object.keys(viewSpecificVariable).length > 0) {
             slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
         }
 

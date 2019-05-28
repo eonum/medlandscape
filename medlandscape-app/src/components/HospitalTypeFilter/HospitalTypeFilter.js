@@ -14,7 +14,7 @@ class HospitalTypeFilter extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.selectedYear !== prevProps.selectedYear && prevProps.selectedYear !== "" && this.state.selectedValues.length > 0) {
+        if (this.props.selectedYear !== prevProps.selectedYear && this.state.selectedValues.length > 0) {
             console.log("hospitaltypefilterUpdate because of year");
             this.setAPIValues(this.state.selectedValues);
         }

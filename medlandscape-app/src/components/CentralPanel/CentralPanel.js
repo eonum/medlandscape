@@ -43,6 +43,20 @@ class CentralPanel extends Component {
         })
     }
 
+    requestLinRegData = (vars) => {
+        let requestedVars = "";
+
+        for (let variable of vars) {
+            requestedVars += variable.name + '$';
+        }
+        requestedVars += "Typ";
+        requestedVars = encodeURIComponent(requestedVars);
+        let query = "hospitals?variables=" + requestedVars;
+
+        console.log("FETCHING from CentralPanel");
+        this.props.fetchData(query);
+    }
+
 	/*sets the state of the generated to "not loaded"*/
     tableDataGenerated = () => {
         this.setState({
@@ -59,12 +73,15 @@ class CentralPanel extends Component {
     render() {
         const { objects, hasLoaded, selectedVariable, year, setVariable, setCSVData} = this.props;
         const { tableDataLoaded, } = this.state;
-        let hospitalVars = this.props.variables.filter(variable => {
-            return (variable.variable_model === "Hospital")
+        let tableVars = this.props.variables.filter((variable) => {
+            return (variable.variable_model === "Hospital");
         });
+        let regressionVars = tableVars.filter((variable) => {
+            return(variable.variable_type !== "enum" && variable.variable_type !== "string");
+        })
         let tableView = (
             <InteractiveTable
-                variables={hospitalVars}
+                variables={tableVars}
                 hospitals={objects}
                 requestData={this.requestTableData}
                 tableDataLoaded={tableDataLoaded}
@@ -87,11 +104,10 @@ class CentralPanel extends Component {
         let linReg = (
             <LinearRegression
                 hospitals={objects}
+                selectedVariable={selectedVariable}
                 setVariable={setVariable}
-                requestData={this.requestTableData}
-                tableDataLoaded={tableDataLoaded}
-                tableDataGenerated={this.tableDataGenerated}
-                variables={hospitalVars}
+                requestData={this.requestLinRegData}
+                variables={regressionVars}
                 year={year}
                 hasLoaded={hasLoaded}
             />
