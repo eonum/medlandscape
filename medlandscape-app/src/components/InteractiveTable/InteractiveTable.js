@@ -632,7 +632,7 @@ class InteractiveTable extends Component {
                 this.props.retriggerTableGeneration();
                 let yearDropdowns = document.getElementsByClassName('yearDropdown');
                 for (let d of yearDropdowns) {
-                    d.classList.toggle('showYearDropdown');
+                    d.classList.add('showYearDropdown');
                 }
             });
         }
