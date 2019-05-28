@@ -159,12 +159,12 @@ class Maps extends Component {
                 className="map"
         		center={[lat, lng]}
         		zoom={zoom}
-        		minZoom={8} // set minimum zoom level
+        		minZoom={6} // set minimum zoom level
         		maxZoom={16} // set maximum zoom level
 				zoomControl={false}
         	>
 				<ZoomControl
-					style="borderRadius=25px;"
+					style={"borderRadius=25px;"}
 					position="topright"
 				/>
 				<Control position="topright">
