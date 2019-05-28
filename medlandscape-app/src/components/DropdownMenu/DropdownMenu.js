@@ -14,20 +14,26 @@ class DropdownMenu extends Component {
     /**
     * toggleDropdown - toggles whether the DropdownMenu is opened or closed
     */
-    toggleDropdown() {
-        let allDropDowns = document.getElementsByClassName('dropdown-content');
+    toggleDropdown(e) {
+        //let allDropDowns = document.getElementsByClassName('dropdown-content');
         let thisDropDown = document.getElementById(this.props.id);
-        for (let i = 0; i < allDropDowns.length; i++) {
-            if (allDropDowns[i] === thisDropDown) {
-                allDropDowns[i].classList.toggle('show');
-            } else {
-                allDropDowns[i].classList.remove('show');
-            }
-        }
+
+        thisDropDown.classList.toggle('show');
+
         if (thisDropDown.classList.contains('show')) {
             thisDropDown.firstChild.focus();
         }
+        let addListener = function () {
+            console.log("removing dropdown");
+            thisDropDown.classList.remove('show');
+            document.removeEventListener("click", addListener);
+        }
+        e.stopPropagation();
+
+        document.addEventListener("click", addListener);
     }
+
+
 
     /**
     * selectItem - informs this.props.selectItem about the item that has been
