@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import './BoxPlot.css'
+import { withTranslation } from 'react-i18next';
+import { numberFormat } from './../../utils.mjs';
 import * as d3 from "d3";
 
 /**
@@ -99,16 +101,64 @@ class BoxPlot extends Component {
 		
 		let tickFormat = function(n){return n.toLocaleString()};
 		
-		//default tool tip function
-		let _tipFunction = function(d) {
-			return ' <span>'+
-					d.item.name+'</span>';
-		}
 	
 		// generate chart
 		let svg = d3.select("#boxplot").append("svg")
 			.attr("width", width)
             .attr("height", height);
+			
+			
+		// Its opacity is set to 0: we don't see it by default.
+     	var tooltip = d3.select("#boxplot")
+		    .append("div")
+		    .style("opacity", 0)
+		    .attr("class", "tooltip")
+		// add popup
+		this.addPopup();
+
+     	// function that changes  tooltip when the user hovers over a point.
+     	// opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+    	var mouseover = function(d) {
+       		d3.select("#boxplot .tooltip").style("opacity", 1)
+				.text(d.hospital.name);
+		}
+
+    	var mousemove = function(d) {
+       		d3.select("#boxplot .tooltip")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px");
+    	}
+
+		// close popup if you click outside
+		var func = function(e) {
+			d3.select("#boxplot .popup")
+				.style("display", "none");
+			document.removeEventListener("click", func);
+		}
+
+		var mouseclick = function(d) {
+       		d3.select("#boxplot .popup")
+				.style("display", "block")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px")
+			d3.select("#boxplot .popupName")
+				.text(d.hospital.name);
+			d3.select("#boxplot .popupAddress")
+				.html("<dd>" + d.hospital.street + ",</dd>" + d.hospital.city);
+			d3.select("#boxplot .popupVariable")
+				.text(numberFormat(d.value));
+
+			// prevent that the click event closes the popup
+			d3.event.stopPropagation();
+			document.addEventListener("click", func);
+    	}
+
+     	// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+    	var mouseleave = function(d) {
+       		d3.select("#boxplot .tooltip").transition()
+        		.duration(200)
+        		.style("opacity", 0)
+    	}
 
 		svg.append("g").append("rect")
 			.attr("width", width)
@@ -149,20 +199,24 @@ class BoxPlot extends Component {
 					.call(function(s) { // init + draw jitter
 						s.attr("class", "d3-exploding-boxplot point")
 							.attr("r", radius)
-							.attr("fill", color) //TODO Tooltip
+							.attr("fill", color)
 							.attr("cx", function(d){
 								return Math.floor(Math.random() * width);
 							})
 							.attr("cy",function(d){
 								return yscale(d.value)
 							})
+							.on("mouseover", mouseover)
+							.on("mousemove", mousemove)
+							.on("mouseleave", mouseleave)
+							.on("click", mouseclick);
 					});
 		let box = boxContent.append("g")
 			.attr("class", "d3-exploding-boxplot normal-points")
 			.append("g")
 				.attr("class", "d3-exploding-boxplot box")
 				.on("click", (d) => {
-					this.explode_boxplot(width, radius, color, yscale, quartiles, box_data);
+					this.explode_boxplot(width, radius, color, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick);
 				});
 		
 		//box
@@ -183,7 +237,7 @@ class BoxPlot extends Component {
 	}
 	
 	
-	explode_boxplot(width, radius, color, yscale, quartiles, box_data){
+	explode_boxplot(width, radius, color, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick){
 		var trans = d3.select("#boxplot").select("g.box").transition()
 				.ease(d3.easeBackIn)
 				.duration(300);
@@ -210,12 +264,10 @@ class BoxPlot extends Component {
 						s.attr('class','d3-exploding-boxplot point')
 							.attr('r',radius)
 							.attr('fill', color)
-							/*.call(function(s){
-								if(!s.empty()) 	//TODO Tooltip
-									tip(s)
-							})
-							.on('mouseover',tip.show)
-							.on('mouseout',tip.hide) */
+							.on("mouseover", mouseover)
+							.on("mousemove", mousemove)
+							.on("mouseleave", mouseleave)
+							.on("click", mouseclick);
 					})
 					.transition()
 					.ease(d3.easeBackOut)
@@ -303,7 +355,48 @@ class BoxPlot extends Component {
 				return yscale(quartiles[0])-yscale(quartiles[2])
 			})
 		this.drawBox(width, yscale, quartiles, min, max);
-	} 
+	}
+	
+	/**
+	* adding Popup
+	*/
+	addPopup = () =>{
+		var popup = d3.select("#boxplot")
+			.append("div")
+			.style("display", "none")
+			.attr("class", "popup");
+
+		var table = popup
+			.append("table");
+
+		var firstRow = table
+			.append("tr");
+		firstRow
+			.append("td")
+			.text(this.props.t("popup.hospital"));
+		firstRow
+			.append("td")
+			.attr("class", "popupName");
+
+		var secondRow = table
+			.append("tr");
+		secondRow
+			.append("td")
+			.text(this.props.t("popup.address"));
+		secondRow
+			.append("td")
+			.attr("class", "popupAddress");
+
+		var thirdRow = table
+			.append("tr");
+		thirdRow
+			.append("td")
+			.text(this.props.selectedVariable.text);
+		thirdRow
+			.append("td")
+			.attr("class", "popupVariable");
+	}
+	
 
 	render() {
 		return (
@@ -312,4 +405,5 @@ class BoxPlot extends Component {
 	}
 }
 
-export default BoxPlot;
+const LocalizedBoxPlot = withTranslation()(BoxPlot);
+export default LocalizedBoxPlot;
