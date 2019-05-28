@@ -2,14 +2,13 @@
     grid-row-start: 1;
 	grid-column-start: 2;
     align-self: start;
-    border-left: 1px solid black;
+    border-left: 2px solid white;
 }
 
 .hospitalSelector {
 	grid-row-start: 2;
 	grid-column-start: 1;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+    border-top: 2px solid white;
 }
 
 .btnGenerateTable {
