@@ -1,5 +1,3 @@
-import * as d3 from "d3";
-
 (function(factory){
 	if(typeof define === "function"  && define.amd)
 	{
@@ -452,5 +450,3 @@ function(d3,d3tip)
 }
 
 ));
-
-export default exploding_boxplot;

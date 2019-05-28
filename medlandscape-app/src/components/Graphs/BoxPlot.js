@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import exploding_boxplot from 'd3_exploding_boxplot'
 import './BoxPlot.css'
 import * as d3 from "d3";
 
@@ -7,10 +6,10 @@ import * as d3 from "d3";
 * BoxPlot is the entity we use to calculate and draw a boxplot from data given as props
 */
 class BoxPlot extends Component {
-
+	
 	componentDidUpdate(){
 		// draw a chart if the variable information has been loaded via api-call
-		if (this.props.hasLoaded)
+		if (this.props.hasLoaded && this.props.objects.length != 0)
 			{
 				this.drawChart();
 			}
@@ -26,7 +25,8 @@ class BoxPlot extends Component {
 		let values = item.attributes[varName];
 		let data = (values[this.props.year]);
 		
-		return {v: data, g: "box1", t: item.name};
+		return {value: data, hospital: item};
+		//return {v: data, g: "box1", t: item.name};
 	}
 
 	/**
@@ -40,8 +40,6 @@ class BoxPlot extends Component {
 			return (this.returnData(obj) !== undefined && obj.name !== "Ganze Schweiz");
 		});
 		
-		console.log(filteredArr);
-		
 		return filteredArr.map((item) => this.returnData(item));
 	}
 
@@ -49,23 +47,264 @@ class BoxPlot extends Component {
 	 * Draws a BoxPlot
 	 */
 	drawChart() {
+		let radius = 4;
+		let color = "red";
+		let height = 480;
+		let width = 600;
+		let boxpadding = 0.2;
+		let margin = {top:10,bottom:30,left:40,right:10};
+		
 		d3.select("#boxplot svg").remove();
 		
 		let data = this.makeDataArray();
 		
-		let chart = exploding_boxplot(data,
-            {y: "v", group: "g", color: "g", label: "t"});
+		// array only with values (selected variable)
+		let valueArr = data.map((d) => d.value).sort(d3.ascending);
 
-		//call chart on a div
-		chart("#boxplot");
+		// calculate the quartiles
+		let quartiles = [
+			d3.quantile(valueArr,0.25),
+			d3.quantile(valueArr,0.5),
+			d3.quantile(valueArr,0.75)
+		];
+		let iqr = (quartiles[2]-quartiles[0]) * 1.5;
+	
 		
-		//move the boxplot a bit, such that the scale is visible even for big numbers
-		d3.selectAll("#boxplot svg > g")
-			.attr("transform", "translate(100,40)");
-		//make the svg a bit bigger
-		d3.selectAll("#boxplot svg")
-			.attr("height", "570");
+		// calculate min and max and mark all outliers
+		let max = Number.MIN_VALUE;
+		let min = Number.MAX_VALUE;
+		
+		let box_data = d3.nest()
+			.key(function(d) {
+				let type = (d.value < quartiles[0] - iqr || d.value > quartiles[2] + iqr) ?
+					"outlier" : "normal";
+				
+				if(type == "normal" && (d.value < min || d.value > max)){
+					max = Math.max(max,d.value);
+					min = Math.min(min,d.value);
+				}
+				return type;
+             })
+			 .map(data);
+		
+		// add empty array if no outliers
+		if(!box_data["$outlier"])
+			box_data["$outlier"] = [];
+
+
+		let yscale = d3.scaleLinear()
+			.domain(d3.extent(data.map((d) => d.value)))
+			.nice()
+			.range([height-margin.top-margin.bottom,0]);
+		
+		
+		let tickFormat = function(n){return n.toLocaleString()};
+		
+		//default tool tip function
+		let _tipFunction = function(d) {
+			return ' <span>'+
+					d.item.name+'</span>';
+		}
+	
+		// generate chart
+		let svg = d3.select("#boxplot").append("svg")
+			.attr("width", width)
+            .attr("height", height);
+
+		svg.append("g").append("rect")
+			.attr("width", width)
+			.attr("height", height)
+			.style("color", "white")
+			.style("opacity", 0)
+			.on('dblclick', () => {this.implode_boxplot(width, yscale, quartiles, min, max);});
+
+
+		let container = svg.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+		let yAxis = d3.axisLeft(yscale).tickFormat(tickFormat);
+		
+		container.append("g")
+			.attr("class", "d3-exploding-boxplot y axis")
+            .call(yAxis)
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -margin.top-d3.mean(yscale.range()))
+            .attr("dy", ".71em")
+            .attr("y",-margin.left+5)
+            .style("text-anchor", "middle")
+            .text("ylab test");
+
+		container = container.insert("g",".axis");
+		
+		let boxContent = container.append("g")
+			.attr('class','d3-exploding-boxplot boxcontent');
+		
+		//create jitter
+		boxContent.append("g")
+				.attr("class", "d3-exploding-boxplot outliers-points")
+				.selectAll(".point")
+				.data(box_data["$outlier"])
+				.enter()
+					.append("circle")
+					.call(function(s) { // init + draw jitter
+						s.attr("class", "d3-exploding-boxplot point")
+							.attr("r", radius)
+							.attr("fill", color) //TODO Tooltip
+							.attr("cx", function(d){
+								return Math.floor(Math.random() * width);
+							})
+							.attr("cy",function(d){
+								return yscale(d.value)
+							})
+					});
+		let box = boxContent.append("g")
+			.attr("class", "d3-exploding-boxplot normal-points")
+			.append("g")
+				.attr("class", "d3-exploding-boxplot box")
+				.on("click", (d) => {
+					this.explode_boxplot(width, radius, color, yscale, quartiles, box_data);
+				});
+		
+		//box
+		box.append("rect").attr("class", "d3-exploding-boxplot box");
+		//median line
+		box.append("line").attr("class", "d3-exploding-boxplot median line");
+		//min line
+		box.append("line").attr("class","d3-exploding-boxplot min line hline");
+		//min vline
+		box.append("line").attr("class","d3-exploding-boxplot line min vline");
+		//max line
+		box.append("line").attr("class","d3-exploding-boxplot max line hline");
+		//max vline
+		box.append("line").attr("class","d3-exploding-boxplot line max vline");
+
+
+		this.drawBox(width, yscale, quartiles, min, max);
 	}
+	
+	
+	explode_boxplot(width, radius, color, yscale, quartiles, box_data){
+		var trans = d3.select("#boxplot").select("g.box").transition()
+				.ease(d3.easeBackIn)
+				.duration(300);
+		trans.select('rect.box')
+					.attr('x',width*0.5)
+					.attr('width',0)
+					.attr('y',yscale(quartiles[1]))
+					.attr('height',0)
+		//median line
+		trans.selectAll('line')
+					.attr('x1',width*0.5)
+					.attr('x2',width*0.5)
+					.attr('y1',yscale(quartiles[1]))
+					.attr('y2',yscale(quartiles[1]))
+				
+		d3.select("#boxplot").selectAll('.normal-points')
+				.selectAll('.point')
+				.data(box_data["$normal"])
+				.enter()
+					.append('circle')
+					.attr('cx',width*0.5)
+					.attr('cy',yscale(quartiles[1]))
+					.call(function(s) {
+						s.attr('class','d3-exploding-boxplot point')
+							.attr('r',radius)
+							.attr('fill', color)
+							/*.call(function(s){
+								if(!s.empty()) 	//TODO Tooltip
+									tip(s)
+							})
+							.on('mouseover',tip.show)
+							.on('mouseout',tip.hide) */
+					})
+					.transition()
+					.ease(d3.easeBackOut)
+					.delay(function(){
+						return 300+100*Math.random()
+					})
+					.duration(function(){
+						return 300+300*Math.random()
+					})
+					.call(function(s){
+						s.attr('cx',function(d){
+							return Math.floor(Math.random() * width);
+						})
+						.attr('cy',function(d){
+							return yscale(d.value);
+						})
+					});
+	}
+	
+	drawBox(width, yscale, quartiles, min, max) {
+		let box = d3.select("#boxplot").selectAll("g.box");
+		
+		box.select('rect.box')
+			.attr('x',0)
+			.attr('width',width)
+			.attr('y',yscale(quartiles[2]))
+			.attr('height', function(d){
+				return yscale(quartiles[0])-yscale(quartiles[2])
+			});
+		//median line
+		box.select('line.median')
+			.attr('x1',0).attr('x2',width)
+			.attr('y1',yscale(quartiles[1]))
+			.attr('y2',yscale(quartiles[1]));
+		//min line
+		box.select('line.min.hline')
+			.attr('x1',width*0.25)
+			.attr('x2',width*0.75)
+			.attr('y1',yscale(Math.min(min,quartiles[0])))
+			.attr('y2',yscale(Math.min(min,quartiles[0])));
+		//min vline
+		box.select('line.min.vline')
+			.attr('x1',width*0.5)
+			.attr('x2',width*0.5)
+			.attr('y1',yscale(Math.min(min,quartiles[0])))
+			.attr('y2',yscale(quartiles[0]));
+		//max line
+		box.select('line.max.hline')
+			.attr('x1',width*0.25)
+			.attr('x2',width*0.75)
+			.attr('y1',yscale(Math.max(max,quartiles[2])))
+			.attr('y2',yscale(Math.max(max,quartiles[2])));
+		//max vline
+		box.select('line.max.vline')
+			.attr('x1',width*0.5)
+			.attr('x2',width*0.5)
+			.attr('y1',yscale(quartiles[2]))
+			.attr('y2',yscale(Math.max(max,quartiles[2])));
+	}
+	
+	implode_boxplot(width, yscale, quartiles, min, max) {
+		d3.select("#boxplot").selectAll(".normal-points")
+			.selectAll('circle')
+			.transition()
+				.ease(d3.easeBackOut)
+				.duration(function(){
+						return 300+300*Math.random()
+				})
+				.attr(width*0.5)
+				.attr('cy',yscale(quartiles[1]))
+				.remove();
+
+
+		let trans = d3.select("#boxPlot").select('.boxcontent')
+			.transition()
+				.ease(d3.easeBackOut)
+				.duration(300)
+				.delay(200);
+		
+		trans.select('rect.box')
+			.attr('x',0)
+			.attr('width',width)
+			.attr('y',yscale(quartiles[2]))
+			.attr('height', function(d){
+				return yscale(quartiles[0])-yscale(quartiles[2])
+			})
+		this.drawBox(width, yscale, quartiles, min, max);
+	} 
 
 	render() {
 		return (
