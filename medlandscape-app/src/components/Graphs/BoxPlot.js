@@ -6,7 +6,7 @@ import * as d3 from "d3";
 * BoxPlot is the entity we use to calculate and draw a boxplot from data given as props
 */
 class BoxPlot extends Component {
-	
+
 	componentDidUpdate(){
 		// draw a chart if the variable information has been loaded via api-call
 		if (this.props.hasLoaded && this.props.objects.length != 0)
@@ -24,7 +24,7 @@ class BoxPlot extends Component {
 		let varName = this.props.selectedVariable.name;
 		let values = item.attributes[varName];
 		let data = (values[this.props.year]);
-		
+
 		return {value: data, hospital: item};
 		//return {v: data, g: "box1", t: item.name};
 	}
@@ -39,7 +39,6 @@ class BoxPlot extends Component {
 		let filteredArr = this.props.objects.filter((obj) => {
 			return (this.returnData(obj) !== undefined && obj.name !== "Ganze Schweiz");
 		});
-		
 		return filteredArr.map((item) => this.returnData(item));
 	}
 
@@ -55,7 +54,7 @@ class BoxPlot extends Component {
 		let margin = {top:10,bottom:30,left:40,right:10};
 		
 		d3.select("#boxplot svg").remove();
-		
+
 		let data = this.makeDataArray();
 		
 		// array only with values (selected variable)
