@@ -19,18 +19,20 @@ class DropdownMenu extends Component {
         let thisDropDown = document.getElementById(this.props.id);
 
         thisDropDown.classList.toggle('show');
-
         if (thisDropDown.classList.contains('show')) {
-            thisDropDown.firstChild.focus();
-        }
-        let addListener = function () {
-            console.log("removing dropdown");
-            thisDropDown.classList.remove('show');
-            document.removeEventListener("click", addListener);
-        }
-        e.stopPropagation();
+            if (thisDropDown.classList.contains('show')) {
+                thisDropDown.firstChild.focus();
+            }
+            let addListener = function () {
+                console.log("removing dropdown");
+                thisDropDown.classList.remove('show');
+                document.removeEventListener("click", addListener);
+            }
+            e.stopPropagation();
 
-        document.addEventListener("click", addListener);
+            document.addEventListener("click", addListener);
+        }
+
     }
 
 
