@@ -47,7 +47,7 @@ class Legend extends Component {
 					<div className="legend">
                         {
                             legendLines.map((line) => {
-                                return (<div key={legendLines.indexOf(line)} className="line"><div className="box" style={line.color}></div>{line.value}</div>)
+                                return (<div key={legendLines.indexOf(line)} className="line"><div className="legendBox" style={line.color}></div>{line.value}</div>)
                             })
                         }
 					</div>
