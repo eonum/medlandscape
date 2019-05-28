@@ -55,6 +55,15 @@ class LanguagePicker extends Component {
 }
 
 /**
+ * PropTypes:
+ *
+ * changeLanguage: Called when the language is changed.
+ */
+InteractiveTable.propTypes = {
+    changeLanguage: PropTypes.func.isRequired,
+}
+
+/**
  * Convert the component using withTranslation() to have access to t() function
  *  and other i18next props. Then export it.
  */
