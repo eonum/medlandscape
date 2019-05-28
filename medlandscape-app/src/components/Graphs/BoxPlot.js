@@ -361,6 +361,8 @@ class BoxPlot extends Component {
 	* adding Popup
 	*/
 	addPopup = () =>{
+		d3.select("#boxplot .popup").remove();
+		
 		var popup = d3.select("#boxplot")
 			.append("div")
 			.style("display", "none")
