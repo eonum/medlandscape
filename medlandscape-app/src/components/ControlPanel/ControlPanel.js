@@ -129,7 +129,7 @@ class ControlPanel extends Component {
 
     render() {
 
-        const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
+        const {t, hasLoaded, unfilteredHospitals, numberVars, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
         const {hospitalVars, cantonVars, enums, selectedEnum} = this.state;
 
         let selectedCantonVar, selectedHospitalVar;
