@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withTranslation } from "react-i18next";
 import './LanguagePicker.css'
 
@@ -59,7 +60,7 @@ class LanguagePicker extends Component {
  *
  * changeLanguage: Called when the language is changed.
  */
-InteractiveTable.propTypes = {
+LanguagePicker.propTypes = {
     changeLanguage: PropTypes.func.isRequired,
 }
 
