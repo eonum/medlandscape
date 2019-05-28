@@ -9,18 +9,11 @@
   shape-rendering: crispEdges;
 }
 
-.x.axis path {
-  /*display: none;*/
-}
-
-rect.d3-exploding-boxplot.box{
-  /*opacity: 0.8;*/
-}
 
 line.d3-exploding-boxplot.line,
 rect.d3-exploding-boxplot.box
 {
-  stroke: #888;
+  stroke: black;
   stroke-width: 2px;
 }
 
@@ -28,16 +21,6 @@ line.d3-exploding-boxplot.vline{
   stroke-dasharray:5,5;
 }
 
-.d3-exploding-boxplot.tip{
-  display:block;
-  position: absolute;
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: #333333;
-  color: #DDDDDD;
-  border-radius: 2px;
-}
 
 g.tick text,
 g.axis text{
@@ -56,7 +39,7 @@ g.axis text{
 }
 
 .line {
-    stroke: #E4002B;
+    stroke: black;
     fill: none;
     stroke-width: 3;
 }
@@ -66,7 +49,7 @@ g.axis text{
 }
 rect {
   stroke-width: 2;
-  fill: #E4002B;
+  fill: #1996fa;
 }
 
 .axis path,
@@ -87,8 +70,7 @@ rect {
 }
 
 .dot {
-    stroke: #293b47;
-    fill: #7A99AC
+    stroke: none;
 }
 
 div.tooltip {

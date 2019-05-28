@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import './BoxPlot.css'
+import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { numberFormat } from './../../utils.mjs';
+import { numberFormat, calculateCircleColor } from './../../utils.mjs';
 import * as d3 from "d3";
 
 /**
@@ -49,7 +50,6 @@ class BoxPlot extends Component {
 	 */
 	drawChart() {
 		let radius = 4;
-		let color = "red";
 		let height = 480;
 		let width = 600;
 		let boxpadding = 0.2;
@@ -104,7 +104,7 @@ class BoxPlot extends Component {
 	
 		// generate chart
 		let svg = d3.select("#boxplot").append("svg")
-			.attr("width", width)
+			.attr("width", width + 100)
             .attr("height", height);
 			
 			
@@ -133,7 +133,7 @@ class BoxPlot extends Component {
 		var func = function(e) {
 			d3.select("#boxplot .popup")
 				.style("display", "none");
-			 
+			document.removeEventListener("click", func);
 		}
 
 		var mouseclick = function(d) {
@@ -169,7 +169,7 @@ class BoxPlot extends Component {
 
 
 		let container = svg.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			.attr("transform", "translate(" + (margin.left + 40) + "," + margin.top + ")");
 		
 		let yAxis = d3.axisLeft(yscale).tickFormat(tickFormat);
 		
@@ -196,12 +196,12 @@ class BoxPlot extends Component {
 				.data(box_data["$outlier"])
 				.enter()
 					.append("circle")
-					.call(function(s) { // init + draw jitter
+					.call((s) => { // init + draw jitter
 						s.attr("class", "d3-exploding-boxplot point")
 							.attr("r", radius)
-							.attr("fill", color)
+							.style("fill", (d) => {return calculateCircleColor(d.hospital, this.props.year)})
 							.attr("cx", function(d){
-								return Math.floor(Math.random() * width);
+								return Math.floor(Math.random() * width * 0.8);
 							})
 							.attr("cy",function(d){
 								return yscale(d.value)
@@ -216,19 +216,28 @@ class BoxPlot extends Component {
 			.append("g")
 				.attr("class", "d3-exploding-boxplot box")
 				.on("click", (d) => {
-					this.explode_boxplot(width, radius, color, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick);
+					this.explode_boxplot(width, radius, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick);
 				});
 		
 		//box
-		box.append("rect").attr("class", "d3-exploding-boxplot box");
+		box.append("rect").attr("class", "d3-exploding-boxplot box")
 		//median line
-		box.append("line").attr("class", "d3-exploding-boxplot median line");
+		box.append("line").attr("class", "d3-exploding-boxplot median line")
+			.on("mouseover", () => {return mouseover({hospital:{name:this.props.t('boxPlot.median')}})})
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 		//min line
-		box.append("line").attr("class","d3-exploding-boxplot min line hline");
+		box.append("line").attr("class","d3-exploding-boxplot min line hline")
+			.on("mouseover", () => {return mouseover({hospital:{name:this.props.t('boxPlot.minimum')}})})
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 		//min vline
 		box.append("line").attr("class","d3-exploding-boxplot line min vline");
 		//max line
-		box.append("line").attr("class","d3-exploding-boxplot max line hline");
+		box.append("line").attr("class","d3-exploding-boxplot max line hline")
+			.on("mouseover", () => {return mouseover({hospital:{name:this.props.t('boxPlot.maximum')}})})
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 		//max vline
 		box.append("line").attr("class","d3-exploding-boxplot line max vline");
 
@@ -236,11 +245,14 @@ class BoxPlot extends Component {
 		this.drawBox(width, yscale, quartiles, min, max);
 	}
 	
-	
-	explode_boxplot(width, radius, color, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick){
+	/**
+	* explodes the boxplot according to the given parameters (hides the boxplot box and draws points)
+	*/
+	explode_boxplot(width, radius, yscale, quartiles, box_data, mouseover, mousemove, mouseleave, mouseclick){
 		var trans = d3.select("#boxplot").select("g.box").transition()
 				.ease(d3.easeBackIn)
 				.duration(300);
+		// hide boxplot box
 		trans.select('rect.box')
 					.attr('x',width*0.5)
 					.attr('width',0)
@@ -252,7 +264,7 @@ class BoxPlot extends Component {
 					.attr('x2',width*0.5)
 					.attr('y1',yscale(quartiles[1]))
 					.attr('y2',yscale(quartiles[1]))
-				
+		// add the points		
 		d3.select("#boxplot").selectAll('.normal-points')
 				.selectAll('.point')
 				.data(box_data["$normal"])
@@ -260,10 +272,10 @@ class BoxPlot extends Component {
 					.append('circle')
 					.attr('cx',width*0.5)
 					.attr('cy',yscale(quartiles[1]))
-					.call(function(s) {
+					.call((s) => {
 						s.attr('class','d3-exploding-boxplot point')
 							.attr('r',radius)
-							.attr('fill', color)
+							.style("fill", (d) => {return calculateCircleColor(d.hospital, this.props.year)})
 							.on("mouseover", mouseover)
 							.on("mousemove", mousemove)
 							.on("mouseleave", mouseleave)
@@ -279,7 +291,7 @@ class BoxPlot extends Component {
 					})
 					.call(function(s){
 						s.attr('cx',function(d){
-							return Math.floor(Math.random() * width);
+							return Math.floor(Math.random() * width * 0.8);
 						})
 						.attr('cy',function(d){
 							return yscale(d.value);
@@ -287,19 +299,26 @@ class BoxPlot extends Component {
 					});
 	}
 	
+	/**
+	* draws the boxplot box (according to the given parameters) 
+	*/
 	drawBox(width, yscale, quartiles, min, max) {
-		let box = d3.select("#boxplot").selectAll("g.box");
+		let box = d3.select("#boxplot").selectAll("g.box")
+			.transition()
+				.ease(d3.easeBackOut)
+				.duration(300)
+				.delay(200);
 		
 		box.select('rect.box')
-			.attr('x',0)
-			.attr('width',width)
+			.attr('x',width * 0.1)
+			.attr('width', width * 0.8)
 			.attr('y',yscale(quartiles[2]))
 			.attr('height', function(d){
 				return yscale(quartiles[0])-yscale(quartiles[2])
 			});
 		//median line
 		box.select('line.median')
-			.attr('x1',0).attr('x2',width)
+			.attr('x1',width * 0.1).attr('x2',width*0.9)
 			.attr('y1',yscale(quartiles[1]))
 			.attr('y2',yscale(quartiles[1]));
 		//min line
@@ -328,6 +347,9 @@ class BoxPlot extends Component {
 			.attr('y2',yscale(Math.max(max,quartiles[2])));
 	}
 	
+	/**
+	* hides the points and adds the boxplot box again
+	*/
 	implode_boxplot(width, yscale, quartiles, min, max) {
 		d3.select("#boxplot").selectAll(".normal-points")
 			.selectAll('circle')
@@ -358,7 +380,7 @@ class BoxPlot extends Component {
 	}
 	
 	/**
-	* adding Popup
+	* adds the popup div to the DOM
 	*/
 	addPopup = () =>{
 		d3.select("#boxplot .popup").remove();
@@ -406,6 +428,22 @@ class BoxPlot extends Component {
         )
 	}
 }
+
+/**
+ * PropTypes:
+ *
+ * objects: list of hospitals with data 
+ * selectedVariable:  selected variable
+ * year: selected year
+ * hasLoaded: bool that will be true if the data is loaded
+ */
+BoxPlot.propTypes = {
+	objects: PropTypes.array.isRequired,
+    selectedVariable: PropTypes.object.isRequired,
+    year: PropTypes.number.isRequired,
+    hasLoaded:PropTypes.bool.isRequired
+}
+
 
 const LocalizedBoxPlot = withTranslation()(BoxPlot);
 export default LocalizedBoxPlot;

@@ -59,5 +59,12 @@
         "psychiatry": "Psychiatrische Klinik",
         "rehabilitation": "Rehabilitationsklinik",
         "special": "Spezialklinik"
-    }
+    },
+	"boxPlot" : {
+		"median": "Median",
+		"upperQuartile": "Oberes Quartil",
+		"lowerQuartile": "Oberes Quartil",
+		"minimum": "Minimum",
+		"maximum": "Maximum"
+	}
 }

@@ -59,5 +59,12 @@
         "psychiatry": "Clinique psychiatrique",
         "rehabilitation": "Clinique de réadaptation",
         "special": "Clinique spécialisée"
-    }
+    },
+	"boxPlot" : {
+		"median": "médiane",
+		"upperQuartile": "quartile supérieur",
+		"lowerQuartile": "quartile inférieur",
+		"minimum": "minimum",
+		"maximum": "maximum",
+	},
 }
