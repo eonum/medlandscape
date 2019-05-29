@@ -182,6 +182,7 @@ class App extends Component {
     * @param  {Variable object} item The selected variable.
     */
     setVariable = (item) => {
+        console.log("setting variable: " + item.name);
         if (item.length === 2) {
             if (item[0] !== this.state.regressionSelectedVariableX || item[1] !== this.state.regressionSelectedVariableY) {
                 this.setState({
@@ -324,10 +325,8 @@ class App extends Component {
             view : view,
             hasLoaded : (view === 2)
         }, () => {
-            if (view === 1) {
-                this.filterOrSetYears(this.state.mapView, "mapView");
-            } else if (view === 3) {
-                this.filterOrSetYears(this.state.graphView, "graphView");
+            if (view !== 2) {
+                this.filteringOnViewChange();
             }
         })
     }
@@ -341,7 +340,7 @@ class App extends Component {
             mapView : view,
             hasLoaded : false
         }, () => {
-            this.filterOrSetYears(view, "mapView");
+            this.filteringOnViewChange();
         })
     }
 
@@ -354,30 +353,29 @@ class App extends Component {
             graphView : view,
             hasLoaded : false
         }, () => {
-            this.filterOrSetYears(view, "graphView");
+            this.filteringOnViewChange();
         });
     }
 
     /**
-     * Setter for the graphView state variable.
-     * @param {number} view The selected view.
-     * @param {String} viewType the type of view (mapView, graphView) that has been selected
+     * Decides if hospitals habe to be filtered depending on the change of view and the active tab on that view.
      */
-    filterOrSetYears = (view, viewType) => {
-        let viewNo;
-        let objects;
-        if (viewType === "mapView"){
-            viewNo = 1;
-            objects = (view === 1) ? this.state.mapHospitals : this.state.cantons;
-        }
-        if (viewType === "graphView"){
-            viewNo = 2;
-            objects = (view === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
-        }
-        if (view === viewNo) {
-            this.filterHospitals(true);
-        } else {
-            this.setYears(objects);
+    filteringOnViewChange = () => {
+        let view = this.state.view;
+
+        if (view === 1) {
+            if (this.state.mapView === 1) {
+                this.filterHospitals(true);
+            } else {
+                console.log("setting years for cantons");
+                this.setYears(this.state.cantons);
+            }
+        } else if (view === 3) {
+            if (this.state.graphView === 1) {
+                this.setYears(this.state.boxPlotHospitals);
+            } else {
+                this.filterHospitals(true);
+            }
         }
     }
 
@@ -386,7 +384,7 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setHospitalsByEnums = (selectedHospitals) => {
-        this.setHospitals(selectedHospitals, "hospitalsByEnums");
+        this.setFilterHospitals(selectedHospitals, "hospitalsByEnums");
     }
 
     /**
@@ -394,7 +392,7 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setHospitalsByType = (selectedHospitals) => {
-        this.setHospitals(selectedHospitals, "hospitalsByType");
+        this.setFilterHospitals(selectedHospitals, "hospitalsByType");
     }
 
     /**
@@ -402,7 +400,7 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setLinRegHospitalsByType = (selectedHospitals) => {
-        this.setHospitals(selectedHospitals, "linRegHospitalsByType");
+        this.setFilterHospitals(selectedHospitals, "linRegHospitalsByType");
     }
 
     /**
@@ -410,7 +408,7 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      * @param {String} stateVar the state variable to be set
      */
-    setHospitals = (selectedHospitals, stateVar) => {
+    setFilterHospitals = (selectedHospitals, stateVar) => {
         let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
             [stateVar] : selectedHospitals,
@@ -490,7 +488,7 @@ class App extends Component {
                 break;
         }
 
-        // render the central panel if not on mapView
+        // renders the central panel if not on mapView
         let centralPanel = (view !== 1)
             ? (
                 <CentralPanel
