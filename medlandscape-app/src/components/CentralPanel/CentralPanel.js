@@ -8,16 +8,20 @@ import './centralPanel.css'
 /**
 * CentralPanel-Component that contains a field which is used to displayed
 * the InteractiveTable, BoxPlot and LinearRegression
-*
 */
-
 class CentralPanel extends Component {
 
     state = {
         tableDataLoaded : false
     }
 
-	/* requests the Data tha is going to be used in the table component, depending on the selected Variable */
+	/**
+     * requestTableData - requests the Data tha is going to be used in the
+     *      table component, depending on the selected Variable
+     *
+     * @param {array} vars variables to request data of
+     * @param {function} callback function that is called when request finished
+     */
     requestTableData = (vars, callback) => {
         let requestedVars = "";
 
@@ -34,8 +38,6 @@ class CentralPanel extends Component {
         requestedVars = encodeURIComponent(requestedVars);
 
         let query = "hospitals?variables=" + requestedVars;
-
-        console.log("FETCHING from CentralPanel");
         this.props.fetchData(query).then(() => {
             this.setState({
                 tableDataLoaded : true
@@ -43,6 +45,12 @@ class CentralPanel extends Component {
         })
     }
 
+    /**
+     *  requestLinRegData - requests the Data tha is going to be used in the
+     *      table component, depending on the selected Variable
+     *
+     * @param {array} vars variables to request data of
+     */
     requestLinRegData = (vars) => {
         let requestedVars = "";
 
@@ -52,24 +60,32 @@ class CentralPanel extends Component {
         requestedVars += "Typ";
         requestedVars = encodeURIComponent(requestedVars);
         let query = "hospitals?variables=" + requestedVars;
-
-        console.log("FETCHING from CentralPanel");
         this.props.fetchData(query);
     }
 
-	/*sets the state of the generated to "not loaded"*/
+	/**
+     *  tableDataGenerated - sets the state of the generated to "not loaded"
+     */
     tableDataGenerated = () => {
         this.setState({
             tableDataLoaded : false
         });
     }
-	/*sets the state of the generated to "loaded"*/
+	/*
+    * retriggerTableGeneration - sets the state of the generated to "loaded"
+    *   informs the table to regenerate
+    */
     retriggerTableGeneration = () => {
         this.setState({
             tableDataLoaded : true
         });
     }
 
+    /**
+     * render - renders the component
+     *
+     * @return {JSX}  jsx of the component     
+     */
     render() {
         const { objects, hasLoaded, selectedVariable, year, setVariable, setCSVData} = this.props;
         const { tableDataLoaded, } = this.state;
