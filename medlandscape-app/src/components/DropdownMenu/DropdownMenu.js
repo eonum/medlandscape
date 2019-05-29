@@ -15,7 +15,6 @@ class DropdownMenu extends Component {
     * toggleDropdown - toggles whether the DropdownMenu is opened or closed
     */
     toggleDropdown(e) {
-        //let allDropDowns = document.getElementsByClassName('dropdown-content');
         let thisDropDown = document.getElementById(this.props.id);
 
         thisDropDown.classList.toggle('show');
@@ -24,7 +23,6 @@ class DropdownMenu extends Component {
                 thisDropDown.firstChild.focus();
             }
             let addListener = function () {
-                console.log("removing dropdown");
                 thisDropDown.classList.remove('show');
                 document.removeEventListener("click", addListener);
             }
@@ -32,7 +30,6 @@ class DropdownMenu extends Component {
 
             document.addEventListener("click", addListener);
         }
-
     }
 
 
@@ -113,14 +110,21 @@ class DropdownMenu extends Component {
 /**
 * PropTypes
 *
+* id: used as a CSS id to know which dropdown should be opened or closed
+*   and as well for finding out which called the selectItem method (see blow)
+*   Should be unique.
 * listItems: an array containing all list items of the menu
 * selectItem: a function that will be called to inform the parent of the item
 *  that was selected
 * selectedItem: an object that represents the selected item
+* defaultText: text to be shown when no item was selected.
 */
 DropdownMenu.propTypes = {
     listItems: PropTypes.array.isRequired,
     selectItem: PropTypes.func.isRequired,
+    selectedItem: PropTypes.object,
+    defaultText: PropTypes.string,
+    id: PropTypes.string.isRequired
 }
 
 const LocalizedDropdownMenu = withTranslation()(DropdownMenu);
