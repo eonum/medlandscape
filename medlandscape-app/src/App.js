@@ -10,6 +10,15 @@ import Slider from './components/Slider/Slider.js'
 const apiURL = "https://qm1.ch/";
 let apiRequest = "/api/medical_landscape/";
 
+/**
+ * Represents the brain of the application
+ * making API calls and distributing data to and from filters and data displaying components
+ *
+ * The state holds all variables, hospital and canton objects,
+ * the selected variables for each view,
+ * the selected view, results of filters, the available years,
+ * the chosen year, CSV data as well as the information that data has been loaded
+*/
 class App extends Component {
 
     state = {
@@ -110,7 +119,7 @@ class App extends Component {
                 let currentVariable = this.state[currentVariableKey];
                 let translatedCurrentVariable = currentVariable; // as fallback, this makes sure nothing changes
                 if (Object.keys(currentVariable).length > 0) { // making sure that currentVariable.name exists
-                    for (var i = 0; i < results.length; i++) {
+                    for (let i = 0; i < results.length; i++) {
                         if (results[i].name === currentVariable.name) {
                             translatedCurrentVariable = results[i];
                         }
@@ -126,7 +135,7 @@ class App extends Component {
                 let translatedCurrentVariable = currentVariable;
                 let translatedCurrentVariable2 = currentVariable2;
                 if (Object.keys(currentVariable).length > 0 && Object.keys(currentVariable2).length > 0) { // making sure that currentVariable.name exists
-                    for (var i = 0; i < results.length; i++) {
+                    for (let i = 0; i < results.length; i++) {
                         if (results[i].name === currentVariable.name) {
                             translatedCurrentVariable = results[i];
                         } else if (results[i].name === currentVariable2.name){
@@ -259,7 +268,7 @@ class App extends Component {
     }
 
     /**
-     * Returns list of available years in given objects for selected Variable.
+     * Setting state.years to list of available years in given objects for selected Variable
      * @param {Object} objects Cantons/Hospitals
      */
     setYears = (objects) => {
@@ -316,19 +325,9 @@ class App extends Component {
             hasLoaded : (view === 2)
         }, () => {
             if (view === 1) {
-                let objects = (this.state.mapView === 1) ? this.state.mapHospitals : this.state.cantons
-                if (this.state.mapView === 1) {
-                    this.filterHospitals(true);
-                } else {
-                    this.setYears(objects);
-                }
+                this.filterOrSetYears(this.state.mapView, "mapView");
             } else if (view === 3) {
-                let objects = (this.state.graphView === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
-                if (this.state.graphView === 2) {
-                    this.filterHospitals(true);
-                } else {
-                    this.setYears(objects);
-                }
+                this.filterOrSetYears(this.state.graphView, "graphView");
             }
         })
     }
@@ -342,12 +341,7 @@ class App extends Component {
             mapView : view,
             hasLoaded : false
         }, () => {
-            let objects = (view === 1) ? this.state.mapHospitals : this.state.cantons;
-            if (view === 1) {
-                this.filterHospitals(true);
-            } else {
-                this.setYears(objects);
-            }
+            this.filterOrSetYears(view, "mapView");
         })
     }
 
@@ -360,13 +354,31 @@ class App extends Component {
             graphView : view,
             hasLoaded : false
         }, () => {
-            let objects = (view === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
-            if (view === 2) {
-                this.filterHospitals(true);
-            } else {
-                this.setYears(objects);
-            }
+            this.filterOrSetYears(view, "graphView");
         });
+    }
+
+    /**
+     * Setter for the graphView state variable.
+     * @param {number} view The selected view.
+     * @param {String} viewType the type of view (mapView, graphView) that has been selected
+     */
+    filterOrSetYears = (view, viewType) => {
+        let viewNo;
+        let objects;
+        if (viewType === "mapView"){
+            viewNo = 1;
+            objects = (view === 1) ? this.state.mapHospitals : this.state.cantons;
+        }
+        if (viewType === "graphView"){
+            viewNo = 2;
+            objects = (view === 1) ? this.state.boxPlotHospitals : this.state.regressionHospitals;
+        }
+        if (view === viewNo) {
+            this.filterHospitals(true);
+        } else {
+            this.setYears(objects);
+        }
     }
 
     /**
@@ -374,15 +386,7 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setHospitalsByEnums = (selectedHospitals) => {
-        let isEmpty = !(selectedHospitals.length > 0);
-        this.setState({
-            hospitalsByEnums : selectedHospitals,
-            hasLoaded : false
-        }, () => {
-            if (!isEmpty) {
-                this.filterHospitals(false);  // years do not need to be updated
-            }
-        })
+        this.setHospitals(selectedHospitals, "hospitalsByEnums");
     }
 
     /**
@@ -390,40 +394,56 @@ class App extends Component {
      * @param {Array} selectedHospitals The selected hospitals.
      */
     setHospitalsByType = (selectedHospitals) => {
-        let isEmpty = !(selectedHospitals.length > 0);
-        this.setState({
-            hospitalsByType : selectedHospitals,
-            hasLoaded : false
-        }, () => {
-            if (!isEmpty) {
-                this.filterHospitals(false); // years do not need to be updated
-            }
-        })
+        this.setHospitals(selectedHospitals, "hospitalsByType");
     }
 
+    /**
+     * Set LinRegHospitalsByType to selected Hospital Type
+     * @param {Array} selectedHospitals The selected hospitals.
+     */
     setLinRegHospitalsByType = (selectedHospitals) => {
+        this.setHospitals(selectedHospitals, "linRegHospitalsByType");
+    }
+
+    /**
+     * Set given state variable to selected hospitals
+     * @param {Array} selectedHospitals The selected hospitals.
+     * @param {String} stateVar the state variable to be set
+     */
+    setHospitals = (selectedHospitals, stateVar) => {
         let isEmpty = !(selectedHospitals.length > 0);
         this.setState({
-            linRegHospitalsByType : selectedHospitals,
+            [stateVar] : selectedHospitals,
             hasLoaded : false
         }, () => {
             if (!isEmpty) {
-                console.log("UPDATING filterhospitals from setHospitalsByType");
                 this.filterHospitals(false); // years do not need to be updated
             }
         })
     }
 
+    /**
+     * Set CSV data
+     * @param {2D Array} data the csv data.
+     */
     setCSVData = (data) => {
         this.setState({
             csvData : data
         })
     }
 
+    /**
+     * is invoked immediately after the component is mounted
+     * makes intitial API call
+     */
     componentDidMount() {
         this.initApiCall();
     }
 
+    /**
+     * render - renders the component to the screen
+     * @return {JSX}  JSX of the component
+    */
     render() {
         const {
             variables,
@@ -470,6 +490,7 @@ class App extends Component {
                 break;
         }
 
+        // render the central panel if not on mapView
         let centralPanel = (view !== 1)
             ? (
                 <CentralPanel
@@ -489,12 +510,10 @@ class App extends Component {
         ;
 
         let slider;
-
         // display the slider only on Maps or Graphs and only if more than one year is available
         if (years.length > 1 && view !== 2 && Object.keys(viewSpecificVariable).length > 0) {
             slider = (<Slider years={years} selectedYear={selectedYear} setYear={this.setYear} hasLoaded={hasLoaded}/>);
         }
-
 
         return (
 			<div className="App">
@@ -530,7 +549,6 @@ class App extends Component {
                     <LanguagePicker changeLanguage={this.changeLanguage} />
                     {slider}
                 </div>
-
 			</div>
         );
     }
