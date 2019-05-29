@@ -272,12 +272,14 @@ class App extends Component {
      * @param {Object} objects Cantons/Hospitals
      */
     setYears = (objects) => {
-        const {name} = this.state[this.getViewSpecificVariable()];
+        const {name, is_time_series} = this.state[this.getViewSpecificVariable()];
         let maxYears = [], years, recent;
         for (let i = 0; i < objects.length; i++) {
             if (objects[i].attributes[name] !== null) {
-                years = Object.keys(objects[i].attributes[name]);
-                maxYears = (years.length > maxYears.length) ? years : maxYears;
+                if (is_time_series) {
+                    years = Object.keys(objects[i].attributes[name]);
+                    maxYears = (years.length > maxYears.length) ? years : maxYears;
+                }
             }
         }
         recent = maxYears.length - 1;
