@@ -51,10 +51,10 @@ class MapInfo extends Component {
  * nrOfObjects: Displays how many Hospitals or Cantons are currently displayed
  */
  MapInfo.propTypes = {
-	 mapView: PropTypes.func.isRequired,
+	 mapView: PropTypes.number.isRequired,
 	 hasLoaded: PropTypes.bool.isRequired,
-	 year: PropTypes.func.isRequired,
-	 selectedVariable: PropTypes.object.isRequired,
+	 year: PropTypes.string.isRequired,
+	 selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 	 nrOfObjects: PropTypes.number.isRequired,
 	 t: PropTypes.func.isRequired
  }
