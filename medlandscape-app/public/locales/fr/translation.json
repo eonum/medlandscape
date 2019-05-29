@@ -65,6 +65,6 @@
 		"upperQuartile": "quartile supérieur",
 		"lowerQuartile": "quartile inférieur",
 		"minimum": "minimum",
-		"maximum": "maximum",
-	},
+		"maximum": "maximum"
+	}
 }
