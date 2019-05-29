@@ -6,6 +6,7 @@ import VariableSelector from './VariableSelector/VariableSelector.js';
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import ResultTable from './ResultTable/ResultTable.js';
 import update from 'immutability-helper';
+import * as d3 from "d3";
 import { withTranslation } from 'react-i18next';
 
 /**
@@ -22,7 +23,7 @@ class InteractiveTable extends Component {
      * constructor - initializes the component by calling the superclass's
      *  constructor and setting the inital state
      *
-     * @param  {ojbect} props props handed over by parent component
+     * @param  {object} props handed over by parent component
      */
     constructor(props) {
         super(props)
@@ -137,7 +138,7 @@ class InteractiveTable extends Component {
      */
     addHospital = () => {
         let nextHospId = this.state.nextHospitalId + "";
-        let hosp = this.createNewHospital(undefined, nextHospId);
+        let hosp = this.createNewHospital(nextHospId);
 
         // splits the next id ('var-x') into 'var' and 'x' and increments 'x'
         let hosp_id_parts = nextHospId.split("-");
@@ -165,7 +166,7 @@ class InteractiveTable extends Component {
         let nextHospId = this.state.nextHospitalId + "";
 
         for (let hosp of this.props.hospitals) {
-            let data = this.createNewHospital(hosp, nextHospId);
+            let data = this.createNewHospital(nextHospId, hosp);
 
             selectedHosps.push(hosp);
             hospDropdowns.push(data[1]);
@@ -188,16 +189,13 @@ class InteractiveTable extends Component {
      *  selectedVariable which is undefined by default, but can be set using
      *  the parameter selectedHosp
      *
-     * @param {Object} selectedHosp the hospital that will be selected by default
+	 * @param {String} id of the new hospitalDropdown 
+     * @param {Object} newSelectedHospital the hospital that will be selected by default
      *
      * @return {Array} Array containing the selectedHospital variable at index 0
      *  and the new dropdown at index 1
      */
-    createNewHospital = (selectedHosp, id) => {
-        let newSelectedHospital = undefined;
-        if (selectedHosp) {
-            newSelectedHospital = selectedHosp;
-        }
+    createNewHospital = (id, newSelectedHospital) => {
         let newDropdown = (
             <div className='hospitalDropdown selectionElement' key={id}>
                 <DropdownMenu id={id}
@@ -219,26 +217,20 @@ class InteractiveTable extends Component {
      * @param {String} senderId Id of the dropdown that should be removed
      */
     subtractHospital = (senderId) => {
-        let index;
-
-		for (let hD of this.state.hospitalDropdowns) {
-			if (hD.props.children[0].props.id === senderId) {
-				index = this.state.hospitalDropdowns.indexOf(hD);
-                break;
-			}
-		}
-
-        let updSelHos1 = this.state.selectedHospitals.slice(0, index);
-        let updSelHos2 = this.state.selectedHospitals.slice(index + 1, this.state.selectedHospitals.length);
-        let updSelHos = updSelHos1.concat(updSelHos2);
-
-        let updHosDrp1 = this.state.hospitalDropdowns.slice(0, index);
-        let updHosDrp2 = this.state.hospitalDropdowns.slice(index + 1, this.state.hospitalDropdowns.length);
-        let updHosDrp = updHosDrp1.concat(updHosDrp2);
-
+		// findIndex does the same as indexOf for arrays, but with a function as input
+		let index = this.state.hospitalDropdowns
+			.findIndex((item) => {return item.props.children[0].props.id === senderId});
+		
+		let newSelectedHospitals = [...this.state.selectedHospitals]; // create a copy of the arrays (React state immutable)
+		let newHospitalDropDowns = [...this.state.hospitalDropdowns];
+		
+		// remove the hospital
+		newSelectedHospitals.splice(index,1);
+		newHospitalDropDowns.splice(index,1);
+		
         this.setState({
-			selectedHospitals: updSelHos,
-			hospitalDropdowns: updHosDrp
+			selectedHospitals: newSelectedHospitals,
+			hospitalDropdowns: newHospitalDropDowns
 		});
         this.selectionChanged();
     }
@@ -254,14 +246,10 @@ class InteractiveTable extends Component {
      * @param {String} senderId Id of the dropdown that selected something
      */
     selectHospital = (item, senderId) => {
-        let index;
-
-        for (let hD of this.state.hospitalDropdowns) {
-            if (hD.props.children[0].props.id === senderId) {
-                index = this.state.hospitalDropdowns.indexOf(hD);
-                break;
-            }
-        }
+		// findIndex does the same as indexOf for arrays, but with a function as input
+		let index = this.state.hospitalDropdowns
+			.findIndex((item) => {return item.props.children[0].props.id === senderId});
+		
 
         this.setState({
             // selectedHospitals : newList
@@ -342,13 +330,10 @@ class InteractiveTable extends Component {
      *  the state and retriggers table generation.
      */
     selectYear = (item, senderId) => {
-        let index;
-        for (let yD of this.state.variableDropdowns) {
-            if (yD.props.children[4].props.children.props.id === senderId) {
-                index = this.state.variableDropdowns.indexOf(yD);
-                break;
-            }
-        }
+		// findIndex does the same as indexOf for arrays, but with a function as input
+		let index = this.state.variableDropdowns
+			.findIndex((item) => {return item.props.children[4].props.children.props.id === senderId});
+	
         let selectedYear;
         if (this.state.selectedVariables[index].is_time_series) {
             selectedYear = Number(item.name);
@@ -372,26 +357,19 @@ class InteractiveTable extends Component {
      * @param {String} senderId Id of the dropdown that should be removed
      */
     subtractVariable = (senderId) => {
-        let index;
+		// findIndex does the same as indexOf for arrays, but with a function as input
+		let index = this.state.variableDropdowns
+			.findIndex((item) => {return item.props.children[0].props.id === senderId});
 
-		for (let vD of this.state.variableDropdowns) {
-			if (vD.props.children[0].props.id === senderId) {
-				index = this.state.variableDropdowns.indexOf(vD);
-                break;
-			}
-		}
-
-        let updSelVar1 = this.state.selectedVariables.slice(0, index);
-        let updSelVar2 = this.state.selectedVariables.slice(index + 1, this.state.selectedVariables.length);
-        let updSelVar = updSelVar1.concat(updSelVar2);
-
-        let updVarDrp1 = this.state.variableDropdowns.slice(0, index);
-        let updVarDrp2 = this.state.variableDropdowns.slice(index + 1, this.state.variableDropdowns.length);
-        let updVarDrp = updVarDrp1.concat(updVarDrp2);
+		let newSelectedVariables = [...this.state.selectedVariables]; //create new copies of the arrays
+		let newVariableDropdowns = [...this.state.variableDropdowns];
+		
+		newSelectedVariables.splice(index,1);
+		newVariableDropdowns.splice(index,1);
 
         this.setState({
-			selectedVariables: updSelVar,
-			variableDropdowns: updVarDrp
+			selectedVariables: newSelectedVariables,
+			variableDropdowns: newVariableDropdowns
 		});
         this.selectionChanged();
     }
@@ -447,14 +425,11 @@ class InteractiveTable extends Component {
      */
     sortHospitals = (senderId, order) => {
         // first get the whole variable object using the senderId
-        let senderIndex;
-
-		for (let vD of this.state.variableDropdowns) {
-			if (vD.props.children[0].props.id === senderId) {
-				senderIndex = this.state.variableDropdowns.indexOf(vD);
-			}
-		}
-
+		
+		// findIndex does the same as indexOf for arrays, but with a function as input
+		let senderIndex = this.state.variableDropdowns
+			.findIndex((item) => {return item.props.children[0].props.id === senderId});
+		
         let variable = this.state.selectedVariables[senderIndex];
 
         // then create an array containing arrays of length 2 that contain the
@@ -481,23 +456,12 @@ class InteractiveTable extends Component {
                 }
                 referenceArr.push([i, value]);
             }
-
-            // then sort this array according to the value on the variable
-            const sortFunction = (
-                function sortFunction(a, b) {
-                    if (a[1] === b[1]) { return 0; }
-                    else {
-                        if (order === 'asc') {
-                            return (a[1] < b[1]) ? -1 : 1;
-                        }
-                        else {
-                            return (a[1] > b[1]) ? -1 : 1;
-                        }
-                    }
-                }
-            );
-
-            referenceArr.sort(sortFunction);
+			
+			// use the d3 sorting functions to sort referenceArr
+			if(order === "asc")
+				referenceArr.sort(function(a, b){ return d3.ascending(a[1], b[1]);});
+			else
+				referenceArr.sort(function(a, b){ return d3.descending(a[1], b[1]);});
 
             // according to the indices in the referenceArr, fill new sorted arrays
             // for dropdowns and selected hospitals
