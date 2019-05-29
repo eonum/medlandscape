@@ -54,8 +54,8 @@
     },
     "hospitalTypes": {
         "university": "Hôpital universitaire",
-        "generic-center": "Hôpital de soins généraux, prise en charge centralisée",
-        "generic-basic": "Hôpital de soins généraux, soins de base",
+        "generic-center": "Hôpital général, soins centralisée",
+        "generic-basic": "Hôpital général, soins de base",
         "psychiatry": "Clinique psychiatrique",
         "rehabilitation": "Clinique de réadaptation",
         "special": "Clinique spécialisée"

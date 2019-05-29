@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import FilterEditor from '../FilterEditor/FilterEditor.js';
 import HospitalTypeFilter from '../HospitalTypeFilter/HospitalTypeFilter.js';
-import { withTranslation } from 'react-i18next';
 import { CSVLink } from "react-csv";
+import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import './ControlPanel.css'
 
 /**
@@ -143,8 +144,6 @@ class ControlPanel extends Component {
         const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
         const {hospitalVars, cantonVars, numberVars, enums, selectedEnum} = this.state;
 
-        let selectedCantonVar, selectedHospitalVar;
-
         let mapViewHospitals = (
             <div className="mapViewHospitals">
                 <HospitalTypeFilter
@@ -282,6 +281,49 @@ class ControlPanel extends Component {
 			</div>
         );
     }
+}
+
+
+/**
+ * PropTypes:
+ *
+ * variables: An array of variable objects.
+ * setVariable: A function that passes the newly selected Variable to the parent component.
+ * selectedVariable: A variable object (or array of two objects) that represent the currently selected Variable.
+ * fetchData: A function that is called when new data is needed from the API.
+ * unfilteredHospitals: A complete list of all (-> "unfiltered") hospital objects in an array.
+ * filteredByEnum: A function that passes a list of hospital objects filtered by enum to the parent component.
+ * filteredByType: A function that passes a list of hospital objects filtered by Type to the parent component (when in Map view).
+ * filteredLinRegByType: A function that passes a list of hospital objects filtered by Type to the parent component (when in Graph view).
+ * year: The currently selected year.
+ * hasLoaded: A boolean that signifies that all data has been fetched by the API and is ready to be manipulated.
+ * view: A number that represents the currently selected view (Map, Table, Graph)
+ * setView: A function that passes the newly selected view to the parent component.
+ * mapView: A number that represents the currently selected tab on the Map view.
+ * setMapView: A function that passes the newly selected Map view to the parent component
+ * graphView: A number that represents the currently selected tab on the Graph view.
+ * setGraphView: A function that passes the newly selected Graph view to the parent component.
+ * csvData: An array that represents the data shown in the table when on Table view, to export as CSV.
+ */
+
+ControlPanel.propTypes = {
+    variables: PropTypes.array.isRequired,
+    setVariable: PropTypes.func.isRequired,
+    selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+    fetchData: PropTypes.func.isRequired,
+    unfilteredHospitals: PropTypes.array.isRequired,
+    filterByEnum: PropTypes.func.isRequired,
+    filterByType: PropTypes.func.isRequired,
+    filterLinRegByType: PropTypes.func.isRequired,
+    year: PropTypes.string.isRequired,
+    hasLoaded: PropTypes.bool.isRequired,
+    view: PropTypes.number.isRequired,
+    setView: PropTypes.func.isRequired,
+    mapView: PropTypes.number.isRequired,
+    setMapView: PropTypes.func.isRequired,
+    graphView: PropTypes.number.isRequired,
+    setGraphView: PropTypes.func.isRequired,
+    csvData: PropTypes.array.isRequired,
 }
 
 /**

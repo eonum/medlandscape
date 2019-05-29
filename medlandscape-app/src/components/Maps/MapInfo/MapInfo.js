@@ -21,7 +21,7 @@ class MapInfo extends Component {
         if (Object.keys(selectedVariable).length !== 0) {
             selectedVar = t('mapInfo.variable') +  ": " + selectedVariable.text;
             if (hasLoaded) {
-                yearInfo = t('mapInfo.year') + ": " + year;
+                yearInfo = (year.length > 0) ? t('mapInfo.year') + ": " + year : "";
                 filterInfo = t('mapInfo.filter') + " " + selectedMap + ": " + nrOfObjects;
             }
         } else {

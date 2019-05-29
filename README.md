@@ -16,7 +16,7 @@ The newest Version is ready to be downloaded at: https://nodejs.org/en/download/
 
 For the installation follow the instructions on the site or from the installer.
 
-After installing node.js  and before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory, where you have saved the application. Move into the *"medlandscape-app"* folder and enter:
+After installing node.js  and before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory, where you have saved the application and enter:
 
 ### `npm -g install`
 

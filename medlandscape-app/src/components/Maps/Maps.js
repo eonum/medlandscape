@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Map, TileLayer, ZoomControl } from 'react-leaflet';
-import './Maps.css';
 import Control from 'react-leaflet-control';
 import MapInfo from './MapInfo/MapInfo.js';
 import HospitalMap from './HospitalMap/HospitalMap.js';
 import CantonMap from './CantonMap/CantonMap.js';
+import PropTypes from 'prop-types';
+import './Maps.css';
 
 /**
 * Maps is the entity we use to draw a map.
@@ -34,7 +34,7 @@ class Maps extends Component {
         let varName = this.props.selectedVariable.name;
 		let values = item.attributes[varName];
 		let data;
-		if (values !== undefined) {
+		if (values !== undefined && values !== null) {
 			data = (values[this.props.year]) ? values[this.props.year] : "noValue";
 		} else {
 			data = "noVariable"

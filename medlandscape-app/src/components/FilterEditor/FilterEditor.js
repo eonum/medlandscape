@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.js';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
+import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import './FilterEditor.css'
 
@@ -170,6 +171,30 @@ class FilterEditor extends Component {
 			</div>
         );
     }
+}
+
+/**
+ * PropTypes:
+ *
+ * hospitals: An array of hospital objects to filter by enum.
+ * filter: A function that is called when the list of recieved hospitals has been filtered by enum.
+ * hasLoaded: A boolean that signifies that all data has been fetched by the API and is ready to be manipulated.
+ * selectedYear: The year in which to extract the type information from.
+ * selectedEnum: A javascript object representing the selected Enum variable to which to filter the hospitals by.
+ * variables: An array of Enum variables to load into the DropdownMenu.
+ * setEnum: A function that passes the selected enum to the parent component.
+ * resetEnum: A function that resets the selected enum in the parent component upon unmounting.
+ */
+
+FilterEditor.propTypes = {
+	hospitals: PropTypes.array.isRequired,
+    filter: PropTypes.func.isRequired,
+	hasLoaded: PropTypes.bool.isRequired,
+    selectedYear: PropTypes.string.isRequired,
+	selectedEnum: PropTypes.object.isRequired,
+	variables: PropTypes.array.isRequired,
+	setEnum: PropTypes.func.isRequired,
+	resetEnum: PropTypes.func.isRequired,
 }
 
 /**

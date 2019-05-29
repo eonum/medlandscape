@@ -63,7 +63,7 @@ class LinearRegression extends Component {
 	   let xArray = [];
 	   let yArray = [];
 	   let objArray = [];
-	   this.props.hospitals.map((obj) => {
+	   this.props.hospitals.forEach((obj) => {
 		   let data = this.returnData(obj);
 		   if (data.x && data.y && obj.name !== "Ganze Schweiz"){ // sort out undefined values for given year & "ganze schweiz"
 				xArray.push(data.x);
