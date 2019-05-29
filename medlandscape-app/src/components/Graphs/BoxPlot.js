@@ -421,8 +421,22 @@ class BoxPlot extends Component {
 
 
 	render() {
+		const { t, selectedVariable, objects } = this.props;
+		let varText = t('mapView.variables');
+		if (Object.keys(selectedVariable).length > 0) {
+			varText += ": " + selectedVariable.text;
+		} else {
+			varText = t('mapInfo.noVariable');
+		}
+
 		return (
-        	<div id="boxplot"></div>
+			<div>
+				<div className="central-panel-header">
+					<h1>{t('graphView.boxPlotTitle')}</h1>
+					<p className="varText">{varText}</p>
+				</div>
+        		<div id="boxplot"></div>
+			</div>
         )
 	}
 }

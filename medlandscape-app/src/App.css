@@ -8,10 +8,6 @@
     left: 0;
 }
 
-.leaflet-control-attribution {
-    display: none;
-}
-
 .grid-container {
     position: absolute;
     display: grid;

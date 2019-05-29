@@ -29,8 +29,14 @@
         "title": "Graph",
         "regressionLine": "Regressionslinie",
         "boxPlot": "Boxplot",
+        "boxPlotTitle": "Boxplot",
         "regression": "L. Reg.",
-	    "correlation": "Korrelation"
+        "regressionTitle": "Lineare Regression",
+	    "correlation": "Korrelation",
+        "selectVariable": "Bitte wählen sie eine Kennzahl.",
+        "selectVariables": "Bitte wählen sie Kennzahlen aus.",
+        "xAxis": "X-Achse",
+        "yAxis": "Y-Achse"
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"

@@ -457,28 +457,59 @@ class LinearRegression extends Component {
 	 * @return {JSX}
 	 */
 	render() {
-		let {variables, selectedVariable} = this.props;
+		let {t, variables, selectedVariable, hospitals, year} = this.props;
+		let varText = t('mapView.variables') + ": ";
+		let hospitalText, yearText;
+
+		if (Object.keys(selectedVariable[0]).length > 0 || Object.keys(selectedVariable[1]).length > 0) {
+			if (Object.keys(selectedVariable[0]).length > 0) {
+				varText += selectedVariable[0].text + " || ";
+			} else {
+				varText += "- || ";
+			}
+			if (Object.keys(selectedVariable[1]).length > 0) {
+				varText += selectedVariable[1].text;
+			} else {
+				varText += "-";
+			}
+			if (Object.keys(selectedVariable[0]).length > 0 && Object.keys(selectedVariable[1]).length > 0) {
+				hospitalText = t('mapInfo.hospitals') + ": " + hospitals.length;
+				yearText = t('mapInfo.year') + ": " + year;
+			}
+		} else {
+			varText = t('graphView.selectVariables');
+		}
 
 		return (
         	<div>
-				<div className="yAxisBtn">
-					<p>Y-Achse:</p>
-					<DropdownMenu id="yAxis"
-		                listItems={variables}
-		                selectItem={this.selectYAxis}
-		                selectedItem={selectedVariable[1]}
-		                defaultText={this.props.t('dropDowns.variablesFallback')}
-		            />
+				<div className="central-panel-header">
+					<h1>{t('graphView.regressionTitle')}</h1>
+					<p className="varText">{varText}</p>
+					<p>{hospitalText}</p>
+					<p>{yearText}</p>
 				</div>
-				<div id="linearregression"></div>
-				<div className="xAxisBtn">
-					<p>X-Achse:</p>
-					<DropdownMenu id="xAxis"
-						listItems={variables}
-						selectItem={this.selectXAxis}
-						selectedItem={selectedVariable[0]}
-						defaultText={this.props.t('dropDowns.variablesFallback')}
-					/>
+				<div className="linear-reg-flex">
+					<div className="axisDropdowns">
+						<div className="yAxisBtn">
+							<p>{t('graphView.yAxis')}</p>
+							<DropdownMenu id="yAxis"
+								listItems={variables}
+								selectItem={this.selectYAxis}
+								selectedItem={selectedVariable[1]}
+								defaultText={this.props.t('dropDowns.variablesFallback')}
+							/>
+						</div>
+						<div className="xAxisBtn">
+							<p>{t('graphView.xAxis')}</p>
+							<DropdownMenu id="xAxis"
+								listItems={variables}
+								selectItem={this.selectXAxis}
+								selectedItem={selectedVariable[0]}
+								defaultText={this.props.t('dropDowns.variablesFallback')}
+							/>
+						</div>
+					</div>
+					<div id="linearregression" className="linear-reg-graph"></div>
 				</div>
 			</div>
         )

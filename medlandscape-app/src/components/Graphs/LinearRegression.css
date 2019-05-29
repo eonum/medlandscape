@@ -84,6 +84,10 @@ div.tooltip {
   width: 150px;
 }
 
-.xAxisBtn{
-    float: right;
+.linear-reg-flex {
+    display: flex;
+}
+
+.axisDropdowns {
+    margin-left: 20px;
 }

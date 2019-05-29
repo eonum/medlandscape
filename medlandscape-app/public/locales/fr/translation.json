@@ -29,8 +29,14 @@
         "title": "Graph",
         "regressionLine": "Ligne de régression",
         "boxPlot": "Boxplot",
-        "regression": "Reg. lin.",
-	"correlation": "Corrélation"
+        "boxPlotTitle": "Boîte à moustaches",
+        "regression": "Rég. lin.",
+        "regressionTitle": "Régression Linéaire",
+	    "correlation": "Corrélation",
+        "selectVariable": "Veuillez choisir une variable.",
+        "selectVariables": "Veuillez choisir des variables.",
+        "xAxis": "Axe-X",
+        "yAxis": "Axe-Y"
     },
     "language_picker": {
         "info": "Choisissez votre langue"
