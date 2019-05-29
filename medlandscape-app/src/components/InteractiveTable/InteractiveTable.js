@@ -7,7 +7,6 @@ import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
 import ResultTable from './ResultTable/ResultTable.js';
 import update from 'immutability-helper';
 import { withTranslation } from 'react-i18next';
-import { CSVLink } from "react-csv";
 
 /**
  * Represents the Table view which can be used to create and display a 2d-table
@@ -655,7 +654,7 @@ class InteractiveTable extends Component {
      * @return {JSX}  JSX of the component
      */
     render() {
-        const { t, objects } = this.props;
+        const { t } = this.props;
         return (
             <div className="interactiveTable">
                 <VariableSelector
