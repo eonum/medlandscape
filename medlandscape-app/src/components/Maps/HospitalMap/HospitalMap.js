@@ -152,11 +152,11 @@ class HospitalMap extends Component {
 
 
 HospitalMap.propTypes = {
-	t: PropTypes.string.isRequired,
-	data: PropTypes.func.isRequired,
-	selectedVariable: PropTypes.object.isRequired,
+	t: PropTypes.func.isRequired,
+	data: PropTypes.array.isRequired,
+	selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 	returnData: PropTypes.func.isRequired,
-	year: PropTypes.func.isRequired,
+	year: PropTypes.string.isRequired,
 
 }
 const LocalizedHospitalMap = withTranslation()(HospitalMap);

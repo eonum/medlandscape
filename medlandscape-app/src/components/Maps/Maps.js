@@ -181,10 +181,10 @@ class Maps extends Component {
 * hasLoaded: bool that will be true if the data is loaded
 */
 Maps.propTypes = {
-	selectedVariable: PropTypes.object.isRequired,
-	view: PropTypes.func.isRequired,
-	mapView: PropTypes.func.isRequired,
-	year: PropTypes.func.isRequired,
+	selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+	view: PropTypes.number.isRequired,
+	mapView: PropTypes.number.isRequired,
+	year: PropTypes.string.isRequired,
 	hasLoaded: PropTypes.bool.isRequired
 }
 export default Maps;

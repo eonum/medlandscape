@@ -260,7 +260,7 @@ class CantonMap extends Component {
  CantonMap.propTypes = {
 	 t: PropTypes.string.isRequired,
 	 data: PropTypes.func.isRequired,
-	 selectedVariable: PropTypes.object.isRequired,
+	 selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 	 maxAndMin: PropTypes.func.isRequired
  }
 const LocalizedCantonMap = withTranslation()(CantonMap);
