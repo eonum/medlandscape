@@ -64,15 +64,11 @@ class ResultTable extends Component {
 
         if (this.props.dataLoaded) {
             if (this.canTableBeGenerated()) {
-                for (let hosp of this.props.selectedHospitals) {
+                for (let hospital of this.props.selectedHospitals) {
                     let newRow = [];
-                    let currentHosp;
-                    for (let hosp2 of this.props.hospitalData) {
-                        if (hosp.name === hosp2.name) {
-                            currentHosp = hosp2;
-                            break;
-                        }
-                    }
+					
+					let currentHosp = this.props.hospitalData.find((hosp) => {return hosp.name === hospital.name;});
+					
                     for (let i = 0; i < this.props.selectedVariables.length; i++) {
                         let variable = this.props.selectedVariables[i];
                         if (variable.is_time_series) {
@@ -80,13 +76,17 @@ class ResultTable extends Component {
                             //     .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
                             const year = this.props.selectedYears[i];
                             const obj = currentHosp.attributes[variable.name];
-                            let value = "";
-                            if (typeof obj[year] !== 'undefined') {
-                                value = obj[year];
+                            let value = "-";
+                            if (typeof obj[year] !== 'undefined' && obj[year] !== '') {
+                                value = numberFormat(obj[year]); //nice formatting for numbers, e.g 1'000'000
                             }
-                            newRow.push(numberFormat(value));
+                            newRow.push(value);
                         } else {
-                            newRow.push(currentHosp.attributes[variable.name]);
+							let value = currentHosp.attributes[variable.name];
+							if(value === "")
+								newRow.push("-");
+							else 
+								newRow.push(value);
                         }
                     }
                     tableData.push(newRow);
