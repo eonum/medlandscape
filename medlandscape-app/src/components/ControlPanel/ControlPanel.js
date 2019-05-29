@@ -9,7 +9,6 @@ import './ControlPanel.css'
 /**
 * ControlPanel-Component that contains different DropdownMenus for the selection in the
 * Map-Component, aswell as Icons to change to a different Components
-*
 */
 
 class ControlPanel extends Component {

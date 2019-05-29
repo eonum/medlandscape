@@ -16,15 +16,22 @@ class FilterEditor extends Component {
 		titles : [],
 	};
 
+    /**
+     * componentDidUpdate - called just after the component updated
+     *
+     * @param  {Object} prevProps previous props
+     */
     componentDidUpdate(prevProps) {
         if (this.props.selectedYear !== prevProps.selectedYear && prevProps.selectedYear !== "" && Object.keys(this.props.selectedEnum).length > 0) {
-            console.log("filterUpdate because of year");
             this.filter(this.state.selectedValues);
         }
     }
 
+	/**
+	 * componentWillUnmount - called before the component unmounts
+	 * 	resets stuff not needed anymore
+	 */
 	componentWillUnmount() {
-		// this doesn't work because it triggers filterhospitals from setHospitalsByEnums
 		this.props.resetEnum();
 		this.props.filter([]);
 	}
@@ -32,14 +39,14 @@ class FilterEditor extends Component {
 	/**
 	 * Called when a variable is selected in a dropdown
      * Gets the titles of the items, that have been selected in the dropdowns
+	 *
+	 * @param {Object} item the selected item
      */
     dropdownSelectItem = (item) => {
 		let titles = [];
 		for (let i = 0; i < item.values.length; i++)
 			titles.push(item.values[i] + ": " + item.values_text[i]);
 
-		console.log("============================");
-		console.log("CHOOSING FILTER VAR");
 		this.props.setEnum(item).then(() => {
             this.setState({
                 selectedValues : [],
@@ -67,9 +74,6 @@ class FilterEditor extends Component {
 				values.push(item);
 			}
 
-			console.log("============================");
-			console.log("CHOOSING FILTER CB");
-
 			this.setState({
 				selectedValues : values
 			});
@@ -84,7 +88,6 @@ class FilterEditor extends Component {
      * @param  {Variable Object} selectedValues the selected filter object to apply to Hospitals
      */
 	filter = (selectedValues) => {
-        console.log("filtering by enum");
 		const {selectedYear, hospitals} = this.props;
         const {name} = this.props.selectedEnum;
 
@@ -135,6 +138,11 @@ class FilterEditor extends Component {
 		this.props.filter(filteredHospitals);
 	}
 
+    /**
+     * render - renders the method
+     *
+     * @return {JSX}  JSX of the component
+     */
     render () {
         const { t, hasLoaded } = this.props;
         return (
