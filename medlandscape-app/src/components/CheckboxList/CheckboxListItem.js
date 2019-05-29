@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 /*
-*The item that is selected in the CheckboxList is bound as a CheckboxListItem here
+* Represents a single checkbox with label as part of a CheckboxList.
 */
 class CheckboxListItem extends Component {
 
     render() {
-       // const {name, text, checkboxSelectItem} = this.props.object;
         return (
             <div className="checkbox-list-item">
                 <label>
@@ -19,4 +19,19 @@ class CheckboxListItem extends Component {
     }
 }
 
+/**
+ * PropTypes:
+ * item: the javascript object (or in case of HospitalTypeFilter, a number) bound to this CheckboxListItem
+ * checkboxSelectItem: the function to call when this component's checkbox is clicked.
+ * title: a String to display next to the checkbox as information.
+ */
+
+CheckboxListItem.propTypes = {
+    item: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.number
+    ]).isRequired,
+    checkboxSelectItem: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+}
 export default CheckboxListItem;

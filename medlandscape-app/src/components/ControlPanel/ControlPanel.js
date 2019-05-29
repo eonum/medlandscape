@@ -125,7 +125,7 @@ class ControlPanel extends Component {
      */
     setTabView = (view) => {
         let oldView = this.props.view;
-        if (oldView !== view) {
+        if (oldView !== view && this.props.hasLoaded) {
             this.props.setView(view);
             document.getElementById('t' + oldView).classList.toggle('selectedTab');
             document.getElementById('t' + view).classList.toggle('selectedTab');

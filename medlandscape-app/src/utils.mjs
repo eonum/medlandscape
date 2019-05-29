@@ -1,12 +1,12 @@
 /**
 * utils.mjs
-* functions to be used all over the app
+* utility functions to be used all over the app
 **/
 
 /**
 * rounding a number to 2 decimals and add " ' " for big numbers
 * @param {number} number to be formatted
-* @return {string} str the formatted string
+* @return {string} the formatted string
 **/
 export function numberFormat(number){
     if(typeof number !== "number")
@@ -26,18 +26,17 @@ export function numberFormat(number){
 }
 
 /**
-* calculate pearson correlation between two given data arrays
+* calculate the pearson correlation between two given data arrays
 * @param {Array} x first data array
 * @param {Array} y second data array
-* @return {number} r the pearson correlation
+* @return {number} the pearson correlation
 **/
-export function pearsonCorrelation(x, y){
+export function pearsonCorrelation(x, y) {
     let n = x.length;
     let sum_X = 0, sum_Y = 0, sum_XY = 0;
     let squareSum_X = 0, squareSum_Y = 0;
 
-    for (let i = 0; i < n; i++)
-    {
+    for (let i = 0; i < n; i++) {
         // sum of elements of array X.
         sum_X = sum_X + x[i];
 
@@ -60,12 +59,18 @@ export function pearsonCorrelation(x, y){
 
     r = Math.round(r*1000)/1000;
 
+    // happens when the filtered hospital list returns no hospitals (ex. CMI brutto, filter "psychiatrische klinik"),
+    // then the args are invalid and r is NaN.
+    if (isNaN(r)) {
+        r = "-";
+    }
+
     return r;
 }
 
 /**
- * Calculates and returns a rgb color
- * @return {String} The rgb color as a string.
+ * Calculates and returns a hex color
+ * @return {String} The hex color as a string.
  */
 export function calculateCircleColor(item, year){
     let color;
@@ -100,7 +105,6 @@ export function calculateCircleColor(item, year){
             color = "#2d2aa7";
             break;
         // spezialklinik
-        // other 5 cases, too lazy to switch them out
         default :
             color = "#762aa7";
             break;

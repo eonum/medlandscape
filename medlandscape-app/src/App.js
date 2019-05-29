@@ -182,7 +182,6 @@ class App extends Component {
     * @param  {Variable object} item The selected variable.
     */
     setVariable = (item) => {
-        console.log("setting variable: " + item.name);
         if (item.length === 2) {
             if (item[0] !== this.state.regressionSelectedVariableX || item[1] !== this.state.regressionSelectedVariableY) {
                 this.setState({
@@ -323,11 +322,9 @@ class App extends Component {
     setView = (view) => {
         this.setState({
             view : view,
-            hasLoaded : (view === 2)
+            hasLoaded : false
         }, () => {
-            if (view !== 2) {
-                this.filteringOnViewChange();
-            }
+            this.filteringOnViewChange();
         })
     }
 
@@ -367,7 +364,6 @@ class App extends Component {
             if (this.state.mapView === 1) {
                 this.filterHospitals(true);
             } else {
-                console.log("setting years for cantons");
                 this.setYears(this.state.cantons);
             }
         } else if (view === 3) {
@@ -376,6 +372,10 @@ class App extends Component {
             } else {
                 this.filterHospitals(true);
             }
+        } else {
+            this.setState({
+                hasLoaded : true
+            });
         }
     }
 
@@ -477,6 +477,7 @@ class App extends Component {
                 break;
             case 2:
                 viewSpecificObjects = (tableHospitals.length > 0) ? tableHospitals : hospitals;
+                viewSpecificVariable = {};
                 break;
             case 3:
                 viewSpecificObjects = (graphView === 1) ? boxPlotHospitals : filteredHospitals;

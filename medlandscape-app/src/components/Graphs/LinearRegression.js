@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import * as d3 from "d3";
-import './LinearRegression.css'
 import DropdownMenu from './../DropdownMenu/DropdownMenu.js';
+import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { numberFormat, pearsonCorrelation, calculateCircleColor } from './../../utils.mjs';
+import * as d3 from "d3";
+import './LinearRegression.css'
 
 /**
 * LinearRegression is the entity we use to calculate and draw a scatterplot with a regression line.
@@ -20,6 +21,10 @@ class LinearRegression extends Component {
 		correlation: '',
 	};
 
+	/**
+	 * Called when the Component has been updated.
+	 * Checks if the chart has to be (re)drawn or needs to be drawn empty.
+	 */
 	componentDidUpdate(prevProps){
 		if (Object.keys(this.props.selectedVariable[0]).length > 0 && Object.keys(this.props.selectedVariable[1]).length > 0) {
 			if (this.props.selectedVariable[0] !== prevProps.selectedVariable[0] || this.props.selectedVariable[1] !== prevProps.selectedVariable[1]) {
@@ -480,5 +485,31 @@ class LinearRegression extends Component {
 	}
 }
 
+/**
+ * PropTypes:
+ *
+ * hospitals: An array of hospital javascript objects to show on the graph.
+ * selectedVariable: An array of two variable objects describing the variables for each axis of the graph.
+ * setVariable: A function that is called when one of the axis variable is set/changed.
+ * requestData: A function that is called when both axis variables are defined and new data is needed.
+ * variables: An array of variables objects of type number that are suitable to display on this graph.
+ * year: A string that describes of which year the data of the hospitals should be analysed.
+ * hasLoaded: A boolean that is true when correlating data has been fetched from the API.
+ */
+
+LinearRegression.propTypes = {
+	hospitals: PropTypes.array.isRequired,
+	selectedVariable: PropTypes.array.isRequired,
+	setVariable: PropTypes.func.isRequired,
+	requestData: PropTypes.func.isRequired,
+	variables: PropTypes.array.isRequired,
+    year: PropTypes.string.isRequired,
+    hasLoaded: PropTypes.bool.isRequired,
+}
+
+/**
+ * Convert the component using withTranslation() to have access to t() function
+ *  and other i18next props. Then export it.
+ */
 const LocalizedLinearRegression = withTranslation()(LinearRegression);
 export default LocalizedLinearRegression;
