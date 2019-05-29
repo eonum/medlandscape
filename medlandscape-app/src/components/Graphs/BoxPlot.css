@@ -73,6 +73,10 @@ rect {
     stroke: none;
 }
 
+.point:hover {
+    cursor: pointer;
+}
+
 div.tooltip {
     color: white;
     position: absolute;
@@ -88,7 +92,6 @@ div.tooltip {
 
 #boxplot .popup{
 	position: absolute;
-	width: 270px;
 	padding: 10px;
 	border-radius: 15px;
     background-color: #1996fa;
@@ -99,7 +102,7 @@ div.tooltip {
 
 #boxplot .popup th, #boxplot .popup, #boxplot .popup tr {
 	font-size: 13px;
-	padding: 4px;
+	padding: 10px;
 	text-align: left;
 	border-top: 1px solid rgba(255,255,255,0.3);
 	border-bottom: 1px solid rgba(255,255,255,0.3);

@@ -64,7 +64,6 @@ class Legend extends Component {
  */
  Legend.propTypes = {
 	 classColors: PropTypes.array.isRequired,
-	 boundaries: PropTypes.func.isRequired
-
+	 boundaries: PropTypes.array.isRequired,
  }
 export default Legend;

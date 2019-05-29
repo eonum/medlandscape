@@ -145,13 +145,6 @@ class ControlPanel extends Component {
 
         let selectedCantonVar, selectedHospitalVar;
 
-        // setting selectedItem for Dropdowns
-        if (mapView === 1) {
-            selectedHospitalVar = selectedVariable;
-        } else {
-            selectedCantonVar = selectedVariable;
-        }
-
         let mapViewHospitals = (
             <div className="mapViewHospitals">
                 <HospitalTypeFilter
@@ -165,7 +158,7 @@ class ControlPanel extends Component {
                 <DropdownMenu id="hospitalVars"
                     listItems={hospitalVars}
                     selectItem={this.setVariable}
-                    selectedItem={selectedHospitalVar}
+                    selectedItem={selectedVariable}
                     defaultText={t('dropDowns.variablesFallback')}
                 />
                 <p>{t('mapView.filter')}</p>
@@ -185,7 +178,7 @@ class ControlPanel extends Component {
         let mapViewCantons = (
             <div className="mapViewCantons">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedCantonVar} defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="cantonVars" listItems={cantonVars} selectItem={this.setVariable} selectedItem={selectedVariable} defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         )
 
@@ -227,7 +220,7 @@ class ControlPanel extends Component {
         let boxPlotView = (
             <div className="graphView">
                 <p>{t('mapView.variables')}</p>
-                <DropdownMenu id="hospitalVars" listItems={numberVars} selectItem={this.setVariable} selectedItem={selectedHospitalVar}  defaultText={t('dropDowns.variablesFallback')}/>
+                <DropdownMenu id="hospitalVars" listItems={numberVars} selectItem={this.setVariable} selectedItem={selectedVariable}  defaultText={t('dropDowns.variablesFallback')}/>
             </div>
         );
 
