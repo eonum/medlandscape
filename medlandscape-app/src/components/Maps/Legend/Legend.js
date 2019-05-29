@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Control from 'react-leaflet-control';
 import './Legend.css'
 
@@ -56,4 +57,14 @@ class Legend extends Component {
 	}
 }
 
+/**
+ * PropTypes:
+ * classColors: The different colors that will be displayed in the legend and on the map
+ * boundaries: Showing the boundaries for the classes
+ */
+ Legend.propTypes = {
+	 classColors: PropTypes.array.isRequired,
+	 boundaries: PropTypes.func.isRequired
+
+ }
 export default Legend;
