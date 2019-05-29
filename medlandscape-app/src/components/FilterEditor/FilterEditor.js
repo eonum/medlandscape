@@ -144,7 +144,7 @@ class FilterEditor extends Component {
      * @return {JSX}  JSX of the component
      */
     render () {
-        const { t, hasLoaded } = this.props;
+        const { t } = this.props;
         return (
 			<div className="filter-editor">
 				<DropdownMenu

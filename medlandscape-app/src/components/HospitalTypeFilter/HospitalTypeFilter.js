@@ -4,33 +4,37 @@ import './hospitalTypeFilter.css';
 import { withTranslation } from "react-i18next";
 
 /*
-*A component that helps with selcting and separating different types of hospitals
+*A component that helps with selecting and separating different types of hospitals
 */
-
 class HospitalTypeFilter extends Component {
 
     state = {
         selectedValues : []
     }
 
+    /**
+     * componentDidUpdate - called after the component was updated
+     *
+     * @param  {Object} prevProps the previous props
+     */
     componentDidUpdate(prevProps) {
         if (this.props.selectedYear !== prevProps.selectedYear && this.state.selectedValues.length > 0) {
-            console.log("hospitaltypefilterUpdate because of year");
             this.setAPIValues(this.state.selectedValues);
         }
         if (this.props.filter !== prevProps.filter) {
-            console.log("resetting because not unmounted");
             this.setState({
                 selectedValues : []
             }, () => {
-                console.log("resetted");
                 this.props.filter([]);
             })
         }
     }
 
+    /**
+     * componentWillUnmount - called before the component unmounts.
+     *  used to reset the filter
+     */
     componentWillUnmount() {
-        console.log("unmounting filterByType");
         this.props.filter([]);
     }
 
@@ -39,10 +43,6 @@ class HospitalTypeFilter extends Component {
      * @param {String} item The selected hospital category to be added.
      */
     checkboxSelectItem = (item) => {
-
-        console.log("============================");
-        console.log("CHOOSING H-TYPE-FILTER CB");
-
         // removes item if in selectedValues
         let values = this.state.selectedValues.filter((value) => {
             return (value !== item)
@@ -109,12 +109,15 @@ class HospitalTypeFilter extends Component {
                     apiValues.push("K111");
             }
         }
-
         this.filter(apiValues);
     }
 
 
-	/*filters through the selected values similar to our FIlterEditor */
+	/**
+     * filter - filters through the selected values similar to our FIlterEditor
+     *
+     * @param {Array} selectedValues
+     */
     filter = (selectedValues) => {
 		const {hospitals, selectedYear} = this.props;
         const name = "Typ"
@@ -155,6 +158,11 @@ class HospitalTypeFilter extends Component {
         this.props.filter(filteredHospitals);
     }
 
+    /**
+     * render - renders the component
+     *
+     * @return {JSX}  JSX of the component     
+     */
     render() {
         const {t, id} = this.props;
         let categorizedHospitalTypes = [0, 1, 2, 3, 4, 5];
