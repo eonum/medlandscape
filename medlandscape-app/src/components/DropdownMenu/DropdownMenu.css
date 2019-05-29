@@ -26,7 +26,7 @@
 /* The search field */
 .searchbar {
     margin: 5px 0 5px 10px;
-    width: 230px;
+    width: 210px;
     border: none;
     border-radius: 20px;
     background-color: #1996f6;
@@ -69,6 +69,7 @@
 
 .dropdownElem {
     border-top: 1px solid #ddd;
+    max-width: 225px;
 }
 
 /* Change color of dropdown links on hover */

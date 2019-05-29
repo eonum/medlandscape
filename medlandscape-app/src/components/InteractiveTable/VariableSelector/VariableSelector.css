@@ -54,14 +54,14 @@
 }
 
 .yearDropdown > .dropdown > .dropdown-content > .searchbar{
-    width: 80px;
+    width: 70px;
     height: 20px;
+    margin: 5px 0 5px 5px;
     border-radius: 20px;
     font-size: 9pt;
 }
 
 .yearDropdown > .dropdown > .dropdown-content > .dropdown-options > .dropdownElem {
-    width: 100px;
     text-align: center;
     padding: 10px 0;
 }

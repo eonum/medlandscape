@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import CheckboxList from '../CheckboxList/CheckboxList.js';
-import './hospitalTypeFilter.css';
+import PropTypes from 'prop-types';
 import { withTranslation } from "react-i18next";
+import './hospitalTypeFilter.css';
 
 /*
 *A component that helps with selecting and separating different types of hospitals
@@ -161,7 +162,7 @@ class HospitalTypeFilter extends Component {
     /**
      * render - renders the component
      *
-     * @return {JSX}  JSX of the component     
+     * @return {JSX}  JSX of the component
      */
     render() {
         const {t, id} = this.props;
@@ -181,6 +182,23 @@ class HospitalTypeFilter extends Component {
             </div>
         )
     }
+}
+
+/**
+ * PropTypes:
+ *
+ * hospitals: An array of hospital objects to filter by type.
+ * filter: A function that is called when the list of recieved hospitals has been filtered by type.
+ * selectedYear: The year in which to extract the type information from.
+ * hasLoaded: A boolean that signifies that all data has been fetched by the API and is ready to be manipulated.
+ */
+
+HospitalTypeFilter.propTypes = {
+	id: PropTypes.string.isRequired,
+    hospitals: PropTypes.array.isRequired,
+    filter: PropTypes.func.isRequired,
+    selectedYear: PropTypes.string.isRequired,
+    hasLoaded: PropTypes.bool.isRequired,
 }
 
 const localizedHospitalTypeFilter = withTranslation()(HospitalTypeFilter);

@@ -275,8 +275,10 @@ class App extends Component {
         const {name} = this.state[this.getViewSpecificVariable()];
         let maxYears = [], years, recent;
         for (let i = 0; i < objects.length; i++) {
-            years = Object.keys(objects[i].attributes[name]);
-            maxYears = (years.length > maxYears.length) ? years : maxYears;
+            if (objects[i].attributes[name] !== null) {
+                years = Object.keys(objects[i].attributes[name]);
+                maxYears = (years.length > maxYears.length) ? years : maxYears;
+            }
         }
         recent = maxYears.length - 1;
         this.setState({

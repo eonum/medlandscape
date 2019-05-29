@@ -21,17 +21,17 @@ class CheckboxListItem extends Component {
 
 /**
  * PropTypes:
- * item: the javascript object (or in case of HospitalTypeFilter, a number) bound to this CheckboxListItem
+ * item: A string (or in case of HospitalTypeFilter, a number) that represents the item bound to this CheckboxListItem
  * checkboxSelectItem: the function to call when this component's checkbox is clicked.
  * title: a String to display next to the checkbox as information.
  */
 
 CheckboxListItem.propTypes = {
     item: PropTypes.oneOfType([
-            PropTypes.object,
-            PropTypes.number
-    ]).isRequired,
+            PropTypes.number,
+            PropTypes.string
+    ]),
     checkboxSelectItem: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
 }
 export default CheckboxListItem;

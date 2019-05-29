@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { withTranslation } from 'react-i18next';
 import InteractiveTable from '../InteractiveTable/InteractiveTable.js';
 import BoxPlot from '../Graphs/BoxPlot.js';
 import LinearRegression from '../Graphs/LinearRegression.js';
+import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import './centralPanel.css'
 
 /**
-* CentralPanel-Component that contains a field which is used to displayed
+* CentralPanel-Component that contains a div which is used to displayed
 * the InteractiveTable, BoxPlot and LinearRegression
 */
 class CentralPanel extends Component {
@@ -84,7 +85,7 @@ class CentralPanel extends Component {
     /**
      * render - renders the component
      *
-     * @return {JSX}  jsx of the component     
+     * @return {JSX}  jsx of the component
      */
     render() {
         const { objects, hasLoaded, selectedVariable, year, setVariable, setCSVData} = this.props;
@@ -158,6 +159,34 @@ class CentralPanel extends Component {
         );
     }
 }
+
+/**
+ * PropTypes:
+ * view:
+ * graphView:
+ * variables: An array of all the variable objects.
+ * hasLoaded: A boolean that signifies that all data has been fetched by the API and is ready to be manipulated.
+ * fetchData: A function that is called when new data is needed from the API.
+ * objects: An array of hospital objects.
+ * setVariable: A function that passes the newly selected Variable to the parent component.
+ * selectedVariable: A variable object (or array of two objects) that represent the currently selected Variable.
+ * setCSVData: A function that passes a 2D array to be exported into csv to the parent component.
+ * year: The currently selected year.
+ */
+
+CentralPanel.propTypes = {
+	view: PropTypes.number.isRequired,
+    graphView: PropTypes.number.isRequired,
+    variables: PropTypes.array.isRequired,
+	hasLoaded: PropTypes.bool.isRequired,
+    fetchData: PropTypes.func.isRequired,
+    objects: PropTypes.array.isRequired,
+    setVariable: PropTypes.func.isRequired,
+    selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+    setCSVData: PropTypes.func.isRequired,
+    year: PropTypes.string.isRequired,
+}
+
 
 /**
  * Convert the component using withTranslation() to have access to t() function

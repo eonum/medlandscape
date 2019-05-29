@@ -11,11 +11,11 @@
 export function numberFormat(number){
     if(typeof number !== "number")
         return number;
-    let nmbr = Math.round(number*100)/100;
+    let nmbr = Math.round(number * 100) / 100;
     let str = nmbr.toString();
     let index;
     index = str.indexOf(".");
-    if (index = str.indexOf(".") === -1){
+    if (index === -1){
         index = str.length;
     }
     while (index > 3){
@@ -57,7 +57,7 @@ export function pearsonCorrelation(x, y) {
                 sum_X * sum_X) * (n * squareSum_Y -
                 sum_Y * sum_Y)));
 
-    r = Math.round(r*1000)/1000;
+    r = Math.round(r * 1000) / 1000;
 
     // happens when the filtered hospital list returns no hospitals (ex. CMI brutto, filter "psychiatrische klinik"),
     // then the args are invalid and r is NaN.
