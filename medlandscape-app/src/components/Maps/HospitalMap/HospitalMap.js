@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import { CircleMarker, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import { withTranslation } from 'react-i18next';
 import { numberFormat, calculateCircleColor } from './../../../utils.mjs';
@@ -87,17 +88,18 @@ class HospitalMap extends Component {
 	 * @return {JSX}
      */
 	render() {
+		const {t,data,selectedVariable,returnData,year} = this.props;
 		return (
 			<LayerGroup>
 				{
 					this.props.data.map((item) => (
           				<CircleMarker
-          					key = {this.props.data.indexOf(item)}
+          					key = {data.indexOf(item)}
         					center={{lon: item.longitude, lat: item.latitude}}
-							color= {calculateCircleColor(item, this.props.year)}
+							color= {calculateCircleColor(item, year)}
 							weight = "2" // defining how big the outline of circle is
 							opacity = "1"
-        					fillColor = {calculateCircleColor(item, this.props.year)}
+        					fillColor = {calculateCircleColor(item, year)}
 							fillOpacity = "0.7"
         					radius={this.getNormedRadius(item)} // norming function is here
 							onMouseOver = {this.setNewStyle.bind(this)}
@@ -116,16 +118,16 @@ class HospitalMap extends Component {
 								<table>
 									<tbody>
 										<tr>
-											<td>{this.props.t("popup.hospital")}</td>
+											<td>{t("popup.hospital")}</td>
 											<td>{item.name}</td>
 										</tr>
 										<tr>
-											<td>{this.props.t("popup.address")}</td>
+											<td>{t("popup.address")}</td>
 											<td><dd>{item.street},</dd>{item.city}</td>
 										</tr>
 										<tr>
-											<td>{this.props.selectedVariable.text}:</td>
-											<td>{numberFormat(this.props.returnData(item))}</td>
+											<td>{selectedVariable.text}:</td>
+											<td>{numberFormat(returnData(item))}</td>
 										</tr>
 									</tbody>
 								</table>
@@ -136,6 +138,26 @@ class HospitalMap extends Component {
 			</LayerGroup>
 		)
 	}
+}
+
+
+/**
+ * PropTypes:
+ * t: used to translate
+ * data: Passes the Data from the corresponding selections
+ * selectedVarialbe: The Variable that has been selected in the Controlpanel
+ * returnData: returns the selected data
+ * year: The year picked in the Slider componentToRender
+ */
+
+
+HospitalMap.propTypes = {
+	t: PropTypes.string.isRequired,
+	data: PropTypes.func.isRequired,
+	selectedVariable: PropTypes.object.isRequired,
+	returnData: PropTypes.func.isRequired,
+	year: PropTypes.func.isRequired,
+
 }
 const LocalizedHospitalMap = withTranslation()(HospitalMap);
 export default LocalizedHospitalMap;

@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import { Map, TileLayer, ZoomControl } from 'react-leaflet'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Map, TileLayer, ZoomControl } from 'react-leaflet';
 import './Maps.css';
 import Control from 'react-leaflet-control';
 import MapInfo from './MapInfo/MapInfo.js';
@@ -64,20 +65,6 @@ class Maps extends Component {
             max: max,
             min: min
         }
-
-        // const mean = sum/counter;
-        // sum = 0;
-		//
-        // objects.map((obj) => {
-        //     let val = this.returnData(obj);
-        //     if (obj.name !== "Ganze Schweiz") {
-        //         const squareDif = Math.pow(val - mean, 2);
-        //         sum += squareDif;
-        //     }
-        // })
-		//
-        // const meanSquareDif = sum/counter;
-        // const std = Math.sqrt(meanSquareDif);
 
 	}
 
@@ -164,7 +151,7 @@ class Maps extends Component {
 				zoomControl={false}
         	>
 				<ZoomControl
-					style={"borderRadius=25px;"}
+					style={{borderRadius:'25px'}}
 					position="topright"
 				/>
 				<Control position="topright">
@@ -185,5 +172,19 @@ class Maps extends Component {
         )
 	}
 }
-
+/*
+*PropTypes:
+* selectedVarialbe: The Variable that has been selected in the Controlpanel
+* view: The View selected, deciding if the map, table or statistics view is shown
+* mapView: The view that decides if either the HospitalMap or the CantonMap is shown
+* year: The year picked in the Slider componentToRender
+* hasLoaded: bool that will be true if the data is loaded
+*/
+Maps.propTypes = {
+	selectedVariable: PropTypes.object.isRequired,
+	view: PropTypes.func.isRequired,
+	mapView: PropTypes.func.isRequired,
+	year: PropTypes.func.isRequired,
+	hasLoaded: PropTypes.bool.isRequired
+}
 export default Maps;

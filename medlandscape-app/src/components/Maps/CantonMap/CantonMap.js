@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import cantons from '../cantons/cantons.json';
 import Legend from '../Legend/Legend.js'
@@ -248,5 +249,19 @@ class CantonMap extends Component {
 	}
 }
 
+/**
+ * PropTypes:
+ * t: used to translate
+ * data: Passes the Data to the corresponding selections
+ * selectedVarialbe: The Variable that has been selected in the Controlpanel
+ * maxAndMin: Function that calculates the Max and Min Values of the selected Variable
+ */
+
+ CantonMap.propTypes = {
+	 t: PropTypes.string.isRequired,
+	 data: PropTypes.func.isRequired,
+	 selectedVariable: PropTypes.object.isRequired,
+	 maxAndMin: PropTypes.func.isRequired
+ }
 const LocalizedCantonMap = withTranslation()(CantonMap);
 export default LocalizedCantonMap;

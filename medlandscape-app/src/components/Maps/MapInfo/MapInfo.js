@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Control from 'react-leaflet-control';
 import { withTranslation } from 'react-i18next';
 import './mapInfo.css';
@@ -40,6 +41,23 @@ class MapInfo extends Component {
     }
 }
 
+/**
+ *PropTypes:
+ * selectedVarialbe: The Variable that has been selected in the Controlpanel
+ * view: The View selected, deciding if the map, table or statistics view is shown
+ * mapView: The view that decides if either the HospitalMap or the CantonMap is shown
+ * year: The year picked in the Slider componentToRender
+ * t: used to translate
+ * nrOfObjects: Displays how many Hospitals or Cantons are currently displayed
+ */
+ MapInfo.propTypes = {
+	 mapView: PropTypes.func.isRequired,
+	 hasLoaded: PropTypes.bool.isRequired,
+	 year: PropTypes.func.isRequired,
+	 selectedVariable: PropTypes.object.isRequired,
+	 nrOfObjects: PropTypes.number.isRequired,
+	 t: PropTypes.func.isRequired
+ }
 /**
  * Convert the component using withTranslation() to have access to t() function
  *  and other i18next props. Then export it.
