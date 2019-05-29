@@ -431,6 +431,7 @@ class InteractiveTable extends Component {
 			.findIndex((item) => {return item.props.children[0].props.id === senderId});
 		
         let variable = this.state.selectedVariables[senderIndex];
+		const year = this.state.selectedYears[senderIndex];
 
         // then create an array containing arrays of length 2 that contain the
         // index of the selectedHospital and its value on the variable
@@ -439,16 +440,13 @@ class InteractiveTable extends Component {
 
         if (this.canTableBeSorted(true)) {
             for (let i = 0; i < selectedHospitals.length; i++) {
-                let currentHosp;
-                for (let hosp of this.props.hospitals) {
-                    if (hosp.name === selectedHospitals[i].name) {
-                        currentHosp = hosp;
-                        break;
-                    }
-                }
+				
+				// find the according hospital object from the hospitals array
+				let currentHosp = this.props.hospitals.find((hosp) => {return hosp.name === selectedHospitals[i].name;});
+				
                 // const latestYear = Object.keys(currentHosp.attributes[variable.name])
                 //     .sort()[Object.keys(currentHosp.attributes[variable.name]).length -1];
-                const year = this.state.selectedYears[senderIndex];
+                
                 const attributes = currentHosp.attributes[variable.name];
                 let value = '';
                 if (typeof attributes[year] !== 'undefined') {
@@ -495,14 +493,9 @@ class InteractiveTable extends Component {
      * @param {String} senderId Id of the dropdown that selected something
      */
 	selectVariable = (item, senderId) => {
-		let index;
-
-		for (let vD of this.state.variableDropdowns) {
-			if (vD.props.children[0].props.id === senderId) {
-				index = this.state.variableDropdowns.indexOf(vD);
-                break;
-			}
-		}
+		// findIndex does the same as indexOf for arrays, but with a function as input
+		let index = this.state.variableDropdowns
+			.findIndex((item) => {return item.props.children[0].props.id === senderId});
 
 		this.setState({
 			selectedVariables: update(this.state.selectedVariables, {[index]: {$set: item}}),
@@ -562,12 +555,7 @@ class InteractiveTable extends Component {
                 let selectedVariable = this.state.selectedVariables[i];
                 let years = new Set();
                 for (let selectedHospital of this.state.selectedHospitals) {
-                    let hospital = {};
-                    for (let hosp of this.props.hospitals) {
-                        if (selectedHospital.name === hosp.name) {
-                            hospital = hosp;
-                        }
-                    }
+                    let hospital = this.props.hospitals.find((hosp) => {return hosp.name === selectedHospital.name;});
                     if (selectedVariable.is_time_series) {
                         for (let year of Object.keys(hospital.attributes[selectedVariable.name])){
                             years.add(year);
