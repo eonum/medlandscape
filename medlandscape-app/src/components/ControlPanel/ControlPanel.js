@@ -23,6 +23,11 @@ class ControlPanel extends Component {
         csvData : []
     }
 
+    /**
+     * componentDidUpdate - called after the component was updated
+     *
+     * @param  {type} prevProps previous props
+     */
     componentDidUpdate(prevProps) {
         // filtering the different variables after the first initialisation of variables
         if (this.props.variables !== prevProps.variables) {
@@ -56,10 +61,8 @@ class ControlPanel extends Component {
             if (this.props.selectedVariable !== prevProps.selectedVariable && this.props.view !== 2) {
                 // specific views in which this can happen
                 if (this.props.mapView === prevProps.mapView && this.props.view === 1 && prevProps.view === 1) {
-                    console.log("FETCHING on CP didUpdate, MAPVIEW variable: " + this.props.selectedVariable.name);
                     this.fetchData(this.props.selectedVariable, this.state.selectedEnum);
                 } else if (this.props.graphView === prevProps.graphView && this.props.view === 3 && prevProps.view === 3 && this.props.graphView !== 2) {
-                    console.log("FETCHING on CP didUpdate, GRAPHVIEW variable: " + this.props.selectedVariable.name);
                     this.fetchData(this.props.selectedVariable, {});
                 }
             }
@@ -91,7 +94,6 @@ class ControlPanel extends Component {
      * @param {Variable Object} variable The chosen variable.
      */
     setEnum = (variable) => {
-        console.log("passing enum var");
         return this.fetchData(this.props.selectedVariable, variable).then(() => {
             this.setState({
                 selectedEnum : variable
@@ -99,6 +101,9 @@ class ControlPanel extends Component {
         });
     }
 
+    /**
+     * resetEnum - resets the enum
+     */
     resetEnum = () => {
         this.setState({
             selectedEnum : {}
@@ -116,6 +121,8 @@ class ControlPanel extends Component {
 
     /**
      * sets the view to be displayed on the ControlPanel.
+     *
+     * @param {Integer} represents the view to change to
      */
     setTabView = (view) => {
         let oldView = this.props.view;
@@ -127,6 +134,11 @@ class ControlPanel extends Component {
 
     }
 
+    /**
+     * render - renders the component
+     *
+     * @return {JSX}  JSX of the component
+     */
     render() {
 
         const {t, hasLoaded, unfilteredHospitals, filterByEnum, filterByType, filterLinRegByType, year, selectedVariable, mapView, graphView, csvData} = this.props;
