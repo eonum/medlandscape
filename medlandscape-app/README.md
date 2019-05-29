@@ -60,6 +60,10 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+## Compatability
+
+This web-application is built on with the newest features of JavaScript ES6. As such it is not supported on Windows Edge. Sadly the application is not yet adapted for usage on mobile devices.
+
 ## Usage
 
 Once you have installed the different modules and have managed to start the application there are many different things you can do.
@@ -76,7 +80,9 @@ The initial site will look like this. In the centre there is a map displaying th
 
 ##### Changing the language
 
-To change the language on any view, simply click the small button in the upper right corner displaying either DE (for German) or FR (for French).![Language-Button](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/Language-Button.jpg>)
+To change the language on any view, simply click the small button in the upper right corner displaying either DE (for German) or FR (for French).
+
+![Language-Button](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/Language-Button.jpg>)
 
 
 
@@ -140,7 +146,7 @@ The Table view let's you create different tables with hospitals and variables th
 
 ##### Initial Site
 
-![TableView](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558715263599.png>)
+![TableView](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableView.png>)
 
 The table-panel contains many already known buttons in the upper right and left corner which function the same through out the whole application.
 
@@ -154,7 +160,7 @@ You can also use the "Alle Spitäler hinzufügen" button to add all hospitals at
 
 If you wish to remove a hospital or variable from your table, simply hover over the dropdown menu and you will see a small cross appear in the top right corner of the dropdown menu. Once you click this the variable or Hospital will disappear.
 
-![TableEntf](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableEntf.JPG>)
+![TableEntf](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableEntf.PNG>)
 
 ##### Creating the table
 
@@ -166,7 +172,7 @@ Once you have selected your hospitals and your variables simply click the "Tabel
 
 Once you create your table there appears a new dropdown beneath your variables, depicting the available different years, so you can compare the same variable for the same hospital over different years. 
 
-![1558717462396](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558717461161.png>)
+![1558717462396](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableYears.png>)
 
 ##### Sorting your values
 
@@ -184,7 +190,9 @@ The statistics-panel let's you create a boxplot to one specific variable or a li
 
 In the Boxplot you can choose a variable in the Control-Panel to then be display as a boxplot-graph with the corresponding values.
 
-![1558718276304](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558718276304.png>)
+![1558718276304](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/BoxPlot.png>)
+
+By clicking on the big colourful box in the boxplot you can see the distribution of all the single hospitals. Double clicking the field will restore the initial view of your created boxplot
 
 ##### Changing to the linear regression
 
@@ -196,7 +204,9 @@ The linear regression shows a simple graph with dropdown menus on the y- and x-a
 
 Once the graph has been generated you can safely click the different circles in the graph to show you the corresponding hospitals and their values.
 
-![1558718602459](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558718602459.png>)
+You can also use the hospital-type selector again to show you only different types of hospitals to your liking.
+
+![1558718602459](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/LinReg.png>)
 
 
 
