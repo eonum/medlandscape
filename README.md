@@ -4,11 +4,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 The medlandscape library is a simple tool to visualize different operating figures across the swiss landscape, concerning values corresponding with the swiss health sector.
 
-The application allows you to view, search and compare different figures of hospitals and cantons in Switzerland. The different parts of this application let you see these figures in a Map-, Table or Statistics-View. Available in German or French.
+The application allows you to view, search and compare different figures of hospitals and cantons in Switzerland. The different parts of this application let you see these figures in a Map-, Table- or Statistics-View. Available in German or French.
 
 ## Installation
 
-Before you can do anything with our app you will have to download 
+Before you can do anything with our app you will have to download
 
 ### `node.js`
 
@@ -16,7 +16,7 @@ The newest Version is ready to be downloaded at: https://nodejs.org/en/download/
 
 For the installation follow the instructions on the site or from the installer.
 
-After installing node.js  and before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory, where you have saved the application and enter:
+After installing node.js  and before running the script to this application you have to install the different modules used. Open your desired Terminal and go to the directory where you have saved the application and enter:
 
 ### `npm -g install`
 
@@ -30,7 +30,7 @@ This Runs the app in the development mode.<br>
 
 Wait for the code to be compiled and your standard browser to open a new page on [http://localhost:3000](http://localhost:3000). If this does not happen automatically you can enter the address into your browser manually to view the application in the browser.
 
-The page will reload if you make edits.<br>
+The page will reload after you hit save if you make edits.<br>
 You will also see any lint errors in the console.
 
 ## Further available scripts
@@ -43,7 +43,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ### `npm run build`
 
 Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+It correctly bundles React in production mode and optimises the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
@@ -58,9 +58,9 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 
 Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customise it when you are ready for it.
 
-## Compatability
+## Compatibility
 
 This web-application is built on with the newest features of JavaScript ES6. As such it is not supported on Windows Edge. Sadly the application is not yet adapted for usage on mobile devices.
 
@@ -74,15 +74,15 @@ Once you have installed the different modules and have managed to start the appl
 
 ##### Initial Site
 
-![1558711354060](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558711354060.png>)
+![Landing page](/ReadMeGallery/1558711354060.png)
 
-The initial site will look like this. In the centre there is a map displaying the swiss country boundary and the several canton boundaries. Already showing are the different dots in different colours, which represent the hospitals on their respective position on the map.  In the upper left corner you have a Control-Panel, which gives you various options to chose from. Directly to the right you have an informational text field, depicting the chosen Variable and the chosen year, as well as the number of hospitals that are shown on the map. In the upper right corner there are tools to zoom in and out of the map, a reset button for the map-view and a button to change the language between German and French. On the bottom there is a time bar which let's you switch between the years, to compare the displayed values over the years.
+The initial site will look like this. In the centre there is a map displaying the Swiss country and the several canton boundaries. Already showing are the different dots in different colours, which represent the hospitals on their respective position on the map.  In the upper left corner you have a Control-Panel, which gives you various options to chose from. Directly to the right you have an informational text field, depicting the chosen Variable and the chosen year, as well as the number of hospitals that are shown on the map. In the upper right corner there are tools to zoom in and out of the map, a reset button for the map-view and a button to change the language between German and French. On the bottom there is a time bar which lets you switch between the years, to compare the displayed values over the years.
 
 ##### Changing the language
 
 To change the language on any view, simply click the small button in the upper right corner displaying either DE (for German) or FR (for French).
 
-![Language-Button](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/Language-Button.jpg>)
+![Language-Button](/ReadMeGallery/Language-Button.jpg)
 
 
 
@@ -90,11 +90,11 @@ To change the language on any view, simply click the small button in the upper r
 
 If you want to change what kind of hospitals are display, simply click on the checkbox to your desired hospital type and the map will adjust accordingly, even changing the sizes of the different circles such as to show the size in relation only to the selected types of hospitals.
 
-##### ![1558711473453](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558711473453.png>)
+##### ![Changing hospital types](ReadMeGallery/1558711473453.png)
 
 In the Control-Panel in the upper left corner, there are two dropdown menus, which let you select your desired variable as well as any special filters you want to apply to the map.
 
-![DropdownMenus](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/DropdownMenus.jpg>)
+![DropdownMenus](ReadMeGallery/DropdownMenus.jpg)
 
 ##### Changing the displayed Year
 
@@ -104,13 +104,13 @@ Simply click on your desired year on the time bar and see how the circles adjust
 
 Simply click on your desired hospital. A small pop-up will appear and show you the information to the selected variable, as well as some basic information about your selected hospital.
 
-![1558714633283](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558714633283.png>)
+![1558714633283](/ReadMeGallery/1558714633283.png)
 
 ##### Changing to the Canton-View
 
 If you want to change to the Canton-View simply press the button labelled "Kanton" or "Canton" in the Control-Panel.
 
-![Kanton-Change](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/Kanton-Change.jpg>)
+![Kanton-Change](/ReadMeGallery/Kanton-Change.jpg)
 
 
 
@@ -118,7 +118,7 @@ If you want to change to the Canton-View simply press the button labelled "Kanto
 
 ##### Initial Site
 
-![1558714323384](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558714323384.png>)
+![1558714323384](/ReadMeGallery/1558714323384.png)
 
 The Canton-View looks very similar to the Hospital-View. It includes the same tools in the right upper corner as the Hospital-View, as well as the text field in the middle on top, to display the adjusting information.
 
@@ -126,11 +126,11 @@ Choosing a variable works the same way as in the Hospital-View. Simply click on 
 
 ##### Understanding the Canton-View
 
-Upon selecting a variable the map will update and show a distribution of your selected variable over the different cantons. The Map functions the same as before and let's you select different years and click on your desired canton to see the specific information concerning your selected variable as well as your selected canton.
+Upon selecting a variable the map will update and show a distribution of your selected variable over the different cantons. The Map functions the same as before and lets you select different years and click on your desired canton to see the specific information concerning your selected variable as well as your selected canton.
 
 New on this page, there is a legend in the bottom right corner, showing you the distribution of the different values and colours used in the map.
 
-![1558714897999](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/1558714897999.png>)
+![1558714897999](/ReadMeGallery/1558714897999.png)
 
 
 
@@ -138,15 +138,15 @@ New on this page, there is a legend in the bottom right corner, showing you the 
 
 Switching between the different panels functions the same as, switching between the different map-views. Simply click on the desired icon and you will be transferred to the new panel.
 
-![PanelChange](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/PanelChange.jpg>)
+![PanelChange](/ReadMeGallery/PanelChange.jpg)
 
 ### Table
 
-The Table view let's you create different tables with hospitals and variables that you decide. After creation you can simply export them to a csv-file with one click.
+The Table view lets you create different tables with hospitals and variables that you decide. After creation you can simply export them to a CSV-file with one click.
 
 ##### Initial Site
 
-![TableView](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableView.JPG>)
+![TableView](/ReadMeGallery/TableView.JPG)
 
 The table-panel contains many already known buttons in the upper right and left corner which function the same through out the whole application.
 
@@ -160,7 +160,7 @@ You can also use the "Alle Spitäler hinzufügen" button to add all hospitals at
 
 If you wish to remove a hospital or variable from your table, simply hover over the dropdown menu and you will see a small cross appear in the top right corner of the dropdown menu. Once you click this the variable or Hospital will disappear.
 
-![img](https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableDelete.PNG)
+![img](/ReadMeGallery/TableDelete.PNG)
 
 ##### Creating the table
 
@@ -170,9 +170,9 @@ Once you have selected your hospitals and your variables simply click the "Tabel
 
 ##### Choosing different years
 
-Once you create your table there appears a new dropdown beneath your variables, depicting the available different years, so you can compare the same variable for the same hospital over different years. 
+Once you create your table there appears a new dropdown beneath your variables, depicting the available different years, so you can compare the same variable for the same hospital over different years.
 
-![1558717462396](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/TableYears.PNG>)
+![1558717462396](/ReadMeGallery/TableYears.PNG)
 
 ##### Sorting your values
 
@@ -184,17 +184,17 @@ After having created your table and having everything sorted the way you want it
 
 ### Statistics
 
-The statistics-panel let's you create a boxplot to one specific variable or a linear regression with two different or equal variables of your choosing.
+The statistics-panel lets you create a boxplot to one specific variable or a linear regression with two different or equal variables of your choosing.
 
 #### Boxplot
 
-In the Boxplot you can choose a variable in the Control-Panel to then be display as a boxplot-graph with the corresponding values.
+Under Boxplot you can choose a variable in the Control-Panel to then be display as a boxplot-graph with the corresponding values.
 
-![1558718276304](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/BoxPlot.PNG>)
+![1558718276304](/ReadMeGallery/BoxPlot.PNG)
 
 
 
-By clicking on the big colourful box in the boxplot you can see the distribution of all the single hospitals. Double clicking the field will restore the initial view of your created boxplot
+By clicking on the big colourful box in the boxplot you can see the distribution of all the single hospitals. Double clicking the field will restore the initial view of your created boxplot.
 
 ##### Changing to the linear regression
 
@@ -208,13 +208,13 @@ Once the graph has been generated you can safely click the different circles in 
 
 You can also use the hospital-type selector again to show you only different types of hospitals to your liking.
 
-![1558718602459](<https://raw.githubusercontent.com/eonum/medlandscape/theLastBranchTM/medlandscape-app/ReadMeGallery/LinReg.PNG>)
+![1558718602459](/ReadMeGallery/LinReg.PNG)
 
 
 
 ## Authors
 
-This application has been made by CS students of the university Bern in collaboration with the **eonum-AG** in Bern. 
+This application has been made by CS students of the university Bern in collaboration with the **eonum-AG** in Bern.
 
 Created by:
 
@@ -235,5 +235,3 @@ Special thanks to Tim Peter and Tess Hoppler of the eonum-AG for giving us the o
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-
