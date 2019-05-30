@@ -35,7 +35,7 @@
     margin: auto;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 35px 35px;
+    background-size: 55px 55px;
 }
 
 .tab:hover {
@@ -43,13 +43,25 @@
 }
 
 #t1{
-    background-image: url('icons/map.png');
+    background-image: url('icons/mapView.svg');
 }
 #t2{
-    background-image: url('icons/table.png');
+    background-image: url('icons/tableView.svg');
 }
 #t3{
-    background-image: url('icons/graph.png');
+    background-image: url('icons/graphView.svg');
+}
+
+#t1.selectedTab {
+    background-image: url('icons/mapViewSelected.svg');
+}
+
+#t2.selectedTab {
+    background-image: url('icons/tableViewSelected.svg');
+}
+
+#t3.selectedTab {
+    background-image: url('icons/graphViewSelected.svg');
 }
 
 .selectedTab, .selectedTab:hover {

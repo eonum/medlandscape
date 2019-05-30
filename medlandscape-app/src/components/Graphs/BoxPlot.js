@@ -421,7 +421,7 @@ class BoxPlot extends Component {
 
 
 	render() {
-		const { t, selectedVariable, objects } = this.props;
+		const { t, selectedVariable } = this.props;
 		let varText = t('mapView.variables');
 		if (Object.keys(selectedVariable).length > 0) {
 			varText += ": " + selectedVariable.text;
