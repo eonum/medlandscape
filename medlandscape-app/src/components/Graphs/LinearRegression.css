@@ -88,6 +88,10 @@ div.tooltip {
     display: flex;
 }
 
+.linear-reg-graph {
+    margin-bottom: 70px;
+}
+
 .axisDropdowns {
     margin-left: 20px;
 }
