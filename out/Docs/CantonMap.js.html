@@ -1,4 +1,32 @@
-import React, { Component } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CantonMap.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CantonMap.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
 import cantons from '../cantons/cantons.json';
@@ -44,14 +72,14 @@ class CantonMap extends Component {
 	returnColor = (value) => {
 		const classColors = this.returnColorClasses()[this.state.colorScheme];
 		const boundaries = this.returnBoundaries();
-		for (let i = 0; i < classColors.length && i < boundaries.length; i++){
+		for (let i = 0; i &lt; classColors.length &amp;&amp; i &lt; boundaries.length; i++){
 			const upperBoundary = boundaries[i].upper;
 			const lowerBoundary = boundaries[i].lower;
-			if (i === 0 && value <= upperBoundary){ // check for values below rounded lower boundary
+			if (i === 0 &amp;&amp; value &lt;= upperBoundary){ // check for values below rounded lower boundary
 				return classColors[0];}
-			if (value <= upperBoundary && value > lowerBoundary)
+			if (value &lt;= upperBoundary &amp;&amp; value > lowerBoundary)
 				return classColors[i];
-			if (i === classColors.length -1 && value > upperBoundary) //check for values above rounded upper boundary
+			if (i === classColors.length -1 &amp;&amp; value > upperBoundary) //check for values above rounded upper boundary
 				return classColors[classColors.length-1];
 		}
 	}
@@ -87,13 +115,13 @@ class CantonMap extends Component {
 		const classSize = range / numberOfClasses;
 		// defining boundaries
 		let boundaries = [];
-		for (let i = 0; i < numberOfClasses; i++){
+		for (let i = 0; i &lt; numberOfClasses; i++){
 			let upperBoundary = max - classSize * i;
 			let lowerBoundary = max - classSize * (i + 1);
 			const uBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
 			const lBroundFactor = this.returnRoundFactor(upperBoundary, classSize);
 			//different rounding for small class sizes
-			if (classSize < 5){
+			if (classSize &lt; 5){
 				upperBoundary = upperBoundary.toFixed(1);
 				lowerBoundary = lowerBoundary.toFixed(1);
 			}
@@ -198,10 +226,10 @@ class CantonMap extends Component {
     render() {
 		const {t, data, selectedVariable, maxAndMin} = this.props;
 		return (
-				<LayerGroup>
+				&lt;LayerGroup>
 					{
 						this.props.data.map((item) => (
-							<GeoJSON
+							&lt;GeoJSON
 								key = {data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
@@ -210,41 +238,41 @@ class CantonMap extends Component {
 								onClick = {this.onClick.bind(this)}
 								onPopupClose = {this.resetStyle.bind(this, item)}
 							>
-								<Tooltip
+								&lt;Tooltip
 									sticky = {true}>
 									{item.text + " (" + item.name + ")"}
-								</Tooltip>
-								<Popup
+								&lt;/Tooltip>
+								&lt;Popup
 									maxWidth = "250"
 									closeButton = {false}
 								>
-									<table>
-										<tbody>
-											<tr>
-												<td>{t("popup.canton")}</td>
-												<td>{item.text} ({item.name})</td>
-											</tr>
-											<tr>
-												<td>{selectedVariable.text}:</td>
-												<td>{numberFormat(this.props.returnData(item))}</td>
-											</tr>
-										</tbody>
-									</table>
-								</Popup>
-							</GeoJSON>
+									&lt;table>
+										&lt;tbody>
+											&lt;tr>
+												&lt;td>{t("popup.canton")}&lt;/td>
+												&lt;td>{item.text} ({item.name})&lt;/td>
+											&lt;/tr>
+											&lt;tr>
+												&lt;td>{selectedVariable.text}:&lt;/td>
+												&lt;td>{numberFormat(this.props.returnData(item))}&lt;/td>
+											&lt;/tr>
+										&lt;/tbody>
+									&lt;/table>
+								&lt;/Popup>
+							&lt;/GeoJSON>
 						))
 					}
 					{
 						(data.length > 0)
 						?
-						<Legend
+						&lt;Legend
 							maxAndMin={maxAndMin}
 							classColors={this.returnColorClasses()[this.state.colorScheme]}
 							boundaries={this.returnBoundaries()}
 						/>
 						: null
 					}
-				</LayerGroup>
+				&lt;/LayerGroup>
 		)
 	}
 }
@@ -265,3 +293,26 @@ class CantonMap extends Component {
  }
 const LocalizedCantonMap = withTranslation()(CantonMap);
 export default LocalizedCantonMap;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 30 2019 04:00:52 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -179,7 +179,7 @@ class App extends Component {
 
     /**
     * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component (or two if lin. reg.),
-    * @param  {Variable object} item The selected variable.
+    * @param  {Object} item The selected variable.
     */
     setVariable = (item) => {
         if (item.length === 2) {
@@ -426,7 +426,7 @@ class App extends Component {
 
     /**
      * Set CSV data
-     * @param {2D Array} data the csv data.
+     * @param {Array} data the csv data.
      */
     setCSVData = (data) => {
         this.setState({

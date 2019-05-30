@@ -30,7 +30,8 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>ControlPanel<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">ControlPanel-Component that contains different DropdownMenus for the selection in theMap-Component, aswell as Icons to change to a different Components</div>
+            <div class="class-description">ControlPanel-Component that contains different DropdownMenus for the selection in the
+Map-Component, aswell as Icons to change to a different Components</div>
         
     
 </header>
@@ -93,7 +94,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line14">line 14</a>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -143,13 +144,31 @@
 
         
             
-<h4 class="name" id="fetchData"><span class="type-signature"></span>fetchData<span class="type-signature"></span></h4>
+<h4 class="name" id=".propTypes"><span class="type-signature">(static) </span>propTypes<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Called when asking for a Variable to be displayed on the mapPrepares correct query to ask App.js
+    PropTypes:
+
+variables: An array of variable objects.
+setVariable: A function that passes the newly selected Variable to the parent component.
+selectedVariable: A variable object (or array of two objects) that represent the currently selected Variable.
+fetchData: A function that is called when new data is needed from the API.
+unfilteredHospitals: A complete list of all (-> "unfiltered") hospital objects in an array.
+filteredByEnum: A function that passes a list of hospital objects filtered by enum to the parent component.
+filteredByType: A function that passes a list of hospital objects filtered by Type to the parent component (when in Map view).
+filteredLinRegByType: A function that passes a list of hospital objects filtered by Type to the parent component (when in Graph view).
+year: The currently selected year.
+hasLoaded: A boolean that signifies that all data has been fetched by the API and is ready to be manipulated.
+view: A number that represents the currently selected view (Map, Table, Graph)
+setView: A function that passes the newly selected view to the parent component.
+mapView: A number that represents the currently selected tab on the Map view.
+setMapView: A function that passes the newly selected Map view to the parent component
+graphView: A number that represents the currently selected tab on the Graph view.
+setGraphView: A function that passes the newly selected Graph view to the parent component.
+csvData: An array that represents the data shown in the table when on Table view, to export as CSV.
 </div>
 
 
@@ -187,7 +206,132 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line67">line 67</a>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line315">line 315</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="fetchData"><span class="type-signature"></span>fetchData<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Called when asking for a Variable to be displayed on the map
+Prepares correct query to ask App.js
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="resetEnum"><span class="type-signature"></span>resetEnum<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    resetEnum - resets the enum
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -211,7 +355,8 @@
 
 
 <div class="description">
-    Sets the state for selected Enum variableGets data after changing it
+    Sets the state for selected Enum variable
+Gets data after changing it
 </div>
 
 
@@ -249,7 +394,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line86">line 86</a>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -311,7 +456,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line106">line 106</a>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -335,7 +480,8 @@
 
 
 <div class="description">
-    Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,then calls fetchData to fetch data from the API.
+    Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
+then calls fetchData to fetch data from the API.
 </div>
 
 
@@ -373,7 +519,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line99">line 99</a>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -392,6 +538,257 @@
         
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="componentDidUpdate"><span class="type-signature"></span>componentDidUpdate<span class="signature">(prevProps)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    componentDidUpdate - called after the component was updated
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>prevProps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">type</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">previous props</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {JSX}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    render - renders the component
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ControlPanel.js.html">ControlPanel.js</a>, <a href="ControlPanel.js.html#line142">line 142</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSX of the component
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSX</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -413,7 +810,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 23 2019 12:42:02 GMT+0200 (GMT+02:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 30 2019 03:53:56 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

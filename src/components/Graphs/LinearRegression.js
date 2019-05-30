@@ -39,7 +39,7 @@ class LinearRegression extends Component {
 
 	/**
 	* Returns the values stored in a this.props.objects canton/hospital
-	* @param  {Canton || Hospital Object} item The object to extract the values from
+	* @param  {Object} item The object to extract the values from
 	* @return {Object} with x: Data for the xVariable and y: Data for the yVariable
 	*/
    returnData = (item) => {

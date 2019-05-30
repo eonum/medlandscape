@@ -72,7 +72,7 @@ class ControlPanel extends Component {
     /**
      * Called when asking for a Variable to be displayed on the map
      * Prepares correct query to ask App.js
-     * @param  {Variable Object} variable The selected Variable to apply to Hospitals or Cantons.
+     * @param  {Object} variable The selected Variable to apply to Hospitals or Cantons.
      */
     fetchData = (variable, enumVar) => {
         const {name, variable_model} = variable;
@@ -91,7 +91,7 @@ class ControlPanel extends Component {
     /**
      * Sets the state for selected Enum variable
      * Gets data after changing it
-     * @param {Variable Object} variable The chosen variable.
+     * @param {Object} variable The chosen variable.
      */
     setEnum = (variable) => {
         return this.fetchData(this.props.selectedVariable, variable).then(() => {
@@ -113,7 +113,7 @@ class ControlPanel extends Component {
     /**
      * Sets the state variable selectedVariable to the selected variable from a DropdownMenu Component,
      * then calls fetchData to fetch data from the API.
-     * @param  {Variable object} item The selected variable.
+     * @param  {Object} item The selected variable.
      */
     setVariable = (item) => {
         this.props.setVariable(item);

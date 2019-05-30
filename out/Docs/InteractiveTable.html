@@ -30,7 +30,12 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>InteractiveTable<span class="signature">(props)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represents the Table view which can be used to create and display a 2d-table to compare different hospitals and their values on selected variablesThe relevant state consists of an array that holds all dropdowns for hospitals and one that holds all selected items of those dropdowns. Those arrays exist for variables as well.</div>
+            <div class="class-description">Represents the Table view which can be used to create and display a 2d-table
+ to compare different hospitals and their values on selected variables
+
+The relevant state consists of an array that holds all dropdowns for hospitals
+ and one that holds all selected items of those dropdowns. Those arrays
+ exist for variables as well.</div>
         
     
 </header>
@@ -53,7 +58,8 @@
 
 
 <div class="description">
-    constructor - initializes the component by calling the superclass's constructor and setting the inital state
+    constructor - initializes the component by calling the superclass's
+ constructor and setting the inital state
 </div>
 
 
@@ -95,7 +101,7 @@
             <td class="type">
             
                 
-<span class="param-type">ojbect</span>
+<span class="param-type">object</span>
 
 
             
@@ -105,7 +111,7 @@
 
             
 
-            <td class="description last">props handed over by parent component</td>
+            <td class="description last">handed over by parent component</td>
         </tr>
 
     
@@ -202,7 +208,19 @@
 
 
 <div class="description">
-    PropTypes:variables: list of variables one can choose fromhospitals: list of hospitals one can choose fromrequestData: function that will be called to download the requested datahasLoaded: bool that will be true if the data is loadedretriggerTableGeneration: will cause resultTable to regenerate its table without resending a request
+    PropTypes:
+
+variables: list of variables one can choose from
+hospitals: list of hospitals one can choose from
+requestData: function that will be called to download the requested data
+hasLoaded: bool that will be true if the data is loaded
+retriggerTableGeneration: will cause resultTable to regenerate its table
+ without resending a request
+tableDataGenerated: will notify parent that ResultTable has finished
+ generating the table (called from ResultTable)
+tableDataLoaded: boolean that is true when the parent finished the request
+ and false when not (will be set to false again by ResultTable after it
+ finished table generation)
 </div>
 
 
@@ -240,7 +258,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line713">line 713</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line669">line 669</a>
     </li></ul></dd>
     
 
@@ -264,7 +282,8 @@
 
 
 <div class="description">
-    addAllHospitals - Adds all hospitals available in this.props.hospitals to the table, deleting existing ones.
+    addAllHospitals - Adds all hospitals available in this.props.hospitals to
+ the table, deleting existing ones.
 </div>
 
 
@@ -326,7 +345,8 @@
 
 
 <div class="description">
-    addHospital - Creates a new dropdown menu to select a hospital to display, with a new unique id. Then updates the state accordingly.
+    addHospital - Creates a new dropdown menu to select a hospital to
+ display, with a new unique id. Then updates the state accordingly.
 </div>
 
 
@@ -388,7 +408,8 @@
 
 
 <div class="description">
-    addVariable - Creates a new dropdown menu to select a variable to display, with a new unique id. Then updates the state accordingly.
+    addVariable - Creates a new dropdown menu to select a variable to display,
+ with a new unique id. Then updates the state accordingly.
 </div>
 
 
@@ -426,7 +447,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line279">line 279</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -450,7 +471,8 @@
 
 
 <div class="description">
-    canTableBeSorted - checks if in each dropdown something is selected, and if the data has been fetched for these selected things.
+    canTableBeSorted - checks if in each dropdown something is selected,
+ and if the data has been fetched for these selected things.
 </div>
 
 
@@ -488,7 +510,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line402">line 402</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line384">line 384</a>
     </li></ul></dd>
     
 
@@ -512,7 +534,9 @@
 
 
 <div class="description">
-    createNewHospital - creates a new hospitalDropdown and the according selectedVariable which is undefined by default, but can be set using the parameter selectedHosp
+    createNewHospital - creates a new hospitalDropdown and the according
+ selectedVariable which is undefined by default, but can be set using
+ the parameter selectedHosp
 </div>
 
 
@@ -550,7 +574,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line197">line 197</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -574,7 +598,9 @@
 
 
 <div class="description">
-    dataFetched - Called when the API-Request is completed (description)
+    dataFetched - Called when the API-Request is completed. Collects all the
+ years for that data exist for all selected hospitals and updates the
+ according yearDropdowns
 </div>
 
 
@@ -612,7 +638,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line584">line 584</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line549">line 549</a>
     </li></ul></dd>
     
 
@@ -636,7 +662,9 @@
 
 
 <div class="description">
-    resultTableAcknowledgedChange - description
+    resultTableAcknowledgedChange - Used by ResultTable to tell the
+ InteractiveTable that it wiped the table when the user changed the
+ selection of vars or hosps
 </div>
 
 
@@ -674,7 +702,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line635">line 635</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line597">line 597</a>
     </li></ul></dd>
     
 
@@ -698,7 +726,11 @@
 
 
 <div class="description">
-    selectHospital - Called when a hospital is selected on a dropdown menu. It uses the id of the dropdown that called this function to identify it's index in the dropdowns array and update its displayed text. The index is as well used to identify the according object in the array of selected items and update it. Immutabilit-helper is used for that.
+    selectHospital - Called when a hospital is selected on a dropdown menu.
+ It uses the id of the dropdown that called this function to identify it's
+ index in the dropdowns array and update its displayed text. The index is
+ as well used to identify the according object in the array of selected
+ items and update it. Immutabilit-helper is used for that.
 </div>
 
 
@@ -736,7 +768,71 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line257">line 257</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line248">line 248</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="selectionChanged"><span class="type-signature"></span>selectionChanged<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    selectionChanged - called when the selected variables or hospitals change.
+ This will notify the ResultTable to wipe itself (via props) and wait
+ for regeneration.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line318">line 318</a>
     </li></ul></dd>
     
 
@@ -760,7 +856,11 @@
 
 
 <div class="description">
-    selectVariable - Called when a variable is selected on a dropdown menu. It uses the id of the dropdown that called this function to identify it's index in the dropdowns array and update its displayed text. The index is as well used to identify the according object in the array of selected items and update it. Immutabilit-helper is used for that.
+    selectVariable - Called when a variable is selected on a dropdown menu.
+ It uses the id of the dropdown that called this function to identify it's
+ index in the dropdowns array and update its displayed text. The index is
+ as well used to identify the according object in the array of selected
+ items and update it. Immutabilit-helper is used for that.
 </div>
 
 
@@ -798,7 +898,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line529">line 529</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line495">line 495</a>
     </li></ul></dd>
     
 
@@ -822,7 +922,8 @@
 
 
 <div class="description">
-    selectYear - description
+    selectYear - called when something is selected in a yearDropdown. updates
+ the state and retriggers table generation.
 </div>
 
 
@@ -860,7 +961,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line339">line 339</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line332">line 332</a>
     </li></ul></dd>
     
 
@@ -884,7 +985,8 @@
 
 
 <div class="description">
-    sortHospitals - Sorts selectedHospitals and hospitalDropdowns according to their value on the variable with senderId.
+    sortHospitals - Sorts selectedHospitals and hospitalDropdowns according
+ to their value on the variable with senderId.
 </div>
 
 
@@ -922,7 +1024,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line444">line 444</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line426">line 426</a>
     </li></ul></dd>
     
 
@@ -946,7 +1048,8 @@
 
 
 <div class="description">
-    submitTableData - Called when the ResultTable finished generating.Adds row and column names to the array for CSV export.
+    submitTableData - Called when the ResultTable finished generating.
+Adds row and column names to the array for CSV export.
 </div>
 
 
@@ -984,7 +1087,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line552">line 552</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line513">line 513</a>
     </li></ul></dd>
     
 
@@ -1008,7 +1111,8 @@
 
 
 <div class="description">
-    subtractHospital - Gets called when the remove button is clicked. Removes the according dropdown from state.
+    subtractHospital - Gets called when the remove button is clicked. Removes
+ the according dropdown from state.
 </div>
 
 
@@ -1046,7 +1150,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line222">line 222</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line219">line 219</a>
     </li></ul></dd>
     
 
@@ -1070,7 +1174,8 @@
 
 
 <div class="description">
-    subtractVariable - Gets called when the remove button is clicked. Removes the according dropdown from state.
+    subtractVariable - Gets called when the remove button is clicked.
+ Removes the according dropdown from state.
 </div>
 
 
@@ -1108,7 +1213,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line370">line 370</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line359">line 359</a>
     </li></ul></dd>
     
 
@@ -1132,7 +1237,9 @@
 
 
 <div class="description">
-    updateAllDropdowns - Fills the dropdown-lists that were present before the api request was complete with the correct data. Otherwise they would be empty lists.
+    updateAllDropdowns - Fills the dropdown-lists that were present before
+ the api request was complete with the correct data. Otherwise they
+ would be empty lists.
 </div>
 
 
@@ -1294,7 +1401,8 @@
 
 
 <div class="description">
-    componentDidUpdate - updates the dropdowns if needed and checks if the language has changed -> if yes, the table is cleared
+    componentDidUpdate - updates the dropdowns if needed and checks if the
+ language has changed -> if yes, the table is cleared
 </div>
 
 
@@ -1382,7 +1490,8 @@
 
 
 <div class="description">
-    componentWillReceiveProps - when the language was changed, the listItems of the existing dropdowns need an update to display the correct items
+    componentWillReceiveProps - when the language was changed, the listItems
+ of the existing dropdowns need an update to display the correct items
 </div>
 
 
@@ -1514,7 +1623,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line646">line 646</a>
+        <a href="InteractiveTable.js.html">InteractiveTable.js</a>, <a href="InteractiveTable.js.html#line608">line 608</a>
     </li></ul></dd>
     
 
@@ -1588,7 +1697,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 23 2019 12:50:11 GMT+0200 (GMT+02:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 30 2019 03:57:58 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

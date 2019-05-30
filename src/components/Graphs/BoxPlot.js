@@ -20,8 +20,8 @@ class BoxPlot extends Component {
 
 	/**
 	 * Returns the values stored in a this.props.objects canton/hospital
-	 * @param  {Canton || Hospital Object} item The object to extract the values from
-	 * @return {int || float} The selected entry in the item.values object
+	 * @param  {Object} item The object to extract the values from
+	 * @return {number} The selected entry in the item.values object
 	 */
 	returnData = (item) => {
 		let varName = this.props.selectedVariable.name;

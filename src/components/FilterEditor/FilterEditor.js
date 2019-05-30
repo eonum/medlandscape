@@ -59,7 +59,7 @@ class FilterEditor extends Component {
 
     /**
      *Called when a variable is selected in a Checkboxlist
-     * @param  {Filter Object} item the selected filter object to apply to Hospitals
+     * @param  {Object} item the selected filter object to apply to Hospitals
      *
      */
     checkboxSelectItem = (item) => {
@@ -86,7 +86,7 @@ class FilterEditor extends Component {
 
     /**
      * Called when different values have been selected in the filter
-     * @param  {Variable Object} selectedValues the selected filter object to apply to Hospitals
+     * @param  {Object} selectedValues the selected filter object to apply to Hospitals
      */
 	filter = (selectedValues) => {
 		const {selectedYear, hospitals} = this.props;

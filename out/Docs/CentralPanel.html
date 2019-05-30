@@ -30,7 +30,8 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>CentralPanel<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">CentralPanel-Component that contains a field which is used to displayedthe InteractiveTable, BoxPlot and LinearRegression</div>
+            <div class="class-description">CentralPanel-Component that contains a div which is used to displayed
+the InteractiveTable, BoxPlot and LinearRegression</div>
         
     
 </header>
@@ -93,7 +94,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line14">line 14</a>
+        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -139,7 +140,385 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
 
+        
+            
+<h4 class="name" id=".propTypes"><span class="type-signature">(static) </span>propTypes<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    PropTypes:
+view:
+graphView:
+variables: An array of all the variable objects.
+hasLoaded: A boolean that signifies that all data has been fetched by the API and is ready to be manipulated.
+fetchData: A function that is called when new data is needed from the API.
+objects: An array of hospital objects.
+setVariable: A function that passes the newly selected Variable to the parent component.
+selectedVariable: A variable object (or array of two objects) that represent the currently selected Variable.
+setCSVData: A function that passes a 2D array to be exported into csv to the parent component.
+year: The currently selected year.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line177">line 177</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="requestLinRegData"><span class="type-signature"></span>requestLinRegData<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    requestLinRegData - requests the Data tha is going to be used in the
+     table component, depending on the selected Variable
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="requestTableData"><span class="type-signature"></span>requestTableData<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    requestTableData - requests the Data tha is going to be used in the
+     table component, depending on the selected Variable
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="tableDataGenerated"><span class="type-signature"></span>tableDataGenerated<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    tableDataGenerated - sets the state of the generated to "not loaded"
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {JSX}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    render - renders the component
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CentralPanel.js.html">CentralPanel.js</a>, <a href="CentralPanel.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    jsx of the component
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">JSX</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -161,7 +540,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 23 2019 12:39:46 GMT+0200 (GMT+02:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu May 30 2019 03:49:52 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

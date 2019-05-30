@@ -9,15 +9,13 @@ import { numberFormat, calculateCircleColor } from './../../../utils.mjs';
 * HosptialVariable in context with our selected Hospitals on to our map
 */
 
-
-
 class HospitalMap extends Component {
 
 
 
     /**
      * Computes the Radius for a hospital point.
-     * @param  {Hospital Object} item The hospital
+     * @param  {Object} item The hospital
      * @return {int} size of the radius
      */
 	getNormedRadius = (item) => {
