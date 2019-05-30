@@ -1,9 +1,10 @@
 .slider {
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
     background-color: white;
     border-radius: 15px;
     position: relative;
+    align-self: end;
 }
 
 .years {

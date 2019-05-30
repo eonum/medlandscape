@@ -1,7 +1,5 @@
 .central-panel {
     overflow: auto;
-    align-self: start;
-    max-height: 650px;
     background-color: white;
 	border-radius: 15px;
 	padding: 10px;
