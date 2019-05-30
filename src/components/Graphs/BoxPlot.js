@@ -106,8 +106,8 @@ class BoxPlot extends Component {
             .attr("height", height);
 
 
-		// Its opacity is set to 0: we don't see it by default.
-     	var tooltip = d3.select("#boxplot")
+		// append tooltip. opacity is set to 0: we don't see it by default.
+     	d3.select("#boxplot")
 		    .append("div")
 		    .style("opacity", 0)
 		    .attr("class", "tooltip")
@@ -419,7 +419,10 @@ class BoxPlot extends Component {
 			.attr("class", "popupVariable");
 	}
 
-
+	/**
+	 * create exploding boxplot and info header
+	 * @return {JSX}
+	 */
 	render() {
 		const { t, selectedVariable } = this.props;
 		let varText = t('mapView.variables');

@@ -123,7 +123,7 @@ class LinearRegression extends Component {
 			.range([h-padding, padding]);
 		// Add a tooltip div. Here we define the general feature of the tooltip: stuff that do not depend on the data point.
      	// Its opacity is set to 0: we don't see it by default.
-     	var tooltip = d3.select("#linearregression")
+     	d3.select("#linearregression")
 		    .append("div")
 		    .style("opacity", 0)
 		    .attr("class", "tooltip")
@@ -298,7 +298,7 @@ class LinearRegression extends Component {
 	* @return {svg}
 	*/
 	createSvg = () =>{
-		const {w, h, padding} = this.state;
+		const {w, h} = this.state;
 		var svg = d3.select("#linearregression")
 			.append("svg")
 			.attr("id","linearregressionsvg")
@@ -314,7 +314,7 @@ class LinearRegression extends Component {
 	* @param {xScale} yScale to append to svg
 	*/
 	appendAxes = (svg, xScale, yScale) => {
-		const {w, h, padding} = this.state;
+		const {h, padding} = this.state;
 		//define axes
 		var xAxis = d3.axisBottom()
 			.scale(xScale)
@@ -341,7 +341,7 @@ class LinearRegression extends Component {
 	* @param {svg}
 	*/
 	addLegend = (svg) => {
-		const {w, h, padding} = this.state;
+		const {w, h} = this.state;
 		// define legend
 		let l_offset_h = 310;
 		let l_offset_w = 220;

@@ -11,7 +11,6 @@
 }(
 function(d3,d3tip)
 {
-
   var default_colors = ["#a6cee3","#ff7f00","#b2df8a","#1f78b4","#fdbf6f","#33a02c","#cab2d6","#6a3d9a","#fb9a99","#e31a1c","#ffff99","#b15928"];
   var compute_boxplot = function(data,iqr_k,value){
     iqr_k = iqr_k || 1.5
