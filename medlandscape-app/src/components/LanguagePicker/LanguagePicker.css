@@ -1,18 +1,42 @@
-.langBtn {
-    width: 80px;
-    height: 30px;
-    margin: 10px;
+.languagePicker {
+    background-color: white;
+    box-sizing: border-box;
+    border-radius: 23px;
+    padding: 2px;
+    margin-top: 125px;
+    margin-left: 1px;
+}
+
+.languagePicker:hover > .hiddenLangBtn {
+    margin-top: 10px;
+    display: block;
+}
+
+.langBtn, .hiddenLangBtn {
+    width: 40px;
+    height: 40px;
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
+    font-size: 12pt;
+}
+
+.langBtn {
     background-color: #1996fa;
     color: white;
-    font-size: 14pt;
 }
 
-.langBtn:hover {
-    cursor: pointer;
-}
-
-.langBtn:focus {
+.langBtn:focus, .hiddenLangBtn:focus {
     outline: none;
+}
+
+.hiddenLangBtn {
+    background-color: #ccc;
+    color: black;
+    display: none;
+}
+
+.hiddenLangBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1996f6;
 }

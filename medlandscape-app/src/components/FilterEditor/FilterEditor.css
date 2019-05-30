@@ -1,0 +1,9 @@
+.filterCheckbox > .checkbox-list {
+    margin: 0;
+    max-height: 130px;
+}
+
+.filterCheckbox p {
+    height: 15px;
+    line-height: 15px;
+}

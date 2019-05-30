@@ -1,15 +1,20 @@
 import React, { Component } from "react";
-import { GeoJSON, Popup, LayerGroup } from 'react-leaflet'
-import cantons from './cantons/cantons.json';
-import Legend from './Legend.js'
+import PropTypes from 'prop-types';
+import { GeoJSON, Popup, LayerGroup, Tooltip } from 'react-leaflet'
+import cantons from '../cantons/cantons.json';
+import Legend from '../Legend/Legend.js'
+import { withTranslation } from 'react-i18next';
+import { numberFormat } from './../../../utils.mjs';
+
+/*
+* Component to display the different cantons on our map. Also displays the selected
+* CantonVariable on to our map
+*/
 
 class CantonMap extends Component {
 
-	constructor(props){
-		super(props);
-		this.state = {
-			colorScheme: ''
-		};
+	state = {
+		colorScheme: ''
 	}
 
   /**
@@ -25,9 +30,9 @@ class CantonMap extends Component {
 			"color": "rgb("+color+")", // outline color
     		"fillColor": "rgb("+color+")",
     		"weight": 3,  // defining how big the outline of canton is
-    		"opacity": 0.4, // outline opacity
-    		"fillOpacity": 0.6
-			};
+    		"opacity": 0.6, // outline opacity
+    		"fillOpacity": 0.8
+		};
 		return cantonStyle;
 	}
 
@@ -58,15 +63,15 @@ class CantonMap extends Component {
 	 * @return {Number} maxRoundingFactor biggest rounding factor that can be used for the given boundary.
  	*/
 	returnRoundFactor = (boundary, classSize) => {
-	let maxRoundingFactor = 1, y = 100000000000000000;
-	while (y > 1){ // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
-		if (classSize > y){
-			maxRoundingFactor = y/10;
-			break;
+		let maxRoundingFactor = 1, y = 100000000000000000;
+		while (y > 1) { // doesnt let maxRoundingFactor become less than 1 (-> wouldn't work correctly with math.round)
+			if (classSize > y) {
+				maxRoundingFactor = y / 10;
+				break;
+			}
+			y /= 10
 		}
-		y/=10
-	}
-	return maxRoundingFactor;
+		return maxRoundingFactor;
 	}
 
 	/**
@@ -110,10 +115,10 @@ class CantonMap extends Component {
 	* color schemes can be mapped to variables in future (with componentWillReceiveProps())
 	*/
 	componentWillMount(){
-		const colorClassesArray = this.returnColorClasses();
-		const random = Math.floor((Math.random() * colorClassesArray.length));
+		// const colorClassesArray = this.returnColorClasses();
+		// const random = Math.floor((Math.random() * colorClassesArray.length));
 		this.setState({
-			colorScheme: random,
+			colorScheme: 0,
 		});
 	}
 
@@ -123,54 +128,140 @@ class CantonMap extends Component {
  	* @return {2D Array} color classes arrays consistiing of rgb colors as strings.
   	*/
 	returnColorClasses = () => {
-		const greenToRed8Classes = ["85, 181, 22", "135, 200, 54", "177, 213, 15", "232, 234, 29", "234, 224, 2", "245, 175, 1", "239, 118, 14", "255, 50, 12"];
+        const greenToRed8Classes = ["85, 181, 22", "135, 200, 54", "177, 213, 15", "232, 234, 29", "234, 224, 2", "245, 175, 1", "239, 118, 14", "255, 50, 12"];
 		const redToGreen8Classes = greenToRed8Classes.slice().reverse();
 		const blue8Classes = ["235, 240, 255", "186, 210, 235", "142, 190, 218", "90, 158, 204", "53, 126, 185", "28, 91, 166", "11, 50, 129", "51, 50, 120"];
 		const red8Classes = ["253, 238, 186", "249, 227, 151", "248 ,  199 ,  122", "244,  174,  90", "246,  133,  82" , "235 ,  93,  80", "204,  73,  80",  "165,  50,  50"]
 		const red5Classes = ["250, 215, 33", "255, 177, 28", "255, 115, 19", "171, 28, 0", "140, 0, 0"];
-		const colorClassesArray = [greenToRed8Classes, blue8Classes, red8Classes, redToGreen8Classes];
+		const colorClassesArray = [blue8Classes, red8Classes, red5Classes, redToGreen8Classes, greenToRed8Classes];
 		return colorClassesArray;
 	}
 
 	/**
-	* Defines what happens if you hover over a canton with your mouse
-	* @param {Object} item = the canton you are hovering over
-	* @param {Object} e = the geoJSON object you are hovering over
+	* Changes canton style if you hover on a canton with your mouse
+	* @param {Object} e the event
 	*/
-	onMouseOver = (item, e) => {
-		// if hovering should highlight a canton (use onMouseOut to reset style. resetting style hasent worked yet sadly)
-		/*e.target.setStyle({
-			color: '#000',
+	onMouseOver = (e) => {
+		e.target.setStyle({
+			color: "#000",
 			opacity: 1
-		});*/
-		e.layer.bindPopup(item.text + " (" + item.name + ")", {closeButton: false});
-		e.layer.openPopup();
- 	}
+		});
+		e.target.bringToFront();
+	}
 
 	/**
-	* Draws cantons on the Map
+	* Set back canton style if you hover off a canton with your mouse
+	* @param {Object} item = the canton you are hovering off
+	* @param {Object} e the event
 	*/
+	onMouseOut = (item, e) => {
+		if (!e.target.isPopupOpen())
+		this.resetStyle(item, e);
+	}
+
+	/**
+	* Set back canton style
+	* @param {Object} item = the canton
+	* @param {Object} e the event
+	*/
+	resetStyle = (item, e) => {
+		const style = this.getCantonStyle(item);
+		e.target.setStyle(style);
+	}
+
+	/**
+	* Set a new style to a canton on the map
+	* @param {Object} e the event
+	*/
+	setNewStyle = (e) =>{
+		e.target.setStyle({
+			color: "#000",
+			opacity: 1
+		});
+		e.target.bringToFront();
+	}
+
+	/**
+	* Define behaviour of click on hospital
+	* @param {Object} e the event
+	*/
+	onClick = (e) => {
+		this.setNewStyle(e);
+		e.target.closeTooltip();
+	}
+
+	/**
+	 * Draws cantons on the map
+	 * Adds popup an tooltip with canton information to each geoJSON
+	 * @return {JSX}
+	 */
     render() {
+		const {t, data, selectedVariable, maxAndMin} = this.props;
 		return (
 				<LayerGroup>
 					{
 						this.props.data.map((item) => (
 							<GeoJSON
-								ref="geojson"
-								key = {this.props.data.indexOf(item)}
+								key = {data.indexOf(item)}
 								data = {cantons[item.name]}
 								style = {this.getCantonStyle(item)}
-								onMouseOver = {this.onMouseOver.bind(this, item)}
+								onMouseOver = {this.onMouseOver.bind(this)}
+								onMouseOut = {this.onMouseOut.bind(this, item)}
+								onClick = {this.onClick.bind(this)}
+								onPopupClose = {this.resetStyle.bind(this, item)}
+							>
+								<Tooltip
+									sticky = {true}>
+									{item.text + " (" + item.name + ")"}
+								</Tooltip>
+								<Popup
+									maxWidth = "250"
+									closeButton = {false}
 								>
-								<Popup>
-									{this.props.returnData(item)}
+									<table>
+										<tbody>
+											<tr>
+												<td>{t("popup.canton")}</td>
+												<td>{item.text} ({item.name})</td>
+											</tr>
+											<tr>
+												<td>{selectedVariable.text}:</td>
+												<td>{numberFormat(this.props.returnData(item))}</td>
+											</tr>
+										</tbody>
+									</table>
 								</Popup>
 							</GeoJSON>
 						))
 					}
-					<Legend maxAndMin={this.props.maxAndMin} classColors={this.returnColorClasses()[this.state.colorScheme]} boundaries={this.returnBoundaries()}/>
+					{
+						(data.length > 0)
+						?
+						<Legend
+							maxAndMin={maxAndMin}
+							classColors={this.returnColorClasses()[this.state.colorScheme]}
+							boundaries={this.returnBoundaries()}
+						/>
+						: null
+					}
 				</LayerGroup>
 		)
 	}
 }
-export default CantonMap;
+
+/**
+ * PropTypes:
+ * t: used to translate
+ * data: Passes the Data to the corresponding selections
+ * selectedVarialbe: The Variable that has been selected in the Controlpanel
+ * maxAndMin: Function that calculates the Max and Min Values of the selected Variable
+ */
+
+ CantonMap.propTypes = {
+	 t: PropTypes.func.isRequired,
+	 data: PropTypes.array.isRequired,
+	 selectedVariable: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+	 maxAndMin: PropTypes.object.isRequired,
+ }
+const LocalizedCantonMap = withTranslation()(CantonMap);
+export default LocalizedCantonMap;

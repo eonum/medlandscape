@@ -1,0 +1,28 @@
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item {
+    padding-left: 7px;
+    border-radius: 5px;
+}
+
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(1){
+    background: linear-gradient(to right, #a72a2a, white);
+}
+
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(2){
+    background: linear-gradient(to right, #a79f2a, white);
+}
+
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(3){
+    background: linear-gradient(to right, #2da72a, white);
+}
+
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(4){
+    background: linear-gradient(to right, #2a8ea7, white);
+}
+
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(5){
+    background: linear-gradient(to right, #2d2aa7, white);
+}
+
+.hospitalTypeFilter > .checkbox-list > .checkbox-list-item:nth-child(6){
+    background: linear-gradient(to right, #762aa7, white);
+}

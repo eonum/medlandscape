@@ -1,29 +1,28 @@
-.checkbox-list{
-    min-width: 270px;
-    max-width: 400px;
-    height: 500px;
-    overflow-y: scroll;
-    background-color: #ddd;
+.checkbox-list {
+    width: 250px;
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
 .checkbox-list-item {
-    width: 100%;
-    font-size: 16px;
     box-sizing: border-box;
-    padding: 3px 0 3px 10px;
-    display: inline-flex;
+    width: 250px;
+    font-size: 9pt;
+    min-height: 25px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.checkbox-list-item label {
+    display: flex;
     align-items: center;
 }
 
-.checkbox-list-item:nth-child(odd) {
-    background-color: #ccc;
-}
-
 .list-item-name {
-    box-sizing: border-box;
-    display: inline;
-    height: 30px;
-    line-height: 30px;
+    line-height: 15px;
     padding-left: 10px;
 }
 

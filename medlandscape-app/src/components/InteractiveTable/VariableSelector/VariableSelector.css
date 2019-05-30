@@ -1,0 +1,67 @@
+.variableSelector > .variableDropdown:nth-child(even) {
+   background-color: rgba(180, 180, 180, .2);
+}
+
+.variableSelector {
+	height: 110px;
+	display: flex;
+}
+
+.variableDropdown {
+    width: 250px;
+	padding: 10px;
+	position: relative;
+}
+
+.variableDropdown > .dropdown {
+	padding: 0;
+}
+
+.btnSortAsc, .btnSortDesc {
+    width: 30px;
+    height: 20px;
+    margin: 15px 5px 0 0;
+    color: white;
+    text-align: center;
+    background-color: #1996f6;
+    border: none;
+    border-radius: 15px;
+    outline: none;
+}
+
+.addVariableButton {
+    margin: 0 10px;
+    align-self: center;
+}
+
+.yearDropdown > .dropdown {
+    width: 100px;
+    padding: 0;
+    display: inline-block;
+}
+
+.yearDropdown > .dropdown > .dropbtn {
+    width: 100px;
+    height: 30px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+.yearDropdown > .dropdown > .dropdown-content {
+    width: 100px;
+    height: 200px;
+}
+
+.yearDropdown > .dropdown > .dropdown-content > .searchbar{
+    width: 70px;
+    height: 20px;
+    margin: 5px 0 5px 5px;
+    border-radius: 20px;
+    font-size: 9pt;
+}
+
+.yearDropdown > .dropdown > .dropdown-content > .dropdown-options > .dropdownElem {
+    text-align: center;
+    padding: 10px 0;
+}

@@ -1,12 +1,76 @@
-{
-    "variables": {
-        "name_canton": "Kantonsvariablen:",
-        "name_hospital": "Spitalvariabeln:"
+﻿{
+    "mapView": {
+        "title": "Karte",
+        "variables" : "Ausgewählte Kennzahl",
+        "cantons": "Kantone",
+        "hospitals": "Spitäler",
+        "filter": "Ausgewählter Filter",
+        "checkbox": "Werte"
+    },
+    "dropDowns": {
+        "fallback": "Wählen",
+        "hospitalFallback": "Spital wählen",
+        "cantonFallback": "Kanton wählen",
+        "variablesFallback": "Kennzahl wählen",
+        "filterFallback": "Filter wählen",
+        "search" : "Suchen..."
+    },
+    "tableView": {
+        "title": "Tabelle",
+        "missingData": "Bitte wählen Sie in jedem Dropdown Menü etwas aus, und stellen Sie sicher, dass die Tabelle generiert wurde, bevor Sie sie sortieren.",
+        "sortAsc": "▲",
+        "sortDesc": "▼",
+        "btnCreateTable": "Tabelle generieren",
+        "btnAddAllHospitals": "Alle Spitäler hinzufügen",
+		"btnCreateCSV": "CSV-Datei erstellen",
+        "noTimeData": "Kein Zeitverlauf vorhanden"
+    },
+    "graphView": {
+        "title": "Graph",
+        "regressionLine": "Regressionslinie",
+        "boxPlot": "Boxplot",
+        "boxPlotTitle": "Boxplot",
+        "regression": "L. Reg.",
+        "regressionTitle": "Lineare Regression",
+	    "correlation": "Korrelation",
+        "selectVariable": "Bitte wählen sie eine Kennzahl.",
+        "selectVariables": "Bitte wählen sie Kennzahlen aus.",
+        "xAxis": "X-Achse",
+        "yAxis": "Y-Achse"
     },
     "language_picker": {
         "info": "Wählen Sie Ihre Sprache"
     },
     "localization_example": {
         "example": "Hallo Brudi"
-    }
+    },
+    "popup": {
+        "address": "Adresse",
+        "hospital": "Spital",
+        "canton": "Kanton"
+    },
+    "mapInfo": {
+        "map": "Karte",
+        "hospitals": "Spitäler",
+        "cantons": "Kantone",
+        "variable": "Kennzahl",
+        "year": "Jahr",
+        "filter": "Angezeigte",
+        "noVariable": "Keine Kennzahl ausgewählt"
+    },
+    "hospitalTypes": {
+        "university": "Universitätsspital",
+        "generic-center": "Allgemeinspital, Zentrumversorgung",
+        "generic-basic": "Allgemeinspital, Grundversorgung",
+        "psychiatry": "Psychiatrische Klinik",
+        "rehabilitation": "Rehabilitationsklinik",
+        "special": "Spezialklinik"
+    },
+	"boxPlot" : {
+		"median": "Median",
+		"upperQuartile": "Oberes Quartil",
+		"lowerQuartile": "Oberes Quartil",
+		"minimum": "Minimum",
+		"maximum": "Maximum"
+	}
 }

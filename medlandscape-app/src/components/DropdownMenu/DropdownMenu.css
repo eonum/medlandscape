@@ -1,15 +1,18 @@
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
     padding: 10px 0 10px 0;
+    position: relative;
 }
 
 /* Dropdown Button */
 .dropbtn {
+    font-size: 11pt;
     box-sizing: border-box;
-    background-color: #1996fa;
+    background-color: #1996f6;
     color: white;
-    padding: 14px 20px;
-    font-size: 16px;
+	height: 50px;
+    text-align: center;
+    padding: 10px;
     border: none;
     cursor: pointer;
     width: 250px;
@@ -22,11 +25,18 @@
 
 /* The search field */
 .searchbar {
+    margin: 5px 0 5px 10px;
+    width: 210px;
+    border: none;
+    border-radius: 20px;
+    background-color: #1996f6;
+    color: white;
     font-size: 16px;
+    outline: none;
 }
 
-.searchbar:hover {
-    cursor: default;
+.searchbar::placeholder {
+    color: white;
 }
 
 /* The search field when it gets focus/clicked on */
@@ -36,25 +46,30 @@
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
+    font-size: 9pt;
     position: absolute;
     box-sizing: border-box;
     z-index: 1;
     background-color: #f6f6f6;
     border: 1px solid black;
+    border-top: none;
     width: 250px;
     height: 300px;
-    overflow: scroll;
+    overflow-wrap: break-word;
+    overflow-y: auto;
     display: none;
 }
 
 /* Links inside the dropdown */
-.dropdownElem {
+.dropdownElem, .searchbar {
     box-sizing: border-box;
     border: none;
-    border-bottom: 1px solid #ddd;
-    color: black;
-    padding: 12px 16px;
-    width: 250px;
+    padding: 12px;
+}
+
+.dropdownElem {
+    border-top: 1px solid #ddd;
+    max-width: 225px;
 }
 
 /* Change color of dropdown links on hover */

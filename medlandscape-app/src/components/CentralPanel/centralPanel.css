@@ -1,0 +1,22 @@
+.central-panel {
+    overflow: auto;
+    align-self: start;
+    max-height: 650px;
+    background-color: white;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+.central-panel-header {
+    padding-left: 20px;
+    margin-bottom: 30px;
+}
+
+.central-panel-header h1 {
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.central-panel-header p {
+    padding: 5px 0;
+}

@@ -1,0 +1,97 @@
+#linearregression {
+    margin-left: 60px;
+    padding-left: 30px;
+}
+
+.line {
+    stroke: #E4002B;
+    fill: none;
+    stroke-width: 3;
+}
+
+.legend {
+  font-size: 12px;
+}
+#linearregression rect {
+  stroke-width: 2;
+  fill: #E4002B;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 10px;
+    font-family: sans-serif;
+}
+
+.text-label {
+    font-size: 10px;
+    font-family: sans-serif;
+}
+
+.dot {
+    stroke: none;
+}
+
+div.tooltip {
+    color: white;
+    position: absolute;
+    text-align: center;
+    padding: 3px;
+    font-size: 16px;
+    background: #1996fa;
+    border: 0px;
+    border-radius: 3px;
+    pointer-events: auto;
+    z-index: 10000;
+}
+
+#popup{
+	position: absolute;
+	width: 270px;
+	padding: 10px;
+	border-radius: 15px;
+    background-color: #1996fa;
+    color: white;
+    opacity: 0.9;
+    z-index: 10000;
+}
+
+
+#popup th, #popup tr, #popup td {
+	font-size: 13px;
+	padding: 4px;
+	text-align: left;
+	border-top: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+#popup table{
+	border-spacing: 10px 0;
+	border-collapse: collapse;
+}
+
+#popup td:nth-child(1) {
+  width: 100px;
+  }
+
+#popup td:nth-child(2) {
+  width: 150px;
+}
+
+.linear-reg-flex {
+    display: flex;
+}
+
+.linear-reg-graph {
+    margin-bottom: 70px;
+}
+
+.axisDropdowns {
+    margin-left: 20px;
+}

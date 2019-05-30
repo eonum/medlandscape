@@ -8,11 +8,74 @@
 }
 
 .leaflet-popup-content-wrapper{
-    background-color: gray;
+    background-color: #1996fa;
     color: white;
     opacity: 0.9;
     line-height: 10px;
 }
-.leaflet-popup-tip {
-    background: red;
+
+.leaflet-popup-tip{
+	opacity: 0;
+}
+
+.leaflet-fade-anim .leaflet-popup{
+	transition: none;
+	-webkit-transition: none;
+	-moz-transition: none;
+	pointer-events: none;
+}
+
+.resetView {
+	background-image: url('icons/switzerland.svg');
+	background-color: white;
+    width: 44px;
+    height: 44px;
+	border-radius: 22px;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 55px auto;
+    margin-right: -5px;
+}
+
+.resetView:hover {
+	cursor: pointer;
+}
+
+.leaflet-tooltip{
+	font-size: 16px;
+	color: white;
+	position: absolute;
+	text-align: center;
+	padding: 3px;
+	background: #1996fa;
+	border: 0px;
+	border-radius: 3px;
+	pointer-events: none;
+}
+
+.leaflet-tooltip::before{
+	opacity: 0;
+}
+
+.map th, .map tr, .map td {
+	font-size: 13px;
+	padding: 4px 0;
+	padding-right: 10px;
+	text-align: left;
+	border-top: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+table{
+	border-spacing: 10px 0;
+	border-collapse: collapse;
+}
+
+td:nth-child(1) {
+  width: 100px;
+  }
+
+td:nth-child(2) {
+  width: 150px;
 }

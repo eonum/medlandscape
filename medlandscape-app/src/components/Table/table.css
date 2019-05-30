@@ -1,0 +1,23 @@
+.table {
+    border-collapse: collapse;
+}
+
+.table tr {
+    height: 70px;
+}
+
+.table tr:nth-child(even) {
+    background-color: rgba(180, 180, 180, .2);
+}
+
+.table td {
+    width: 270px;
+    height: 70px;
+    box-sizing: border-box;
+    padding: 0 5px;
+    text-align: center;
+}
+
+.table td:nth-child(even) {
+    background-color: rgba(200, 200, 200, .2);
+}

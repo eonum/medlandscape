@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withTranslation } from "react-i18next";
 import './LanguagePicker.css'
 
@@ -7,14 +8,31 @@ import './LanguagePicker.css'
 */
 class LanguagePicker extends Component {
 
+    state = {
+        lang : 'de',
+        otherLang : 'fr'
+    }
+
     /**
     * onLanguageChange - Changes the language, and after that resends the
     * initApiCall to retrieve the correct variable names.
     */
-    onLanguageChange = (code) => {
+    onLanguageChange = () => {
+        let code, other;
+        if (this.state.lang === 'de') {
+            code = 'fr';
+            other = 'de';
+        } else {
+            code = 'de';
+            other = 'fr';
+        }
         this.props.i18n.changeLanguage(code).then(() => {
-            this.props.resendInitApiCall();
+            this.props.changeLanguage();
         });
+        this.setState({
+            lang : code,
+            otherLang : other
+        })
     }
 
 
@@ -26,12 +44,24 @@ class LanguagePicker extends Component {
     render () {
         return (
             <div className="languagePicker">
-                <p>{this.props.t('language_picker.info')}:</p>
-                <button className="langBtn" onClick={() => this.onLanguageChange('de')}>DE</button>
-                <button className="langBtn" onClick={() => this.onLanguageChange('fr')}>FR</button>
+                <button className="langBtn">
+                    {this.state.lang.toUpperCase()}
+                </button>
+                <button className="hiddenLangBtn" onClick={() => this.onLanguageChange()}>
+                    {this.state.otherLang.toUpperCase()}
+                </button>
             </div>
         );
     }
+}
+
+/**
+ * PropTypes:
+ *
+ * changeLanguage: Called when the language is changed.
+ */
+LanguagePicker.propTypes = {
+    changeLanguage: PropTypes.func.isRequired,
 }
 
 /**

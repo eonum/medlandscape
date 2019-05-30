@@ -1,12 +1,76 @@
-{
-    "variables": {
-        "name_canton": "Variables de canton:",
-        "name_hospital": "Variables d'hôpital:"
+﻿{
+    "mapView": {
+        "title": "Carte",
+        "variables" : "Variable seléctionnée",
+        "cantons": "Cantons",
+        "hospitals": "Hôpitaux",
+        "filter": "Filtre seléctionné",
+        "checkbox": "Options"
+    },
+    "dropDowns": {
+        "fallback" : "Choisir",
+        "hospitalFallback": "Choisir Hôpital",
+        "cantonFallback": "Choisir Canton",
+        "variablesFallback": "Choisir Variable",
+        "filterFallback": "Choisir filtre",
+        "search" : "Chercher..."
+    },
+    "tableView": {
+        "title": "Tableau",
+        "missingData": "Veuillez sélectionner quelque chose dans chaque menu déroulant et vous assurer que le tableau a été généré avant de le trier.",
+        "sortAsc": "▲",
+        "sortDesc": "▼",
+        "btnCreateTable": "Créer tableau",
+        "btnAddAllHospitals": "Ajouter tous les hôpitaux",
+	    "btnCreateCSV": "Créer CSV",
+        "noTimeData": "Pas de cours à temps disponible"
+    },
+    "graphView": {
+        "title": "Graph",
+        "regressionLine": "Ligne de régression",
+        "boxPlot": "Boxplot",
+        "boxPlotTitle": "Boîte à moustaches",
+        "regression": "Rég. lin.",
+        "regressionTitle": "Régression Linéaire",
+	    "correlation": "Corrélation",
+        "selectVariable": "Veuillez choisir une variable.",
+        "selectVariables": "Veuillez choisir des variables.",
+        "xAxis": "Axe-X",
+        "yAxis": "Axe-Y"
     },
     "language_picker": {
         "info": "Choisissez votre langue"
     },
     "localization_example": {
         "example": "Bonjour frèri"
-    }
+    },
+    "popup": {
+        "address": "Adresse",
+        "hospital": "Hôpital",
+        "canton": "Canton"
+    },
+    "mapInfo": {
+        "map": "Carte",
+        "hospitals": "Hôpitaux",
+        "cantons": "Cantons",
+        "variable": "Variable",
+        "year": "Année",
+        "filter": "",
+        "noVariable" : "Aucune variable selectionnée"
+    },
+    "hospitalTypes": {
+        "university": "Hôpital universitaire",
+        "generic-center": "Hôpital général, soins centralisée",
+        "generic-basic": "Hôpital général, soins de base",
+        "psychiatry": "Clinique psychiatrique",
+        "rehabilitation": "Clinique de réadaptation",
+        "special": "Clinique spécialisée"
+    },
+	"boxPlot" : {
+		"median": "médiane",
+		"upperQuartile": "quartile supérieur",
+		"lowerQuartile": "quartile inférieur",
+		"minimum": "minimum",
+		"maximum": "maximum"
+	}
 }

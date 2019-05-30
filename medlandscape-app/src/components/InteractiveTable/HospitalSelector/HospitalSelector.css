@@ -1,0 +1,18 @@
+ .hospitalSelector > .hospitalDropdown:nth-child(even) {
+    background-color: rgba(180, 180, 180, .2);
+}
+
+.hospitalDropdown > .dropdown {
+    width: 270px;
+    height: 70px;
+    box-sizing: border-box;
+	padding: 10px 0 10px 10px;
+}
+
+.hospitalDropdown {
+    position: relative;
+}
+
+.addHospitalButton {
+    margin: 10px  0 10px 110px;
+}

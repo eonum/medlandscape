@@ -1,0 +1,122 @@
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+line.d3-exploding-boxplot.line,
+rect.d3-exploding-boxplot.box
+{
+  stroke: black;
+  stroke-width: 2px;
+}
+
+line.d3-exploding-boxplot.vline{
+  stroke-dasharray:5,5;
+}
+
+
+g.tick text,
+g.axis text{
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+
+#linearregression {
+    margin-left: 60px;
+    padding-left: 30px;
+}
+
+.line {
+    stroke: black;
+    fill: none;
+    stroke-width: 3;
+}
+
+.legend {
+  font-size: 12px;
+}
+rect {
+  stroke-width: 2;
+  fill: #1996fa;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 10px;
+    font-family: sans-serif;
+}
+
+.text-label {
+    font-size: 10px;
+    font-family: sans-serif;
+}
+
+.dot {
+    stroke: none;
+}
+
+.point:hover {
+    cursor: pointer;
+}
+
+div.tooltip {
+    color: white;
+    position: absolute;
+    text-align: center;
+    padding: 3px;
+    font-size: 16px;
+    background: #1996fa;
+    border: 0px;
+    border-radius: 3px;
+    pointer-events: auto;
+    z-index: 10000;
+}
+
+#boxplot .popup{
+	position: absolute;
+	padding: 10px;
+	border-radius: 15px;
+    background-color: #1996fa;
+    color: white;
+    opacity: 0.9;
+    z-index: 10000;
+}
+
+#boxplot .popup th, #boxplot .popup, #boxplot .popup tr {
+	font-size: 13px;
+	padding: 10px;
+	text-align: left;
+	border-top: 1px solid rgba(255,255,255,0.3);
+	border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+#boxplot .popup table {
+	border-spacing: 10px 0;
+	border-collapse: collapse;
+}
+
+#boxplot .popup td:nth-child(1) {
+  width: 100px;
+  }
+
+#boxplot .popup td:nth-child(2) {
+  width: 150px;
+}
