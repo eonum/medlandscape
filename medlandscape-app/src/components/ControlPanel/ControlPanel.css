@@ -52,6 +52,29 @@
     background-image: url('icons/graphView.svg');
 }
 
+.tabToolTip {
+    position: fixed;
+    margin-bottom: 65px;
+    margin-left: 45px;
+    display: none;
+    color: white;
+    background-color: #1996f9;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+#t1:hover > .tabToolTip {
+    display: block;
+}
+
+#t2:hover > .tabToolTip {
+    display: block;
+}
+
+#t3:hover > .tabToolTip {
+    display: block;
+}
+
 #t1.selectedTab {
     background-image: url('icons/mapViewSelected.svg');
 }

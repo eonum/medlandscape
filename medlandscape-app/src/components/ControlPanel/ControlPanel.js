@@ -271,9 +271,15 @@ class ControlPanel extends Component {
         return (
 			<div className="control-panel">
                 <div className="tabs">
-                    <div id="t1" className="tab selectedTab" onClick={this.setTabView.bind(this, 1)}></div>
-                    <div id="t2" className="tab" onClick={this.setTabView.bind(this, 2)}></div>
-                    <div id="t3" className="tab" onClick={this.setTabView.bind(this, 3)}></div>
+                    <div id="t1" className="tab selectedTab" onClick={this.setTabView.bind(this, 1)}>
+                        <div className="tabToolTip">{t('mapView.title')}</div>
+                    </div>
+                    <div id="t2" className="tab" onClick={this.setTabView.bind(this, 2)}>
+                        <div className="tabToolTip">{t('tableView.title')}</div>
+                    </div>
+                    <div id="t3" className="tab" onClick={this.setTabView.bind(this, 3)}>
+                        <div className="tabToolTip">{t('graphView.title')}</div>
+                    </div>
                 </div>
                 <div className="tabContent">
                     {controlPanelView}
