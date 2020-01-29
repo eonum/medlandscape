@@ -16,16 +16,22 @@ class Table extends Component {
      * @return {JSX}  JSX-Code of component
      */
     render() {
-        return (
+        let table;
+        if(this.props.tableData.length > 4) {
+            table = <tr>Bitte melden Sie sich für grössere Auswertungen an <a href='mailto:info@eonum.ch'>info@eonum.ch</a>.
+                Die eonum AG bietet weitergehende Datenanalysen mit zusätzlichen Datenquellen an.
+                Weitere Informationen dazu finden Sie <a href='https://eonum.ch/de/allgemein/medical-landscape-schweiz/' target='_blank'>hier</a></tr>;
+        } else {
+            table = this.props.tableData.map((row, rowIndex) => {
+                return (<tr key={this.props.tableData.indexOf(row)}>{row.map((cell, cellIndex) => {
+                    return <td key={row.length * rowIndex + cellIndex}>{cell}</td>
+                })}</tr>);
+            })
+        }
+            return (
             <table className="table">
                 <tbody>
-                { // for each row, each element is added to the DOM
-                    this.props.tableData.map((row, rowIndex) => {
-                        return (<tr key={this.props.tableData.indexOf(row)}>{row.map((cell, cellIndex) => {
-                            return <td key={row.length * rowIndex + cellIndex}>{cell}</td>
-                        })}</tr>)
-                    })
-                }
+                { table }
                 </tbody>
             </table>
         );
