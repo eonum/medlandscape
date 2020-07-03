@@ -74,6 +74,9 @@ export function pearsonCorrelation(x, y) {
  */
 export function calculateCircleColor(item, year){
     let color;
+    if(item.attributes["Typ"] == null) {
+	return "black";
+    }
     switch (item.attributes["Typ"][year]) {
         // unispital
         case ("K111"):
