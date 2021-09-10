@@ -84,6 +84,7 @@ class ControlPanel extends Component {
             if (Object.keys(enumVar).length > 0) {
                 query += encodeURIComponent("$" + enumVar.name);
             }
+            query += encodeURIComponent("$Typ");
         }
         return this.props.fetchData(query);
     }
