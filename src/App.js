@@ -520,6 +520,19 @@ class App extends Component {
 
         return (
 			<div className="App">
+                <script>
+                    {'var _paq = window._paq = window._paq || [];\n' +
+                        '                    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */\n' +
+                        '                    _paq.push([\'trackPageView\']);\n' +
+                        '                    _paq.push([\'enableLinkTracking\']);\n' +
+                        '                    (function() {\n' +
+                        '                        var u="//analytics.eonum.ch/";\n' +
+                        '                        _paq.push([\'setTrackerUrl\', u+\'matomo.php\']);\n' +
+                        '                        _paq.push([\'setSiteId\', \'4\']);\n' +
+                        '                        var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];\n' +
+                        '                        g.async=true; g.src=u+\'matomo.js\'; s.parentNode.insertBefore(g,s);\n' +
+                        '                    })();'}
+                </script>
                 <Maps
                     objects={viewSpecificObjects}
                     selectedVariable={viewSpecificVariable}
